@@ -56,6 +56,9 @@ ExportedObj/
 *.opendb
 *.VC.db
 
+# .slnx is Unity 6's auto-generated solution file format (replaces .sln).
+*.slnx
+
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
