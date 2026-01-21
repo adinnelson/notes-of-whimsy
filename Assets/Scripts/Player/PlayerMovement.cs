@@ -4,13 +4,14 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float acceleration = 1.25f;
-    [SerializeField] private float maxSpeed = 5f;
-    [SerializeField] private float drag = 1f;
+    [SerializeField] private float maxSpeed = 5.0f;
+    [SerializeField] private float drag = 1.0f;
 
     private InputSystem_Actions inputActions;
     private new Rigidbody2D rigidbody;
 
-    void OnDisable() {
+    void OnDisable()
+    {
         inputActions.Player.Disable();
     }
 
