@@ -116,7 +116,6 @@ public class beam_logic : MonoBehaviour
         float vect_angle = vect_rad * Mathf.Rad2Deg;
         float vect_length = pointingVector.magnitude;
 
-
         beamVisual.localPosition = pointingVector / 2.0f - pointingVector.normalized * 0.5f * yScale;
         beamVisual.localRotation = Quaternion.Euler(0.0f, 0.0f, vect_angle);
         beamVisual.localScale = new Vector2(vect_length, yScale);

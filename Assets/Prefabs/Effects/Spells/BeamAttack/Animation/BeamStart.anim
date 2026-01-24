@@ -132,7 +132,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: note_particle_emit_percent
+    attribute: noteParticleEmitPercent
     path: 
     classID: 114
     script: {fileID: 11500000, guid: 872b1d80827be584fbc76d060088b09b, type: 3}
@@ -174,7 +174,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 3730406092
+      attribute: 1576176593
       script: {fileID: 11500000, guid: 872b1d80827be584fbc76d060088b09b, type: 3}
       typeID: 114
       customType: 0
@@ -318,7 +318,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: note_particle_emit_percent
+    attribute: noteParticleEmitPercent
     path: 
     classID: 114
     script: {fileID: 11500000, guid: 872b1d80827be584fbc76d060088b09b, type: 3}
