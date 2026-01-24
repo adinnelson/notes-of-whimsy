@@ -20,23 +20,25 @@ public class BeatHandler : MonoBehaviour {
     // beatItem to spawn
     [SerializeField] private BeatItem beatGraphic;
 
+    // step size beat item moves on FixedUpdate
+    [SerializeField] private float stepSize = 0.1f;
+
     // general track positional variables
     private Vector3 beatInitialPosition;
     private Vector3 beatEndPosition;
     private float beatDistance;
     private float spawnTime;
-    
-    // enabled when a beat is within acceptable range
-    public bool validAttackInterval = false;
 
     // pools BeatItems to prevent constant spawning and destroying of GameObjects
-    ObjectPool<BeatItem> beatPool;
+    private ObjectPool<BeatItem> beatPool;
 
     // current beats on track
-    List<BeatItem> currentVisibleBeats = new List<BeatItem>();
+    private List<BeatItem> currentVisibleBeats = new List<BeatItem>();
 
-    // step size beat item moves on FixedUpdate
-    [SerializeField] private float stepSize = 0.1f;
+    
+    // enabled when a beat is within acceptable range
+    public bool ValidAttackInterval = false;
+
     void Awake()
     {
         beatPool = new ObjectPool<BeatItem>(
@@ -78,35 +80,6 @@ public class BeatHandler : MonoBehaviour {
 
         // check interval of first one in list
         CheckValidAttackInterval(GetPercentRemainingFrontBeat(bpm));
-
-    }
-    
-    // returns percentage front beat item is from final destination
-    public float GetPercentRemainingFrontBeat(float bpm) 
-    {
-        return (endGraphic.transform.position.x - currentVisibleBeats[0].transform.position.x) / beatDistance;
-    }
-
-    
-    public void CheckValidAttackInterval (float percentage) 
-    {                                                                        
-
-        // if the percentage of track on BeatItem remaining is at acceptable distance for input
-        if (percentage <= 0.2) 
-        {
-            validAttackInterval = true;
-        } 
-        else 
-        {
-            validAttackInterval = false;
-        }
-    }
-
-    // called when beat item hits end of track
-    public void BeatArrived(BeatItem beat)
-    {
-        currentVisibleBeats.RemoveAt(0);
-        beatPool.Release(beat);
     }
 
     // Creates a new pooled GameObject the first time (and whenever the pool needs more).
@@ -137,4 +110,30 @@ public class BeatHandler : MonoBehaviour {
         Destroy(beat);
     }
 
+    // returns percentage front beat item is from final destination
+    public float GetPercentRemainingFrontBeat(float bpm) 
+    {
+        return (endGraphic.transform.position.x - currentVisibleBeats[0].transform.position.x) / beatDistance;
+    }
+
+    
+    public void CheckValidAttackInterval (float percentage) 
+    {                                                                        
+        // if the percentage of track on BeatItem remaining is at acceptable distance for input
+        if (percentage <= 0.2) 
+        {
+            ValidAttackInterval = true;
+        } 
+        else 
+        {
+            ValidAttackInterval = false;
+        }
+    }
+
+    // called when beat item hits end of track
+    public void BeatArrived(BeatItem beat)
+    {
+        currentVisibleBeats.RemoveAt(0);
+        beatPool.Release(beat);
+    }
 }

@@ -5,10 +5,10 @@ using UnityEngine.Pool;
 public class BeatItem : MonoBehaviour
 {
     // reference to beat handler in in scene
-    BeatHandler beatHandler;
+    private BeatHandler beatHandler;
 
     // end gameobject
-    GameObject endGoal;
+    private GameObject endGoal;
 
     float stepSize = 0.0f;
 
