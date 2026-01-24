@@ -49,9 +49,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872b1d80827be584fbc76d060088b09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  note_particle_emit_percent: 0
-  y_scale: 2
-  destroy_time: 0.5
+  noteParticleEmitPercent: 0
+  yScale: 2
+  destroyTime: 1
 --- !u!95 &1797587252066260219
 Animator:
   serializedVersion: 7
