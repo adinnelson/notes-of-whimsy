@@ -105,8 +105,6 @@ public class BeatHandler : MonoBehaviour {
     // called when beat item hits end of track
     public void BeatArrived(BeatItem beat)
     {
-        audioSource.PlayOneShot(clip);
-        currentVisibleBeats.RemoveAt(0);
         beatPool.Release(beat);
     }
 
