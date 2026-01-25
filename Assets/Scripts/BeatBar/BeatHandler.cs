@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Pool;
 using System.Globalization;
-using System.Reflection.Metadata;
 
 public class BeatHandler : MonoBehaviour {
 
@@ -36,7 +35,7 @@ public class BeatHandler : MonoBehaviour {
 
     // current beats on track
     private List<BeatItem> currentVisibleBeats = new List<BeatItem>();
-    
+
     // enabled when a beat is within acceptable range
     public bool ValidAttackInterval = false;
 
