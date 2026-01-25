@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Pool;
 using System.Globalization;
+using System.Reflection.Metadata;
 
 public class BeatHandler : MonoBehaviour {
 
@@ -20,6 +21,7 @@ public class BeatHandler : MonoBehaviour {
     // beatItem to spawn
     [SerializeField] private BeatItem beatGraphic;
 
+
     // step size beat item moves on FixedUpdate
     [SerializeField] private float stepSize = 0.1f;
 
@@ -34,7 +36,6 @@ public class BeatHandler : MonoBehaviour {
 
     // current beats on track
     private List<BeatItem> currentVisibleBeats = new List<BeatItem>();
-
     
     // enabled when a beat is within acceptable range
     public bool ValidAttackInterval = false;
@@ -59,8 +60,7 @@ public class BeatHandler : MonoBehaviour {
         beatDistance = beatEndPosition.x - beatInitialPosition.x;
         spawnTime = 60f / bpm; 
 
-        // initial beat item spawned
-        currentVisibleBeats.Add(beatPool.Get());
+        PopulateBeatBar();
     }
 
     float timeElapsed = 0;
@@ -135,5 +135,21 @@ public class BeatHandler : MonoBehaviour {
     {
         currentVisibleBeats.RemoveAt(0);
         beatPool.Release(beat);
+    }
+
+    // loads beat bar with beat items leaving a buffer distance
+    private void PopulateBeatBar(float bufferDistance = 0.0f)
+    {
+        float distanceToAdd = stepSize / Time.fixedDeltaTime * spawnTime;
+
+        int i = 0;
+        while(beatDistance - bufferDistance - distanceToAdd * i > 0)
+        {
+            BeatItem beatItem = beatPool.Get();
+            beatItem.transform.position = new Vector3(beatSpawnPoint.position.x + distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
+            currentVisibleBeats.Add(beatItem);
+
+            i++;
+        }
     }
 }
