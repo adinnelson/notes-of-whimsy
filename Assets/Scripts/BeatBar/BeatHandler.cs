@@ -70,7 +70,7 @@ public class BeatHandler : MonoBehaviour {
         PopulateBeatBar();
     }
 
-    float timeElapsed = 0;
+    float timeElapsed = 0.0f;
     void FixedUpdate() 
     {
         // Add time track for when to spawn a new beat
@@ -80,9 +80,9 @@ public class BeatHandler : MonoBehaviour {
             beatItem.Init(this, defaultColour, endGraphic, beatSpawnPoint.position, stepSize);
 
             currentVisibleBeats.Add(beatItem);
-            timeElapsed = 0;
+            timeElapsed = 0.0f;
 
-            for(int i =0;i < activeBeatSpawners.Count;i++)
+            for(int i = 0;i < activeBeatSpawners.Count;i++)
             {
                 activeBeatSpawners[i].StartSpawnCountdown();
             }
@@ -95,7 +95,7 @@ public class BeatHandler : MonoBehaviour {
         if(currentVisibleBeats.Count == 0) return;
 
         // check interval of first one in list
-        CheckValidAttackInterval(GetPercentRemainingFrontBeat(bpm));
+        CheckValidAttackInterval(GetPercentRemainingFrontBeat());
     }
 
     // Creates a new pooled GameObject the first time (and whenever the pool needs more).
@@ -127,7 +127,7 @@ public class BeatHandler : MonoBehaviour {
     }
 
     // returns percentage front beat item is from final destination
-    public float GetPercentRemainingFrontBeat(float bpm) 
+    public float GetPercentRemainingFrontBeat() 
     {
         return (endGraphic.transform.position.x - currentVisibleBeats[0].transform.position.x) / beatDistance;
     }

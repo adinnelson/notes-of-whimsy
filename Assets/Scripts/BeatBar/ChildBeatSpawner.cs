@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class ChildBeatSpawner : MonoBehaviour
 {
-    private float spawnTime = 0;
+    private float spawnTime = 0.0f;
     public float SpawnTime
     {
         get { return spawnTime; }
     }
 
-    private float timeElapsed = 0;
+    private float timeElapsed = 0.0f;
     private bool waitingToSpawn = false;
 
     private BeatHandler beatHandler;
@@ -25,7 +25,7 @@ public class ChildBeatSpawner : MonoBehaviour
         if (timeElapsed >= spawnTime)
         {
             beatHandler.SpawnAdditionalBeat(colour);
-            timeElapsed = 0;
+            timeElapsed = 0.0f;
             waitingToSpawn = false;
         }
 
