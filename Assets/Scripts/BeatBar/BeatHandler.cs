@@ -7,6 +7,8 @@ using System.Globalization;
 
 public class BeatHandler : MonoBehaviour {
 
+    public const float REQUIRED_ACCURACY = 0.1f;
+
     // beats per minute
     [SerializeField] private float bpm;
 
@@ -20,12 +22,16 @@ public class BeatHandler : MonoBehaviour {
     // beatItem to spawn
     [SerializeField] private BeatItem beatGraphic;
 
+    // child spawner prefab
+    [SerializeField] private ChildBeatSpawner childBeatSpawner;
 
     // step size beat item moves on FixedUpdate
     [SerializeField] private float stepSize = 0.1f;
+    
+    // default colour for main bpm beats
+    [SerializeField] private Color defaultColour;
 
     // general track positional variables
-    private Vector3 beatInitialPosition;
     private Vector3 beatEndPosition;
     private float beatDistance;
     private float spawnTime;
@@ -35,6 +41,9 @@ public class BeatHandler : MonoBehaviour {
 
     // current beats on track
     private List<BeatItem> currentVisibleBeats = new List<BeatItem>();
+
+    // list of spawners
+    private List<ChildBeatSpawner> activeBeatSpawners = new List<ChildBeatSpawner>();
 
     // enabled when a beat is within acceptable range
     public bool ValidAttackInterval = false;
@@ -54,9 +63,8 @@ public class BeatHandler : MonoBehaviour {
 
     void Start() 
     {
-        beatInitialPosition = beatSpawnPoint.localPosition; 
-        beatEndPosition = endGraphic.transform.localPosition;
-        beatDistance = beatEndPosition.x - beatInitialPosition.x;
+        beatEndPosition = endGraphic.transform.position;
+        beatDistance = beatEndPosition.x - beatSpawnPoint.position.x;
         spawnTime = 60f / bpm; 
 
         PopulateBeatBar();
@@ -68,8 +76,17 @@ public class BeatHandler : MonoBehaviour {
         // Add time track for when to spawn a new beat
         if (timeElapsed >= spawnTime)
         {
-            currentVisibleBeats.Add(beatPool.Get());
+            BeatItem beatItem = beatPool.Get();
+            beatItem.Init(this, defaultColour, endGraphic, beatSpawnPoint.position, stepSize);
+
+            currentVisibleBeats.Add(beatItem);
             timeElapsed = 0;
+
+            for(int i =0;i < activeBeatSpawners.Count;i++)
+            {
+                activeBeatSpawners[i].StartSpawnCountdown();
+            }
+
             return;
         }
 
@@ -86,27 +103,27 @@ public class BeatHandler : MonoBehaviour {
     {
         BeatItem beatItem = Instantiate(beatGraphic, beatSpawnPoint.position, Quaternion.identity);
         beatItem.gameObject.SetActive(false);
-        
+        beatItem.transform.parent = this.transform;
+
         return beatItem;
     }
 
     // Called when an item is taken from the pool.
-    private void OnGet(BeatItem beat)
+    private void OnGet(BeatItem beatItem)
     {
-        beat.Init(this, endGraphic, beatInitialPosition, stepSize);
-        beat.gameObject.SetActive(true);
+        beatItem.gameObject.SetActive(true);
     }
 
     // Called when an item is returned to the pool.
-    private void OnRelease(BeatItem beat)
+    private void OnRelease(BeatItem beatItem)
     {
-        beat.gameObject.SetActive(false);
+        beatItem.gameObject.SetActive(false);
     }
 
     // Called when the pool decides to destroy an item (e.g., above max size).
-    private void OnDestroyItem(BeatItem beat)
+    private void OnDestroyItem(BeatItem beatItem)
     {
-        Destroy(beat);
+        Destroy(beatItem);
     }
 
     // returns percentage front beat item is from final destination
@@ -115,11 +132,11 @@ public class BeatHandler : MonoBehaviour {
         return (endGraphic.transform.position.x - currentVisibleBeats[0].transform.position.x) / beatDistance;
     }
 
-    
+    // sets flag if beatItem is close enough end point
     public void CheckValidAttackInterval (float percentage) 
     {                                                                        
         // if the percentage of track on BeatItem remaining is at acceptable distance for input
-        if (percentage <= 0.2) 
+        if (percentage <= REQUIRED_ACCURACY) 
         {
             ValidAttackInterval = true;
         } 
@@ -130,10 +147,28 @@ public class BeatHandler : MonoBehaviour {
     }
 
     // called when beat item hits end of track
-    public void BeatArrived(BeatItem beat)
+    public void BeatArrived(BeatItem beatItem)
     {
         currentVisibleBeats.RemoveAt(0);
-        beatPool.Release(beat);
+        beatPool.Release(beatItem);
+    }
+
+    // create child beat spawner
+    public void CreateChildSpawner(Color colour, float spawnTime)
+    {
+        ChildBeatSpawner spawner = Instantiate(childBeatSpawner, beatSpawnPoint.position, Quaternion.identity); 
+        spawner.Init(this, colour, beatSpawnPoint.position, spawnTime);
+
+        activeBeatSpawners.Add(spawner);
+    }
+
+    // spawns a beat on bar with passed in color
+    public void SpawnAdditionalBeat(Color colour)
+    {
+        BeatItem beatItem = beatPool.Get();
+        beatItem.Init(this, colour, endGraphic, beatSpawnPoint.position, stepSize);
+
+        currentVisibleBeats.Add(beatItem);
     }
 
     // loads beat bar with beat items leaving a buffer distance
@@ -141,14 +176,30 @@ public class BeatHandler : MonoBehaviour {
     {
         float distanceToAdd = stepSize / Time.fixedDeltaTime * spawnTime;
 
-        int i = 0;
-        while(beatDistance - bufferDistance - distanceToAdd * i > 0)
+        float beatItemSpeed = stepSize / Time.fixedDeltaTime;
+
+        // spawn as many beat items that are needed given buffer passed and bar size
+        for(int i = 0; beatDistance - bufferDistance - distanceToAdd * i > 0; i++)
         {
+            Vector3 spawnPosition = new Vector3(beatSpawnPoint.position.x + distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
+
             BeatItem beatItem = beatPool.Get();
-            beatItem.transform.position = new Vector3(beatSpawnPoint.position.x + distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
+            beatItem.Init(this, defaultColour, endGraphic, spawnPosition, stepSize);
+
             currentVisibleBeats.Add(beatItem);
 
-            i++;
+            // spawns in child spawners initial beat items throughout beatbar
+            for(int j = 0;j < activeBeatSpawners.Count;j++)
+            {
+                Vector3 additionalSpawnPosition = spawnPosition - Vector3.right * beatItemSpeed * activeBeatSpawners[j].SpawnTime;
+                
+                if(additionalSpawnPosition.x < beatSpawnPoint.position.x) break;
+
+                BeatItem additionalBeatItem = beatPool.Get();
+                additionalBeatItem.Init(this, activeBeatSpawners[j].Colour, endGraphic, additionalSpawnPosition, stepSize);
+
+                currentVisibleBeats.Add(additionalBeatItem);
+            }
         }
     }
 }

@@ -14,6 +14,8 @@ public class BeatItem : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(endGoal == null) return;
+
         if(this.gameObject.transform.position.x >= endGoal.transform.position.x)
         {
             beatHandler.BeatArrived(this);
@@ -24,7 +26,7 @@ public class BeatItem : MonoBehaviour
     }
 
     // Initializes beat item
-    public void Init(BeatHandler beatHandler, GameObject endGoal, Vector3 position, float stepSize)
+    public void Init(BeatHandler beatHandler, Color colour, GameObject endGoal, Vector3 position, float stepSize)
     {
         // references used
         this.beatHandler = beatHandler;
@@ -35,6 +37,9 @@ public class BeatItem : MonoBehaviour
 
         // amount to move after Time.fixedDeltaTime
         this.stepSize = stepSize;
+
+        // set color
+        GetComponent<SpriteRenderer>().color = colour;
     }
 
 }
