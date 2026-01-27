@@ -3,9 +3,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] private Projectile projectilePrefab;
     [SerializeField] private Transform firePoint;
     [SerializeField] private float fireCooldownSeconds = 0.2f;
+    [SerializeField] private ProjectilePool projectilePool;
 
     private const float MIN_AIM_DEADZONE_SQR = 0.0001f;
     private const float MIN_STICK_DEADZONE_SQR = 0.09f;
@@ -19,8 +19,11 @@ public class PlayerAttack : MonoBehaviour
 
     private InputSystem_Actions inputActions;
     private Camera mainCamera;
+
     private float lastFireTimeSeconds;
-    private AimSource lastAimSource = AimSource.Mouse;
+
+    private AimSource activeAimSource = AimSource.Mouse;
+
     private Vector2 lastAimDirection = Vector2.right;
     private Vector2 lastMousePos;
 
@@ -28,7 +31,6 @@ public class PlayerAttack : MonoBehaviour
     {
         mainCamera = Camera.main;
         inputActions = new InputSystem_Actions();
-
         CacheInitialMousePosition();
     }
 
@@ -46,14 +48,15 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
+        // Continuously check to update aim based on the most recent input (Mouse and/or Controller)
         UpdateAimSourceFromStick();
         UpdateAimSourceFromMouseMovement();
     }
 
     private void OnFirePerformed(InputAction.CallbackContext context)
     {
-        // Use the firing device as the tiebreaker so stick drift cannot steal mouse shots.
-        UpdateAimSourceFromFireInput(context);
+        // whichever device (Mouse or Controller) that fired gets to be the active aim source for this shot.
+        SetAimSourceFromFireDevice(context);
 
         if (!IsOffCooldown())
         {
@@ -71,20 +74,20 @@ public class PlayerAttack : MonoBehaviour
 
     private void FireProjectile()
     {
-        if (projectilePrefab == null)
+        if (projectilePool == null)
         {
-            Debug.LogError("Projectile prefab is not assigned on PlayerAttack.");
+            Debug.LogError("ProjectilePool is not assigned on PlayerAttack.");
             return;
         }
 
-        Vector3 spawnPosition = GetSpawnPosition();
-        Vector2 finalDirection = GetFinalFireDirection(spawnPosition);
+        Vector3 projectileSpawnPosition = GetProjectileSpawnPosition();
+        Vector2 finalDirection = GetFinalFireDirection(projectileSpawnPosition);
 
-        Projectile projectileInstance = Instantiate(projectilePrefab, spawnPosition, Quaternion.identity);
-        projectileInstance.Initialize(finalDirection);
+        Projectile projectile = projectilePool.Get();
+        projectile.Activate(projectileSpawnPosition, finalDirection);
     }
 
-    private Vector3 GetSpawnPosition()
+    private Vector3 GetProjectileSpawnPosition()
     {
         // Return firePoint position if assigned, otherwise return the player's position
         return firePoint != null ? firePoint.position : transform.position;
@@ -100,6 +103,7 @@ public class PlayerAttack : MonoBehaviour
         lastMousePos = Mouse.current.position.ReadValue();
     }
 
+    // Updates the active aim source and cached direction when stick input is detected
     private void UpdateAimSourceFromStick()
     {
         Vector2 stickAim = inputActions.Player.Aim.ReadValue<Vector2>();
@@ -109,10 +113,11 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        lastAimSource = AimSource.Gamepad;
+        activeAimSource = AimSource.Gamepad;
         lastAimDirection = stickAim.normalized;
     }
 
+    // Updates the active aim source and cached direction when mouse movement is detected
     private void UpdateAimSourceFromMouseMovement()
     {
         if (Mouse.current == null)
@@ -130,9 +135,9 @@ public class PlayerAttack : MonoBehaviour
         }
 
         lastMousePos = mousePos;
-        lastAimSource = AimSource.Mouse;
+        activeAimSource = AimSource.Mouse;
 
-        Vector3 aimOrigin = GetSpawnPosition();
+        Vector3 aimOrigin = GetProjectileSpawnPosition();
         Vector2 mouseAim = GetMouseAimDirection(aimOrigin);
 
         if (mouseAim.sqrMagnitude >= MIN_AIM_DEADZONE_SQR)
@@ -141,28 +146,32 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    private void UpdateAimSourceFromFireInput(InputAction.CallbackContext context)
+    // Depending on which device triggered the fire action, Use the Cached Aim direction from that device. 
+    private void SetAimSourceFromFireDevice(InputAction.CallbackContext context)
     {
-        if (context.control == null || context.control.device == null)
+        // Get the input device (mouse or gamepad) that triggered this action
+        InputDevice device = context.control?.device;
+
+        if (device == null)
         {
             return;
         }
 
-        if (context.control.device is Mouse)
+        if (device is Mouse)
         {
-            lastAimSource = AimSource.Mouse;
-            return;
+            activeAimSource = AimSource.Mouse;
         }
 
-        if (context.control.device is Gamepad)
+        else if (device is Gamepad)
         {
-            lastAimSource = AimSource.Gamepad;
+            activeAimSource = AimSource.Gamepad;
         }
     }
 
+    // Depending on AimSource, get the final fire direction using the cached aim direction for that device.
     private Vector2 GetFinalFireDirection(Vector3 spawnPosition)
     {
-        if (lastAimSource == AimSource.Gamepad)
+        if (activeAimSource == AimSource.Gamepad)
         {
             Vector2 stickAim = inputActions.Player.Aim.ReadValue<Vector2>();
 
@@ -171,7 +180,7 @@ public class PlayerAttack : MonoBehaviour
                 lastAimDirection = stickAim.normalized;
             }
 
-            // When the stick returns to neutral, keep the last direction so shots don't snap to the idle mouse cursor.
+            // When the stick returns to neutral, keep the last direction stored and use that as fire direction.
             return lastAimDirection;
         }
 

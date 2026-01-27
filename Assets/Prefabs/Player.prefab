@@ -110,6 +110,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2852815562626469276, guid: 73861d502ca7f38499b1af206113828b, type: 3}
   firePoint: {fileID: 5189259256147739164}
   fireCooldownSeconds: 0.2
+  projectilePool: {fileID: 6917752319159339000, guid: a06cf0089aa00de408d434c20b3ebdc1, type: 3}
 --- !u!114 &1155841396824913759
 MonoBehaviour:
   m_ObjectHideFlags: 0
