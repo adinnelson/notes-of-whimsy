@@ -36,6 +36,8 @@ public class BeatHandler : MonoBehaviour {
     private float beatDistance;
     private float spawnTime;
 
+    private float timeElapsed = 0.0f;
+
     // pools BeatItems to prevent constant spawning and destroying of GameObjects
     private ObjectPool<BeatItem> beatPool;
 
@@ -70,7 +72,6 @@ public class BeatHandler : MonoBehaviour {
         PopulateBeatBar();
     }
 
-    float timeElapsed = 0.0f;
     void FixedUpdate() 
     {
         // Add time track for when to spawn a new beat
