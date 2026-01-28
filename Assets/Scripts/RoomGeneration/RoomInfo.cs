@@ -3,12 +3,10 @@ using UnityEngine;
 
 public class RoomInfo : MonoBehaviour
 {
-    public GameObject LeftNode;
-    public GameObject RightNode;
-    public GameObject TopNode;
-    public GameObject BottomNode;
-
-
+    public GameObject leftNode;
+    public GameObject rightNode;
+    public GameObject topNode;
+    public GameObject bottomNode;
 
     public List<GameObject> Enemies;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -21,5 +19,17 @@ public class RoomInfo : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public GameObject GetNode(string name)
+    {
+        return name.ToLower() switch
+        {
+            "left" => leftNode,
+            "right" => rightNode,
+            "top" => topNode,
+            "bottom" => bottomNode,
+            _ => null,
+        };
     }
 }
