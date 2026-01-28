@@ -2,9 +2,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
-public class pickupObject : MonoBehaviour
+public class PickupObject : MonoBehaviour
 {
-    [Header("Inventory UI")]
+    [Header("Inventory")]
+    [SerializeField] private InventoryItems inventory; //InventoryItems.cs should be assigned, either to player or an Inventory Manager obj, and then that gets used as the ref for this field
     [SerializeField] private Transform contentsParent;
     /*
      * these "Icons for Note Type" private GameObjects are stand-ins for the actual note prefabs. 
@@ -26,8 +27,19 @@ public class pickupObject : MonoBehaviour
         {
             return;
         }
-
-        SpawnIcon(pickup.itemType);
+        inventory.AddItem(pickup.itemType); //add the note to the data
+        /*
+         * TEMPORARY IF STATEMENT: updates for future sprints when behaviour of the notes is better known. 
+         * this is to prevent duplicate icons from spawning when multiples of the same note are picked up.
+         * UI icon creation and updates should be handled by the inventory system and NOT by this PickupObject script.
+         * 
+         * Should duplicates show in inventory?
+         * Should icons have counters attached, when there are more than 1 of a type?
+         */
+        if (inventory.GetCount(pickup.itemType) == 1)
+        {
+            SpawnIcon(pickup.itemType); //add the note to the UI
+        }
         Destroy(objToPickup.gameObject);
     }
 
