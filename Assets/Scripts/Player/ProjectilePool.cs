@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class ProjectilePool : MonoBehaviour
 {
     [SerializeField] private Projectile projectilePrefab;
-    [SerializeField] private int poolSize = 30;
+    [SerializeField] private int defaultPoolSize = 30;
+    [SerializeField] private int maxPoolSize = 100;
 
-    private readonly Queue<Projectile> pool = new Queue<Projectile>();
+    private ObjectPool<Projectile> pool;
 
     private void Awake()
     {
@@ -16,11 +18,21 @@ public class ProjectilePool : MonoBehaviour
             return;
         }
 
-        // Pre-create a bunch of projectiles.
-        for (int i = 0; i < poolSize; i++)
+        pool = new ObjectPool<Projectile>(
+            createFunc: CreateNew,
+            actionOnGet: OnGet,
+            actionOnRelease: OnRelease,
+            actionOnDestroy: OnDestroyProjectile,
+            collectionCheck: true,
+            defaultCapacity: defaultPoolSize,
+            maxSize: maxPoolSize
+        );
+
+        // Pre-instantiate projectiles
+        for (int i = 0; i < defaultPoolSize; i++)
         {
-            Projectile newProjectile = CreateNew();
-            Return(newProjectile);
+            Projectile newProjectile = pool.Get();
+            pool.Release(newProjectile);
         }
     }
 
@@ -32,25 +44,29 @@ public class ProjectilePool : MonoBehaviour
     }
 
     // Get a projectile from the queue
+    public void OnGet(Projectile newProjectile)
+    {
+        newProjectile.gameObject.SetActive(true);
+    }
+
+    private void OnRelease(Projectile newProjectile)
+    {
+        newProjectile.gameObject.SetActive(false);
+    }
+
+    private void OnDestroyProjectile(Projectile newProjectile)
+    {
+        Destroy(newProjectile.gameObject);
+    }
+
     public Projectile Get()
     {
-        if (pool.Count == 0)
-        {
-            // If we run out, expand the pool so firing never fails.
-            Debug.LogWarning("ProjectilePool expanded beyond initial size. Consider increasing the pool size");
-            Projectile newProjectile = CreateNew();
-            return newProjectile;
-        }
-
-        Projectile pooledProjectile = pool.Dequeue();
-        pooledProjectile.gameObject.SetActive(true);
-        return pooledProjectile;
+        return pool.Get();
     }
 
     // Return a projectile back to the queue
     public void Return(Projectile returningProjectile)
     {
-        returningProjectile.gameObject.SetActive(false);
-        pool.Enqueue(returningProjectile);
+        pool.Release(returningProjectile);
     }
 }
