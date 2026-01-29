@@ -5,13 +5,12 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float speed = 12.0f;
     [SerializeField] private float lifetimeSeconds = 2.0f;
-
+    [SerializeField] private float damage = 1.0f;
+    private ProjectilePoolManager poolManager;
+    private Projectile owningPrefab;
     private const float MIN_DIRECTION_SQR = 0.0001f;
-
     private new Rigidbody2D rigidbody;
     private Vector2 direction;
-
-    private ProjectilePool pool;
     private float despawnTime;
     private bool isActive;
 
@@ -20,11 +19,8 @@ public class Projectile : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    // Pool sets this once when it instantiates the projectile
-    public void SetPool(ProjectilePool projectilePool)
-    {
-        pool = projectilePool;
-    }
+    public void SetPoolManager(ProjectilePoolManager manager) => poolManager = manager;
+    public void SetOwningPrefab(Projectile prefab) => owningPrefab = prefab;
 
     // set's spawn position and travel direction, activates the projectile
     public void Activate(Vector3 spawnPosition, Vector2 travelDirection)
@@ -60,13 +56,12 @@ public class Projectile : MonoBehaviour
 
     private void Despawn()
     {
-        // Reset anything that could “leak” into the next reuse
         rigidbody.linearVelocity = Vector2.zero;
         isActive = false;
 
-        if (pool != null)
+        if (poolManager != null && owningPrefab != null)
         {
-            pool.Return(this);
+            poolManager.Return(owningPrefab, this);
         }
         else
         {
@@ -76,7 +71,7 @@ public class Projectile : MonoBehaviour
 
     private void OnDisable()
     {
-        // Safety: if disabled by something else, stop motion
+        // if disabled by something else, stop motion
         if (rigidbody != null)
         {
             rigidbody.linearVelocity = Vector2.zero;
@@ -84,4 +79,26 @@ public class Projectile : MonoBehaviour
 
         isActive = false;
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!isActive) 
+        {
+            return;
+        }
+
+        // Don't hit yourself
+        if (other.attachedRigidbody != null && other.attachedRigidbody.gameObject == gameObject)
+        {
+            return;
+        }
+
+        // If the thing we hit can take damage, damage it
+        if (other.TryGetComponent<IDamageable>(out var damageable))
+        {
+            damageable.TakeDamage(damage);
+            Despawn(); // return projectile to pool after a successful hit
+        }
+    }
 }
+
