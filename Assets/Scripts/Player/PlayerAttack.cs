@@ -4,19 +4,11 @@ using UnityEngine.InputSystem;
 public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] private Transform firePoint;
+    [SerializeField] private Projectile projectilePrefab;
     [SerializeField] private float fireCooldownSeconds = 0.2f;
-    [SerializeField] private ProjectilePool projectilePool;
-
     private const float MIN_AIM_DEADZONE_SQR = 0.0001f;
     private const float MIN_STICK_DEADZONE_SQR = 0.09f;
     private const float MOUSE_MOVE_DETECT_SQR = 0.1f;
-
-    private enum AimSource
-    {
-        Mouse,
-        Gamepad
-    }
-
     private InputSystem_Actions inputActions;
     private Camera mainCamera;
 
@@ -26,6 +18,12 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector2 lastAimDirection = Vector2.right;
     private Vector2 lastMousePos;
+
+    private enum AimSource
+    {
+        Mouse,
+        Gamepad
+    }
 
     private void Awake()
     {
@@ -74,18 +72,21 @@ public class PlayerAttack : MonoBehaviour
 
     private void FireProjectile()
     {
-        if (projectilePool == null)
-        {
-            Debug.LogError("ProjectilePool is not assigned on PlayerAttack.");
-            return;
-        }
-
         Vector3 projectileSpawnPosition = GetProjectileSpawnPosition();
         Vector2 finalDirection = GetFinalFireDirection(projectileSpawnPosition);
 
-        Projectile projectile = projectilePool.Get();
+        // Shooter asks the manager for a projectile of its assigned prefab
+        ProjectilePoolManager manager = ProjectilePoolManager.GetOrCreate();
+        Projectile projectile = manager.Get(projectilePrefab);
+
+        if (projectile == null) 
+        {
+            return;
+        }
+
         projectile.Activate(projectileSpawnPosition, finalDirection);
     }
+
 
     private Vector3 GetProjectileSpawnPosition()
     {
