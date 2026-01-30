@@ -1,15 +1,10 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-/*
- * Inventory data currently stored as a Dictionary<ItemType, int> 
- * tracks the inventory as item counts, for now. 
- * 
- * Inventory data structure can evolve (ex. create ItemData ==> class ItemData) without altering the pickup logic.
- */
-public class InventoryItems : MonoBehaviour
+//all inventory data and logic stored here
+public class InventoryManager
 {
-    private Dictionary<ItemType, int> items = new Dictionary<ItemType, int>(); //keeping the count of each item type for now -- obviously we can store more data associated with each item we pickup
+    private Dictionary<ItemType, int> items = new();
 
     public void AddItem(ItemType type, int amount = 1)
     {

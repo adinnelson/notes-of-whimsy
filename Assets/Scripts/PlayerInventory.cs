@@ -1,11 +1,11 @@
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
 
-public class PickupObject : MonoBehaviour
+//shifted PickupObject into PlayerInventory for clarity
+public class PlayerInventory : MonoBehaviour
 {
-    [Header("Inventory")]
-    [SerializeField] private InventoryItems inventory; //InventoryItems.cs should be assigned, either to player or an Inventory Manager obj, and then that gets used as the ref for this field
+    private InventoryManager inventory = new InventoryManager();
+
+    [Header("InventoryUI")]
     [SerializeField] private Transform contentsParent;
     /*
      * these "Icons for Note Type" private GameObjects are stand-ins for the actual note prefabs. 
@@ -22,28 +22,25 @@ public class PickupObject : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D objToPickup)
     {
-        var pickup = objToPickup.GetComponent<PickupItem>();
+        PickupItem pickup = objToPickup.GetComponent<PickupItem>();
+
         if (pickup == null)
         {
+            Debug.Log($"Object to pickup was empty! Collider: {objToPickup.name}");
             return;
         }
-        inventory.AddItem(pickup.itemType); //add the note to the data
-        /*
-         * TEMPORARY IF STATEMENT: updates for future sprints when behaviour of the notes is better known. 
-         * this is to prevent duplicate icons from spawning when multiples of the same note are picked up.
-         * UI icon creation and updates should be handled by the inventory system and NOT by this PickupObject script.
-         * 
-         * Should duplicates show in inventory?
-         * Should icons have counters attached, when there are more than 1 of a type?
-         */
+
+        inventory.AddItem(pickup.itemType); //add to inventory Data
+    
+        // temporary to prevent duplicate icons
         if (inventory.GetCount(pickup.itemType) == 1)
         {
-            SpawnIcon(pickup.itemType); //add the note to the UI
+            SpawnIcon(pickup.itemType); //add to inventory UI
         }
         Destroy(objToPickup.gameObject);
     }
 
-    void SpawnIcon(ItemType type)
+    private void SpawnIcon(ItemType type)
     {
         GameObject prefab = type switch
         {
@@ -56,9 +53,9 @@ public class PickupObject : MonoBehaviour
 
         if (prefab == null)
         {
+            Debug.Log($"No prefab assigned for ItemType {type}");
             return;
         }
-        GameObject newIconFromTemplate = Instantiate(prefab, contentsParent);
-        newIconFromTemplate.SetActive(true);
+        Instantiate(prefab, contentsParent).SetActive(true);
     }
 }
