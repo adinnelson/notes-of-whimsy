@@ -119,6 +119,97 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &915430898
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 405419558325543748, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 405419558325543748, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 405419558325543748, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 405419558325543748, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 405419558325543748, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 405419558325543748, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 405419558325543748, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 405419558325543748, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 405419558325543748, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 405419558325543748, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3343295593945499484, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_Name
+      value: BeatBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774199362058708298, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774199362058708298, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: playerAttack
+      value: 
+      objectReference: {fileID: 1278789926}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+--- !u!114 &1240768399 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+  m_PrefabInstance: {fileID: 915430898}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59aa8152b834b1a4abd9eb7cfc962aba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BeatHandler
+--- !u!114 &1278789926 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+  m_PrefabInstance: {fileID: 1460984151}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b140c8372181b34caa928b56b88c69a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
 --- !u!1 &1289567962
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,9 +355,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: beathandler
+      value: 
+      objectReference: {fileID: 1240768399}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: projectilePool
       value: 
-      objectReference: {fileID: 1650386389}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -329,17 +424,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a06cf0089aa00de408d434c20b3ebdc1, type: 3}
---- !u!114 &1650386389 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6917752319159339000, guid: a06cf0089aa00de408d434c20b3ebdc1, type: 3}
-  m_PrefabInstance: {fileID: 1650386388}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd9b6eaf3e9ec974bb0f0c124e2a1c97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectilePool
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -347,3 +431,4 @@ SceneRoots:
   - {fileID: 1289567965}
   - {fileID: 1460984151}
   - {fileID: 1650386388}
+  - {fileID: 915430898}
