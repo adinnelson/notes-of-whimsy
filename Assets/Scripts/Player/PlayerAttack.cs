@@ -24,6 +24,7 @@ public class PlayerAttack : MonoBehaviour
     private Vector2 lastAimDirection = Vector2.right;
     private Vector2 lastMousePos;
 
+    // hashset of attack locks
     private HashSet<string> attackLocks = new HashSet<string>();
 
     private enum AimSource
@@ -73,6 +74,7 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
+        // if you fire off beat lock attacks until next beat
         if (beathandler != null && !beathandler.ValidAttackInterval) 
         {
             AddAttackLock(MISSED_ATTACK_LOCK_KEY);
@@ -235,11 +237,13 @@ public class PlayerAttack : MonoBehaviour
         return mouseWorldPosition - originWorldPosition;
     }
 
+    // adds lock with key to attackLocks
     public void AddAttackLock(string key)
     {
         attackLocks.Add(key);
     }
 
+    // removes lock with key from attackLocks
     public void RemoveAttackLock(string key)
     {
         attackLocks.Remove(key);

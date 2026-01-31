@@ -166,6 +166,7 @@ public class BeatHandler : MonoBehaviour {
         RemoveFrontBeat();
     }
 
+    // remove front beat from list and return to pool
     public void RemoveFrontBeat()
     {
         BeatItem beatItem = currentVisibleBeats[0];
