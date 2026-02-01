@@ -359,6 +359,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4426264664621214320, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: note
+      value: 
+      objectReference: {fileID: 8835509098591157618, guid: d7e7d2b19e2f7ff488c56e7733dbdf20, type: 3}
+    - target: {fileID: 4426264664621214320, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: playerAttack
+      value: 
+      objectReference: {fileID: 1278789926}
     - target: {fileID: 5189259256147739164, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.2873125
@@ -419,6 +427,22 @@ PrefabInstance:
       propertyPath: projectilePrefabB
       value: 
       objectReference: {fileID: 8835509098591157618, guid: 8500acdd58d2a6d42b2b2711d5255fc6, type: 3}
+    - target: {fileID: 7752919813059416915, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: note
+      value: 
+      objectReference: {fileID: 8835509098591157618, guid: eb963c59930fc8a48b3b3a90113a4d83, type: 3}
+    - target: {fileID: 7752919813059416915, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: playerAttack
+      value: 
+      objectReference: {fileID: 1278789926}
+    - target: {fileID: 7996963532604069450, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: note
+      value: 
+      objectReference: {fileID: 8835509098591157618, guid: 6b430ec2757a87c45b2de9757d94bc54, type: 3}
+    - target: {fileID: 7996963532604069450, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: playerAttack
+      value: 
+      objectReference: {fileID: 1278789926}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
