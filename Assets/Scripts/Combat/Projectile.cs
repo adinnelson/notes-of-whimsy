@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
     public void SetOwningPrefab(Projectile prefab) => owningPrefab = prefab;
 
     // set's spawn position and travel direction, activates the projectile
-    public void Activate(Vector3 spawnPosition, Vector2 travelDirection)
+    public void Activate(Vector3 spawnPosition, Vector2 travelDirection, NoteEffectHandler noteEffectHandler = null)
     {
         transform.position = spawnPosition;
 
