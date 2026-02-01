@@ -135,24 +135,6 @@ public class PlayerAttack : MonoBehaviour
         return Time.time >= lastFireTimeSeconds + fireCooldownSeconds;
     }
 
-    public void FireProjectile(Projectile projectilePrefab)
-    {
-        Vector3 projectileSpawnPosition = GetProjectileSpawnPosition();
-        Vector2 finalDirection = GetFinalFireDirection(projectileSpawnPosition);
-
-        // Shooter asks the manager for a projectile of its assigned prefab
-        ProjectilePoolManager manager = ProjectilePoolManager.GetOrCreate();
-        Projectile projectile = manager.Get(projectilePrefab);
-
-        if (projectile == null) 
-        {
-            return;
-        }
-
-        projectile.Activate(projectileSpawnPosition, finalDirection);
-    }
-
-
     private Vector3 GetProjectileSpawnPosition()
     {
         // Return firePoint position if assigned, otherwise return the player's position
@@ -280,6 +262,24 @@ public class PlayerAttack : MonoBehaviour
 
         return mouseWorldPosition - originWorldPosition;
     }
+
+    public void FireProjectile(Projectile projectilePrefab)
+    {
+        Vector3 projectileSpawnPosition = GetProjectileSpawnPosition();
+        Vector2 finalDirection = GetFinalFireDirection(projectileSpawnPosition);
+
+        // Shooter asks the manager for a projectile of its assigned prefab
+        ProjectilePoolManager manager = ProjectilePoolManager.GetOrCreate();
+        Projectile projectile = manager.Get(projectilePrefab);
+
+        if (projectile == null) 
+        {
+            return;
+        }
+
+        projectile.Activate(projectileSpawnPosition, finalDirection);
+    }
+
 
     // adds lock with key to attackLocks
     public void AddAttackLock(string key)
