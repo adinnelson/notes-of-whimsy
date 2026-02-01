@@ -12,7 +12,7 @@ public class Projectile : MonoBehaviour
     private new Rigidbody2D rigidbody;
     private Vector2 direction;
     private float despawnTime;
-    private bool isActive;
+    protected bool isActive;
 
     private void Awake()
     {
@@ -38,6 +38,21 @@ public class Projectile : MonoBehaviour
         isActive = true;
     }
 
+    protected void Despawn()
+    {
+        rigidbody.linearVelocity = Vector2.zero;
+        isActive = false;
+
+        if (poolManager != null && owningPrefab != null)
+        {
+            poolManager.Return(owningPrefab, this);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     private void FixedUpdate()
     {
         if (!isActive)
@@ -51,21 +66,6 @@ public class Projectile : MonoBehaviour
         if (Time.time >= despawnTime)
         {
             Despawn();
-        }
-    }
-
-    private void Despawn()
-    {
-        rigidbody.linearVelocity = Vector2.zero;
-        isActive = false;
-
-        if (poolManager != null && owningPrefab != null)
-        {
-            poolManager.Return(owningPrefab, this);
-        }
-        else
-        {
-            gameObject.SetActive(false);
         }
     }
 

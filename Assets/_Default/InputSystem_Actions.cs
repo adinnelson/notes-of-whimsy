@@ -174,9 +174,36 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Fire"",
+                    ""name"": ""FireYellow"",
                     ""type"": ""Button"",
                     ""id"": ""94d03d1c-eda5-4b18-a469-77ca8ac42ede"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FirePurple"",
+                    ""type"": ""Button"",
+                    ""id"": ""2ea766a0-27af-46a6-8a76-38ed6973c411"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FireRed"",
+                    ""type"": ""Button"",
+                    ""id"": ""99484c9f-a511-4358-87a3-53a2ad951e5e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FireBlue"",
+                    ""type"": ""Button"",
+                    ""id"": ""30995772-f6f3-44b2-82c2-91a303974399"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -576,7 +603,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Fire"",
+                    ""action"": ""FireYellow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -587,7 +614,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Fire"",
+                    ""action"": ""FireYellow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -598,7 +625,106 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Touch"",
-                    ""action"": ""Fire"",
+                    ""action"": ""FireYellow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1ab0add-73e0-4f70-8b1e-9ab84798c82f"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""FirePurple"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cedadf57-52e7-443f-8193-5ad9d6fa0e0d"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""FirePurple"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""64df13a5-aea6-4824-9ae1-9155f4b7273d"",
+                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Touch"",
+                    ""action"": ""FirePurple"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7454ff05-2d05-4f36-9254-8a61a581c42d"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""FireRed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ca0154b5-0244-4f8e-98a5-69251a399d11"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""FireRed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32050564-c8e2-4883-bf6a-e73ab43b1b9f"",
+                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Touch"",
+                    ""action"": ""FireRed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15ba80d5-84e6-4384-9558-c929d7d9a20e"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""FireBlue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""886fed8c-2f02-427a-a206-d1ef12aa3f26"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""FireBlue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0eba9281-157c-4f77-a594-338facaf67ea"",
+                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Touch"",
+                    ""action"": ""FireBlue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1195,7 +1321,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Previous = m_Player.FindAction("Previous", throwIfNotFound: true);
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_FireYellow = m_Player.FindAction("FireYellow", throwIfNotFound: true);
+        m_Player_FirePurple = m_Player.FindAction("FirePurple", throwIfNotFound: true);
+        m_Player_FireRed = m_Player.FindAction("FireRed", throwIfNotFound: true);
+        m_Player_FireBlue = m_Player.FindAction("FireBlue", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1298,7 +1427,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Previous;
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_FireYellow;
+    private readonly InputAction m_Player_FirePurple;
+    private readonly InputAction m_Player_FireRed;
+    private readonly InputAction m_Player_FireBlue;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1347,9 +1479,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Fire".
+        /// Provides access to the underlying input action "Player/FireYellow".
         /// </summary>
-        public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @FireYellow => m_Wrapper.m_Player_FireYellow;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/FirePurple".
+        /// </summary>
+        public InputAction @FirePurple => m_Wrapper.m_Player_FirePurple;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/FireRed".
+        /// </summary>
+        public InputAction @FireRed => m_Wrapper.m_Player_FireRed;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/FireBlue".
+        /// </summary>
+        public InputAction @FireBlue => m_Wrapper.m_Player_FireBlue;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1403,9 +1547,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @Fire.started += instance.OnFire;
-            @Fire.performed += instance.OnFire;
-            @Fire.canceled += instance.OnFire;
+            @FireYellow.started += instance.OnFireYellow;
+            @FireYellow.performed += instance.OnFireYellow;
+            @FireYellow.canceled += instance.OnFireYellow;
+            @FirePurple.started += instance.OnFirePurple;
+            @FirePurple.performed += instance.OnFirePurple;
+            @FirePurple.canceled += instance.OnFirePurple;
+            @FireRed.started += instance.OnFireRed;
+            @FireRed.performed += instance.OnFireRed;
+            @FireRed.canceled += instance.OnFireRed;
+            @FireBlue.started += instance.OnFireBlue;
+            @FireBlue.performed += instance.OnFireBlue;
+            @FireBlue.canceled += instance.OnFireBlue;
         }
 
         /// <summary>
@@ -1444,9 +1597,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @Fire.started -= instance.OnFire;
-            @Fire.performed -= instance.OnFire;
-            @Fire.canceled -= instance.OnFire;
+            @FireYellow.started -= instance.OnFireYellow;
+            @FireYellow.performed -= instance.OnFireYellow;
+            @FireYellow.canceled -= instance.OnFireYellow;
+            @FirePurple.started -= instance.OnFirePurple;
+            @FirePurple.performed -= instance.OnFirePurple;
+            @FirePurple.canceled -= instance.OnFirePurple;
+            @FireRed.started -= instance.OnFireRed;
+            @FireRed.performed -= instance.OnFireRed;
+            @FireRed.canceled -= instance.OnFireRed;
+            @FireBlue.started -= instance.OnFireBlue;
+            @FireBlue.performed -= instance.OnFireBlue;
+            @FireBlue.canceled -= instance.OnFireBlue;
         }
 
         /// <summary>
@@ -1811,12 +1973,33 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSprint(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Fire" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "FireYellow" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnFire(InputAction.CallbackContext context);
+        void OnFireYellow(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "FirePurple" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFirePurple(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "FireRed" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFireRed(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "FireBlue" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFireBlue(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
