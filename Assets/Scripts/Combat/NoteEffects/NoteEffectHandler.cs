@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Generic NoteEffectHandler class to be inherited by specific note effect hand;ers
+// Generic NoteEffectHandler class to be inherited by specific note effect handlers
 public abstract class NoteEffectHandler : MonoBehaviour
 {
     [SerializeField] protected Note note;
