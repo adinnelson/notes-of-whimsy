@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - puObj
   layers:
   - Default
   - TransparentFX
@@ -43,6 +44,8 @@ TagManager:
     locked: 0
   - name: Walls
     uniqueID: 1373270931
+  - name: Background
+    uniqueID: 2554782705
     locked: 0
   - name: Default
     uniqueID: 0
