@@ -12,7 +12,7 @@ public class Projectile : MonoBehaviour
     private new Rigidbody2D rigidbody;
     private Vector2 direction;
     private float despawnTime;
-    private bool isActive;
+    protected bool isActive;
 
     private void Awake()
     {
@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
     public void SetOwningPrefab(Projectile prefab) => owningPrefab = prefab;
 
     // set's spawn position and travel direction, activates the projectile
-    public void Activate(Vector3 spawnPosition, Vector2 travelDirection)
+    public void Activate(Vector3 spawnPosition, Vector2 travelDirection, NoteEffectHandler noteEffectHandler = null)
     {
         transform.position = spawnPosition;
 
@@ -36,6 +36,21 @@ public class Projectile : MonoBehaviour
 
         despawnTime = Time.time + lifetimeSeconds;
         isActive = true;
+    }
+
+    protected void Despawn()
+    {
+        rigidbody.linearVelocity = Vector2.zero;
+        isActive = false;
+
+        if (poolManager != null && owningPrefab != null)
+        {
+            poolManager.Return(owningPrefab, this);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void FixedUpdate()
@@ -51,21 +66,6 @@ public class Projectile : MonoBehaviour
         if (Time.time >= despawnTime)
         {
             Despawn();
-        }
-    }
-
-    private void Despawn()
-    {
-        rigidbody.linearVelocity = Vector2.zero;
-        isActive = false;
-
-        if (poolManager != null && owningPrefab != null)
-        {
-            poolManager.Return(owningPrefab, this);
-        }
-        else
-        {
-            gameObject.SetActive(false);
         }
     }
 

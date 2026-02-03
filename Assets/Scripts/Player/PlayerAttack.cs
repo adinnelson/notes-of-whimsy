@@ -17,6 +17,11 @@ public class PlayerAttack : MonoBehaviour
     private InputSystem_Actions inputActions;
     private Camera mainCamera;
 
+    private YellowNoteEffectHandler yellowEffectHandler;
+    private PurpleNoteEffectHandler purpleEffectHandler;
+    private RedNoteEffectHandler redEffectHandler;
+    private BlueNoteEffectHandler blueEffectHandler;
+
     private float lastFireTimeSeconds;
 
     private AimSource activeAimSource = AimSource.Mouse;
@@ -43,13 +48,28 @@ public class PlayerAttack : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Player.Enable();
-        inputActions.Player.Fire.performed += OnFirePerformed;
+        inputActions.Player.FireYellow.performed += OnFirePerformed;
+        inputActions.Player.FirePurple.performed += OnFirePerformed;
+        inputActions.Player.FireRed.performed += OnFirePerformed;
+        inputActions.Player.FireBlue.performed += OnFirePerformed;
     }
 
     private void OnDisable()
     {
-        inputActions.Player.Fire.performed -= OnFirePerformed;
+        inputActions.Player.FireBlue.performed -= OnFirePerformed;
+        inputActions.Player.FireRed.performed -= OnFirePerformed;
+        inputActions.Player.FirePurple.performed -= OnFirePerformed;
+        inputActions.Player.FireYellow.performed -= OnFirePerformed;
         inputActions.Player.Disable();
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        yellowEffectHandler = GetComponent<YellowNoteEffectHandler>();
+        purpleEffectHandler = GetComponent<PurpleNoteEffectHandler>();
+        redEffectHandler = GetComponent<RedNoteEffectHandler>();
+        blueEffectHandler = GetComponent<BlueNoteEffectHandler>();
     }
 
     private void Update()
@@ -81,7 +101,31 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        FireProjectile();
+        // Activates the different effect handlers
+        switch (context.action.name)
+        {
+            case "FireYellow":
+            {
+                yellowEffectHandler?.Fire();
+                break;        
+            }
+            case "FirePurple":
+            {
+                purpleEffectHandler?.Fire();
+                break;        
+            }
+            case "FireRed":
+            {
+                redEffectHandler?.Fire();
+                break;        
+            }
+            case "FireBlue":
+            {
+                blueEffectHandler?.Fire();
+                break;        
+            }
+        }
+
         beathandler.RemoveFrontBeat();
         lastFireTimeSeconds = Time.time;
     }
@@ -90,24 +134,6 @@ public class PlayerAttack : MonoBehaviour
     {
         return Time.time >= lastFireTimeSeconds + fireCooldownSeconds;
     }
-
-    private void FireProjectile()
-    {
-        Vector3 projectileSpawnPosition = GetProjectileSpawnPosition();
-        Vector2 finalDirection = GetFinalFireDirection(projectileSpawnPosition);
-
-        // Shooter asks the manager for a projectile of its assigned prefab
-        ProjectilePoolManager manager = ProjectilePoolManager.GetOrCreate();
-        Projectile projectile = manager.Get(projectilePrefab);
-
-        if (projectile == null) 
-        {
-            return;
-        }
-
-        projectile.Activate(projectileSpawnPosition, finalDirection);
-    }
-
 
     private Vector3 GetProjectileSpawnPosition()
     {
@@ -236,6 +262,24 @@ public class PlayerAttack : MonoBehaviour
 
         return mouseWorldPosition - originWorldPosition;
     }
+
+    public void FireProjectile(Projectile projectilePrefab, NoteEffectHandler noteEffectHandler = null)
+    {
+        Vector3 projectileSpawnPosition = GetProjectileSpawnPosition();
+        Vector2 finalDirection = GetFinalFireDirection(projectileSpawnPosition);
+
+        // Shooter asks the manager for a projectile of its assigned prefab
+        ProjectilePoolManager manager = ProjectilePoolManager.GetOrCreate();
+        Projectile projectile = manager.Get(projectilePrefab);
+
+        if (projectile == null) 
+        {
+            return;
+        }
+
+        projectile.Activate(projectileSpawnPosition, finalDirection, noteEffectHandler);
+    }
+
 
     // adds lock with key to attackLocks
     public void AddAttackLock(string key)
