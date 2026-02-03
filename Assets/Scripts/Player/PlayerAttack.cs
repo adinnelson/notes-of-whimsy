@@ -1,8 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerAttack : MonoBehaviour
 {
+    public const string MISSED_ATTACK_LOCK_KEY = "MISSED_ATTACK";
+
+    [SerializeField] private BeatHandler beathandler;
     [SerializeField] private Transform firePoint;
     [SerializeField] private Projectile projectilePrefab;
     [SerializeField] private float fireCooldownSeconds = 0.2f;
@@ -18,6 +23,9 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector2 lastAimDirection = Vector2.right;
     private Vector2 lastMousePos;
+
+    // hashset of attack locks
+    private HashSet<string> attackLocks = new HashSet<string>();
 
     private enum AimSource
     {
@@ -56,12 +64,25 @@ public class PlayerAttack : MonoBehaviour
         // whichever device (Mouse or Controller) that fired gets to be the active aim source for this shot.
         SetAimSourceFromFireDevice(context);
 
+        if(attackLocks.Count > 0)
+        {
+            return;
+        }
+
         if (!IsOffCooldown())
         {
             return;
         }
 
+        // if you fire off beat lock attacks until next beat
+        if (beathandler != null && !beathandler.ValidAttackInterval) 
+        {
+            AddAttackLock(MISSED_ATTACK_LOCK_KEY);
+            return;
+        }
+
         FireProjectile();
+        beathandler.RemoveFrontBeat();
         lastFireTimeSeconds = Time.time;
     }
 
@@ -214,5 +235,17 @@ public class PlayerAttack : MonoBehaviour
         mouseWorldPosition.z = originWorldPosition.z;
 
         return mouseWorldPosition - originWorldPosition;
+    }
+
+    // adds lock with key to attackLocks
+    public void AddAttackLock(string key)
+    {
+        attackLocks.Add(key);
+    }
+
+    // removes lock with key from attackLocks
+    public void RemoveAttackLock(string key)
+    {
+        attackLocks.Remove(key);
     }
 }

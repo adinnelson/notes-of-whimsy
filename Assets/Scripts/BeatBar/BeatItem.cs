@@ -8,7 +8,7 @@ public class BeatItem : MonoBehaviour
     private BeatHandler beatHandler;
 
     // end gameobject
-    private GameObject endGoal;
+    private Vector3 endGoal;
 
     float stepSize = 0.0f;
 
@@ -16,7 +16,7 @@ public class BeatItem : MonoBehaviour
     {
         if(endGoal == null) return;
 
-        if(this.gameObject.transform.position.x >= endGoal.transform.position.x)
+        if(this.gameObject.transform.position.x >= endGoal.x)
         {
             beatHandler.BeatArrived(this);
             return;
@@ -26,7 +26,7 @@ public class BeatItem : MonoBehaviour
     }
 
     // Initializes beat item
-    public void Init(BeatHandler beatHandler, Color colour, GameObject endGoal, Vector3 position, float stepSize)
+    public void Init(BeatHandler beatHandler, Color colour, Vector3 endGoal, Vector3 position, float stepSize)
     {
         // references used
         this.beatHandler = beatHandler;
