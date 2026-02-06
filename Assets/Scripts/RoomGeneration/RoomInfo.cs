@@ -8,6 +8,8 @@ public class RoomInfo : MonoBehaviour
     public GameObject topNode;
     public GameObject bottomNode;
 
+    public List<GameObject> nodeList;
+
     public List<GameObject> Enemies;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
