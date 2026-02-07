@@ -11,13 +11,14 @@ public class Note : Projectile
 
     public void InitializeFromData(SpellDataSO spellData)
     {
-        //from this Note.cs script
+        //from this Note.cs script -> can we inherite this data from SpellDataSO instead?
         this.name = spellData.spellName;
         this.desc = spellData.description;
         this.key = spellData.inputKey;
-        //from projectile class
+        //inherites from Projectile.cs
         this.speed = spellData.speed;
         this.damage = spellData.damage;
+        this.lifetimeSeconds = spellData.lifetimeSeconds;
     }
 
     // overrides just to set note effect handler reference

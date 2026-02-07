@@ -22,6 +22,11 @@ public class PlayerInventory : MonoBehaviour
         SpellDataSO newSpell = pickup.spell;
         ItemType type = newSpell.spellType;
 
+        /*
+         * only 1 spell of each ItemType allowed at a time. 
+         * if we find a new spell but already have that ItemType known, we automatically swap for the new one.
+         * future task: no auto swap new spell -> will have a pop up of stats for the new spell and player can choose to replace active spell with the new spell
+         */
         if (activeSpells.ContainsKey(type))
         {
             Debug.Log($"Swapping {activeSpells[type].name} for {newSpell.spellName}");
@@ -54,4 +59,13 @@ public class PlayerInventory : MonoBehaviour
     {
         return activeSpells.TryGetValue(type, out SpellDataSO spell) ? spell : null;
     }
+
+    /*
+     * FUTURE TODO:
+     * public void SaveInventory()
+     * public void LoadInventory()
+     * either use a spell library with all spells accessible in a specific spell folder 
+     *              or 
+     * can use SO SpellDatabase with: public List<SpellDataSO> allSpellsDatabase;
+     */
 }

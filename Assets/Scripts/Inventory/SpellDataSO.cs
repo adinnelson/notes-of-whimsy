@@ -3,16 +3,18 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewSpell", menuName = "Scriptable Objects/Spells")]
 public class SpellDataSO : ScriptableObject
 {
-    public string spellName; //should matche 'name' in Note.cs
-    public string description; //should matche 'desc' in Note.cs
-    public string inputKey; //should matches 'key' in Note.cs
     public ItemType spellType;
 
+    //these match info in Note.cs -- can we change these in Note.cs to inherite from here?
+    public string spellName;
+    public string description;
+    public string inputKey;
 
+    //these match the stats found in Projectile.cs and Note.cs and can be overriden here by updating them in inspector
     [Header("Combat Stats")]
     public float damage;
     public float speed;
-    public float lifetime;
+    public float lifetimeSeconds;
 
     [Header("Visuals")]
     public GameObject noteProjectilePrefab; //prefab with the Note.cs script on it **visual effects in the world

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-//later on, we can add to each ItemType the spell info that goes along with each different note
+//can add the combos to the ItemType list
 public enum ItemType
 {
     Purple,
