@@ -9,6 +9,17 @@ public class Note : Projectile
  
     private NoteEffectHandler noteEffectHandler;
 
+    public void InitializeFromData(SpellDataSO spellData)
+    {
+        //from this Note.cs script
+        this.name = spellData.spellName;
+        this.desc = spellData.description;
+        this.key = spellData.inputKey;
+        //from projectile class
+        this.speed = spellData.speed;
+        this.damage = spellData.damage;
+    }
+
     // overrides just to set note effect handler reference
     public void Activate(Vector3 spawnPosition, Vector2 travelDirection, NoteEffectHandler noteEffectHandler = null)
     {

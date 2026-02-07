@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e6ae1729c36a2841a3919b43d9a8002, type: 3}
+  m_Name: blueSpelll
+  m_EditorClassIdentifier: Assembly-CSharp::SpellDataSO
+  spellName: 
+  description: 
+  inputKey: 
+  spellType: 1
+  damage: 0
+  speed: 0
+  lifetime: 0
+  noteProjectilePrefab: {fileID: 6748023661102452975, guid: d7e7d2b19e2f7ff488c56e7733dbdf20, type: 3}
+  uiIconPrefab: {fileID: 5716504807486476903, guid: 182e5345d969caa4ebd6aeb1d96e4678, type: 3}

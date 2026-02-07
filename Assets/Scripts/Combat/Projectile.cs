@@ -3,9 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float speed = 12.0f;
-    [SerializeField] private float lifetimeSeconds = 2.0f;
-    [SerializeField] private float damage = 1.0f;
+    [SerializeField] public float speed = 12.0f;
+    [SerializeField] public float lifetimeSeconds = 2.0f;
+    [SerializeField] public float damage = 1.0f;
     private ProjectilePoolManager poolManager;
     private Projectile owningPrefab;
     private const float MIN_DIRECTION_SQR = 0.0001f;

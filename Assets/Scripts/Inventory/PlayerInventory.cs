@@ -1,61 +1,57 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-//shifted PickupObject into PlayerInventory for clarity
 public class PlayerInventory : MonoBehaviour
 {
-    private InventoryManager inventory = new InventoryManager();
+    private Dictionary<ItemType, SpellDataSO> activeSpells = new Dictionary<ItemType, SpellDataSO>(); //keep track of spells -- only allowed 1 of each type
+    private Dictionary<ItemType, GameObject> activeIcon = new Dictionary<ItemType, GameObject>(); //keep track of the spell Icons -- swap them out when new spell is learned
 
     [Header("InventoryUI")]
     [SerializeField] private Transform contentsParent;
-    /*
-     * these "Icons for Note Type" private GameObjects are stand-ins for the actual note prefabs. 
-     * if we swap these later, other updates must also occur: 
-     *      1. prefab reference in Inspector needs updating
-     *      2. below, SpawnIcon() switch-mapping (ex. ItemType.Green => greenIcon); 
-     *      3. in ItemType.cs enum if new note types are added or changed (ex. Green)
-     */
-    [Header("Icons for Note Type")]
-    [SerializeField] private GameObject greenIcon;
-    [SerializeField] private GameObject blueIcon;
-    [SerializeField] private GameObject yellowIcon;
-    [SerializeField] private GameObject pinkIcon;
 
     private void OnTriggerEnter2D(Collider2D objToPickup)
     {
         PickupItem pickup = objToPickup.GetComponent<PickupItem>();
 
-        if (pickup == null)
+        if (pickup == null || pickup.spell == null)
         {
-            Debug.Log($"Object to pickup was empty! Collider: {objToPickup.name}");
+            Debug.LogWarning($"Object to pickup was empty! Collider: {objToPickup.name}");
             return;
         }
 
-        inventory.AddItem(pickup.itemType); //add to inventory Data
-    
-        // temporary to prevent duplicate icons
-        if (inventory.GetCount(pickup.itemType) == 1)
+        SpellDataSO newSpell = pickup.spell;
+        ItemType type = newSpell.spellType;
+
+        if (activeSpells.ContainsKey(type))
         {
-            SpawnIcon(pickup.itemType); //add to inventory UI
+            Debug.Log($"Swapping {activeSpells[type].name} for {newSpell.spellName}");
+            if (activeIcon.ContainsKey(type))
+            {
+                Destroy(activeIcon[type]);
+                activeIcon.Remove(type);
+            }
         }
+
+        activeSpells[type] = newSpell;
+        SpawnIcon(newSpell);
         Destroy(objToPickup.gameObject);
     }
 
-    private void SpawnIcon(ItemType type)
+    private void SpawnIcon(SpellDataSO spell)
     {
-        GameObject prefab = type switch
+        if (spell.uiIconPrefab == null)
         {
-            ItemType.Green => greenIcon,
-            ItemType.Blue => blueIcon,
-            ItemType.Yellow => yellowIcon,
-            ItemType.Pink => pinkIcon,
-            _ => null
-        };
-
-        if (prefab == null)
-        {
-            Debug.Log($"No prefab assigned for ItemType {type}");
+            Debug.LogWarning($"No UI Icon Prefab assigned for {spell.spellName}");
             return;
         }
-        Instantiate(prefab, contentsParent).SetActive(true);
+
+        GameObject iconInstance = Instantiate(spell.uiIconPrefab, contentsParent);
+        iconInstance.SetActive(true);
+        activeIcon[spell.spellType] = iconInstance;
+    }
+
+    public SpellDataSO GetSpellByType(ItemType type)
+    {
+        return activeSpells.TryGetValue(type, out SpellDataSO spell) ? spell : null;
     }
 }
