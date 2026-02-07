@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Room Node
   layers:
   - Default
   - TransparentFX
@@ -40,6 +41,7 @@ TagManager:
   m_SortingLayers:
   - name: Background
     uniqueID: 2554782705
+    locked: 0
   - name: Floors
     uniqueID: 4070886917
     locked: 0

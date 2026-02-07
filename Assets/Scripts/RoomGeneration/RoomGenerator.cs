@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework.Internal;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -43,7 +45,7 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-    private InputSystem_Actions inputs;
+
 
 
 
@@ -52,7 +54,6 @@ idea is to make it work for any size and shape room to have creativity and relea
 */
     void Awake()
     {
-        inputs = new();
         CreateFloorLayout();
     }
     // remembird
@@ -107,12 +108,8 @@ idea is to make it work for any size and shape room to have creativity and relea
         // todo: loop through room spawn points and pick a room to attach
         for (int i = 0; numberOfRooms < desiredRoomNumber; i++)
         {
-            // fixme: find a way to have this section not hang
-            print(i);
-            // todo: add randomization
             currentRoom = spawnedRooms[i];
             currentRoomInfo = currentRoom.GetComponent<RoomInfo>();
-            // spawnedRooms.Add(currentRoom);
             List<GameObject> nodes = currentRoomInfo.nodeList;
             
             int roomsSpawnedThisIteration = numberOfRooms;
@@ -120,7 +117,6 @@ idea is to make it work for any size and shape room to have creativity and relea
             for(int j = 0; j < nodes.Count; j++)
             {
                 if(nodes[j] == null) continue;
-                print("starting wait");
                 
                 // spawn new rooms on each free node 
                 switch (nodes[j].name.ToLower())
@@ -145,8 +141,10 @@ idea is to make it work for any size and shape room to have creativity and relea
                     spawnedRoom = null;
                     continue;
                 }
+                if(spawnedRoom == null) continue;
                 spawnedRooms.Add(spawnedRoom);
                 numberOfRooms++;
+                j =0;
             }
             
             // Break if no rooms were spawned this iteration (dungeon is closed off)
@@ -157,7 +155,7 @@ idea is to make it work for any size and shape room to have creativity and relea
             }
         }
         
-        // CapOffHoles();
+        CapOffHoles();
     }
 
     /// <summary>
@@ -171,8 +169,6 @@ idea is to make it work for any size and shape room to have creativity and relea
     {
         // do check for valid room here so the room can be changed here instead of later
         int selectedRoomNum = Random.Range(0, roomPool.Count);
-        print(node.name);
-
         // RoomInfo testRoomInfo = roomPool[selectedRoomNum].GetComponent<RoomInfo>();
         // // make sure the dungeon isnt instantly capped off
         // while(testRoomInfo.nodeList.Count == 1)
@@ -187,6 +183,8 @@ idea is to make it work for any size and shape room to have creativity and relea
         spawnedRoom.transform.position = node.position - spawnedRoom.GetComponent<RoomInfo>().GetNode(direction).transform.localPosition;
         spawnedRoom.name = node.name + "spawned" + numberOfRooms;
         spawnedRoomInfo.nodeList.Remove(spawnedRoomInfo.GetNode(direction));
+        spawnedRoomInfo.SetParentNode(node);
+        spawnedRoomInfo.SetSpawnedNode(spawnedRoomInfo.GetNode(direction).transform);
         
         return spawnedRoom;
     }
@@ -200,51 +198,51 @@ idea is to make it work for any size and shape room to have creativity and relea
     /// </summary>
     private void CapOffHoles()
     {
+        GameObject spawnedRoom = null;
+        List<GameObject> intersection;
         for(int i = 0; i < numberOfRooms; i++)
         {
             RoomInfo currentRoomInfo = spawnedRooms[i].GetComponent<RoomInfo>();
+            List<GameObject> nodes = currentRoomInfo.nodeList;
+
             if(currentRoomInfo.nodeList.Count <= 0) continue;
 
-            foreach (var node in currentRoomInfo.nodeList)
+            for(int j = 0; j < nodes.Count; j++)
             {
-                switch (node.name.ToLower())
+                if(nodes[j] == null) continue;
+                
+                // spawn new rooms on each free node 
+                switch (nodes[j].name.ToLower())
                 {
                     case "leftnode":
-                        // Add logic for left node
-                        List<GameObject> intersection = new();
-                        foreach (var room in starterRooms)
-                        {
-                            if (rightConnections.Contains(room))
-                            {
-                                intersection.Add(room);
-                            }
-                        }
-                        if (intersection.Count > 0)
-                        {
-                            int intersectionSelector = (int)Random.Range(0f, intersection.Count);
-                            GameObject spawnedRoom = Instantiate(intersection[intersectionSelector], roomsParent.transform);
-                            RoomInfo spawnedRoomInfo = spawnedRoom.GetComponent<RoomInfo>();
-                            spawnedRoom.transform.position = node.transform.position - spawnedRoomInfo.GetNode("right").transform.localPosition;
-                            spawnedRoom.name = node.name + "spawned" + numberOfRooms;
-                            spawnedRoomInfo.nodeList.Remove(spawnedRoomInfo.GetNode("right"));
-                            spawnedRooms.Add(spawnedRoom);
-                            // numberOfRooms++;
-                        }
-
-                        break;
+                        intersection = rightConnections.Intersect(starterRooms).ToList(); 
+                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "right");
+                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("left"));
+                    break;
                     case "rightnode":
-                        // Add logic for right node
-                        
-                        break;
+                        intersection = leftConnections.Intersect(starterRooms).ToList(); 
+                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "left");
+                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("right"));
+                    break;
                     case "topnode":
-                        // Add logic for top node
-                        break;
+                        intersection = bottomConnections.Intersect(starterRooms).ToList(); 
+                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "bottom");
+                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("top"));
+                    break;
                     case "bottomnode":
-                        // Add logic for bottom node
-                        break;
+                        intersection = topConnections.Intersect(starterRooms).ToList();
+                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "top");
+                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("bottom"));
+                    break;
                     default:
-                        break;
-                } }
+                    spawnedRoom = null;
+                    continue;
+                }
+                if(spawnedRoom == null) continue;
+                spawnedRooms.Add(spawnedRoom);
+                numberOfRooms++;
+                j =0;
+            }
         }
     }
 

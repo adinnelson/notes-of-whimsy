@@ -348,7 +348,7 @@ MonoBehaviour:
   roomsParent: {fileID: 0}
   grid: {fileID: 302093471}
   numberOfRooms: 0
-  desiredRoomNumber: 5
+  desiredRoomNumber: 10
   spawnedRooms: []
   starterRooms:
   - {fileID: 2791336798263055279, guid: 0f888efa387aa2c4aadc6589d88889c5, type: 3}
