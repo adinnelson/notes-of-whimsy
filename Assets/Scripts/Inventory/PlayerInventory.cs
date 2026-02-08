@@ -20,7 +20,7 @@ public class PlayerInventory : MonoBehaviour
         }
 
         SpellDataSO newSpell = pickup.spell;
-        ItemType type = newSpell.spellType;
+        ItemType type = newSpell.SpellType;
 
         /*
          * only 1 spell of each ItemType allowed at a time. 
@@ -44,15 +44,15 @@ public class PlayerInventory : MonoBehaviour
 
     private void SpawnIcon(SpellDataSO spell)
     {
-        if (spell.uiIconPrefab == null)
+        if (spell.UIIconPrefab == null)
         {
             Debug.LogWarning($"No UI Icon Prefab assigned for {spell.name}");
             return;
         }
 
-        GameObject iconInstance = Instantiate(spell.uiIconPrefab, contentsParent);
+        GameObject iconInstance = Instantiate(spell.UIIconPrefab, contentsParent);
         iconInstance.SetActive(true);
-        activeIcon[spell.spellType] = iconInstance;
+        activeIcon[spell.SpellType] = iconInstance;
     }
 
     public SpellDataSO GetSpellByType(ItemType type)

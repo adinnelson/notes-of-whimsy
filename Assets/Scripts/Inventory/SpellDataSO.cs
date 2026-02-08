@@ -3,9 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewSpell", menuName = "Scriptable Objects/Spells")]
 public class SpellDataSO : ScriptableObject
 {
-    public ItemType spellType;
+    [Header("Type")]
+    public ItemType SpellType;
 
     [Header("Visuals")]
-    public GameObject noteProjectilePrefab; //prefab with the Note.cs script on it **visual effects in the world
-    public GameObject uiIconPrefab; //visual for icon in the UI
+    public Note NoteProjectilePrefab; //prefab for note effects
+    public GameObject UIIconPrefab; //prefab for UI Icon
 }
