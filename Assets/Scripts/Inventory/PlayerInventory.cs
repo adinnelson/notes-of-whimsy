@@ -24,12 +24,12 @@ public class PlayerInventory : MonoBehaviour
 
         /*
          * only 1 spell of each ItemType allowed at a time. 
-         * if we find a new spell but already have that ItemType known, we automatically swap for the new one.
+         * if we find a new spell but already have a spell of that ItemType known, we automatically swap for the new one.
          * future task: no auto swap new spell -> will have a pop up of stats for the new spell and player can choose to replace active spell with the new spell
          */
         if (activeSpells.ContainsKey(type))
         {
-            Debug.Log($"Swapping {activeSpells[type].name} for {newSpell.spellName}");
+            Debug.Log($"Swapping {activeSpells[type].name} for {newSpell.name}");
             if (activeIcon.ContainsKey(type))
             {
                 Destroy(activeIcon[type]);
@@ -46,7 +46,7 @@ public class PlayerInventory : MonoBehaviour
     {
         if (spell.uiIconPrefab == null)
         {
-            Debug.LogWarning($"No UI Icon Prefab assigned for {spell.spellName}");
+            Debug.LogWarning($"No UI Icon Prefab assigned for {spell.name}");
             return;
         }
 
