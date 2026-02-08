@@ -9,7 +9,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Damageable
   - Water
   - UI
   - 
@@ -44,6 +44,7 @@ TagManager:
     locked: 0
   - name: Walls
     uniqueID: 1373270931
+    locked: 0
   - name: Background
     uniqueID: 2554782705
     locked: 0

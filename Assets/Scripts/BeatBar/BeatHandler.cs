@@ -38,6 +38,7 @@ public class BeatHandler : MonoBehaviour {
     private Vector3 beatEndPosition;
     private float beatDistance;
     private float spawnTime;
+    public float SecondsPerBeat => 60f / bpm;
 
     private float timeElapsed = 0.0f;
 

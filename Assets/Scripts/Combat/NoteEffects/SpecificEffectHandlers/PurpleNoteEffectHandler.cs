@@ -2,13 +2,46 @@ using UnityEngine;
 
 public class PurpleNoteEffectHandler : NoteEffectHandler
 {
+    [SerializeField] private BeatHandler beatHandler;
+    [SerializeField] private LaserBeam laserPrefab;
+
+    private bool onCooldown;
+
     public override void Fire()
     {
-        playerAttack.FireProjectile(note, this);
+        if (onCooldown)
+        {
+            return;
+        }
+
+        if (beatHandler == null)
+        {
+            Debug.LogError("PurpleNoteEffectHandler: BeatHandler not assigned.", this);
+            return;
+        }
+
+        if (laserPrefab == null)
+        {
+            Debug.LogError("PurpleNoteEffectHandler: Laser prefab not assigned.", this);
+            return;
+        }
+
+        // Spawn laser
+        LaserBeam beam = Instantiate(laserPrefab);
+        beam.Init(transform, beatHandler);
+
+        // Cooldown starts immediately (3 beats total)
+        onCooldown = true;
+        Invoke(nameof(ResetCooldown), beatHandler.SecondsPerBeat * 3f);
+    }
+
+    private void ResetCooldown()
+    {
+        onCooldown = false;
     }
 
     public override void HitEnemy(IDamageable damageable)
     {
-
+        // not used for beam
     }
 }

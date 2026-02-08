@@ -52,24 +52,7 @@ public class beam_logic : MonoBehaviour
     void Update()
     {
 
-        // Example use, follows mouse and starts / stops with click
-
-        Vector2 mouse_pos = Mouse.current.position.ReadValue();
-        SetVector(transform.InverseTransformPoint(Camera.main.ScreenToWorldPoint(mouse_pos)));
-
-        Mouse mouse = Mouse.current;
-
-        if (mouse == null) return;
-
-        if (mouse.leftButton.wasPressedThisFrame)
-        {
-            StartBeam();
-        }
-
-        if (mouse.leftButton.wasReleasedThisFrame)
-        {
-            EndBeam();
-        }
+        
     }
 
     /// <summary>
