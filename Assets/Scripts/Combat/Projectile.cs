@@ -3,9 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] public float speed = 12.0f;
-    [SerializeField] public float lifetimeSeconds = 2.0f;
-    [SerializeField] public float damage = 1.0f;
+    [SerializeField] private float speed = 12.0f;
+    [SerializeField] private float lifetimeSeconds = 2.0f;
+    [SerializeField] private float damage = 1.0f;
     private ProjectilePoolManager poolManager;
     private Projectile owningPrefab;
     private const float MIN_DIRECTION_SQR = 0.0001f;
@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
     public void SetOwningPrefab(Projectile prefab) => owningPrefab = prefab;
 
     // set's spawn position and travel direction, activates the projectile
-    public void Activate(Vector3 spawnPosition, Vector2 travelDirection, NoteEffectHandler noteEffectHandler = null)
+    public virtual void Activate(Vector3 spawnPosition, Vector2 travelDirection, NoteEffectHandler noteEffectHandler = null)
     {
         transform.position = spawnPosition;
 
