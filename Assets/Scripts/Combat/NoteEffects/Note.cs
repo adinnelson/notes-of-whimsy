@@ -10,7 +10,7 @@ public class Note : Projectile
     private NoteEffectHandler noteEffectHandler;
 
     // overrides just to set note effect handler reference
-    public void Activate(Vector3 spawnPosition, Vector2 travelDirection, NoteEffectHandler noteEffectHandler = null)
+    public override void Activate(Vector3 spawnPosition, Vector2 travelDirection, NoteEffectHandler noteEffectHandler = null)
     {
         base.Activate(spawnPosition, travelDirection);
 
