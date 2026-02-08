@@ -10,11 +10,30 @@ public class YellowNoteEffectHandler : NoteEffectHandler
 
     float damage = 25f;
 
+    float cooldown = 5;
+
+    bool onCooldown = false;
+
     bool lightingEffectInProgress = false;
+
 
     void FixedUpdate() 
     {
-        if (!lightingEffectInProgress) return;
+        if (!lightingEffectInProgress) 
+        {
+            if(!onCooldown) return;
+
+            if(timeElapsed >= cooldown)
+            {
+                onCooldown = false;
+                timeElapsed = 0.0f;
+                return;
+            }
+
+            timeElapsed += Time.fixedDeltaTime;
+            return;
+        }
+
         if(enemies.Count <= 0)
         {
             lightingEffectInProgress = false;
@@ -34,7 +53,10 @@ public class YellowNoteEffectHandler : NoteEffectHandler
 
     public override void Fire()
     {
+        if (onCooldown) return;
+
         playerAttack.FireProjectile(note, this);
+        onCooldown = true;
     }
 
     List<EnemyBase> enemies = new List<EnemyBase>();
