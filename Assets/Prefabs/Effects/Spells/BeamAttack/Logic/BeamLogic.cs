@@ -4,16 +4,6 @@ using UnityEngine.InputSystem;
 
 public class beam_logic : MonoBehaviour
 {
-    /// <summary>
-    /// Invoked when the BeamStart animation is finished and the beam is at full strength.
-    /// </summary>
-    public event Action EventBeamOn;
-
-    /// <summary>
-    /// Invoked when the BeamEnd animation is finshed and the beam is no longer visible.
-    /// </summary>
-    public event Action EventBeamOff;
-
     [SerializeField] private float noteParticleEmitPercent = 1.0f;
     [SerializeField] private float yScale = 1.0f;
     [SerializeField] private float destroyTime = 1.0f;
@@ -52,24 +42,7 @@ public class beam_logic : MonoBehaviour
     void Update()
     {
 
-        // Example use, follows mouse and starts / stops with click
-
-        Vector2 mouse_pos = Mouse.current.position.ReadValue();
-        SetVector(transform.InverseTransformPoint(Camera.main.ScreenToWorldPoint(mouse_pos)));
-
-        Mouse mouse = Mouse.current;
-
-        if (mouse == null) return;
-
-        if (mouse.leftButton.wasPressedThisFrame)
-        {
-            StartBeam();
-        }
-
-        if (mouse.leftButton.wasReleasedThisFrame)
-        {
-            EndBeam();
-        }
+        
     }
 
     /// <summary>
@@ -132,5 +105,14 @@ public class beam_logic : MonoBehaviour
 
         lingeringParticleEmitter.localPosition = pointingVector - pointingVector.normalized;
         lingeringParticleEmitter.localRotation = beamVisual.localRotation;
+    }
+
+    // Stop all the children effects on the beam so it doesn't continue playing after the beam has already stopped.
+    public void StopParticles()
+    {
+        foreach (var effects in GetComponentsInChildren<ParticleSystem>())
+        {
+            effects.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
     }
 }
