@@ -15,11 +15,11 @@ public class Note : Projectile
         base.Activate(spawnPosition, travelDirection);
 
         this.noteEffectHandler = noteEffectHandler;
-        Debug.Log($"=============Note: Activate override triggered!");
+        Debug.Log($"Note.cs: Activate override triggered!");
     }
 
     // overrides generic projectile as we want to activate effect
-    private void OnTriggerEnter2D(Collider2D other)
+    private override void OnTriggerEnter2D(Collider2D other)
     {
         if (!isActive) 
         {
@@ -36,7 +36,6 @@ public class Note : Projectile
         if (other.TryGetComponent<IDamageable>(out var damageable))
         {
             noteEffectHandler?.HitEnemy(damageable);
-            Debug.Log("=================");
             Despawn();
         }
     }
