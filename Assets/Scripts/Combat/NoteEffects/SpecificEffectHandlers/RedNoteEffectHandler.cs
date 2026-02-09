@@ -6,7 +6,7 @@ using System.Linq;
 public class RedNoteEffectHandler : NoteEffectHandler
 {
     [Header("Fireball AOE specs")]
-    [SerializeField] private float knockbackRadius = 10.0f;
+    [SerializeField] private float knockbackRadius = 1.0f;
     [SerializeField] private float knockbackForce = 500.0f;
     [SerializeField] private float damage = 20.0f;
     [SerializeField] private LayerMask enemyLayer; 
@@ -22,16 +22,22 @@ public class RedNoteEffectHandler : NoteEffectHandler
         {
             Vector3 impactPosition = enemyComponent.transform.position;
             Vector3 playerPosition = playerAttack.transform.position;
+
+            enemiesInRange.Add(enemyComponent.gameObject);
+            Debug.Log($"Physics Check! Script Radius: {knockbackRadius} | World Position: {impactPosition}");
+            DebugDrawCircle(impactPosition, knockbackRadius, Color.cyan, 2.0f);
+
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(impactPosition, knockbackRadius, enemyLayer);
 
             foreach (Collider2D hit in hitColliders)
             {
-                enemiesInRange.Add(hit.gameObject);
-                Debug.Log($"AOE caught: {hit.gameObject.name}");
+                if (!enemiesInRange.Contains(hit.gameObject))
+                {
+                    enemiesInRange.Add(hit.gameObject);
+                }
             }
-            Debug.Log($"Explosion hit {enemiesInRange.Count} enemies on the Enemy layer.");
 
-        Knockback(enemiesInRange, impactPosition, playerPosition);
+            Knockback(enemiesInRange, impactPosition, playerPosition);
         }
     }
 
@@ -46,25 +52,30 @@ public class RedNoteEffectHandler : NoteEffectHandler
         {
             Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
 
-            if (rb != null)
+            if (rb == null)
             {
-                Vector2 direction = (target.transform.position - moveAwayFrom).normalized;
-                Vector3 offset = target.transform.position - impactPoint;
-
-                if (offset.sqrMagnitude < 0.0001f)
-                {
-                    direction = (target.transform.position - moveAwayFrom).normalized;
-                    Debug.Log($"Primary Target {target.name} hit! Knocking back from player.");
-                }
-                else
-                {
-                    direction = offset.normalized;
-                }
-
-                rb.velocity = Vector2.zero;
-                rb.AddForce(direction * knockbackForce);
-                Debug.Log($"Knocking back {target.name} with {knockbackForce} force.");
+                continue;
             }
+
+            Vector2 direction;
+            Vector3 targetPosition = target.transform.position;
+            Vector3 offset = targetPosition - impactPoint;
+
+            Debug.DrawLine(impactPoint, targetPosition, Color.yellow, 1.0f);
+
+            if (offset.sqrMagnitude < 0.0001f)
+            {
+                direction = (targetPosition - moveAwayFrom).normalized;
+                Debug.DrawRay(targetPosition, direction * 2, Color.red, 1.0f);
+            }
+            else
+            {
+                direction = offset.normalized;
+                Debug.DrawRay(targetPosition, direction * 2, Color.blue, 1.0f);
+            }
+
+            rb.velocity = Vector2.zero;
+            rb.AddForce(direction * knockbackForce);
         }
     }
 
@@ -93,8 +104,19 @@ public class RedNoteEffectHandler : NoteEffectHandler
         playerAttack.FireProjectile(note, this);
     }
 
-    public void FixedUpdate()
+    private void DebugDrawCircle(Vector3 center, float radius, Color color, float duration)
     {
+        int segments = 32;
+        float angleStep = 360f / segments;
+        Vector3 prevPoint = center + new Vector3(radius, 0, 0);
 
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = i * angleStep * Mathf.Deg2Rad;
+            Vector3 nextPoint = center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
+
+            Debug.DrawLine(prevPoint, nextPoint, color, duration);
+            prevPoint = nextPoint;
+        }
     }
 }

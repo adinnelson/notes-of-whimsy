@@ -15,7 +15,6 @@ public class Note : Projectile
         base.Activate(spawnPosition, travelDirection);
 
         this.noteEffectHandler = noteEffectHandler;
-        Debug.Log($"Note.cs: Activate override triggered!");
     }
 
     // overrides generic projectile as we want to activate effect
