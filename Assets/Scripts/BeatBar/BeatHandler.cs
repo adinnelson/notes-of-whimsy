@@ -70,7 +70,7 @@ public class BeatHandler : MonoBehaviour {
     {
         beatEndPosition = new Vector3(endGraphic.transform.position.x + LATE_OFFSET, endGraphic.transform.position.y, endGraphic.transform.position.z);
         beatDistance = endGraphic.transform.position.x - beatSpawnPoint.position.x;
-        spawnTime = 60f / bpm; 
+        spawnTime = 60.0f / bpm; 
 
         PopulateBeatBar();
     }
@@ -222,5 +222,9 @@ public class BeatHandler : MonoBehaviour {
                 currentVisibleBeats.Add(additionalBeatItem);
             }
         }
+    }
+    public float GetBPM()
+    {
+        return bpm;
     }
 }
