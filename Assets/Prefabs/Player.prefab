@@ -113,10 +113,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   beathandler: {fileID: 0}
   firePoint: {fileID: 5189259256147739164}
-  yellowEffectHandler: {fileID: 0}
-  purpleEffectHandler: {fileID: 0}
-  redEffectHandler: {fileID: 0}
-  blueEffectHandler: {fileID: 0}
   projectilePrefab: {fileID: 2852815562626469276, guid: 73861d502ca7f38499b1af206113828b, type: 3}
   fireCooldownSeconds: 0.2
 --- !u!114 &1155841396824913759
@@ -256,6 +252,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RedNoteEffectHandler
   note: {fileID: 0}
   playerAttack: {fileID: 0}
+  knockbackRadius: 10
+  knockbackForce: 500
+  damage: 20
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &4426264664621214320
 MonoBehaviour:
   m_ObjectHideFlags: 0
