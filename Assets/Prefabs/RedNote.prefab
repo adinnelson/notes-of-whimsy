@@ -138,7 +138,7 @@ MonoBehaviour:
   damage: 1
   key: red
   name: red
-  desc: red
+  desc: 'red note AOE knockback '
 --- !u!58 &-5968953057158646297
 CircleCollider2D:
   m_ObjectHideFlags: 0

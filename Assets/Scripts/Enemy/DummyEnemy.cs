@@ -13,7 +13,7 @@ public class DummyEnemy : EnemyBase
 
     protected override void OnAttackStart()
     {
-        if (logStateChanges) Debug.Log("[DummyEnemy] Attack START");
+        //if (logStateChanges) Debug.Log("[DummyEnemy] Attack START");
         // For a dummy: do nothing else
     }
 
@@ -24,21 +24,21 @@ public class DummyEnemy : EnemyBase
 
     protected override void OnAttackEnd()
     {
-        if (logStateChanges) Debug.Log("[DummyEnemy] Attack END");
+        //if (logStateChanges) Debug.Log("[DummyEnemy] Attack END");
     }
 
     protected override void OnTelegraphStart()
     {
-        if (logStateChanges) Debug.Log("[DummyEnemy] Telegraph START");
+        //if (logStateChanges) Debug.Log("[DummyEnemy] Telegraph START");
     }
 
     protected override void OnRecoverStart()
     {
-        if (logStateChanges) Debug.Log("[DummyEnemy] Recover START");
+        //if (logStateChanges) Debug.Log("[DummyEnemy] Recover START");
     }
 
     protected override void OnHurtStart()
     {
-        if (logStateChanges) Debug.Log("[DummyEnemy] Hurt START");
+        //if (logStateChanges) Debug.Log("[DummyEnemy] Hurt START");
     }
 }

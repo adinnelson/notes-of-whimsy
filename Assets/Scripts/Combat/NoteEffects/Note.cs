@@ -10,11 +10,12 @@ public class Note : Projectile
     private NoteEffectHandler noteEffectHandler;
 
     // overrides just to set note effect handler reference
-    public void Activate(Vector3 spawnPosition, Vector2 travelDirection, NoteEffectHandler noteEffectHandler = null)
+    public override void Activate(Vector3 spawnPosition, Vector2 travelDirection, NoteEffectHandler noteEffectHandler = null)
     {
         base.Activate(spawnPosition, travelDirection);
 
         this.noteEffectHandler = noteEffectHandler;
+        Debug.Log($"=============Note: Activate override triggered!");
     }
 
     // overrides generic projectile as we want to activate effect
@@ -35,6 +36,7 @@ public class Note : Projectile
         if (other.TryGetComponent<IDamageable>(out var damageable))
         {
             noteEffectHandler?.HitEnemy(damageable);
+            Debug.Log("=================");
             Despawn();
         }
     }
