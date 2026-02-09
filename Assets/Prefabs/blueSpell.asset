@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e6ae1729c36a2841a3919b43d9a8002, type: 3}
-  m_Name: blueSpelll
+  m_Name: blueSpell
   m_EditorClassIdentifier: Assembly-CSharp::SpellDataSO
   SpellType: 1
   NoteProjectilePrefab: {fileID: 8835509098591157618, guid: d7e7d2b19e2f7ff488c56e7733dbdf20, type: 3}
