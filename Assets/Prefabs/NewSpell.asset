@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e6ae1729c36a2841a3919b43d9a8002, type: 3}
-  m_Name: redSpell2
+  m_Name: NewSpell
   m_EditorClassIdentifier: Assembly-CSharp::SpellDataSO
-  SpellType: 3
-  NoteProjectilePrefab: {fileID: 8835509098591157618, guid: eb963c59930fc8a48b3b3a90113a4d83, type: 3}
-  UIIconPrefab: {fileID: 5716504807486476903, guid: 33fdb23fcc60f0d42be17988a4ccedbf, type: 3}
+  SpellType: 0
+  NoteProjectilePrefab: {fileID: 0}
+  UIIconPrefab: {fileID: 0}
