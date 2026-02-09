@@ -1,56 +1,84 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.Pool;
 
 public class YellowNoteEffectHandler : NoteEffectHandler
 {
-    float detectionRadius = 2.5f;
+    // Set values used for calculations
+    private float detectionRadius = 3.5f;
+    private float damage = 25.0f;
+    private float cooldown = 5.0f;
+    private float timeBetweenTargets = 0.5f;
+    private float stunTime = 5.0f;
+    private string stunKey = "yellow";
 
-    float timeElapsed = 0.0f;
+    // flags and tracking variables
+    private float timeElapsed = 0.0f;
+    private bool onCooldown = false;
+    private bool lightingEffectInProgress = false;
 
-    float damage = 25f;
+    // For tracking stunned enemies
+    private Dictionary<EnemyBase, float> stunnedEnemies = new Dictionary<EnemyBase, float>();
+    private HashSet<EnemyBase> storedEnemies = new HashSet<EnemyBase>();
+    
+    // For lightning chain order
+    private List<EnemyBase> enemies = new List<EnemyBase>();
 
-    float cooldown = 5;
+    // layer mask for effect
+    [SerializeField] private LayerMask enemyMask;
 
-    bool onCooldown = false;
+    // Temp Lighning effects
+    [SerializeField] private TempLightingEffectLogic lightningEffect;
+     private ObjectPool<TempLightingEffectLogic> lightningChainPool;
+    private List<TempLightingEffectLogic> currentVisibleLightningChains = new List<TempLightingEffectLogic>();
 
-    bool lightingEffectInProgress = false;
-
+    void Awake()
+    {
+        lightningChainPool = new ObjectPool<TempLightingEffectLogic>(
+            createFunc: CreateItem,
+            actionOnGet: OnGet,
+            actionOnRelease: OnRelease,
+            actionOnDestroy: OnDestroyItem,
+            collectionCheck: true,   // helps catch double-release mistakes
+            defaultCapacity: 10,
+            maxSize: 50
+        );
+    }    
 
     void FixedUpdate() 
     {
+        UpdateAffectedEnemies();
+
         if (!lightingEffectInProgress) 
         {
-            if(!onCooldown) return;
+            UpdateCooldown();
 
-            if(timeElapsed >= cooldown)
-            {
-                onCooldown = false;
-                timeElapsed = 0.0f;
-                return;
-            }
-
-            timeElapsed += Time.fixedDeltaTime;
             return;
         }
 
         if(enemies.Count <= 0)
         {
-            lightingEffectInProgress = false;
+            DisableEffect();
+
             return;
         }
 
 
-        if(timeElapsed >= 1.0f)
+        if(timeElapsed >= timeBetweenTargets)
         {
-            enemies[0].GetComponent<Health>().TakeDamage(damage);
-            enemies.RemoveAt(0);
-            timeElapsed = 0;
+            ChainToNextTarget();
+        }
+        else
+        {
+            UpdateCurrentChain();
         }
 
         timeElapsed +=  Time.fixedDeltaTime;
     }
 
+    // shoot projectile
     public override void Fire()
     {
         if (onCooldown) return;
@@ -59,17 +87,13 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         onCooldown = true;
     }
 
-    List<EnemyBase> enemies = new List<EnemyBase>();
+    // On enemy hit, enables effect and sets up initial values
     public override void HitEnemy(IDamageable damageable)
     {
         enemies.Clear();
-        
         Health enemyHealth = (Health)damageable;
 
-        
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(enemyHealth.transform.position, detectionRadius);
-
-        Debug.Log(hitColliders.Length);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(enemyHealth.transform.position, detectionRadius, enemyMask);
 
         foreach(Collider2D collider in hitColliders)
         {
@@ -81,9 +105,138 @@ public class YellowNoteEffectHandler : NoteEffectHandler
 
             enemies.Add(enemy);
 
-            lightingEffectInProgress = true;
         }
 
-        
+        enemies = enemies.OrderBy(enemy => Vector3.Distance(enemyHealth.transform.position, enemy.transform.position)).ToList();
+
+        TempLightingEffectLogic lightningChain = lightningChainPool.Get();
+        lightningChain.transform.position = enemies[0].transform.position;
+        lightningChain.TargetPos = enemies[0].transform.position;
+        currentVisibleLightningChains.Add(lightningChain);
+
+        StunEnemy(enemies[0]);
+
+        enemies[0].GetComponent<Health>().TakeDamage(damage);
+        enemies.RemoveAt(0);
+
+        lightingEffectInProgress = true;        
     }
+
+    // stuns enemies or adds to stunTime to stun effect
+    private void StunEnemy(EnemyBase enemy)
+    {
+        if(storedEnemies.Contains(enemy))
+        {
+            stunnedEnemies[enemy] += stunTime;
+            enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
+            enemy.AddStunEffect(stunKey);
+            return;
+        }
+
+        stunnedEnemies.Add(enemy, stunTime);
+        storedEnemies.Add(enemy);
+        enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
+        enemy.AddStunEffect(stunKey);
+    }
+
+    // updates cooldown
+    private void UpdateCooldown()
+    {
+        if(!onCooldown) return;
+
+        if(timeElapsed >= cooldown)
+        {
+            onCooldown = false;
+            timeElapsed = 0.0f;
+            return;
+        }
+
+        timeElapsed += Time.fixedDeltaTime;
+    }
+
+    // updates stun time on affected enemies
+    private void UpdateAffectedEnemies()
+    {
+        foreach(EnemyBase enemy in storedEnemies)
+        {
+            if(stunnedEnemies[enemy] <= 0) continue;
+
+            stunnedEnemies[enemy] = stunnedEnemies[enemy] - Time.fixedDeltaTime;
+
+            if(stunnedEnemies[enemy] <= 0)
+            {
+                enemy.RemoveStunEffect(stunKey);
+                enemy.gameObject.transform.localScale = new Vector3(1, 1, 1);
+            }
+        }
+    }
+
+    // updates chain to next target
+    private void UpdateCurrentChain()
+    {
+        Vector3 dir = currentVisibleLightningChains[currentVisibleLightningChains.Count - 1].transform.position - enemies[0].transform.position;
+        currentVisibleLightningChains[currentVisibleLightningChains.Count - 1].TargetPos = enemies[0].transform.position + (timeBetweenTargets - timeElapsed) / timeBetweenTargets * dir;
+    }
+
+    // deals damages to finished chain and sets up next chain
+    private void ChainToNextTarget()
+    {
+        enemies[0].GetComponent<Health>().TakeDamage(damage);
+            
+        EnemyBase enemySource = enemies[0];
+
+        StunEnemy(enemySource);
+
+        enemies.RemoveAt(0);
+        timeElapsed = 0;
+
+        if(enemies.Count <= 0) return;
+
+        TempLightingEffectLogic lightningChain = lightningChainPool.Get();
+        lightningChain.transform.position = enemySource.transform.position;
+        lightningChain.TargetPos = enemySource.transform.position;
+        currentVisibleLightningChains.Add(lightningChain);
+    }
+
+
+    // diables and returns lightning effects
+    private void DisableEffect()
+    {
+        lightingEffectInProgress = false;
+
+        for (int i = 0;i < currentVisibleLightningChains.Count;i++)
+        {
+            lightningChainPool.Release(currentVisibleLightningChains[i]);
+        }
+
+        currentVisibleLightningChains.Clear();
+    }
+
+    // Creates a new pooled GameObject the first time (and whenever the pool needs more).
+    private TempLightingEffectLogic CreateItem()
+    {
+        TempLightingEffectLogic lightningChain = Instantiate(lightningEffect, Vector2.zero, Quaternion.identity);
+        lightningChain.gameObject.SetActive(false);
+
+        return lightningChain;
+    }
+
+    // Called when an item is taken from the pool.
+    private void OnGet(TempLightingEffectLogic lightningChain)
+    {
+        lightningChain.gameObject.SetActive(true);
+    }
+
+    // Called when an item is returned to the pool.
+    private void OnRelease(TempLightingEffectLogic lightningChain)
+    {
+        lightningChain.gameObject.SetActive(false);
+    }
+
+    // Called when the pool decides to destroy an item (e.g., above max size).
+    private void OnDestroyItem(TempLightingEffectLogic lightningChain)
+    {
+        Destroy(lightningChain);
+    }
+
 }
