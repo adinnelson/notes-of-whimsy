@@ -18,6 +18,7 @@ public class LaserBeam : MonoBehaviour
     [SerializeField] private LayerMask enemyMask;
 
     private float lifeTimer;
+    private bool loggedMissingRefs = false;
     private readonly HashSet<IDamageable> uniqueHits = new HashSet<IDamageable>();
 
     public void Init(Transform start, BeatHandler handler)
@@ -46,13 +47,32 @@ public class LaserBeam : MonoBehaviour
         }
 
         beam.StartBeam();
-        lifeTimer = beatHandler.SecondsPerBeat * activeBeats; // lasts 2 beats
+        lifeTimer = SecondsPerBeat() * activeBeats; // lasts 2 beats
     }
 
     private void Update()
     {
         if (startTransform == null || cam == null || Mouse.current == null)
         {
+            if (!loggedMissingRefs)
+            {
+                if (startTransform == null)
+                {
+                    Debug.LogWarning("LaserBeam: startTransform is NULL.", this);
+                }
+
+                if (cam == null)
+                {
+                    Debug.LogWarning("LaserBeam: Camera.main not found. Is there a camera tagged MainCamera?", this);
+                }
+
+                if (Mouse.current == null)
+                {
+                    Debug.LogWarning("LaserBeam: Mouse.current is NULL. Input System not initialized?", this);
+                }
+                // Added this cause it's on update so it will likely hit every frame and spam the log, so only log once
+                loggedMissingRefs = true;
+            }
             return;
         }
 
@@ -64,7 +84,7 @@ public class LaserBeam : MonoBehaviour
             return;
         }
 
-        // TO DO: currently anchors laser object on player (change to position of bard weapaon when that exists)
+        // TO DO: currently anchors laser object on player (change to position of bard weapon when that exists)
         transform.position = startTransform.position;
 
         // mouse world
@@ -120,10 +140,17 @@ public class LaserBeam : MonoBehaviour
         }
     }
 
+    // Stop Laser beam and particles
     private void StopBeam()
     {
         beam.EndBeam();
+        beam.StopParticles();
         beam.DestroyBeam();
         enabled = false;
+    }
+
+    private float SecondsPerBeat()
+    {
+        return 60.0f / beatHandler.GetBPM();
     }
 }

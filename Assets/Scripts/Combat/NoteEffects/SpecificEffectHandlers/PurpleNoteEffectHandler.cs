@@ -32,7 +32,8 @@ public class PurpleNoteEffectHandler : NoteEffectHandler
 
         // Cooldown starts immediately (3 beats total)
         onCooldown = true;
-        Invoke(nameof(ResetCooldown), beatHandler.SecondsPerBeat * 3f);
+        float secondsPerBeat = 60.0f / beatHandler.GetBPM();
+        Invoke(nameof(ResetCooldown), secondsPerBeat * 3.0f);
     }
 
     private void ResetCooldown()
