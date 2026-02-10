@@ -171,6 +171,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BeatBar
       objectReference: {fileID: 0}
+    - target: {fileID: 5287378004892712079, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7153632319040493981, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7774199362058708298, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: m_LocalScale.x
       value: 13
