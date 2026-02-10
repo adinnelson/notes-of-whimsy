@@ -18,13 +18,13 @@ public class BeatItem : MonoBehaviour
     {
         if(endGoal == null) return;
 
-        if(this.gameObject.transform.position.x >= endGoal.transform.position.x + LATE_OFFSET)
+        if(this.gameObject.transform.position.x <= endGoal.transform.position.x - LATE_OFFSET)
         {
             beatHandler.BeatArrived(this);
             return;
         }
 
-        this.transform.localPosition += Vector3.right * stepSize;
+        this.transform.localPosition += Vector3.left * stepSize;
     }
 
     // Initializes beat item

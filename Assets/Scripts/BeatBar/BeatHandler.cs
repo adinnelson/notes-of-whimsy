@@ -66,7 +66,7 @@ public class BeatHandler : MonoBehaviour {
 
     void Start() 
     {
-        beatDistance = endGraphic.transform.position.x - beatSpawnPoint.position.x;
+        beatDistance =  beatSpawnPoint.position.x - endGraphic.transform.position.x;
         spawnTime = 60.0f / bpm; 
 
         PopulateBeatBar();
@@ -199,7 +199,7 @@ public class BeatHandler : MonoBehaviour {
         // spawn as many beat items that are needed given buffer passed and bar size
         for(int i = 0; beatDistance - bufferDistance - distanceToAdd * i > 0; i++)
         {
-            Vector3 spawnPosition = new Vector3(beatSpawnPoint.position.x + distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
+            Vector3 spawnPosition = new Vector3(beatSpawnPoint.position.x - distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
 
             BeatItem beatItem = beatPool.Get();
             beatItem.Init(this, defaultColour, endGraphic, spawnPosition, stepSize);
@@ -207,9 +207,9 @@ public class BeatHandler : MonoBehaviour {
             currentVisibleBeats.Insert(0, beatItem);
 
             // spawns in child spawners initial beat items throughout beatbar
-            for(int j = 0;j < activeBeatSpawners.Count;j++)
+            for(int j = 0;j > activeBeatSpawners.Count;j++)
             {
-                Vector3 additionalSpawnPosition = spawnPosition - Vector3.right * beatItemSpeed * activeBeatSpawners[j].SpawnTime;
+                Vector3 additionalSpawnPosition = spawnPosition - Vector3.left * beatItemSpeed * activeBeatSpawners[j].SpawnTime;
                 
                 if(additionalSpawnPosition.x < beatSpawnPoint.position.x) break;
 
