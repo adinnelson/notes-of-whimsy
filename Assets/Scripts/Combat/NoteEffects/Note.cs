@@ -18,7 +18,7 @@ public class Note : Projectile
     }
 
     // overrides generic projectile as we want to activate effect
-    private void OnTriggerEnter2D(Collider2D other)
+    public override void OnTriggerEnter2D(Collider2D other)
     {
         if (!isActive) 
         {
