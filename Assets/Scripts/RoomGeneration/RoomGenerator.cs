@@ -1,16 +1,16 @@
-using System.Collections;
+
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework.Internal;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 public class RoomGenerator : MonoBehaviour
 {
+    [SerializeField]
+    private List<GameObject> enemyPool ;
 
     [Header("Object References")]
-    [SerializeField]
     private GameObject roomsParent;
     
     [SerializeField]
@@ -19,7 +19,6 @@ public class RoomGenerator : MonoBehaviour
     [Header("Layout Controls")]
     [SerializeField]
     private int numberOfRooms;
-
     // the number of rooms before generation stops not the end number of rooms
     [SerializeField]
     private int desiredRoomNumber;
@@ -44,7 +43,7 @@ public class RoomGenerator : MonoBehaviour
     private List<GameObject> bottomConnections;
 
 
-
+    public static event System.Action OnDungeonComplete;
 
 
 
@@ -153,7 +152,8 @@ idea is to make it work for any size and shape room to have creativity and relea
                 numberOfRooms++;
                 j =0;
             }
-            
+            // TODO: find best spot for this
+            PopulateEnemies(currentRoomInfo);
             // Break if no rooms were spawned this iteration (dungeon is closed off)
             if (numberOfRooms == roomsSpawnedThisIteration)
             {
@@ -163,6 +163,8 @@ idea is to make it work for any size and shape room to have creativity and relea
         }
         
         CapOffHoles();
+        OnDungeonComplete?.Invoke();
+
     }
 
     /// <summary>
@@ -254,5 +256,27 @@ idea is to make it work for any size and shape room to have creativity and relea
         }
     }
 
+    //spawns enemies into rooms
+    // TODO: re-implement with proper logic
+    private void PopulateEnemies(RoomInfo currentRoom)
+    {
+        // HACK: choose a random number of enemies to add to the rooms list of enemies
+        Tilemap floor = currentRoom.GetFloor();
+        print(floor.cellBounds.center);
+
+        if (currentRoom.GetSafety() == false)
+        {
+            if(enemyPool.Count > 0)
+            {
+                // FIXME: change to GetEnemies once implemented also add randomization
+                currentRoom.enemies.Add(enemyPool[0]);
+
+            }
+            else
+            {
+                Debug.LogWarning("Fill out Enemy pool on Generator");
+            }
+        }
+    }
 
 }

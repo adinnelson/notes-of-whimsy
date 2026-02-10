@@ -9,21 +9,21 @@ public class FloorInfo : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        gameObject.tag = "Floor";
-        TilemapCollider2D floorTiles = this.AddComponent<TilemapCollider2D>();
-        floorTiles.compositeOperation = Collider2D.CompositeOperation.Merge;
-        Rigidbody2D rb = this.AddComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Kinematic;
-        CompositeCollider2D compColl = this.AddComponent<CompositeCollider2D>();
-        compColl.isTrigger = true;   
+        // gameObject.tag = "Floor";
+        // TilemapCollider2D floorTiles = this.AddComponent<TilemapCollider2D>();
+        // floorTiles.compositeOperation = Collider2D.CompositeOperation.Merge;
+        // Rigidbody2D rb = this.AddComponent<Rigidbody2D>();
+        // rb.bodyType = RigidbodyType2D.Kinematic;
+        // CompositeCollider2D compColl = this.AddComponent<CompositeCollider2D>();
+        // compColl.isTrigger = true;   
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         print($"collision with {collision.name}");
-        if(collision.CompareTag("Floor")) {
-            print("good collision");
+        if(collision.name == "Floor") {
             OnFloorOverlap?.Invoke(gameObject);
+            print("good collision");
         }
         
     }

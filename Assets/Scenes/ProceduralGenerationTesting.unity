@@ -345,6 +345,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a14b4eb2c89eb40b1dbf85ab979c48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomGenerator
+  enemyPool:
+  - {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
   roomsParent: {fileID: 0}
   grid: {fileID: 302093471}
   numberOfRooms: 0

@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using JetBrains.Annotations;
-using NUnit.Framework.Interfaces;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,6 +7,15 @@ using UnityEngine.Tilemaps;
 
 public class RoomInfo : MonoBehaviour
 {
+    [Header("TileMaps")]
+    [SerializeField]
+    private Tilemap floor;
+    [SerializeField]
+    private Tilemap walls;
+    [SerializeField]
+    private Tilemap roomLock;
+
+
     [Header("Attachment Nodes")]
     public GameObject leftNode;
     public GameObject rightNode;
@@ -26,35 +32,45 @@ public class RoomInfo : MonoBehaviour
 
     [Header("Enemy logic")]
     public List<GameObject> enemies;
-    public bool IS_SAFE = false;
+    public bool IS_SAFE;
 
     
 
-
-    //follows const naming since it will not change
-    // controls whether or not enemies should spawn in this room
-
     public int NumberOfNodes {get; private set;}
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
+        RoomGenerator.OnDungeonComplete += HandleDungeonCompletion;
         for(int i =0; i < transform.childCount; i++)
         {
-            if(transform.GetChild(i).name.ToLower() == "floor")
+            string childName = transform.GetChild(i).name.ToLower();
+            if(childName == "floor")
             {
-                transform.GetChild(i).AddComponent<FloorInfo>();
+                floor = transform.GetChild(i).GetComponent<Tilemap>();
+                // transform.GetChild(i).AddComponent<FloorInfo>();
                 break;
+            }else if(childName == "walls")
+            {
+                walls = transform.GetChild(i).GetComponent<Tilemap>();
+            }else if(childName == "roomLock")
+            {
+                roomLock = transform.GetChild(i).GetComponent<Tilemap>();
             }
         }
-        // GameObject floor = transform.GetChild(0).GameObject();
 
-        // TilemapCollider2D floorTiles = floor.AddComponent<TilemapCollider2D>();
-        // floorTiles.compositeOperation = Collider2D.CompositeOperation.Merge;
-        // Rigidbody2D rb = floor.AddComponent<Rigidbody2D>();
-        // rb.bodyType = RigidbodyType2D.Kinematic;
-        // CompositeCollider2D compColl = floor.AddComponent<CompositeCollider2D>();
-        // compColl.isTrigger = true;
+
     }
+
+    void OnDestroy()
+    {
+        RoomGenerator.OnDungeonComplete -= HandleDungeonCompletion;
+    }
+
+    private void HandleDungeonCompletion()
+    {
+        PopulateEnemies();
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -63,6 +79,21 @@ public class RoomInfo : MonoBehaviour
         {
             transform.position = parentNode.position - spawnedNode.localPosition;
         }
+    }
+
+    private void PopulateEnemies()
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            print("spawning");
+            // FIXME: get better logic for finding a spot to spawn enemy
+            Instantiate(enemy, floor.CellToWorld(Vector3Int.RoundToInt(floor.localBounds.center)), Quaternion.identity,transform);
+        }
+    }
+
+    public Tilemap GetFloor()
+    {
+        return floor;
     }
 
     public GameObject GetNode(string name)
@@ -120,5 +151,10 @@ public class RoomInfo : MonoBehaviour
     public List<GameObject> GetNodeList()
     {
         return nodeList;
+    }
+
+    public bool GetSafety()
+    {
+        return IS_SAFE;
     }
 }
