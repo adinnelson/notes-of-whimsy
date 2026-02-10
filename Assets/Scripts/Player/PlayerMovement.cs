@@ -10,8 +10,6 @@ public class PlayerMovement : MonoBehaviour
     private InputSystem_Actions inputActions;
     private new Rigidbody2D rigidbody;
 
-    private Animator animator;
-
     void OnDisable()
     {
         inputActions.Player.Disable();
@@ -22,7 +20,6 @@ public class PlayerMovement : MonoBehaviour
     {
         inputActions = new InputSystem_Actions();
         rigidbody = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         inputActions.Player.Enable();
     }
 
@@ -68,11 +65,4 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        // Update animator parameters based on movement
-        Vector2 velocity = rigidbody.linearVelocity;
-        animator.SetFloat("Speed", velocity.x + velocity.y / 2); // Adjust this as needed for your animation blend tree
-        
-    }
 }
