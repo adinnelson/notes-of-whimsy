@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public abstract class EnemyBase : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected float stateTimer;
     protected float cooldownTimer;
+
+    protected HashSet<string> stunEffects = new HashSet<string>();
 
     protected virtual void Awake()
     {
@@ -37,6 +41,11 @@ public abstract class EnemyBase : MonoBehaviour
     // Handles "global" timers (cooldown + stateTimer) and updates the current state's behavior.
     protected virtual void Update()
     {
+        if (stunEffects.Count > 0)
+        {
+            return;
+        }
+
         if (target == null)
         {
             return;
@@ -253,6 +262,18 @@ public abstract class EnemyBase : MonoBehaviour
         {
             rb.linearVelocity = Vector2.zero;
         }
+    }
+
+    public void AddStunEffect(string key)
+    {
+        if(stunEffects.Contains(key)) return;
+
+        stunEffects.Add(key);
+    }
+
+    public void RemoveStunEffect(string key)
+    {
+        stunEffects.Remove(key);
     }
 
     // Required attack customization
