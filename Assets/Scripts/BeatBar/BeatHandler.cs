@@ -8,7 +8,6 @@ using System.Globalization;
 public class BeatHandler : MonoBehaviour {
 
     private const float REQUIRED_ACCURACY = 0.1f;
-    private const float LATE_OFFSET = 0.5f; 
 
     [SerializeField] private PlayerAttack playerAttack;
 
@@ -35,7 +34,6 @@ public class BeatHandler : MonoBehaviour {
     [SerializeField] private Color defaultColour;
 
     // general track positional variables
-    private Vector3 beatEndPosition;
     private float beatDistance;
     private float spawnTime;
 
@@ -68,7 +66,6 @@ public class BeatHandler : MonoBehaviour {
 
     void Start() 
     {
-        beatEndPosition = new Vector3(endGraphic.transform.position.x + LATE_OFFSET, endGraphic.transform.position.y, endGraphic.transform.position.z);
         beatDistance = endGraphic.transform.position.x - beatSpawnPoint.position.x;
         spawnTime = 60.0f / bpm; 
 
@@ -81,7 +78,7 @@ public class BeatHandler : MonoBehaviour {
         if (timeElapsed >= spawnTime)
         {
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, defaultColour, beatEndPosition, beatSpawnPoint.position, stepSize);
+            beatItem.Init(this, defaultColour, endGraphic, beatSpawnPoint.position, stepSize);
 
             currentVisibleBeats.Add(beatItem);
             timeElapsed = 0.0f;
@@ -187,7 +184,7 @@ public class BeatHandler : MonoBehaviour {
     public void SpawnAdditionalBeat(Color colour)
     {
         BeatItem beatItem = beatPool.Get();
-        beatItem.Init(this, colour, beatEndPosition, beatSpawnPoint.position, stepSize);
+        beatItem.Init(this, colour, endGraphic, beatSpawnPoint.position, stepSize);
 
         currentVisibleBeats.Add(beatItem);
     }
@@ -205,7 +202,7 @@ public class BeatHandler : MonoBehaviour {
             Vector3 spawnPosition = new Vector3(beatSpawnPoint.position.x + distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
 
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, defaultColour, beatEndPosition, spawnPosition, stepSize);
+            beatItem.Init(this, defaultColour, endGraphic, spawnPosition, stepSize);
 
             currentVisibleBeats.Insert(0, beatItem);
 
@@ -217,7 +214,7 @@ public class BeatHandler : MonoBehaviour {
                 if(additionalSpawnPosition.x < beatSpawnPoint.position.x) break;
 
                 BeatItem additionalBeatItem = beatPool.Get();
-                additionalBeatItem.Init(this, activeBeatSpawners[j].Colour, beatEndPosition, additionalSpawnPosition, stepSize);
+                additionalBeatItem.Init(this, activeBeatSpawners[j].Colour, endGraphic, additionalSpawnPosition, stepSize);
 
                 currentVisibleBeats.Add(additionalBeatItem);
             }
