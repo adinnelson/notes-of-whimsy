@@ -252,7 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RedNoteEffectHandler
   note: {fileID: 0}
   playerAttack: {fileID: 0}
-  knockbackRadius: 10
+  knockbackRadius: 1
   knockbackForce: 500
   damage: 20
   enemyLayer:

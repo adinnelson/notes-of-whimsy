@@ -9,13 +9,12 @@ public class RedNoteEffectHandler : NoteEffectHandler
     [SerializeField] private float knockbackRadius = 1.0f;
     [SerializeField] private float knockbackForce = 500.0f;
     [SerializeField] private float damage = 20.0f;
-    [SerializeField] private LayerMask enemyLayer; 
 
     List<GameObject> enemiesInRange = new List<GameObject>();
+
     public override void HitEnemy(IDamageable damageable)
     {
         enemiesInRange.Clear();
-
         MonoBehaviour enemyComponent = damageable as MonoBehaviour;
 
         if (enemyComponent != null)
@@ -24,19 +23,21 @@ public class RedNoteEffectHandler : NoteEffectHandler
             Vector3 playerPosition = playerAttack.transform.position;
 
             enemiesInRange.Add(enemyComponent.gameObject);
-            Debug.Log($"Physics Check! Script Radius: {knockbackRadius} | World Position: {impactPosition}");
             DebugDrawCircle(impactPosition, knockbackRadius, Color.cyan, 2.0f);
 
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(impactPosition, knockbackRadius, enemyLayer);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(impactPosition, knockbackRadius);
 
             foreach (Collider2D hit in hitColliders)
             {
-                if (!enemiesInRange.Contains(hit.gameObject))
+                if (hit.TryGetComponent<IDamageable>(out IDamageable targetDamageable))
                 {
-                    enemiesInRange.Add(hit.gameObject);
+                    if (!enemiesInRange.Contains(hit.gameObject))
+                    {
+                        enemiesInRange.Add(hit.gameObject);
+                    }
                 }
             }
-
+            DoDamage(enemiesInRange);
             Knockback(enemiesInRange, impactPosition, playerPosition);
         }
     }
@@ -84,6 +85,15 @@ public class RedNoteEffectHandler : NoteEffectHandler
         if (targets == null || !targets.Any())
         {
             return;
+        }
+
+        foreach (GameObject target in targets)
+        {
+            if (target.TryGetComponent<IDamageable>(out IDamageable damageable))
+            {
+                Debug.Log($"<color=orange>AOE Damage:</color> Dealing {damage} to {target.name}");
+                damageable.TakeDamage(damage);
+            }
         }
     }
 
