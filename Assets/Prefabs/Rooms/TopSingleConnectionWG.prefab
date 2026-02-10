@@ -1503,7 +1503,7 @@ GameObject:
   - component: {fileID: 1167656958354785006}
   m_Layer: 0
   m_Name: TopSingleConnectionWG
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1543,11 +1543,13 @@ MonoBehaviour:
   rightNode: {fileID: 0}
   topNode: {fileID: 5812821175366679389}
   bottomNode: {fileID: 0}
-  parentNode: {fileID: 0}
-  spawnedNode: {fileID: 0}
   nodeList:
   - {fileID: 5812821175366679389}
-  Enemies: []
+  subRooms: []
+  parentNode: {fileID: 0}
+  spawnedNode: {fileID: 0}
+  enemies: []
+  IS_SAFE: 1
 --- !u!1 &3190756977640528348
 GameObject:
   m_ObjectHideFlags: 0

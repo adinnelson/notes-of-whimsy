@@ -54,6 +54,7 @@ idea is to make it work for any size and shape room to have creativity and relea
 */
     void Awake()
     {
+        FloorInfo.OnFloorOverlap += HandleFloorOverlap;
         CreateFloorLayout();
     }
     // remembird
@@ -79,11 +80,16 @@ idea is to make it work for any size and shape room to have creativity and relea
         }
     }
 
-    /// <summary>
-    /// todo: implement
-    /// step 1: spawn starter room
-    /// step 2: outer loop 
-    /// </summary>
+    void OnDestroy()
+    {
+        FloorInfo.OnFloorOverlap -= HandleFloorOverlap;
+    }
+
+    void HandleFloorOverlap(GameObject overlappingFloor)
+    {
+        // TODO: Handle floor overlap here
+        Debug.LogWarning($"Floor overlap detected with {overlappingFloor.name}", overlappingFloor);
+    }
     private void CreateFloorLayout()
     {
         GameObject spawnedRoom = null;
@@ -143,6 +149,7 @@ idea is to make it work for any size and shape room to have creativity and relea
                 }
                 if(spawnedRoom == null) continue;
                 spawnedRooms.Add(spawnedRoom);
+                currentRoomInfo.AddSubRoom(spawnedRoom);
                 numberOfRooms++;
                 j =0;
             }
@@ -240,6 +247,7 @@ idea is to make it work for any size and shape room to have creativity and relea
                 }
                 if(spawnedRoom == null) continue;
                 spawnedRooms.Add(spawnedRoom);
+                currentRoomInfo.AddSubRoom(spawnedRoom);
                 numberOfRooms++;
                 j =0;
             }

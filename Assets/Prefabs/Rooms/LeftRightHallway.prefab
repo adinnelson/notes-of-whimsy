@@ -1761,12 +1761,14 @@ MonoBehaviour:
   rightNode: {fileID: 7470584714282884875}
   topNode: {fileID: 0}
   bottomNode: {fileID: 0}
-  parentNode: {fileID: 0}
-  spawnedNode: {fileID: 0}
   nodeList:
   - {fileID: 1235644689385497925}
   - {fileID: 7470584714282884875}
-  Enemies: []
+  subRooms: []
+  parentNode: {fileID: 0}
+  spawnedNode: {fileID: 0}
+  enemies: []
+  IS_SAFE: 0
 --- !u!1 &2909395373761921694
 GameObject:
   m_ObjectHideFlags: 0
@@ -2214,7 +2216,7 @@ GameObject:
   - component: {fileID: 4078958201765451133}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
