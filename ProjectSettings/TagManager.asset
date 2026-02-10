@@ -9,7 +9,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Damageable
   - Water
   - UI
   - 
@@ -39,11 +39,29 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Floors
+    uniqueID: 4070886917
+    locked: 0
+  - name: Walls
+    uniqueID: 1373270931
+    locked: 0
   - name: Background
     uniqueID: 2554782705
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player Effects
+    uniqueID: 1445409119
+    locked: 0
+  - name: Enemies
+    uniqueID: 1570242627
+    locked: 0
+  - name: Enemy Effects
+    uniqueID: 845773507
+    locked: 0
+  - name: Player
+    uniqueID: 3301409661
     locked: 0
   m_RenderingLayers:
   - Default
