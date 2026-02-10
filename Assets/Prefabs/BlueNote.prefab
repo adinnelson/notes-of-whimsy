@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 663902830690428922}
   - component: {fileID: 1465642289406486963}
   - component: {fileID: 8835509098591157618}
+  - component: {fileID: 7267057955772570292}
   - component: {fileID: -5968953057158646297}
   m_Layer: 0
   m_Name: BlueNote
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.41159, y: 0.1277, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -128,7 +129,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6748023661102452975}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 055856765d35360479d341c380d089cd, type: 3}
   m_Name: 
@@ -139,6 +140,22 @@ MonoBehaviour:
   key: blue
   name: blue
   desc: blue
+--- !u!114 &7267057955772570292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6748023661102452975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e11ac74d32cf28647a607e2b3f92566d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlueProjectileController
+  note: {fileID: 8835509098591157618}
+  playerAttack: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+  projectileDamage: 0.1
+  gravityScale: 20
 --- !u!58 &-5968953057158646297
 CircleCollider2D:
   m_ObjectHideFlags: 0
