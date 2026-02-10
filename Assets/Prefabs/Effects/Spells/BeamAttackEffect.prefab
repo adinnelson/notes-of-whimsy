@@ -50,8 +50,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TempLightingEffectLogic
   noteParticleEmitPercent: 0
-  yScale: 1
-  destroyTime: 1000
+  yScale: 0.5
+  destroyTime: 1
 --- !u!95 &1797587252066260219
 Animator:
   serializedVersion: 7

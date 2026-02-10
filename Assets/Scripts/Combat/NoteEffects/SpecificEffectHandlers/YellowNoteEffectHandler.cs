@@ -97,25 +97,27 @@ public class YellowNoteEffectHandler : NoteEffectHandler
 
         foreach(Collider2D collider in hitColliders)
         {
-            if(collider.gameObject == this) continue;
+            if(collider.gameObject == enemyHealth.gameObject) continue;
 
             EnemyBase enemy = collider.gameObject.GetComponent<EnemyBase>();
 
             if(enemy == null) continue;
 
-            enemies.Add(enemy);
+            enemies.Add(collider.gameObject.GetComponent<EnemyBase>());
 
         }
 
         enemies = enemies.OrderBy(enemy => Vector3.Distance(enemyHealth.transform.position, enemy.transform.position)).ToList();
+        enemies.Insert(0, enemyHealth.gameObject.GetComponent<EnemyBase>());
 
         TempLightingEffectLogic lightningChain = lightningChainPool.Get();
         lightningChain.transform.position = enemies[0].transform.position;
         lightningChain.TargetPos = enemies[0].transform.position;
         currentVisibleLightningChains.Add(lightningChain);
 
-        StunEnemy(enemies[0]);
+        lightningChain.StartBeam();
 
+        StunEnemy(enemies[0]);
         enemies[0].GetComponent<Health>().TakeDamage(damage);
         enemies.RemoveAt(0);
 
@@ -128,14 +130,14 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         if(storedEnemies.Contains(enemy))
         {
             stunnedEnemies[enemy] += stunTime;
-            enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
+            //enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
             enemy.AddStunEffect(stunKey);
             return;
         }
 
         stunnedEnemies.Add(enemy, stunTime);
         storedEnemies.Add(enemy);
-        enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
+        //enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
         enemy.AddStunEffect(stunKey);
     }
 
@@ -196,6 +198,8 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         lightningChain.transform.position = enemySource.transform.position;
         lightningChain.TargetPos = enemySource.transform.position;
         currentVisibleLightningChains.Add(lightningChain);
+
+        lightningChain.StartBeam();
     }
 
 

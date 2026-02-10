@@ -48,20 +48,7 @@ public class TempLightingEffectLogic : MonoBehaviour
 
     void Start()
     {
-        animator = GetComponent<Animator>();
-
-        beamVisual = transform.Find("BeamVisual");
-        musicNoteEmitter = transform.Find("MusicNoteParticles");
-        impactParticleEmitter = transform.Find("ImpactParticles");
-        lingeringParticleEmitter = transform.Find("LingeringParticles");
-
-        beamVisualSprite = beamVisual.GetComponent<SpriteRenderer>();
-        musicNoteParticles = musicNoteEmitter.GetComponent<ParticleSystem>();
-        musicNoteParticlesShape = musicNoteParticles.shape;
-        musicNoteParticlesEmission = musicNoteParticles.emission;
-
-        StartBeam();
-        UpdateBeam();
+        
     }
 
     void Update()
@@ -90,6 +77,18 @@ public class TempLightingEffectLogic : MonoBehaviour
     /// </summary>
     public void StartBeam()
     {
+        animator = GetComponent<Animator>();
+
+        beamVisual = transform.Find("BeamVisual");
+        musicNoteEmitter = transform.Find("MusicNoteParticles");
+        impactParticleEmitter = transform.Find("ImpactParticles");
+        lingeringParticleEmitter = transform.Find("LingeringParticles");
+
+        beamVisualSprite = beamVisual.GetComponent<SpriteRenderer>();
+        musicNoteParticles = musicNoteEmitter.GetComponent<ParticleSystem>();
+        musicNoteParticlesShape = musicNoteParticles.shape;
+        musicNoteParticlesEmission = musicNoteParticles.emission;
+
         animator.Play("BeamStart");
     }
 
@@ -117,18 +116,18 @@ public class TempLightingEffectLogic : MonoBehaviour
         float vect_angle = vect_rad * Mathf.Rad2Deg;
         float vect_length = pointingVector.magnitude;
 
-        beamVisual.localPosition = pointingVector - pointingVector * 0.5f * yScale;
+        beamVisual.localPosition = pointingVector / 2.0f - pointingVector.normalized * 0.5f * yScale;
         beamVisual.localRotation = Quaternion.Euler(0.0f, 0.0f, vect_angle);
-        beamVisual.localScale = new Vector2(vect_length * 2, yScale);
+        beamVisual.localScale = new Vector2(vect_length, yScale);
         beamVisualSprite.material.SetFloat("_Rotation", vect_angle);
         beamVisualSprite.material.SetFloat("_XScale", vect_length);
 
         musicNoteEmitter.localPosition = beamVisual.localPosition;
         musicNoteEmitter.localRotation = beamVisual.localRotation;
-        musicNoteParticlesShape.scale = new Vector3(vect_length, 0.0f, 0.0f);
-        musicNoteParticlesEmission.rateOverTime = 8f * vect_length * noteParticleEmitPercent;
+        musicNoteParticlesShape.scale = new Vector3(vect_length - 1.0f, 0.0f, 0.0f);
+        musicNoteParticlesEmission.rateOverTime = 8f * (vect_length - 1.0f) * noteParticleEmitPercent;
 
-        impactParticleEmitter.localPosition = pointingVector - pointingVector * 0.5f;
+        impactParticleEmitter.localPosition = pointingVector - pointingVector.normalized * 0.5f;
         impactParticleEmitter.rotation = Quaternion.Euler(0, 0, vect_angle + 180.0f - 45.0f / 2.0f);
 
         lingeringParticleEmitter.localPosition = pointingVector - pointingVector.normalized;
