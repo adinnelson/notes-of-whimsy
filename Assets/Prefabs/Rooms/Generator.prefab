@@ -45,8 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomGenerator
   enemyPool:
-  - {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-  roomsParent: {fileID: 0}
+  - {fileID: 3917825305028578068, guid: 8801b97fddefa40308eb94005c935918, type: 3}
   grid: {fileID: 0}
   numberOfRooms: 0
   desiredRoomNumber: 10
