@@ -287,23 +287,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1318327020 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3396551298964252400, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
-  m_PrefabInstance: {fileID: 7512288111122243721}
-  m_PrefabAsset: {fileID: 0}
---- !u!156049354 &1318327023
-Grid:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318327020}
-  m_Enabled: 1
-  m_CellSize: {x: 1, y: 1, z: 0}
-  m_CellGap: {x: 0, y: 0, z: 0}
-  m_CellLayout: 0
-  m_CellSwizzle: 0
 --- !u!1 &1612854094
 GameObject:
   m_ObjectHideFlags: 0
@@ -493,21 +476,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
-      propertyPath: grid
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
-      propertyPath: allowRegeneration
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3396551298964252400, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1318327023}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
