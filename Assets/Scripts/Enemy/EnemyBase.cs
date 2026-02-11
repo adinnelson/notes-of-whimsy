@@ -8,33 +8,48 @@ public abstract class EnemyBase : MonoBehaviour
 
     [Header("Core")]
     [SerializeField] protected EnemyConfig config;
-    [SerializeField] protected Transform target;
 
+    [Header("Death Behavior")]
+    [SerializeField] private bool disableOnDeath = true;
+
+    protected Transform target;
     protected Rigidbody2D rb;
     protected State state;
+
+    private Health health;
+    private Collider2D col;
 
     protected float stateTimer;
     protected float cooldownTimer;
 
     protected HashSet<string> stunEffects = new HashSet<string>();
 
+    // Get Player location based on tag. If no player found, log an error.
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>();
+
+        health = GetComponent<Health>();
+        if (health != null)
+        {
+            health.OnDeath += HandleDeath;
+        }
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            target = player.transform;
+        }
+        else
+        {
+            Debug.LogError($"{name}: No GameObject with tag 'Player' found in scene.");
+        }
     }
 
     // initialize the enemy into the Idle state.
     protected virtual void Start()
     {
-        if (target == null)
-        {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-            {
-                target = player.transform;
-            }
-        }
-
         EnterState(State.Idle);
     }
 
@@ -274,6 +289,34 @@ public abstract class EnemyBase : MonoBehaviour
     public void RemoveStunEffect(string key)
     {
         stunEffects.Remove(key);
+    }
+    protected virtual void HandleDeath()
+    {
+        if (state == State.Dead)
+        {
+            return;
+        }
+
+        EnterState(State.Dead);
+
+        // Stop physics interactions
+        StopMovement();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+
+        if (disableOnDeath)
+        {
+            gameObject.SetActive(false);   // pooled-friendly death for enemy pooling later
+        }
+    }
+    protected virtual void OnDestroy()
+    {
+        if (health != null)
+        {
+            health.OnDeath -= HandleDeath;
+        }
     }
 
     // Required attack customization

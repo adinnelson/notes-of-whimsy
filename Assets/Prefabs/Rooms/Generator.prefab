@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4942507808661254169}
   - component: {fileID: 7064005530636982605}
-  - component: {fileID: 5884843540817841428}
+  - component: {fileID: 2145482322479185504}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -43,12 +43,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8a14b4eb2c89eb40b1dbf85ab979c48, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::RoomGenerator
   enemyPool:
   - {fileID: 3917825305028578068, guid: 8801b97fddefa40308eb94005c935918, type: 3}
   numberOfRooms: 0
   desiredRoomNumber: 10
+  minEnemies: 2
+  maxEnemies: 5
   spawnedRooms: []
   starterRooms:
   - {fileID: 2791336798263055279, guid: 0f888efa387aa2c4aadc6589d88889c5, type: 3}
@@ -70,7 +72,7 @@ MonoBehaviour:
   - {fileID: 2791336798263055279, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
   - {fileID: 2791336798263055279, guid: e12a1ad944347de4b9408d5ae0183bd9, type: 3}
   allowRegeneration: 1
---- !u!156049354 &5884843540817841428
+--- !u!156049354 &2145482322479185504
 Grid:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
