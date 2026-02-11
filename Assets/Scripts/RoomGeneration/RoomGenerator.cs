@@ -13,8 +13,6 @@ public class RoomGenerator : MonoBehaviour
     [Header("Object References")]
     private GameObject roomsParent;
     
-    [SerializeField]
-    private GameObject grid;
 
     [Header("Layout Controls")]
     [SerializeField]
@@ -46,7 +44,8 @@ public class RoomGenerator : MonoBehaviour
     public static event System.Action OnDungeonComplete;
 
 
-
+    // DEBUG VARIABLE FOR ALLOWING REGENERATION
+    public bool allowRegeneration = true;
 
 /*
 idea is to make it work for any size and shape room to have creativity and releave staleness of levels
@@ -68,7 +67,7 @@ idea is to make it work for any size and shape room to have creativity and relea
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.rKey.wasPressedThisFrame)
+        if (Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration)
         {
             Destroy(roomsParent);
             roomsParent = null;
@@ -99,7 +98,7 @@ idea is to make it work for any size and shape room to have creativity and relea
         if (roomsParent == null)
         {
         roomsParent = new GameObject("Floor Layout");
-        roomsParent.transform.SetParent(grid.transform);
+        roomsParent.transform.SetParent(transform);
         roomsParent.transform.position.Set(0,0,0);
         }
         // pull from the starter rooms list and spawn one at random

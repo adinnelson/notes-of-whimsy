@@ -224,6 +224,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::YellowNoteEffectHandler
   note: {fileID: 8835509098591157618, guid: 8500acdd58d2a6d42b2b2711d5255fc6, type: 3}
   playerAttack: {fileID: 5369474722563365308}
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 8
+  lightningEffect: {fileID: 8046267622772934418, guid: 6ee47fdd172e450498f0d56812dd828c, type: 3}
 --- !u!114 &7996963532604069450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,6 +258,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RedNoteEffectHandler
   note: {fileID: 0}
   playerAttack: {fileID: 0}
+  knockbackRadius: 1
+  knockbackForce: 500
+  damage: 20
 --- !u!114 &4426264664621214320
 MonoBehaviour:
   m_ObjectHideFlags: 0
