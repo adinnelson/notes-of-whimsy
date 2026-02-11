@@ -116,10 +116,6 @@ InitTestScene*.unity*
 /[Aa]ssets/Plugins/FMOD/Cache/*
 /[Aa]ssets/Plugins/FMOD/Cache.meta
 
-# Ignore bank files in StreamingAssets folder
-/[Aa]ssets/StreamingAssets/**/*.bank
-/[Aa]ssets/StreamingAssets/**/*.bank.meta
-
 # Log files
 fmod.log
 fmod_editor.log
