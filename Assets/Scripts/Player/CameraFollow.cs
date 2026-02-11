@@ -21,20 +21,41 @@ public class CameraFollow : MonoBehaviour
     public float smoothSpeed = 5f;
 
     [Header("Optional: Look Ahead")]
-    [Tooltip("Enable camera to shift in the direction of movement based on player velocity")]
+    [Tooltip("Enable camera to shift in the direction of movement based on player input")]
     public bool enableLookAhead = false;
 
-    [Tooltip("How far ahead to look based on velocity")]
+    [Tooltip("How far ahead to look based on input direction")]
     [Range(0f, 10f)]
     public float lookAheadDistance = 2.5f;
 
-    [Tooltip("Minimum player speed required to activate look-ahead (prevents jitter when idle)")]
-    [Range(0f, 2f)]
-    public float lookAheadMinSpeed = 0.5f;
+    [Tooltip("Minimum input magnitude required to activate look-ahead (prevents jitter when idle)")]
+    [Range(0f, 1f)]
+    public float lookAheadMinSpeed = 0.1f;
+
+    [Tooltip("How quickly look-ahead offset adjusts (should be faster than smoothSpeed)")]
+    [Range(1f, 20f)]
+    public float lookAheadResponsiveness = 10f;
 
     // Private variables
     private Vector3 velocity = Vector3.zero;
-    private Rigidbody2D targetRigidbody;
+    private Vector3 currentLookAheadOffset = Vector3.zero;
+    private Vector3 lookAheadVelocity = Vector3.zero;
+    private InputSystem_Actions inputActions;
+
+    private const float CAMERA_Z_OFFSET = -10f;
+
+    /// <summary>
+    /// Ensure the camera Z offset is correct when the camera is placed in the editor.
+    /// </summary>
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        UnityEditor.EditorApplication.delayCall += () =>
+        {
+            transform.position = new Vector3(0.0f, 0.0f, CAMERA_Z_OFFSET);
+        };
+    }
+#endif
 
     private void Start()
     {
@@ -44,8 +65,17 @@ public class CameraFollow : MonoBehaviour
             return;
         }
 
-        // Get Rigidbody2D component for look-ahead feature
-        targetRigidbody = target.GetComponent<Rigidbody2D>();
+        // Initialize input actions for lookahead
+        inputActions = new InputSystem_Actions();
+        inputActions.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        if (inputActions != null)
+        {
+            inputActions.Player.Disable();
+        }
     }
 
     private void LateUpdate()
@@ -58,31 +88,29 @@ public class CameraFollow : MonoBehaviour
         // Calculate look-ahead if enabled
         if (enableLookAhead)
         {
-            // Safety check: need Rigidbody2D for look-ahead to work
-            if (targetRigidbody == null)
-            {
-                targetRigidbody = target.GetComponent<Rigidbody2D>();
+            // Get player input direction
+            Vector2 moveInput = inputActions.Player.Move.ReadValue<Vector2>();
 
-                if (targetRigidbody == null)
-                {
-                    // No Rigidbody2D, skip look-ahead this frame
-                    Debug.LogWarning("CameraFollow: Look-ahead requires a Rigidbody2D component on the target.");
-                }
+            // Calculate desired lookahead offset based on input, not velocity
+            Vector3 desiredLookAheadOffset = Vector3.zero;
+            if (moveInput.magnitude >= lookAheadMinSpeed)
+            {
+                // Normalize diagonal input
+                if (moveInput.magnitude > 1f)
+                    moveInput.Normalize();
+
+                desiredLookAheadOffset = moveInput.normalized * lookAheadDistance;
             }
 
-            // Apply look-ahead if we have rigidbody
-            if (targetRigidbody != null)
-            {
-                Vector2 playerVelocity = targetRigidbody.linearVelocity;
+            // Smooth the offset itself (prevents overshoot when stopping)
+            currentLookAheadOffset = Vector3.SmoothDamp(
+                currentLookAheadOffset,
+                desiredLookAheadOffset,
+                ref lookAheadVelocity,
+                1f / lookAheadResponsiveness
+            );
 
-                // Only apply look-ahead if moving faster than minimum speed
-                if (playerVelocity.magnitude >= lookAheadMinSpeed)
-                {
-                    // Calculate look-ahead position instantly (no smoothing here)
-                    Vector3 lookAheadOffset = playerVelocity.normalized * lookAheadDistance;
-                    desiredPosition += lookAheadOffset;
-                }
-            }
+            desiredPosition += currentLookAheadOffset;
         }
 
         // Keep camera's Z position (important for 2D)
@@ -109,19 +137,13 @@ public class CameraFollow : MonoBehaviour
             Gizmos.DrawLine(transform.position, target.position);
 
             // Show look ahead if enabled and active
-            if (enableLookAhead && Application.isPlaying && targetRigidbody != null)
+            if (enableLookAhead && Application.isPlaying && currentLookAheadOffset.magnitude > 0.01f)
             {
-                Vector2 playerVelocity = targetRigidbody.linearVelocity;
+                Vector3 lookAheadPoint = target.position + currentLookAheadOffset;
 
-                if (playerVelocity.magnitude >= lookAheadMinSpeed)
-                {
-                    Vector3 lookAheadOffset = playerVelocity.normalized * lookAheadDistance;
-                    Vector3 lookAheadPoint = target.position + lookAheadOffset;
-
-                    Gizmos.color = Color.magenta;
-                    Gizmos.DrawLine(target.position, lookAheadPoint);
-                    Gizmos.DrawWireSphere(lookAheadPoint, 0.2f);
-                }
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawLine(target.position, lookAheadPoint);
+                Gizmos.DrawWireSphere(lookAheadPoint, 0.2f);
             }
         }
     }
