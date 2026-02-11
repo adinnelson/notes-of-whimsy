@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -1729807999703734264}
   - component: {fileID: -5960956627775330249}
   - component: {fileID: 1812180462523983375}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: EnemyDummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,6 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DummyEnemy
   config: {fileID: 11400000, guid: 68c669b4456e465498041cb181c5d795, type: 2}
+  disableOnDeath: 1
   logStateChanges: 1
 --- !u!50 &-5960956627775330249
 Rigidbody2D:
