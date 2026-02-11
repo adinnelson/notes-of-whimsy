@@ -242,11 +242,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7774199362058708298, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 13
+      value: 1.5309525
       objectReference: {fileID: 0}
     - target: {fileID: 7774199362058708298, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5
+      value: 0.4164
       objectReference: {fileID: 0}
     - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: playerAttack
