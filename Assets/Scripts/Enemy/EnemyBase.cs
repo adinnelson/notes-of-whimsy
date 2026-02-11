@@ -137,13 +137,13 @@ public abstract class EnemyBase : MonoBehaviour
         {
             return false;
         }
-        return DistanceToTarget() <= config.stopDistance;
+        return DistanceToTarget() <= config.attackRange;
     }
 
     // Chase state behavior, Move toward the target until we're within stopDistance, and if this enemy decides it can attack, transition into Telegraph.
     protected virtual void ChaseTick(float dt)
     {
-        ChaseUntilStopDistance(config.chaseSpeed, config.stopDistance);
+        ChaseUntilStopDistance(config.chaseSpeed, config.attackRange);
 
         if (CanStartAttack())
         {
