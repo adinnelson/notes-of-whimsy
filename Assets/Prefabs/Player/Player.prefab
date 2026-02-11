@@ -127,9 +127,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0523522d8831d946a529c107b967c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  acceleration: 1.25
+  acceleration: 10
   maxSpeed: 5
-  drag: 1
 --- !u!50 &290925503593085523
 Rigidbody2D:
   serializedVersion: 5
@@ -153,7 +152,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -224,6 +223,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::YellowNoteEffectHandler
   note: {fileID: 8835509098591157618, guid: 8500acdd58d2a6d42b2b2711d5255fc6, type: 3}
   playerAttack: {fileID: 5369474722563365308}
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 0
+  lightningEffect: {fileID: 0}
 --- !u!114 &7996963532604069450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,8 +255,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f69593bbcd8a3714bb2b7c3bb226cbb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RedNoteEffectHandler
-  note: {fileID: 0}
-  playerAttack: {fileID: 0}
+  note: {fileID: 8835509098591157618, guid: eb963c59930fc8a48b3b3a90113a4d83, type: 3}
+  playerAttack: {fileID: 5369474722563365308}
+  knockbackRadius: 1
+  knockbackForce: 500
+  damage: 20
 --- !u!114 &4426264664621214320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,5 +272,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf97015115dbd254abde054afd87430c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlueNoteEffectHandler
-  note: {fileID: 0}
-  playerAttack: {fileID: 0}
+  note: {fileID: 8835509098591157618, guid: d7e7d2b19e2f7ff488c56e7733dbdf20, type: 3}
+  playerAttack: {fileID: 5369474722563365308}
