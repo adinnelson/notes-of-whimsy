@@ -30,7 +30,7 @@ public class AnimationFlip : MonoBehaviour
             animator.SetBool("CharFaceLeft", false);
         }
         rigidbody.linearVelocity = new Vector2(rigidbody.linearVelocity.x, rigidbody.linearVelocity.y);
-        animator.SetFloat("Speed", Mathf.Abs(rigidbody.linearVelocity.x));
+        animator.SetFloat("Speed", Mathf.Abs(rigidbody.linearVelocity.x) + Mathf.Abs(rigidbody.linearVelocity.y));
     }
    
 }
