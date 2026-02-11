@@ -825,6 +825,10 @@ PrefabInstance:
       propertyPath: busPath
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5521856360994340478, guid: 6154e32a1b9d1ce47b573e8f19d149f9, type: 3}
+      propertyPath: Banks.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
