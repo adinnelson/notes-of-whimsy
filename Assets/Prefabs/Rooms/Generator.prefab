@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3396551298964252400}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.20898, y: -3.96935, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,7 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomGenerator
   enemyPool:
   - {fileID: 3917825305028578068, guid: 8801b97fddefa40308eb94005c935918, type: 3}
-  grid: {fileID: 0}
   numberOfRooms: 0
   desiredRoomNumber: 10
   spawnedRooms: []
@@ -69,3 +68,4 @@ MonoBehaviour:
   bottomConnections:
   - {fileID: 2791336798263055279, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
   - {fileID: 2791336798263055279, guid: e12a1ad944347de4b9408d5ae0183bd9, type: 3}
+  allowRegeneration: 1
