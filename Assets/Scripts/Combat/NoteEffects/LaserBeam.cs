@@ -144,7 +144,6 @@ public class LaserBeam : MonoBehaviour
     private void StopBeam()
     {
         beam.EndBeam();
-        beam.StopParticles();
         beam.DestroyBeam();
         enabled = false;
     }
