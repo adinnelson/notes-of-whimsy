@@ -1,11 +1,12 @@
 using UnityEngine;
 using System;
+
 public class Health : MonoBehaviour, IDamageable
 {
     public event Action OnDeath;
+
     [SerializeField] private float maxHealth = 100.0f;
     [SerializeField] private GameObject healthPrefab; // HealthDisplay prefab
-    [SerializeField] private Transform healthUIParent; // HealthScrollView Content
 
     private float currentHealth;
     private HealthUI UI;
@@ -21,9 +22,11 @@ public class Health : MonoBehaviour, IDamageable
 
     void SpawnHealthUI()
     {
-        if (healthPrefab != null && healthUIParent != null)
+        if (healthPrefab != null)
         {
-            GameObject objectToDisplayHealth = Instantiate(healthPrefab, healthUIParent);
+            GameObject objectToDisplayHealth = Instantiate(healthPrefab, transform);
+            objectToDisplayHealth.transform.localPosition = new Vector3(0, 1.0f, 0);
+
             UI = objectToDisplayHealth.GetComponent<HealthUI>();
 
             if (UI != null)

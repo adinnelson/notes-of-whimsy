@@ -731,6 +731,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1633469044}
+    - targetCorrespondingSourceObject: {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1633469054}
   m_SourcePrefab: {fileID: 100100000, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
 --- !u!1001 &1483857928
 PrefabInstance:
@@ -1102,6 +1105,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   contentsParent: {fileID: 740190811}
+--- !u!114 &1633469054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633469034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df253cfd76d7c444bb2c365f00ac69b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  maxHealth: 100
+  healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
 --- !u!1001 &1650386388
 PrefabInstance:
   m_ObjectHideFlags: 0
