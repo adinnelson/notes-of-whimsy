@@ -636,7 +636,7 @@ PrefabInstance:
       objectReference: {fileID: 204370191}
     - target: {fileID: 7752919813059416915, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: knockbackForce
-      value: 500
+      value: 1500
       objectReference: {fileID: 0}
     - target: {fileID: 7752919813059416915, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: knockbackRadius

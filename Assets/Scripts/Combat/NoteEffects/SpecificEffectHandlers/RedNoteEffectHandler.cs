@@ -75,7 +75,7 @@ public class RedNoteEffectHandler : NoteEffectHandler
                 Debug.DrawRay(targetPosition, direction * 2, Color.blue, 1.0f);
             }
 
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             rb.AddForce(direction * knockbackForce);
         }
     }
@@ -91,7 +91,6 @@ public class RedNoteEffectHandler : NoteEffectHandler
         {
             if (target.TryGetComponent<IDamageable>(out IDamageable damageable))
             {
-                Debug.Log($"<color=orange>AOE Damage:</color> Dealing {damage} to {target.name}");
                 damageable.TakeDamage(damage);
             }
         }
