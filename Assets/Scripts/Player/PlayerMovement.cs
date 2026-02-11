@@ -27,12 +27,12 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         MovePlayer();
-
         // Apply drag when no input is detected
         if (inputActions.Player.Move.ReadValue<Vector2>() == Vector2.zero)
         {
             ApplyDrag();
         }
+        
     }
 
     private void ApplyDrag()
@@ -64,4 +64,5 @@ public class PlayerMovement : MonoBehaviour
             rigidbody.linearVelocity = rigidbody.linearVelocity.normalized * maxSpeed;
         }
     }
+
 }

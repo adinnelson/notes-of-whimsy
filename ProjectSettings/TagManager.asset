@@ -4,12 +4,14 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - Room Node
+  - Floor
   - puObj
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Damageable
   - Water
   - UI
   - 
@@ -39,11 +41,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2554782705
+    locked: 0
   - name: Floors
     uniqueID: 4070886917
     locked: 0
   - name: Walls
     uniqueID: 1373270931
+    locked: 0
   - name: Background
     uniqueID: 2554782705
     locked: 0
