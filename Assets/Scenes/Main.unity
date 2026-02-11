@@ -173,7 +173,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: bpm
-      value: 60
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: stepSize
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: playerAttack
@@ -349,7 +353,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5189259256147739164, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.83
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5189259256147739164, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_LocalPosition.z
