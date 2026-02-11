@@ -8,7 +8,7 @@ public class EnemyConfig : ScriptableObject
 
     [Header("Movement")]
     public float chaseSpeed = 3.0f;     // Speed while chasing
-    public float stopDistance = 2.0f;   // Distance from player before stopping
+    public float attackRange = 8.0f;  // Distance from player before starting attack
 
 
     [Header("Attack")]
