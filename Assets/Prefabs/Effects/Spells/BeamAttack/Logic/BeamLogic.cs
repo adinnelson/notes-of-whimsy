@@ -41,8 +41,7 @@ public class beam_logic : MonoBehaviour
 
     void Update()
     {
-
-        
+        UpdateBeam();
     }
 
     /// <summary>
@@ -52,8 +51,8 @@ public class beam_logic : MonoBehaviour
     /// <param name="newVector">The new local vector of the beam.</param>
     public void SetVector(Vector2 newVector)
     {
-        pointingVector = newVector + newVector.normalized;
-        UpdateBeam();
+        pointingVector = newVector;
+        
     }
 
     /// <summary>
@@ -89,30 +88,22 @@ public class beam_logic : MonoBehaviour
         float vect_angle = vect_rad * Mathf.Rad2Deg;
         float vect_length = pointingVector.magnitude;
 
-        beamVisual.localPosition = pointingVector / 2.0f - pointingVector.normalized * 0.5f * yScale;
+        beamVisual.localPosition = pointingVector / 2.0f;
         beamVisual.localRotation = Quaternion.Euler(0.0f, 0.0f, vect_angle);
-        beamVisual.localScale = new Vector2(vect_length, yScale);
+        beamVisual.localScale = new Vector2(vect_length + 2.0f, yScale);
         beamVisualSprite.material.SetFloat("_Rotation", vect_angle);
-        beamVisualSprite.material.SetFloat("_XScale", vect_length);
+        beamVisualSprite.material.SetFloat("_XScale", vect_length + 2.0f);
 
         musicNoteEmitter.localPosition = beamVisual.localPosition;
         musicNoteEmitter.localRotation = beamVisual.localRotation;
-        musicNoteParticlesShape.scale = new Vector3(vect_length - 1.0f, 0.0f, 0.0f);
-        musicNoteParticlesEmission.rateOverTime = 8f * (vect_length - 1.0f) * noteParticleEmitPercent;
+        musicNoteParticlesShape.scale = new Vector3(vect_length, 0.0f, 0.0f);
+        musicNoteParticlesEmission.rateOverTime = 8f * vect_length * noteParticleEmitPercent;
+        
 
-        impactParticleEmitter.localPosition = pointingVector - pointingVector.normalized * 0.5f;
+        impactParticleEmitter.localPosition = pointingVector;
         impactParticleEmitter.rotation = Quaternion.Euler(0, 0, vect_angle + 180.0f - 45.0f / 2.0f);
 
-        lingeringParticleEmitter.localPosition = pointingVector - pointingVector.normalized;
+        lingeringParticleEmitter.localPosition = pointingVector;
         lingeringParticleEmitter.localRotation = beamVisual.localRotation;
-    }
-
-    // Stop all the children effects on the beam so it doesn't continue playing after the beam has already stopped.
-    public void StopParticles()
-    {
-        foreach (var effects in GetComponentsInChildren<ParticleSystem>())
-        {
-            effects.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-        }
     }
 }
