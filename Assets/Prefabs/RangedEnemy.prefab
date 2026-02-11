@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4169916575795475163
+--- !u!1 &3917825305028578068
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,46 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5189259256147739164}
-  - component: {fileID: 9197238375382272279}
-  - component: {fileID: 5369474722563365308}
-  - component: {fileID: 1155841396824913759}
-  - component: {fileID: 290925503593085523}
-  - component: {fileID: 248219787503362026}
-  - component: {fileID: 1734703644410629698}
-  - component: {fileID: 7996963532604069450}
-  - component: {fileID: 7752919813059416915}
-  - component: {fileID: 4426264664621214320}
+  - component: {fileID: 5241637396355224166}
+  - component: {fileID: 791840139780710217}
+  - component: {fileID: 4221648346885010113}
+  - component: {fileID: -5960956627775330249}
+  - component: {fileID: 8812664814101434642}
+  - component: {fileID: -3090202720258761063}
   m_Layer: 0
-  m_Name: Player
+  m_Name: RangedEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5189259256147739164
+--- !u!4 &5241637396355224166
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169916575795475163}
+  m_GameObject: {fileID: 3917825305028578068}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.01103, y: 0.04651, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &9197238375382272279
+--- !u!212 &791840139780710217
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169916575795475163}
+  m_GameObject: {fileID: 3917825305028578068}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -90,7 +86,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -712631045867808456, guid: b670ab75dde984907b8570040daa08c5, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -99,52 +95,36 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &5369474722563365308
+--- !u!114 &4221648346885010113
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169916575795475163}
+  m_GameObject: {fileID: 3917825305028578068}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b140c8372181b34caa928b56b88c69a, type: 3}
+  m_Script: {fileID: 11500000, guid: df253cfd76d7c444bb2c365f00ac69b4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  beathandler: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
-  firePoint: {fileID: 5189259256147739164}
-  projectilePrefab: {fileID: 8835509098591157618, guid: 8500acdd58d2a6d42b2b2711d5255fc6, type: 3}
-  fireCooldownSeconds: 0.2
---- !u!114 &1155841396824913759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169916575795475163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0523522d8831d946a529c107b967c79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  acceleration: 1.25
-  maxSpeed: 5
-  drag: 1
---- !u!50 &290925503593085523
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  maxHealth: 100
+  healthPrefab: {fileID: 0}
+  healthUIParent: {fileID: 0}
+--- !u!50 &-5960956627775330249
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169916575795475163}
+  m_GameObject: {fileID: 3917825305028578068}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 4
+  m_AngularDamping: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -155,15 +135,31 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
   m_Constraints: 4
---- !u!60 &248219787503362026
+--- !u!114 &8812664814101434642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3917825305028578068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d1e04ac548b64219a81161d980e8a5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RangedEnemy
+  config: {fileID: 11400000, guid: e9f92feed384e1344b2e4998d7252ce9, type: 2}
+  projectilePrefab: {fileID: 2852815562626469276, guid: 73861d502ca7f38499b1af206113828b, type: 3}
+  firePoint: {fileID: 5241637396355224166}
+  spreadDegrees: 12
+--- !u!60 &-3090202720258761063
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169916575795475163}
+  m_GameObject: {fileID: 3917825305028578068}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -210,61 +206,3 @@ PolygonCollider2D:
       - {x: 0.5, y: 0}
       - {x: 0.25, y: 0.43359375}
   m_UseDelaunayMesh: 1
---- !u!114 &1734703644410629698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169916575795475163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f06c6c6bd9d8ba142a250baef2cf043b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::YellowNoteEffectHandler
-  note: {fileID: 8835509098591157618, guid: 8500acdd58d2a6d42b2b2711d5255fc6, type: 3}
-  playerAttack: {fileID: 5369474722563365308}
---- !u!114 &7996963532604069450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169916575795475163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 101ec7500dd9e314c9e633ec87c5f6ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PurpleNoteEffectHandler
-  note: {fileID: 8835509098591157618, guid: 6b430ec2757a87c45b2de9757d94bc54, type: 3}
-  playerAttack: {fileID: 5369474722563365308}
-  beatHandler: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
-  laserPrefab: {fileID: -5741139717231234517, guid: 3e9e1b16b71bbd940954b08ad1827808, type: 3}
---- !u!114 &7752919813059416915
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169916575795475163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f69593bbcd8a3714bb2b7c3bb226cbb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RedNoteEffectHandler
-  note: {fileID: 0}
-  playerAttack: {fileID: 0}
---- !u!114 &4426264664621214320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169916575795475163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf97015115dbd254abde054afd87430c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BlueNoteEffectHandler
-  note: {fileID: 0}
-  playerAttack: {fileID: 0}

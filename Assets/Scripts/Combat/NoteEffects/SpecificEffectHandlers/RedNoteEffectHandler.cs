@@ -31,6 +31,11 @@ public class RedNoteEffectHandler : NoteEffectHandler
             {
                 if (hit.TryGetComponent<IDamageable>(out IDamageable targetDamageable))
                 {
+                    if (hit.CompareTag("Player"))
+                    {
+                        continue;
+                    }
+
                     if (!enemiesInRange.Contains(hit.gameObject))
                     {
                         enemiesInRange.Add(hit.gameObject);

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -87,7 +86,7 @@ public class RoomInfo : MonoBehaviour
         {
             print("spawning");
             // FIXME: get better logic for finding a spot to spawn enemy
-            Instantiate(enemy, floor.CellToWorld(Vector3Int.RoundToInt(floor.localBounds.center)), Quaternion.identity,transform);
+            Instantiate(enemy, floor.CellToWorld(Vector3Int.RoundToInt(floor.localBounds.center) + new Vector3Int(Random.Range(0,2),Random.Range(0,2), 0 )), Quaternion.identity,transform);
         }
     }
 

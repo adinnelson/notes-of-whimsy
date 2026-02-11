@@ -13,8 +13,6 @@ public class RoomGenerator : MonoBehaviour
     [Header("Object References")]
     private GameObject roomsParent;
     
-    [SerializeField]
-    private GameObject grid;
 
     [Header("Layout Controls")]
     [SerializeField]
@@ -22,6 +20,10 @@ public class RoomGenerator : MonoBehaviour
     // the number of rooms before generation stops not the end number of rooms
     [SerializeField]
     private int desiredRoomNumber;
+    [SerializeField]
+    private int minEnemies;
+    [SerializeField]
+    private int maxEnemies;
 
     [SerializeField]
     private List<GameObject> spawnedRooms;
@@ -46,7 +48,8 @@ public class RoomGenerator : MonoBehaviour
     public static event System.Action OnDungeonComplete;
 
 
-
+    // DEBUG VARIABLE FOR ALLOWING REGENERATION
+    public bool allowRegeneration = true;
 
 /*
 idea is to make it work for any size and shape room to have creativity and releave staleness of levels
@@ -68,7 +71,7 @@ idea is to make it work for any size and shape room to have creativity and relea
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.rKey.wasPressedThisFrame)
+        if (Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration)
         {
             Destroy(roomsParent);
             roomsParent = null;
@@ -99,7 +102,7 @@ idea is to make it work for any size and shape room to have creativity and relea
         if (roomsParent == null)
         {
         roomsParent = new GameObject("Floor Layout");
-        roomsParent.transform.SetParent(grid.transform);
+        roomsParent.transform.SetParent(transform);
         roomsParent.transform.position.Set(0,0,0);
         }
         // pull from the starter rooms list and spawn one at random
@@ -256,10 +259,12 @@ idea is to make it work for any size and shape room to have creativity and relea
         }
     }
 
+
     //spawns enemies into rooms
     // TODO: re-implement with proper logic
     private void PopulateEnemies(RoomInfo currentRoom)
     {
+        int enemyCount = Random.Range(minEnemies,maxEnemies);
         // HACK: choose a random number of enemies to add to the rooms list of enemies
         Tilemap floor = currentRoom.GetFloor();
         print(floor.cellBounds.center);
@@ -269,7 +274,11 @@ idea is to make it work for any size and shape room to have creativity and relea
             if(enemyPool.Count > 0)
             {
                 // FIXME: change to GetEnemies once implemented also add randomization
-                currentRoom.enemies.Add(enemyPool[0]);
+                for(int i = 0; i < enemyCount; i++)
+                {
+                    
+                currentRoom.enemies.Add(enemyPool[Random.Range(0, enemyPool.Count)]);
+                }
 
             }
             else

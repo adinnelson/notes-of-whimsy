@@ -13,12 +13,14 @@ public class Projectile : MonoBehaviour
     private Vector2 direction;
     private float despawnTime;
     protected bool isActive;
+    private GameObject owner;
 
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
     }
 
+    public void SetOwner(GameObject ownerObject) => owner = ownerObject;
     public void SetPoolManager(ProjectilePoolManager manager) => poolManager = manager;
     public void SetOwningPrefab(Projectile prefab) => owningPrefab = prefab;
 
@@ -85,6 +87,19 @@ public class Projectile : MonoBehaviour
         if (!isActive) 
         {
             return;
+        }
+        // This is friendly-fire protection so a projectile doesn’t hit the thing that fired it.
+        if (owner != null)
+        {
+            if (other.gameObject == owner)
+            {
+                return;
+            }
+
+            if (other.transform.IsChildOf(owner.transform))
+            {
+                return;
+            }
         }
 
         // Don't hit yourself

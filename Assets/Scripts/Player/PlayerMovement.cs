@@ -5,7 +5,6 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float acceleration = 1.25f;
     [SerializeField] private float maxSpeed = 5.0f;
-    [SerializeField] private float drag = 1.0f;
 
     private InputSystem_Actions inputActions;
     private new Rigidbody2D rigidbody;
@@ -27,25 +26,6 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         MovePlayer();
-        // Apply drag when no input is detected
-        if (inputActions.Player.Move.ReadValue<Vector2>() == Vector2.zero)
-        {
-            ApplyDrag();
-        }
-        
-    }
-
-    private void ApplyDrag()
-    {
-        Vector2 dragForce = -rigidbody.linearVelocity.normalized * drag;
-        if (dragForce.magnitude > rigidbody.linearVelocity.magnitude)
-        {
-            rigidbody.linearVelocity = Vector2.zero;
-        }
-        else
-        {
-            rigidbody.AddForce(dragForce, ForceMode2D.Impulse);
-        }
     }
 
     private void MovePlayer()
@@ -54,15 +34,13 @@ public class PlayerMovement : MonoBehaviour
         float moveVertical = inputActions.Player.Move.ReadValue<Vector2>().y;
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
-        Vector2 moveForce = movement * acceleration;
-
-        rigidbody.AddForce(moveForce, ForceMode2D.Impulse);
-
-        // Clamp player speed to maxSpeed
-        if (rigidbody.linearVelocity.magnitude > maxSpeed)
+        if (movement.magnitude > 1)
         {
-            rigidbody.linearVelocity = rigidbody.linearVelocity.normalized * maxSpeed;
+            movement.Normalize();
         }
-    }
 
+        Vector2 targetVelocity = movement * maxSpeed;
+
+        rigidbody.linearVelocity = Vector2.Lerp(rigidbody.linearVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
+    }
 }
