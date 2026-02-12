@@ -12,7 +12,7 @@ public class BeatHandler : MonoBehaviour {
     [SerializeField] private PlayerAttack playerAttack;
 
     // beats per minute
-    [SerializeField] private float bpm;
+    [SerializeField] private float bpm = 120f;
 
     // spawn position
     [SerializeField] private Transform beatSpawnPoint;
