@@ -108,8 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 100
-  healthPrefab: {fileID: 0}
-  healthUIParent: {fileID: 0}
+  healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
 --- !u!114 &-1729807999703734264
 MonoBehaviour:
   m_ObjectHideFlags: 0
