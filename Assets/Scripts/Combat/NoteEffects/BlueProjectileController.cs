@@ -23,7 +23,7 @@ public class BlueProjectileController : BlueNoteEffectHandler
     private bool canActivate = true;
 
     private const float COOLDOWN_TIME = 4.0f;
-    private const float MIN_DAMAGE_VELOCITY = 5.0f;
+    private const float MIN_DAMAGE_VELOCITY = 2.0f;
     private const float CIRCLING_RADIUS = 1.0f;
     private const float CIRCLING_SPEED = 1.0f;
     private const float RETURN_MAX_DELTA = 0.02f;
