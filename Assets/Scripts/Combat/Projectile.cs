@@ -13,7 +13,7 @@ public class Projectile : MonoBehaviour
     private Vector2 direction;
     private float despawnTime;
     protected bool isActive;
-    private GameObject owner;
+    protected GameObject owner;
 
     private void Awake()
     {
@@ -88,6 +88,7 @@ public class Projectile : MonoBehaviour
         {
             return;
         }
+
         // This is friendly-fire protection so a projectile doesn’t hit the thing that fired it.
         if (owner != null)
         {

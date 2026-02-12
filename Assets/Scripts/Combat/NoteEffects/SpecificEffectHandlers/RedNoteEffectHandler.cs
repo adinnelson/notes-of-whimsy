@@ -115,7 +115,7 @@ public class RedNoteEffectHandler : NoteEffectHandler
             return;
         }
 
-        playerAttack.FireProjectile(note, this);
+        playerAttack.FireProjectile(note, this, this.gameObject);
     }
 
     private void DebugDrawCircle(Vector3 center, float radius, Color color, float duration)

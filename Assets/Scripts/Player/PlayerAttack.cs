@@ -263,7 +263,7 @@ public class PlayerAttack : MonoBehaviour
         return mouseWorldPosition - originWorldPosition;
     }
 
-    public void FireProjectile(Projectile projectilePrefab, NoteEffectHandler noteEffectHandler = null)
+    public void FireProjectile(Projectile projectilePrefab, NoteEffectHandler noteEffectHandler = null, GameObject owner = null)
     {
         Vector3 projectileSpawnPosition = GetProjectileSpawnPosition();
         Vector2 finalDirection = GetFinalFireDirection(projectileSpawnPosition);
@@ -277,6 +277,10 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
+        if (owner != null)
+        {
+            projectile.SetOwner(owner);
+        }
         projectile.Activate(projectileSpawnPosition, finalDirection, noteEffectHandler);
     }
 
