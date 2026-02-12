@@ -1,17 +1,15 @@
 using UnityEngine;
 using System;
-using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour, IDamageable
 {
     public event Action OnDeath;
+
     [SerializeField] private float maxHealth = 100.0f;
     [SerializeField] private GameObject healthPrefab; // HealthDisplay prefab
-    [SerializeField] private Transform healthUIParent; // HealthScrollView Content
 
     private float currentHealth;
     private HealthUI UI;
-    private bool isPlayer = false;
 
     public float CurrentHealth => currentHealth;
     public float MaxHealth => maxHealth;
@@ -20,15 +18,15 @@ public class Health : MonoBehaviour, IDamageable
     {
         currentHealth = maxHealth;
         SpawnHealthUI();
-
-        isPlayer = this.GetComponent<PlayerAttack>() != null;
     }
 
     void SpawnHealthUI()
     {
-        if (healthPrefab != null && healthUIParent != null)
+        if (healthPrefab != null)
         {
-            GameObject objectToDisplayHealth = Instantiate(healthPrefab, healthUIParent);
+            GameObject objectToDisplayHealth = Instantiate(healthPrefab, transform);
+            objectToDisplayHealth.transform.localPosition = new Vector3(0, 1.0f, 0);
+
             UI = objectToDisplayHealth.GetComponent<HealthUI>();
 
             if (UI != null)
@@ -66,10 +64,5 @@ public class Health : MonoBehaviour, IDamageable
         }
 
         OnDeath?.Invoke();
-
-        if(isPlayer)
-        {
-            SceneManager.LoadScene("Main", LoadSceneMode.Single);
-        }
     }
 }

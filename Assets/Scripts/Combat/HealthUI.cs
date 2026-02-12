@@ -3,7 +3,7 @@ using TMPro;
 
 public class HealthUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI healthText;  // assign this in the HealthDisplay prefab
+    [SerializeField] private TextMeshPro healthText;  // assign this in the HealthDisplay prefab
 
     private Health target;
 
@@ -18,7 +18,8 @@ public class HealthUI : MonoBehaviour
     {
         if (target != null)
         {
-            healthText.text = $"{target.name} {target.CurrentHealth}/{target.MaxHealth}";
+            //healthText.text = $"{target.name} {target.CurrentHealth}/{target.MaxHealth}";
+            healthText.text = $"{target.CurrentHealth}/{target.MaxHealth}";
         }
     }
 }
