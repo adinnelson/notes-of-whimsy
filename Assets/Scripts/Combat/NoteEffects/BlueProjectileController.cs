@@ -40,7 +40,7 @@ public class BlueProjectileController : BlueNoteEffectHandler
         player = playerAttack.transform;
     }
 
-    // Detach from player and move in the aim direction
+    // Shoot the projectile in the aim direction
     public void Activate()
     {
         if (!canActivate)
@@ -118,6 +118,12 @@ public class BlueProjectileController : BlueNoteEffectHandler
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, damageRadius);
         foreach (Collider2D collision in hitColliders)
         {
+            // Do not affect the player
+            if (collision.transform == player)
+            {
+                continue;
+            }
+
             IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
             if (damageable != null)
             {
