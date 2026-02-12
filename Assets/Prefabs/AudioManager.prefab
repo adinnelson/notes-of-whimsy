@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9468c5f457ace64f8d4df6d642b107f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioBankLoader
-  LoadEvent: 1
-  UnloadEvent: 2
+  LoadEvent: 7
+  UnloadEvent: 8
   Banks:
   - Master
   CollisionTag: 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour, IDamageable
 {
@@ -10,6 +11,7 @@ public class Health : MonoBehaviour, IDamageable
 
     private float currentHealth;
     private HealthUI UI;
+    private bool isPlayer = false;
 
     public float CurrentHealth => currentHealth;
     public float MaxHealth => maxHealth;
@@ -18,6 +20,8 @@ public class Health : MonoBehaviour, IDamageable
     {
         currentHealth = maxHealth;
         SpawnHealthUI();
+
+        isPlayer = GetComponent<PlayerAttack>() != null;
     }
 
     void SpawnHealthUI()
@@ -64,5 +68,10 @@ public class Health : MonoBehaviour, IDamageable
         }
 
         OnDeath?.Invoke();
+
+        if(isPlayer)
+        {
+            SceneManager.LoadScene("Main", LoadSceneMode.Single);
+        }
     }
 }
