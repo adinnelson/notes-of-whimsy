@@ -12,11 +12,11 @@ public class BeatHandler : MonoBehaviour {
     [SerializeField] private PlayerAttack playerAttack;
 
     // beats per minute
-    [SerializeField] private float bpm;
+    [SerializeField] private float bpm = 120f;
 
     // spawn position
     [SerializeField] private Transform beatSpawnPoint;
-    
+
     // end of track
     // stored as GameObject to add effects on beatItem finishing track
     [SerializeField] private GameObject endGraphic;
@@ -29,7 +29,7 @@ public class BeatHandler : MonoBehaviour {
 
     // step size beat item moves on FixedUpdate
     [SerializeField] private float stepSize = 0.065f;
-    
+
     // default colour for main bpm beats
     [SerializeField] private Color defaultColour;
 
@@ -64,15 +64,15 @@ public class BeatHandler : MonoBehaviour {
         );
     }
 
-    void Start() 
+    void Start()
     {
         beatDistance =  beatSpawnPoint.position.x - endGraphic.transform.position.x;
-        spawnTime = 60.0f / bpm; 
+        spawnTime = 60.0f / bpm;
 
         PopulateBeatBar();
     }
 
-    void FixedUpdate() 
+    void FixedUpdate()
     {
         // Add time track for when to spawn a new beat
         if (timeElapsed >= spawnTime)
@@ -128,20 +128,20 @@ public class BeatHandler : MonoBehaviour {
     }
 
     // returns percentage front beat item is from final destination
-    public float GetPercentRemainingFrontBeat() 
+    public float GetPercentRemainingFrontBeat()
     {
-        return (endGraphic.transform.position.x - currentVisibleBeats[0].transform.position.x) / beatDistance;
+        return (currentVisibleBeats[0].transform.position.x - endGraphic.transform.position.x) / beatDistance;
     }
 
     // sets flag if beatItem is close enough end point
-    public void CheckValidAttackInterval (float percentage) 
-    {                                             
+    public void CheckValidAttackInterval (float percentage)
+    {
         // if the percentage of track on BeatItem remaining is at acceptable distance for input
-        if (percentage <= REQUIRED_ACCURACY) 
+        if (percentage <= REQUIRED_ACCURACY)
         {
             ValidAttackInterval = true;
-        } 
-        else 
+        }
+        else
         {
             ValidAttackInterval = false;
         }
@@ -174,7 +174,7 @@ public class BeatHandler : MonoBehaviour {
     // create child beat spawner
     public void CreateChildSpawner(Color colour, float spawnTime)
     {
-        ChildBeatSpawner spawner = Instantiate(childBeatSpawner, beatSpawnPoint.position, Quaternion.identity); 
+        ChildBeatSpawner spawner = Instantiate(childBeatSpawner, beatSpawnPoint.position, Quaternion.identity);
         spawner.Init(this, colour, beatSpawnPoint.position, spawnTime);
 
         activeBeatSpawners.Add(spawner);
@@ -210,7 +210,7 @@ public class BeatHandler : MonoBehaviour {
             for(int j = 0;j > activeBeatSpawners.Count;j++)
             {
                 Vector3 additionalSpawnPosition = spawnPosition - Vector3.left * beatItemSpeed * activeBeatSpawners[j].SpawnTime;
-                
+
                 if(additionalSpawnPosition.x < beatSpawnPoint.position.x) break;
 
                 BeatItem additionalBeatItem = beatPool.Get();

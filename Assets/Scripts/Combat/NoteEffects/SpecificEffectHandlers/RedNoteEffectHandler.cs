@@ -31,6 +31,11 @@ public class RedNoteEffectHandler : NoteEffectHandler
             {
                 if (hit.TryGetComponent<IDamageable>(out IDamageable targetDamageable))
                 {
+                    if (hit.CompareTag("Player"))
+                    {
+                        continue;
+                    }
+
                     if (!enemiesInRange.Contains(hit.gameObject))
                     {
                         enemiesInRange.Add(hit.gameObject);
@@ -110,7 +115,7 @@ public class RedNoteEffectHandler : NoteEffectHandler
             return;
         }
 
-        playerAttack.FireProjectile(note, this);
+        playerAttack.FireProjectile(note, this, this.gameObject);
     }
 
     private void DebugDrawCircle(Vector3 center, float radius, Color color, float duration)

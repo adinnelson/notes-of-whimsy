@@ -23,7 +23,7 @@ public class BlueProjectileController : BlueNoteEffectHandler
     private bool canActivate = true;
 
     private const float COOLDOWN_TIME = 4.0f;
-    private const float MIN_DAMAGE_VELOCITY = 5.0f;
+    private const float MIN_DAMAGE_VELOCITY = 2.0f;
     private const float CIRCLING_RADIUS = 1.0f;
     private const float CIRCLING_SPEED = 1.0f;
     private const float RETURN_MAX_DELTA = 0.02f;
@@ -40,7 +40,7 @@ public class BlueProjectileController : BlueNoteEffectHandler
         player = playerAttack.transform;
     }
 
-    // Detach from player and move in the aim direction
+    // Shoot the projectile in the aim direction
     public void Activate()
     {
         if (!canActivate)
@@ -118,6 +118,12 @@ public class BlueProjectileController : BlueNoteEffectHandler
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, damageRadius);
         foreach (Collider2D collision in hitColliders)
         {
+            // Do not affect the player
+            if (collision.transform == player)
+            {
+                continue;
+            }
+
             IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
             if (damageable != null)
             {

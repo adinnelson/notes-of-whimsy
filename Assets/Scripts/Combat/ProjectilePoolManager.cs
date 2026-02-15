@@ -20,7 +20,9 @@ public class ProjectilePoolManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+
+        // temporarily disabling for demo
+        //DontDestroyOnLoad(gameObject);
     }
 
     // Creates a new ObjectPool for a specific projectile prefab
