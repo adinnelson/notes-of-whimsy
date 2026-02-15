@@ -265,9 +265,6 @@ idea is to make it work for any size and shape room to have creativity and relea
     private void PopulateEnemies(RoomInfo currentRoom)
     {
         int enemyCount = Random.Range(minEnemies,maxEnemies);
-        // HACK: choose a random number of enemies to add to the rooms list of enemies
-        Tilemap floor = currentRoom.GetFloor();
-        print(floor.cellBounds.center);
 
         if (currentRoom.GetSafety() == false)
         {
