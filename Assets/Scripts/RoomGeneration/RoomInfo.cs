@@ -34,7 +34,7 @@ public class RoomInfo : MonoBehaviour
     public bool IS_SAFE;
 
 
-
+    public static event System.Action<GameObject> OnFloorOverlap;
     public int NumberOfNodes {get; private set;}
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -84,7 +84,7 @@ public class RoomInfo : MonoBehaviour
     {
         foreach (GameObject enemy in enemies)
         {
-            // print("spawning");
+            print($"{gameObject.name} is spawning enemies");
             // FIXME: get better logic for finding a spot to spawn enemy
             Instantiate(enemy, floor.CellToWorld(Vector3Int.RoundToInt(floor.localBounds.center) + new Vector3Int(Random.Range(0,2),Random.Range(0,2), 0 )), Quaternion.identity,transform);
         }
@@ -156,4 +156,17 @@ public class RoomInfo : MonoBehaviour
     {
         return IS_SAFE;
     }
+
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        // print($"collision with {collision.name}");
+        if(collision.name == "Floor" && collision.gameObject != floor.gameObject) {
+            Debug.LogWarning($"{gameObject.name} collided with {collision.name}");
+            OnFloorOverlap?.Invoke(gameObject);
+            print("good collision");
+        }
+
+    }
+
 }

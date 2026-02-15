@@ -18,22 +18,22 @@ public class FloorInfo : MonoBehaviour
         // compColl.isTrigger = true;
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        // print($"collision with {collision.name}");
-        if(collision.name == "Floor") {
-            OnFloorOverlap?.Invoke(gameObject);
-            print("good collision");
-        }
+    // void OnTriggerEnter2D(Collider2D collision)
+    // {
+    //     // print($"collision with {collision.name}");
+    //     if(collision.name == "Floor") {
+    //         OnFloorOverlap?.Invoke(gameObject);
+    //         print("good collision");
+    //     }
 
-    }
+    // }
 
-    void OnTriggerStay2D(Collider2D collision)
-    {
-        // print("now we lingering");
-        if(collision.CompareTag("Floor")) {
-            OnFloorOverlap?.Invoke(gameObject);
-        }
-    }
+    // void OnTriggerStay2D(Collider2D collision)
+    // {
+    //     // print("now we lingering");
+    //     if(collision.CompareTag("Floor")) {
+    //         OnFloorOverlap?.Invoke(gameObject);
+    //     }
+    // }
 }
 

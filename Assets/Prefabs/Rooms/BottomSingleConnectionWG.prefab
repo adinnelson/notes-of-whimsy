@@ -1498,7 +1498,7 @@ GameObject:
   - component: {fileID: 1649224494829435800}
   m_Layer: 0
   m_Name: BottomSingleConnectionWG
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1582,7 +1582,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.12107849, y: -1.5134809}
+  m_Offset: {x: 0.0855875, y: -1.3986661}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1592,7 +1592,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 13.107849, y: 12.744614}
+  m_Size: {x: 10.122667, y: 10.67795}
   m_EdgeRadius: 0
 --- !u!1 &3190756977640528348
 GameObject:
