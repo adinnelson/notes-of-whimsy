@@ -50,6 +50,7 @@ public class CameraFollow : MonoBehaviour
 #if UNITY_EDITOR
     private void OnValidate()
     {
+        if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) return;
         UnityEditor.EditorApplication.delayCall += () =>
         {
             transform.position = new Vector3(0.0f, 0.0f, CAMERA_Z_OFFSET);

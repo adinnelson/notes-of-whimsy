@@ -33,7 +33,7 @@ public class RoomInfo : MonoBehaviour
     public List<GameObject> enemies;
     public bool IS_SAFE;
 
-    
+
 
     public int NumberOfNodes {get; private set;}
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -84,7 +84,7 @@ public class RoomInfo : MonoBehaviour
     {
         foreach (GameObject enemy in enemies)
         {
-            print("spawning");
+            // print("spawning");
             // FIXME: get better logic for finding a spot to spawn enemy
             Instantiate(enemy, floor.CellToWorld(Vector3Int.RoundToInt(floor.localBounds.center) + new Vector3Int(Random.Range(0,2),Random.Range(0,2), 0 )), Quaternion.identity,transform);
         }

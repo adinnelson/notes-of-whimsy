@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BeatHandler
   playerAttack: {fileID: 0}
-  bpm: 85
+  bpm: 120
   beatSpawnPoint: {fileID: 7153632319040493981}
   endGraphic: {fileID: 6592525763627111619}
   beatGraphic: {fileID: 7350653073411354262, guid: 6e7f8e362457c494da8148f143b3070a, type: 3}

@@ -45,7 +45,9 @@ public class YellowNoteEffectHandler : NoteEffectHandler
             defaultCapacity: 10,
             maxSize: 50
         );
-    }    
+
+        
+    }  
 
     void FixedUpdate() 
     {
@@ -83,7 +85,9 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     {
         if (onCooldown) return;
 
-        playerAttack.FireProjectile(note, this);
+        
+        note.SetOwner(this.gameObject);
+        playerAttack.FireProjectile(note, this, this.gameObject);
         onCooldown = true;
     }
 
