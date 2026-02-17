@@ -31,6 +31,20 @@ public class Note : Projectile
             return;
         }
 
+        // This is friendly-fire protection so a projectile doesn’t hit the thing that fired it.
+        if (owner != null)
+        {
+            if (other.gameObject == owner)
+            {
+                return;
+            }
+
+            if (other.transform.IsChildOf(owner.transform))
+            {
+                return;
+            }
+        }
+
         // If the thing we hit can take damage, damage it
         if (other.TryGetComponent<IDamageable>(out var damageable))
         {
