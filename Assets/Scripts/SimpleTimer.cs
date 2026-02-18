@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 public class SimpleTimer
 {
-    float duration = 60;
+    float duration = 60.0f;
     float timeRemaining;
     bool on = false;
     bool loop = false;
