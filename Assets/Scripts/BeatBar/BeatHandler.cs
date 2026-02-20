@@ -42,6 +42,12 @@ public class BeatHandler : MonoBehaviour {
     // pools BeatItems to prevent constant spawning and destroying of GameObjects
     private ObjectPool<BeatItem> beatPool;
 
+    // Unlocked beat and order variables
+    HashSet<int> unlockedBeats = new HashSet<int>();
+    int nextBeatId = 1;
+    int maxBeatId = 8;
+
+
     // current beats on track
     private List<BeatItem> currentVisibleBeats = new List<BeatItem>();
 
@@ -69,7 +75,10 @@ public class BeatHandler : MonoBehaviour {
         beatDistance =  beatSpawnPoint.position.x - endGraphic.transform.position.x;
         spawnTime = 60.0f / bpm;
 
-        PopulateBeatBar();
+        unlockedBeats.Add(1);
+        unlockedBeats.Add(5);
+
+        //PopulateBeatBar();
     }
 
     void FixedUpdate()
@@ -77,8 +86,19 @@ public class BeatHandler : MonoBehaviour {
         // Add time track for when to spawn a new beat
         if (timeElapsed >= spawnTime)
         {
+            bool playerHasBeat = unlockedBeats.Contains(nextBeatId);
+
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, defaultColour, endGraphic, beatSpawnPoint.position, stepSize);
+            beatItem.Init(this, defaultColour, endGraphic, beatSpawnPoint.position, stepSize, nextBeatId, playerHasBeat);
+
+            if(!playerHasBeat)
+            {
+                beatItem.GetComponent<SpriteRenderer>().enabled = false;
+            }
+            else
+            {
+                beatItem.GetComponent<SpriteRenderer>().enabled = true;
+            }
 
             currentVisibleBeats.Add(beatItem);
             timeElapsed = 0.0f;
@@ -86,6 +106,12 @@ public class BeatHandler : MonoBehaviour {
             for(int i = 0;i < activeBeatSpawners.Count;i++)
             {
                 activeBeatSpawners[i].StartSpawnCountdown();
+            }
+
+            nextBeatId++;
+            if(nextBeatId > maxBeatId)
+            {
+                nextBeatId = 1;
             }
 
             return;
@@ -137,7 +163,7 @@ public class BeatHandler : MonoBehaviour {
     public void CheckValidAttackInterval (float percentage)
     {
         // if the percentage of track on BeatItem remaining is at acceptable distance for input
-        if (percentage <= REQUIRED_ACCURACY)
+        if (currentVisibleBeats[0].Unlocked && percentage <= REQUIRED_ACCURACY)
         {
             ValidAttackInterval = true;
         }
@@ -180,11 +206,12 @@ public class BeatHandler : MonoBehaviour {
         activeBeatSpawners.Add(spawner);
     }
 
+    // DEBRECATED FROM NEW TICK SYSTEM
     // spawns a beat on bar with passed in color
     public void SpawnAdditionalBeat(Color colour)
     {
         BeatItem beatItem = beatPool.Get();
-        beatItem.Init(this, colour, endGraphic, beatSpawnPoint.position, stepSize);
+        beatItem.Init(this, colour, endGraphic, beatSpawnPoint.position, stepSize, 0);
 
         currentVisibleBeats.Add(beatItem);
     }
@@ -202,7 +229,7 @@ public class BeatHandler : MonoBehaviour {
             Vector3 spawnPosition = new Vector3(beatSpawnPoint.position.x - distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
 
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, defaultColour, endGraphic, spawnPosition, stepSize);
+            beatItem.Init(this, defaultColour, endGraphic, spawnPosition, stepSize, 0);
 
             currentVisibleBeats.Insert(0, beatItem);
 
@@ -214,12 +241,26 @@ public class BeatHandler : MonoBehaviour {
                 if(additionalSpawnPosition.x < beatSpawnPoint.position.x) break;
 
                 BeatItem additionalBeatItem = beatPool.Get();
-                additionalBeatItem.Init(this, activeBeatSpawners[j].Colour, endGraphic, additionalSpawnPosition, stepSize);
+                additionalBeatItem.Init(this, activeBeatSpawners[j].Colour, endGraphic, additionalSpawnPosition, stepSize, 0);
 
                 currentVisibleBeats.Add(additionalBeatItem);
             }
         }
     }
+
+    public void BeatUnlocked(int beatId)
+    {
+        unlockedBeats.Add(beatId);
+
+        for (int i = 0;i < currentVisibleBeats.Count;i++)
+        {
+            if(currentVisibleBeats[i].BeatId != beatId) return;
+
+            currentVisibleBeats[i].GetComponent<SpriteRenderer>().enabled = true;
+            currentVisibleBeats[i].Unlocked = true; 
+        }
+    }
+
     public float GetBPM()
     {
         return bpm;
