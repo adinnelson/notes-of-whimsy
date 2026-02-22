@@ -6,6 +6,8 @@ public class PlayerInventory : MonoBehaviour
     private Dictionary<ItemType, SpellDataSO> activeSpells = new Dictionary<ItemType, SpellDataSO>(); //keep track of spells -- only allowed 1 of each type
     private Dictionary<ItemType, GameObject> activeIcon = new Dictionary<ItemType, GameObject>(); //keep track of the spell Icons -- swap them out when new spell is learned
 
+    [SerializeField] private BeatHandler beatHandler;
+
     [Header("InventoryUI")]
     [SerializeField] private Transform contentsParent;
 
@@ -35,6 +37,10 @@ public class PlayerInventory : MonoBehaviour
                 Destroy(activeIcon[type]);
                 activeIcon.Remove(type);
             }
+        }
+        else
+        {
+            beatHandler.BeatUnlocked(newSpell.beatId);
         }
 
         activeSpells[type] = newSpell;

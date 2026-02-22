@@ -254,8 +254,8 @@ public class BeatHandler : MonoBehaviour {
 
         for (int i = 0;i < currentVisibleBeats.Count;i++)
         {
-            if(currentVisibleBeats[i].BeatId != beatId) return;
-
+            if(currentVisibleBeats[i].BeatId != beatId) continue;
+            
             currentVisibleBeats[i].GetComponent<SpriteRenderer>().enabled = true;
             currentVisibleBeats[i].Unlocked = true; 
         }

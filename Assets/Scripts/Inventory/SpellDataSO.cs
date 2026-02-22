@@ -9,4 +9,6 @@ public class SpellDataSO : ScriptableObject
     [Header("Visuals")]
     public Note NoteProjectilePrefab; //prefab for note effects
     public GameObject UIIconPrefab; //prefab for UI Icon
+
+    public int beatId;
 }
