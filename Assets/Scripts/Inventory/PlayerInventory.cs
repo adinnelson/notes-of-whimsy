@@ -38,10 +38,6 @@ public class PlayerInventory : MonoBehaviour
                 activeIcon.Remove(type);
             }
         }
-        else
-        {
-            beatHandler.BeatUnlocked(newSpell.beatId);
-        }
 
         activeSpells[type] = newSpell;
         SpawnIcon(newSpell);

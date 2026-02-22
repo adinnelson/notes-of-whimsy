@@ -44,8 +44,8 @@ public class BeatHandler : MonoBehaviour {
 
     // Unlocked beat and order variables
     HashSet<int> unlockedBeats = new HashSet<int>();
-    int nextBeatId = 1;
-    int maxBeatId = 8;
+    int nextTickId = 1;
+    int maxTickId = 8;
 
 
     // current beats on track
@@ -86,10 +86,10 @@ public class BeatHandler : MonoBehaviour {
         // Add time track for when to spawn a new beat
         if (timeElapsed >= spawnTime)
         {
-            bool playerHasBeat = unlockedBeats.Contains(nextBeatId);
+            bool playerHasBeat = unlockedBeats.Contains(nextTickId);
 
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, defaultColour, endGraphic, beatSpawnPoint.position, stepSize, nextBeatId, playerHasBeat);
+            beatItem.Init(this, defaultColour, endGraphic, beatSpawnPoint.position, stepSize, nextTickId, playerHasBeat);
 
             if(!playerHasBeat)
             {
@@ -108,10 +108,10 @@ public class BeatHandler : MonoBehaviour {
                 activeBeatSpawners[i].StartSpawnCountdown();
             }
 
-            nextBeatId++;
-            if(nextBeatId > maxBeatId)
+            nextTickId++;
+            if(nextTickId > maxTickId)
             {
-                nextBeatId = 1;
+                nextTickId = 1;
             }
 
             return;
@@ -248,13 +248,13 @@ public class BeatHandler : MonoBehaviour {
         }
     }
 
-    public void BeatUnlocked(int beatId)
+    public void BeatUnlocked(int tickId)
     {
-        unlockedBeats.Add(beatId);
+        unlockedBeats.Add(tickId);
 
         for (int i = 0;i < currentVisibleBeats.Count;i++)
         {
-            if(currentVisibleBeats[i].BeatId != beatId) continue;
+            if(currentVisibleBeats[i].TickId != tickId) continue;
             
             currentVisibleBeats[i].GetComponent<SpriteRenderer>().enabled = true;
             currentVisibleBeats[i].Unlocked = true; 

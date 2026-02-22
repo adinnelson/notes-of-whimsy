@@ -12,10 +12,10 @@ public class BeatItem : MonoBehaviour
     // end gameobject
     private GameObject endGoal;
 
-    private int beatId = 0;
-    public int BeatId
+    private int tickId = 0;
+    public int TickId
     {
-        get { return beatId; }
+        get { return tickId; }
     }
 
     private bool unlocked = false;
@@ -41,7 +41,7 @@ public class BeatItem : MonoBehaviour
     }
 
     // Initializes beat item
-    public void Init(BeatHandler beatHandler, Color colour, GameObject endGoal, Vector3 position, float stepSize, int beatId, bool unlocked = false)
+    public void Init(BeatHandler beatHandler, Color colour, GameObject endGoal, Vector3 position, float stepSize, int tickId, bool unlocked = false)
     {
         // references used
         this.beatHandler = beatHandler;
@@ -56,7 +56,7 @@ public class BeatItem : MonoBehaviour
         // set color
         GetComponent<SpriteRenderer>().color = colour;
 
-        this.beatId = beatId;
+        this.tickId = tickId;
 
         this.unlocked = unlocked;
     }
