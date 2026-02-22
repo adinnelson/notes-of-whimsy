@@ -15,9 +15,16 @@ public class PlayerInventory : MonoBehaviour
     {
         PickupItem pickup = objToPickup.GetComponent<PickupItem>();
 
-        if (pickup == null || pickup.spell == null)
+        if (pickup == null || (pickup.spell == null && pickup.tickId == 0))
         {
             Debug.LogWarning($"Object to pickup was empty! Collider: {objToPickup.name}");
+            return;
+        }
+
+        if (pickup.tickId != 0)
+        {
+            beatHandler.BeatUnlocked(pickup.tickId);
+            Destroy(objToPickup.gameObject);
             return;
         }
 
