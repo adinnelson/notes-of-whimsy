@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    private [SerializeField] BeatHandler beatHandler;
+    [SerializeField] private BeatHandler beatHandler;
 
     private List<SimpleTimer> timers = new List<SimpleTimer>();
 
