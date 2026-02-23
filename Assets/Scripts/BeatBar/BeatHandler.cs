@@ -137,7 +137,6 @@ public class BeatHandler : MonoBehaviour {
         if (!gm.BeatHit && percentage < 0.05f)
         {
             gm.TriggerBeat();   
-            gm.BeatHit = true;
         }
     }
 
