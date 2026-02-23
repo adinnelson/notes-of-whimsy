@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Pool;
+using UnityEngine.InputSystem;
 using System.Globalization;
 
 public class BeatHandler : MonoBehaviour {
@@ -87,6 +88,9 @@ public class BeatHandler : MonoBehaviour {
 
     void FixedUpdate()
     {
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
+
         // Add time track for when to spawn a new beat
         if (timeElapsed >= spawnTime)
         {
