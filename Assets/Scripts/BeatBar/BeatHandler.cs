@@ -33,6 +33,8 @@ public class BeatHandler : MonoBehaviour {
     // default colour for main bpm beats
     [SerializeField] private Color defaultColour;
 
+    private GameManager gm;
+
     // general track positional variables
     private float beatDistance;
     private float spawnTime;
@@ -72,6 +74,8 @@ public class BeatHandler : MonoBehaviour {
 
     void Start()
     {
+        gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
+
         beatDistance =  beatSpawnPoint.position.x - endGraphic.transform.position.x;
         spawnTime = 60.0f / bpm;
 
@@ -121,8 +125,16 @@ public class BeatHandler : MonoBehaviour {
 
         if(currentVisibleBeats.Count == 0) return;
 
+        float percentage = GetPercentRemainingFrontBeat();
+
         // check interval of first one in list
-        CheckValidAttackInterval(GetPercentRemainingFrontBeat());
+        CheckValidAttackInterval(percentage);
+
+        if (!gm.BeatHit && percentage < 0.05f)
+        {
+            gm.TriggerBeat();   
+            gm.BeatHit = true;
+        }
     }
 
     // Creates a new pooled GameObject the first time (and whenever the pool needs more).
@@ -187,6 +199,7 @@ public class BeatHandler : MonoBehaviour {
         }
 
         RemoveFrontBeat();
+        gm.BeatHit = false;
     }
 
     // remove front beat from list and return to pool
