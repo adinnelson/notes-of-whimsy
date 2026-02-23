@@ -2,13 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 public class SimpleTimer
 {
-    float duration = 60.0f;
-    float timeRemaining;
-    bool on = false;
-    bool loop = false;
+    private float duration = 60.0f;
+    private float timeRemaining;
+    private bool on = false;
+    private bool loop = false;
 
     Action onFinish;
 

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] BeatHandler beatHandler;
+    private [SerializeField] BeatHandler beatHandler;
 
-    List<SimpleTimer> timers = new List<SimpleTimer>();
+    private List<SimpleTimer> timers = new List<SimpleTimer>();
 
     // enabled when a beat is within acceptable range
     public bool BeatHit = false;
