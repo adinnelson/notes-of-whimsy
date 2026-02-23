@@ -134,9 +134,9 @@ public class BeatHandler : MonoBehaviour {
         // check interval of first one in list
         CheckValidAttackInterval(percentage);
 
-        if (!gm.BeatHit && percentage < 0.05f)
+        if (!gm.TickHit && percentage < 0.05f)
         {
-            gm.TriggerBeat();   
+            gm.TriggerTick(currentVisibleBeats[0].TickId);   
         }
     }
 
@@ -202,7 +202,7 @@ public class BeatHandler : MonoBehaviour {
         }
 
         RemoveFrontBeat();
-        gm.BeatHit = false;
+        gm.TickHit = false;
     }
 
     // remove front beat from list and return to pool

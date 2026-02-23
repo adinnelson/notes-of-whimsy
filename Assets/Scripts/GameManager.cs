@@ -10,9 +10,12 @@ public class GameManager : MonoBehaviour
     private List<SimpleTimer> timers = new List<SimpleTimer>();
 
     // enabled when a beat is within acceptable range
-    public bool BeatHit = false;
+    public bool TickHit = false;
 
-    public Action OnBeatTriggered = null;
+    public Action OnTickTriggered = null;
+
+    // important to call separate for enemies who only react to odd ticks
+    public Action OnOddTickTriggered = null;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,13 +32,15 @@ public class GameManager : MonoBehaviour
         }        
     }
 
-    public void TriggerBeat()
+    public void TriggerTick(int tickId)
     {
-        BeatHit = true;
+        TickHit = true;
 
-        if(OnBeatTriggered == null) return;
+        if(OnTickTriggered == null) return;
 
-        OnBeatTriggered.Invoke();
+        OnTickTriggered.Invoke();
+
+        if(tickId % 2 == 0) return;
     }
 
     public void AddTimer(SimpleTimer timer)
