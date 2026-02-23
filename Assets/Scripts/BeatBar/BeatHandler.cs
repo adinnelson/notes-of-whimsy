@@ -83,7 +83,7 @@ public class BeatHandler : MonoBehaviour {
         unlockedBeats.Add(1);
         unlockedBeats.Add(5);
 
-        //PopulateBeatBar();
+        PopulateBeatBar();
     }
 
     void FixedUpdate()
@@ -240,13 +240,23 @@ public class BeatHandler : MonoBehaviour {
 
         float beatItemSpeed = stepSize / Time.fixedDeltaTime;
 
+        int tickIdCurr = (int)(beatDistance / (bufferDistance + distanceToAdd));
+
+        int tickId = tickIdCurr;
+
         // spawn as many beat items that are needed given buffer passed and bar size
         for(int i = 0; beatDistance - bufferDistance - distanceToAdd * i > 0; i++)
         {
+            if(!unlockedBeats.Contains(tickId))
+            {
+                tickId--;
+                continue;
+            }
+
             Vector3 spawnPosition = new Vector3(beatSpawnPoint.position.x - distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
 
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, defaultColour, endGraphic, spawnPosition, stepSize, 0);
+            beatItem.Init(this, defaultColour, endGraphic, spawnPosition, stepSize, tickId);
 
             currentVisibleBeats.Insert(0, beatItem);
 
@@ -262,7 +272,11 @@ public class BeatHandler : MonoBehaviour {
 
                 currentVisibleBeats.Add(additionalBeatItem);
             }
+
+            tickId--;
         }
+
+        this.nextTickId = tickIdCurr + 1;
     }
 
     public void BeatUnlocked(int tickId)
