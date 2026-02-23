@@ -196,7 +196,7 @@ public class BeatHandler : MonoBehaviour {
             Debug.Log("Beats arrived out of order!");
         }
 
-        if (playerAttack != null)
+        if (playerAttack != null && beatItem.Unlocked)
         {
             playerAttack.RemoveAttackLock(PlayerAttack.MISSED_ATTACK_LOCK_KEY);
         }
