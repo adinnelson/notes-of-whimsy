@@ -3,43 +3,24 @@ using System.Collections.Generic;
 
 public class PlayerInventory : MonoBehaviour
 {
-    private Dictionary<ItemType, SpellDataSO> activeSpells = new Dictionary<ItemType, SpellDataSO>(); //keep track of spells -- only allowed 1 of each type
-    private Dictionary<ItemType, GameObject> activeIcon = new Dictionary<ItemType, GameObject>(); //keep track of the spell Icons -- swap them out when new spell is learned
-
+    //now allows multiple same type spells 
+    private List<SpellDataSO> activeSpells = new List<SpellDataSO>(); 
+    private List<GameObject> activeIcon = new List<GameObject>();
     [Header("InventoryUI")]
     [SerializeField] private Transform contentsParent;
 
-    private void OnTriggerEnter2D(Collider2D objToPickup)
+    public void TryToPickup(SpellDataSO newSpell, GameObject worldObject)
     {
-        PickupItem pickup = objToPickup.GetComponent<PickupItem>();
-
-        if (pickup == null || pickup.spell == null)
+        if (newSpell == null)
         {
-            Debug.LogWarning($"Object to pickup was empty! Collider: {objToPickup.name}");
+            Debug.LogWarning("tried to add a null spell");
             return;
         }
 
-        SpellDataSO newSpell = pickup.spell;
-        ItemType type = newSpell.SpellType;
-
-        /*
-         * only 1 spell of each ItemType allowed at a time. 
-         * if we find a new spell but already have a spell of that ItemType known, we automatically swap for the new one.
-         * future task: no auto swap new spell -> will have a pop up of stats for the new spell and player can choose to replace active spell with the new spell
-         */
-        if (activeSpells.ContainsKey(type))
-        {
-            Debug.Log($"Swapping {activeSpells[type].name} for {newSpell.name}");
-            if (activeIcon.ContainsKey(type))
-            {
-                Destroy(activeIcon[type]);
-                activeIcon.Remove(type);
-            }
-        }
-
-        activeSpells[type] = newSpell;
+        Debug.Log($"Adding spell to inventory: {newSpell.name}");
+        activeSpells.Add(newSpell);
         SpawnIcon(newSpell);
-        Destroy(objToPickup.gameObject);
+        Destroy(worldObject);
     }
 
     private void SpawnIcon(SpellDataSO spell)
@@ -52,20 +33,6 @@ public class PlayerInventory : MonoBehaviour
 
         GameObject iconInstance = Instantiate(spell.UIIconPrefab, contentsParent);
         iconInstance.SetActive(true);
-        activeIcon[spell.SpellType] = iconInstance;
+        activeIcon.Add(iconInstance);
     }
-
-    public SpellDataSO GetSpellByType(ItemType type)
-    {
-        return activeSpells.TryGetValue(type, out SpellDataSO spell) ? spell : null;
-    }
-
-    /*
-     * FUTURE TODO:
-     * public void SaveInventory()
-     * public void LoadInventory()
-     * either use a spell library with all spells accessible in a specific spell folder 
-     *              or 
-     * can use SO SpellDatabase with: public List<SpellDataSO> allSpellsDatabase;
-     */
 }
