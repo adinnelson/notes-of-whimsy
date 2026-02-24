@@ -50,6 +50,17 @@ public class BeatHandler : MonoBehaviour {
     int nextTickId = 1;
     int maxTickId = 8;
 
+    Dictionary<int, Color> tickIdToColor = new Dictionary<int, Color>
+{
+    { 1, Color.red },
+    { 2, Color.orange },
+    { 3, Color.yellow },
+    { 4, Color.pink },
+    { 5, Color.purple },
+    { 6, Color.cyan },
+    { 7, Color.blue },
+    { 8, Color.green }
+};
 
     // current beats on track
     private List<BeatItem> currentVisibleBeats = new List<BeatItem>();
@@ -97,7 +108,7 @@ public class BeatHandler : MonoBehaviour {
             bool playerHasBeat = unlockedBeats.Contains(nextTickId);
 
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, defaultColour, endGraphic, beatSpawnPoint.position, stepSize, nextTickId, playerHasBeat);
+            beatItem.Init(this, tickIdToColor[nextTickId], endGraphic, beatSpawnPoint.position, stepSize, nextTickId, playerHasBeat);
 
             if(!playerHasBeat)
             {
@@ -205,6 +216,27 @@ public class BeatHandler : MonoBehaviour {
         gm.TickHit = false;
     }
 
+    // returns front beat
+    // or null if no beats
+    public BeatItem GetFrontBeat(bool onlyVisible = true)
+    {
+        if(currentVisibleBeats.Count <= 0) return null;
+
+        if(onlyVisible)
+        {
+            for(int i = 0;i < currentVisibleBeats.Count;i++)
+            {
+                if(!currentVisibleBeats[i].Unlocked) continue;
+
+                return currentVisibleBeats[i];
+            }
+
+            return null;
+        }
+
+        return currentVisibleBeats[0];
+    }
+
     // remove front beat from list and return to pool
     public void RemoveFrontBeat()
     {
@@ -255,7 +287,7 @@ public class BeatHandler : MonoBehaviour {
             Vector3 spawnPosition = new Vector3(beatSpawnPoint.position.x - distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
 
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, defaultColour, endGraphic, spawnPosition, stepSize, tickId);
+            beatItem.Init(this, tickIdToColor[tickId], endGraphic, spawnPosition, stepSize, tickId);
 
             currentVisibleBeats.Insert(0, beatItem);
 

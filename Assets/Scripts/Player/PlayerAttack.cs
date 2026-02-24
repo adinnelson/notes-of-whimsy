@@ -49,16 +49,10 @@ public class PlayerAttack : MonoBehaviour
     {
         inputActions.Player.Enable();
         inputActions.Player.FireYellow.performed += OnFirePerformed;
-        inputActions.Player.FirePurple.performed += OnFirePerformed;
-        inputActions.Player.FireRed.performed += OnFirePerformed;
-        inputActions.Player.FireBlue.performed += OnFirePerformed;
     }
 
     private void OnDisable()
     {
-        inputActions.Player.FireBlue.performed -= OnFirePerformed;
-        inputActions.Player.FireRed.performed -= OnFirePerformed;
-        inputActions.Player.FirePurple.performed -= OnFirePerformed;
         inputActions.Player.FireYellow.performed -= OnFirePerformed;
         inputActions.Player.Disable();
     }
@@ -101,25 +95,27 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
+        BeatItem frontBeatItem = beathandler.GetFrontBeat();
+
         // Activates the different effect handlers
-        switch (context.action.name)
+        switch (frontBeatItem.TickId)
         {
-            case "FireYellow":
+            case 3:
             {
                 yellowEffectHandler?.Fire();
                 break;        
             }
-            case "FirePurple":
+            case 5:
             {
                 purpleEffectHandler?.Fire();
                 break;        
             }
-            case "FireRed":
+            case 1:
             {
                 redEffectHandler?.Fire();
                 break;        
             }
-            case "FireBlue":
+            case 7:
             {
                 blueEffectHandler?.Fire();
                 break;        
