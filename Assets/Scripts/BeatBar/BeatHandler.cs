@@ -50,17 +50,18 @@ public class BeatHandler : MonoBehaviour {
     int nextTickId = 1;
     int maxTickId = 8;
 
+    // tempory until the adding and removing effects system update occurs
     Dictionary<int, Color> tickIdToColor = new Dictionary<int, Color>
-{
-    { 1, Color.red },
-    { 2, Color.orange },
-    { 3, Color.yellow },
-    { 4, Color.pink },
-    { 5, Color.purple },
-    { 6, Color.cyan },
-    { 7, Color.blue },
-    { 8, Color.green }
-};
+    {
+        { 1, Color.red },
+        { 2, Color.orange },
+        { 3, Color.yellow },
+        { 4, Color.pink },
+        { 5, Color.purple },
+        { 6, Color.cyan },
+        { 7, Color.blue },
+        { 8, Color.green }
+    };
 
     // current beats on track
     private List<BeatItem> currentVisibleBeats = new List<BeatItem>();
@@ -99,6 +100,7 @@ public class BeatHandler : MonoBehaviour {
 
     void FixedUpdate()
     {
+        // place beatbar at mouse
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
 
@@ -310,7 +312,9 @@ public class BeatHandler : MonoBehaviour {
         this.nextTickId = tickIdCurr + 1;
     }
 
-    public void BeatUnlocked(int tickId)
+    // adds tick id to hashset
+    // unlocks annd unhides any ticks on bar
+    public void TickUnlocked(int tickId)
     {
         unlockedBeats.Add(tickId);
 

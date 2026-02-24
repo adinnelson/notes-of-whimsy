@@ -23,7 +23,7 @@ public class PlayerInventory : MonoBehaviour
 
         if (pickup.tickId != 0)
         {
-            beatHandler.BeatUnlocked(pickup.tickId);
+            beatHandler.TickUnlocked(pickup.tickId);
             Destroy(objToPickup.gameObject);
             return;
         }
