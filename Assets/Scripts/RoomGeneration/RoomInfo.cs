@@ -31,7 +31,10 @@ public class RoomInfo : MonoBehaviour
 
     [Header("Enemy logic")]
     public List<GameObject> enemies;
+
+    [Header("Room Type")]
     public bool IS_SAFE;
+    public RoomTypes roomType;
 
 
     public static event System.Action<GameObject> OnFloorOverlap;
@@ -162,11 +165,19 @@ public class RoomInfo : MonoBehaviour
     {
         // print($"collision with {collision.name}");
         if(collision.name == "Floor" && collision.gameObject != floor.gameObject) {
-            Debug.LogWarning($"{gameObject.name} collided with {collision.name}");
             OnFloorOverlap?.Invoke(gameObject);
-            print("good collision");
         }
 
     }
+
+}
+
+public enum RoomTypes
+{
+    starter,
+    generic,
+    combat,
+    shop,
+    reward
 
 }

@@ -202,7 +202,7 @@ idea is to make it work for any size and shape room to have creativity and relea
         RoomInfo spawnedRoomInfo = spawnedRoom.GetComponent<RoomInfo>();
 
         spawnedRoom.transform.position = node.position - spawnedRoom.GetComponent<RoomInfo>().GetNode(direction).transform.localPosition;
-        spawnedRoom.name = node.name + "spawned" + numberOfRooms;
+        // spawnedRoom.name = node.name + "spawned" + numberOfRooms;
         spawnedRoomInfo.nodeList.Remove(spawnedRoomInfo.GetNode(direction));
         spawnedRoomInfo.SetParentNode(node);
         spawnedRoomInfo.SetSpawnedNode(spawnedRoomInfo.GetNode(direction).transform);
@@ -259,7 +259,11 @@ idea is to make it work for any size and shape room to have creativity and relea
                     spawnedRoom = null;
                     continue;
                 }
-                if(spawnedRoom == null) continue;
+                if(spawnedRoom == null) {
+                    j = 0;
+                    continue;
+                }
+
                 spawnedRooms.Add(spawnedRoom);
                 currentRoomInfo.AddSubRoom(spawnedRoom);
                 numberOfRooms++;

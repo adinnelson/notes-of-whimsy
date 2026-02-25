@@ -54,10 +54,10 @@ MonoBehaviour:
   maxEnemies: 5
   spawnedRooms: []
   starterRooms:
-  - {fileID: 2791336798263055279, guid: 0f888efa387aa2c4aadc6589d88889c5, type: 3}
-  - {fileID: 2791336798263055279, guid: 5236fb63f11fd4c4e85d4655ddf3c562, type: 3}
-  - {fileID: 2791336798263055279, guid: 92ff378c053c1d04eb8fb36ebb056b92, type: 3}
-  - {fileID: 2791336798263055279, guid: e12a1ad944347de4b9408d5ae0183bd9, type: 3}
+  - {fileID: 5809351762855307295, guid: c8eb3c7d7f730e04695babf28e765e95, type: 3}
+  - {fileID: 2960902605508290741, guid: 5cdb067a8c70bf3418155c48065a6a1c, type: 3}
+  - {fileID: 2935493060984338722, guid: 72a7c94c6533d964da2be52f44beea52, type: 3}
+  - {fileID: 1041415166973672473, guid: d9a603176219d55459d52c7c841e7eac, type: 3}
   leftConnections:
   - {fileID: 2791336798263055279, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
   - {fileID: 2791336798263055279, guid: ae1b80da5aea3414990cbb79ca82378d, type: 3}
