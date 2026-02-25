@@ -20,6 +20,11 @@ public class SpellPickupUI : MonoBehaviour
     {
         Debug.Log($"Showing pickup UI for: {pickup.spell.name}");
         currentPickup = pickup;
+
+        //set the pop-up menu to appear by the object we are picking up
+        Vector2 screenPos = Camera.main.WorldToScreenPoint(pickup.transform.position);
+        panel.transform.position = screenPos;
+
         panel.SetActive(true);
     }
 
@@ -34,7 +39,7 @@ public class SpellPickupUI : MonoBehaviour
         {
             Debug.LogWarning("Pickup called but currentPickup is null!");
         }
-            panel.SetActive(false);
+        panel.SetActive(false);
         currentPickup = null;
     }
 
