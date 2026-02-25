@@ -18,7 +18,6 @@ public class SpellPickupUI : MonoBehaviour
 
     public void Show(PickupItem pickup)
     {
-        Debug.Log($"Showing pickup UI for: {pickup.spell.name}");
         currentPickup = pickup;
 
         //set the pop-up menu to appear by the object we are picking up
@@ -32,7 +31,6 @@ public class SpellPickupUI : MonoBehaviour
     {
         if (currentPickup != null)
         {
-            Debug.Log($"Picking up spell: {currentPickup.spell.name}");
             playerInventory.TryToPickup(currentPickup.spell, currentPickup.gameObject);
         }
         else
@@ -47,7 +45,6 @@ public class SpellPickupUI : MonoBehaviour
     {
         if (currentPickup != null)
         {
-            Debug.Log($"Discarding spell: {currentPickup.spell.name}");
             Destroy(currentPickup.gameObject);
         }
         else

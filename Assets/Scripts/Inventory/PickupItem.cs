@@ -4,7 +4,7 @@ public class PickupItem : MonoBehaviour
 {
     public SpellDataSO spell;
 
-    public float pickupRange = 2.0f;
+    private float pickupRange = 2.0f;
 
     private Transform player;
 
@@ -25,13 +25,12 @@ public class PickupItem : MonoBehaviour
                 float distance = Vector2.Distance(transform.position, player.position);
                 if (distance <= pickupRange)
                 {
-                    Debug.Log($"Clicked on spell: {spell.name}");
                     SpellPickupUI.Instance.Show(this);
                 }
             }
             else
             {
-                Debug.Log("Too far away to pickup.");
+                return;
             }
         }
     }

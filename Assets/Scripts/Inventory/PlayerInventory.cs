@@ -17,7 +17,6 @@ public class PlayerInventory : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Adding spell to inventory: {newSpell.name}");
         activeSpells.Add(newSpell);
         SpawnIcon(newSpell);
         Destroy(worldObject);
