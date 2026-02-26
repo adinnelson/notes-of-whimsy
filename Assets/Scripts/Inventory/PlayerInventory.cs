@@ -14,8 +14,7 @@ public class PlayerInventory : MonoBehaviour
 
     public void TryToPickup(SpellDataSO newSpell, GameObject worldObject)
     {
-
-
+        
         if (newSpell == null)
         {
             Debug.LogWarning("tried to add a null spell");
@@ -25,6 +24,25 @@ public class PlayerInventory : MonoBehaviour
         activeSpells.Add(newSpell);
         SpawnIcon(newSpell);
         Destroy(worldObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D objToPickup)
+    {
+        PickupItem pickup = objToPickup.GetComponent<PickupItem>();
+
+        if (pickup == null)
+        {
+            Debug.LogWarning($"Not A Valid PickUp Item! Collider: {objToPickup.name}");
+            return;
+        }
+
+        if (pickup.tickId == 0)
+        {
+            return;
+        }
+
+        beatHandler.TickUnlocked(pickup.tickId);
+        Destroy(objToPickup.gameObject);
     }
 
     private void SpawnIcon(SpellDataSO spell)
