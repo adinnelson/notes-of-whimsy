@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 public class PickupItem : MonoBehaviour
 {
     public SpellDataSO spell;
+    public int tickId;
 
     private float pickupRange = 2.0f;
 
