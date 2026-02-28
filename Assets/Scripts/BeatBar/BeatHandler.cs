@@ -35,6 +35,7 @@ public class BeatHandler : MonoBehaviour {
     [SerializeField] private Color defaultColour;
 
     private GameManager gm;
+    private PlayerActiveSpellsHandler playerActiveSpellsHandler;
 
     // general track positional variables
     private float beatDistance;
@@ -88,12 +89,17 @@ public class BeatHandler : MonoBehaviour {
     void Start()
     {
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
+        playerActiveSpellsHandler = GameObject.FindWithTag("Player")?.GetComponent<PlayerActiveSpellsHandler>();
 
         beatDistance =  beatSpawnPoint.position.x - endGraphic.transform.position.x;
         spawnTime = 60.0f / bpm;
 
         unlockedBeats.Add(1);
+        playerActiveSpellsHandler.UnlockSlot(1);
+        playerActiveSpellsHandler.EquipSpell(1, 1);
         unlockedBeats.Add(5);
+        playerActiveSpellsHandler.UnlockSlot(5);
+        playerActiveSpellsHandler.EquipSpell(5, 3);
 
         PopulateBeatBar();
     }
