@@ -1559,6 +1559,7 @@ MonoBehaviour:
   spawnedNode: {fileID: 0}
   enemies: []
   IS_SAFE: 1
+  roomType: 0
 --- !u!61 &1241668904736937246
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -36,6 +36,11 @@ public class RoomInfo : MonoBehaviour
     public bool IS_SAFE;
     public RoomTypes roomType;
 
+    [Header("Shop Attributes")]
+    public bool isShop;
+    public List<GameObject> itemSpawnLocations;
+    
+
 
     public static event System.Action<GameObject> OnFloorOverlap;
     public int NumberOfNodes {get; private set;}
