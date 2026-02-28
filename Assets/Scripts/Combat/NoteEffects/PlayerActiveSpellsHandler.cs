@@ -76,4 +76,18 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
         slotSpell.unlocked = true;
     }
 
+    public bool GetSpellUnlockedFromSlotId(int slotId)
+    {
+        if(!slotSpells.ContainsKey(slotId)) return -1;
+
+        return slotSpells[slotId].unlocked;
+    }
+
+    public NoteEffectHandler GetSpellEffectHandlerFromSlotId(int slotId)
+    {
+        if(!slotSpells.ContainsKey(slotId)) return null;
+
+        return slotSpells[slotId].noteEffectHandler;
+    }
+
 }
