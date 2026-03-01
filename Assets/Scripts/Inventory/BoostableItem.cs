@@ -1,0 +1,18 @@
+using UnityEngine;
+
+public enum BoostType
+{
+    Speed,
+    MaxHealth,
+    Damage,
+    HealthPotion
+}
+
+public class BoostableItem : MonoBehaviour
+{
+    [SerializeField] private BoostType boostType;
+    [SerializeField] private float amount = 1.0f;
+
+    public BoostType Type => boostType;
+    public float Amount => amount;
+}
