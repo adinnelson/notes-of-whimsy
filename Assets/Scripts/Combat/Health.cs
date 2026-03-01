@@ -14,7 +14,6 @@ public class Health : MonoBehaviour, IDamageable
     private bool isPlayer = false;
     private PlayerStats stats;
 
-    public float CurrentHealth => currentHealth;
     public float MaxHealth => stats.MaxHealth;
 
     void Awake()
@@ -84,5 +83,15 @@ public class Health : MonoBehaviour, IDamageable
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, stats.MaxHealth);
         UI?.UpdateText();
+    }
+
+    public float CurrentHealth
+    {
+        get => currentHealth;
+        set
+        {
+            currentHealth = Mathf.Clamp(value, 0, stats.MaxHealth);
+            UI?.UpdateText();
+        }
     }
 }
