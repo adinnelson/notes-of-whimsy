@@ -4,10 +4,10 @@ using UnityEngine.EventSystems;
 
 public class SpellBox : MonoBehaviour, IPointerClickHandler
 {
-    SpellEditBar spellEditBar;
-    GameObject spellIcon = null;
+    private SpellEditBar spellEditBar;
+    private GameObject spellIcon = null;
     
-    int slotId;
+    private int slotId;
 
     void Start() 
     {

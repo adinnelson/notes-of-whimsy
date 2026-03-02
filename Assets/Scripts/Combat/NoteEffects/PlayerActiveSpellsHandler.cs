@@ -6,7 +6,7 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
 {
     public const int SPELL_SLOT_NUM = 8;
 
-    PlayerAttack playerAttack;
+    private PlayerAttack playerAttack;
 
     [SerializeField] private List<SpellDataSO> spellData = new List<SpellDataSO>();
 
@@ -24,10 +24,10 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     }
 
     // spells equipt
-    Dictionary<int, SlotSpell> slotSpells = new Dictionary<int, SlotSpell>();
+    private Dictionary<int, SlotSpell> slotSpells = new Dictionary<int, SlotSpell>();
 
     // all spell data
-    Dictionary<int, SpellDataSO> idToSpellData = new Dictionary<int, SpellDataSO>();
+    private Dictionary<int, SpellDataSO> idToSpellData = new Dictionary<int, SpellDataSO>();
 
     private void Awake() {
         

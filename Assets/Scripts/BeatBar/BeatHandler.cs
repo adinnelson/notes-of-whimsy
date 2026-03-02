@@ -47,9 +47,9 @@ public class BeatHandler : MonoBehaviour {
     private ObjectPool<BeatItem> beatPool;
 
     // Unlocked beat and order variables
-    HashSet<int> unlockedBeats = new HashSet<int>();
-    int nextBeatId = 1;
-    int maxBeatId = 8;
+    private HashSet<int> unlockedBeats = new HashSet<int>();
+    private int nextBeatId = 1;
+    private int maxBeatId = 8;
 
     // tempory until the adding and removing effects system update occurs
     Dictionary<int, Color> beatIdToColor = new Dictionary<int, Color>

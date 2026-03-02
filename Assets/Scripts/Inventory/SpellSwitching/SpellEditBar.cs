@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 public class SpellEditBar : MonoBehaviour
 {
-    List<SpellBox> spellBoxes = new List<SpellBox>();
-    PlayerActiveSpellsHandler playerActiveSpellsHandler;
-    PlayerInventory playerInventory;
+    private List<SpellBox> spellBoxes = new List<SpellBox>();
+    private PlayerActiveSpellsHandler playerActiveSpellsHandler;
+    private PlayerInventory playerInventory;
     private InputSystem_Actions inputActions;
 
 
@@ -18,12 +18,12 @@ public class SpellEditBar : MonoBehaviour
         Equip
     }
 
-    Setting setting = Setting.Equip;
+    private Setting setting = Setting.Equip;
 
-    SpellDataSO spellToBePlaced = null;
-    GameObject associatedSpellPickup = null;
+    private SpellDataSO spellToBePlaced = null;
+    private GameObject associatedSpellPickup = null;
 
-    int? initialSlotId = null;
+    private int? initialSlotId = null;
 
     private void Awake()
     {
