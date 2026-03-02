@@ -7,6 +7,13 @@ public class BlueNoteEffectHandler : NoteEffectHandler
     private BlueProjectileController projectileInstance;
     private Transform playerTransform => playerAttack.transform;
 
+    public override void Init(SpellDataSO spellData, PlayerAttack playerAttack)
+    {
+        this.spellData = spellData;
+        this.playerAttack = playerAttack;
+        this.note = spellData.NoteProjectilePrefab;
+    }
+
     public override void Fire()
     {
         // playerAttack.FireProjectile(note, this);

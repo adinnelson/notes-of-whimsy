@@ -2,10 +2,24 @@ using UnityEngine;
 
 public class PurpleNoteEffectHandler : NoteEffectHandler
 {
-    [SerializeField] private BeatHandler beatHandler;
-    [SerializeField] private LaserBeam laserPrefab;
+    private BeatHandler beatHandler;
+    private LaserBeam laserPrefab;
 
     private bool onCooldown;
+
+    public void SetLaser(LaserBeam laserPrefab)
+    {
+        this.laserPrefab = laserPrefab;
+    }
+
+    public override void Init(SpellDataSO spellData, PlayerAttack playerAttack)
+    {
+        this.spellData = spellData;
+        this.playerAttack = playerAttack;
+        this.note = spellData.NoteProjectilePrefab;
+
+        beatHandler = FindObjectOfType<BeatHandler>();
+    }
 
     public override void Fire()
     {

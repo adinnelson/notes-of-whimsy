@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 public class PlayerInventory : MonoBehaviour
@@ -11,10 +12,30 @@ public class PlayerInventory : MonoBehaviour
 
     [Header("InventoryUI")]
     [SerializeField] private Transform contentsParent;
+    [SerializeField] private SpellEditBar spellEditBar;
+    [SerializeField] private PlayerActiveSpellsHandler playerActiveSpellsHandler;
+
+    private InputSystem_Actions inputActions;
+
+    private void Awake()
+    {
+        inputActions = new InputSystem_Actions();
+    }
+
+    private void OnEnable()
+    {
+        inputActions.Player.Enable();
+        inputActions.Player.SpellSlots.performed += OnOpenInventory;
+    }
+
+    private void OnDisable()
+    {
+        inputActions.Player.SpellSlots.performed -= OnOpenInventory;
+        inputActions.Player.Disable();
+    }
 
     public void TryToPickup(SpellDataSO newSpell, GameObject worldObject)
     {
-        
         if (newSpell == null)
         {
             Debug.LogWarning("tried to add a null spell");
@@ -22,8 +43,8 @@ public class PlayerInventory : MonoBehaviour
         }
 
         activeSpells.Add(newSpell);
-        SpawnIcon(newSpell);
-        Destroy(worldObject);
+
+        spellEditBar.Open(newSpell, worldObject);
     }
 
     private void OnTriggerEnter2D(Collider2D objToPickup)
@@ -32,16 +53,19 @@ public class PlayerInventory : MonoBehaviour
 
         if (pickup == null)
         {
-            Debug.LogWarning($"Not A Valid PickUp Item! Collider: {objToPickup.name}");
+            //Debug.LogWarning($"Not A Valid PickUp Item! Collider: {objToPickup.name}");
             return;
         }
 
-        if (pickup.tickId == 0)
+        if (pickup.beatId == 0)
         {
             return;
         }
 
-        beatHandler.TickUnlocked(pickup.tickId);
+        beatHandler.BeatUnlocked(pickup.beatId);
+        
+        playerActiveSpellsHandler.UnlockSlot(pickup.beatId);
+
         Destroy(objToPickup.gameObject);
     }
 
@@ -56,5 +80,10 @@ public class PlayerInventory : MonoBehaviour
         GameObject iconInstance = Instantiate(spell.UIIconPrefab, contentsParent);
         iconInstance.SetActive(true);
         activeIcon.Add(iconInstance);
+    }
+
+    private void OnOpenInventory(InputAction.CallbackContext context)
+    {
+        spellEditBar.Open();
     }
 }

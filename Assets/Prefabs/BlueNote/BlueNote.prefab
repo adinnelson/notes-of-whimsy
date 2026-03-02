@@ -140,6 +140,7 @@ MonoBehaviour:
   key: blue
   name: blue
   desc: blue
+  spellIcon: {fileID: 5716504807486476903, guid: 182e5345d969caa4ebd6aeb1d96e4678, type: 3}
 --- !u!114 &7267057955772570292
 MonoBehaviour:
   m_ObjectHideFlags: 0

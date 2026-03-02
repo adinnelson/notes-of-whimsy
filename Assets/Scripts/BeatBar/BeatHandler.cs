@@ -35,6 +35,7 @@ public class BeatHandler : MonoBehaviour {
     [SerializeField] private Color defaultColour;
 
     private GameManager gm;
+    private PlayerActiveSpellsHandler playerActiveSpellsHandler;
 
     // general track positional variables
     private float beatDistance;
@@ -46,21 +47,17 @@ public class BeatHandler : MonoBehaviour {
     private ObjectPool<BeatItem> beatPool;
 
     // Unlocked beat and order variables
-    HashSet<int> unlockedBeats = new HashSet<int>();
-    int nextTickId = 1;
-    int maxTickId = 8;
+    private HashSet<int> unlockedBeats = new HashSet<int>();
+    private int nextBeatId = 1;
+    private int maxBeatId = 8;
 
     // tempory until the adding and removing effects system update occurs
-    Dictionary<int, Color> tickIdToColor = new Dictionary<int, Color>
+    private Dictionary<int, Color> beatIdToColor = new Dictionary<int, Color>
     {
         { 1, Color.red },
-        { 2, Color.orange },
-        { 3, Color.yellow },
-        { 4, Color.pink },
-        { 5, Color.purple },
-        { 6, Color.cyan },
-        { 7, Color.blue },
-        { 8, Color.green }
+        { 2, Color.yellow },
+        { 3, Color.purple },
+        { 4, Color.blue }
     };
 
     // current beats on track
@@ -88,12 +85,17 @@ public class BeatHandler : MonoBehaviour {
     void Start()
     {
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
+        playerActiveSpellsHandler = GameObject.FindWithTag("Player")?.GetComponent<PlayerActiveSpellsHandler>();
 
         beatDistance =  beatSpawnPoint.position.x - endGraphic.transform.position.x;
         spawnTime = 60.0f / bpm;
 
         unlockedBeats.Add(1);
+        playerActiveSpellsHandler.UnlockSlot(1);
+        playerActiveSpellsHandler.EquipSpell(1, 1);
         unlockedBeats.Add(5);
+        playerActiveSpellsHandler.UnlockSlot(5);
+        playerActiveSpellsHandler.EquipSpell(5, 3);
 
         PopulateBeatBar();
     }
@@ -107,10 +109,12 @@ public class BeatHandler : MonoBehaviour {
         // Add time track for when to spawn a new beat
         if (timeElapsed >= spawnTime)
         {
-            bool playerHasBeat = unlockedBeats.Contains(nextTickId);
+            bool playerHasBeat = unlockedBeats.Contains(nextBeatId);
+
+            int spelldInBeatSlot = playerActiveSpellsHandler.GetSpellIdFromSlotId(nextBeatId);
 
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, tickIdToColor[nextTickId], endGraphic, beatSpawnPoint.position, stepSize, nextTickId, playerHasBeat);
+            beatItem.Init(this, spelldInBeatSlot > 0 ? beatIdToColor[spelldInBeatSlot] : Color.white, endGraphic, beatSpawnPoint.position, stepSize, nextBeatId, playerHasBeat);
 
             if(!playerHasBeat)
             {
@@ -129,10 +133,10 @@ public class BeatHandler : MonoBehaviour {
                 activeBeatSpawners[i].StartSpawnCountdown();
             }
 
-            nextTickId++;
-            if(nextTickId > maxTickId)
+            nextBeatId++;
+            if(nextBeatId > maxBeatId)
             {
-                nextTickId = 1;
+                nextBeatId = 1;
             }
 
             return;
@@ -149,7 +153,7 @@ public class BeatHandler : MonoBehaviour {
 
         if (!gm.BeatHit && percentage < 0.05f)
         {
-            gm.TriggerBeat(currentVisibleBeats[0].TickId);
+            gm.TriggerBeat(currentVisibleBeats[0].BeatId);
         }
     }
 
@@ -273,23 +277,23 @@ public class BeatHandler : MonoBehaviour {
 
         float beatItemSpeed = stepSize / Time.fixedDeltaTime;
 
-        int tickIdCurr = (int)(beatDistance / (bufferDistance + distanceToAdd));
+        int beatIdCurr = (int)(beatDistance / (bufferDistance + distanceToAdd));
 
-        int tickId = tickIdCurr;
+        int beatId = beatIdCurr;
 
         // spawn as many beat items that are needed given buffer passed and bar size
         for(int i = 0; beatDistance - bufferDistance - distanceToAdd * i > 0; i++)
         {
-            if(!unlockedBeats.Contains(tickId))
+            if(!unlockedBeats.Contains(beatId))
             {
-                tickId--;
+                beatId--;
                 continue;
             }
 
             Vector3 spawnPosition = new Vector3(beatSpawnPoint.position.x - distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
 
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, tickIdToColor[tickId], endGraphic, spawnPosition, stepSize, tickId);
+            beatItem.Init(this, beatIdToColor[beatId], endGraphic, spawnPosition, stepSize, beatId);
 
             currentVisibleBeats.Insert(0, beatItem);
 
@@ -306,21 +310,21 @@ public class BeatHandler : MonoBehaviour {
                 currentVisibleBeats.Add(additionalBeatItem);
             }
 
-            tickId--;
+            beatId--;
         }
 
-        this.nextTickId = tickIdCurr + 1;
+        this.nextBeatId = beatIdCurr + 1;
     }
 
     // adds tick id to hashset
     // unlocks annd unhides any ticks on bar
-    public void TickUnlocked(int tickId)
+    public void BeatUnlocked(int beatId)
     {
-        unlockedBeats.Add(tickId);
+        unlockedBeats.Add(beatId);
 
         for (int i = 0;i < currentVisibleBeats.Count;i++)
         {
-            if(currentVisibleBeats[i].TickId != tickId) continue;
+            if(currentVisibleBeats[i].BeatId != beatId) continue;
 
             currentVisibleBeats[i].GetComponent<SpriteRenderer>().enabled = true;
             currentVisibleBeats[i].Unlocked = true;

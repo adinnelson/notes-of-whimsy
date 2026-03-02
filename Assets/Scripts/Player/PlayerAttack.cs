@@ -8,6 +8,7 @@ public class PlayerAttack : MonoBehaviour
     public const string MISSED_ATTACK_LOCK_KEY = "MISSED_ATTACK";
 
     [SerializeField] private BeatHandler beathandler;
+    private PlayerActiveSpellsHandler playerActiveSpellsHandler;
     [SerializeField] private Transform firePoint;
     [SerializeField] private Projectile projectilePrefab;
     [SerializeField] private float fireCooldownSeconds = 0.2f;
@@ -16,11 +17,6 @@ public class PlayerAttack : MonoBehaviour
     private const float MOUSE_MOVE_DETECT_SQR = 0.1f;
     private InputSystem_Actions inputActions;
     private Camera mainCamera;
-
-    private YellowNoteEffectHandler yellowEffectHandler;
-    private PurpleNoteEffectHandler purpleEffectHandler;
-    private RedNoteEffectHandler redEffectHandler;
-    private BlueNoteEffectHandler blueEffectHandler;
 
     private float lastFireTimeSeconds;
 
@@ -60,10 +56,7 @@ public class PlayerAttack : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        yellowEffectHandler = GetComponent<YellowNoteEffectHandler>();
-        purpleEffectHandler = GetComponent<PurpleNoteEffectHandler>();
-        redEffectHandler = GetComponent<RedNoteEffectHandler>();
-        blueEffectHandler = GetComponent<BlueNoteEffectHandler>();
+        playerActiveSpellsHandler = FindObjectOfType<PlayerActiveSpellsHandler>();
     }
 
     private void Update()
@@ -96,31 +89,8 @@ public class PlayerAttack : MonoBehaviour
         }
 
         BeatItem frontBeatItem = beathandler.GetFrontBeat();
-
-        // Activates the different effect handlers
-        switch (frontBeatItem.TickId)
-        {
-            case 3:
-            {
-                yellowEffectHandler?.Fire();
-                break;        
-            }
-            case 5:
-            {
-                purpleEffectHandler?.Fire();
-                break;        
-            }
-            case 1:
-            {
-                redEffectHandler?.Fire();
-                break;        
-            }
-            case 7:
-            {
-                blueEffectHandler?.Fire();
-                break;        
-            }
-        }
+        
+        playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(frontBeatItem.BeatId)?.Fire();
 
         beathandler.RemoveFrontBeat();
         lastFireTimeSeconds = Time.time;
