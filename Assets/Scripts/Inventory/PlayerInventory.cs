@@ -57,14 +57,14 @@ public class PlayerInventory : MonoBehaviour
             return;
         }
 
-        if (pickup.tickId == 0)
+        if (pickup.beatId == 0)
         {
             return;
         }
 
-        beatHandler.TickUnlocked(pickup.tickId);
+        beatHandler.BeatUnlocked(pickup.beatId);
         
-        playerActiveSpellsHandler.UnlockSlot(pickup.tickId);
+        playerActiveSpellsHandler.UnlockSlot(pickup.beatId);
 
         Destroy(objToPickup.gameObject);
     }

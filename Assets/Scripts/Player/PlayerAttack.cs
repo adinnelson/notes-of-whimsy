@@ -90,7 +90,7 @@ public class PlayerAttack : MonoBehaviour
 
         BeatItem frontBeatItem = beathandler.GetFrontBeat();
         
-        playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(frontBeatItem.TickId)?.Fire();
+        playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(frontBeatItem.BeatId)?.Fire();
 
         beathandler.RemoveFrontBeat();
         lastFireTimeSeconds = Time.time;

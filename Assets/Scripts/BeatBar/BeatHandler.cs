@@ -48,11 +48,11 @@ public class BeatHandler : MonoBehaviour {
 
     // Unlocked beat and order variables
     HashSet<int> unlockedBeats = new HashSet<int>();
-    int nextTickId = 1;
-    int maxTickId = 8;
+    int nextBeatId = 1;
+    int maxBeatId = 8;
 
     // tempory until the adding and removing effects system update occurs
-    Dictionary<int, Color> tickIdToColor = new Dictionary<int, Color>
+    Dictionary<int, Color> beatIdToColor = new Dictionary<int, Color>
     {
         { 1, Color.red },
         { 2, Color.yellow },
@@ -109,12 +109,12 @@ public class BeatHandler : MonoBehaviour {
         // Add time track for when to spawn a new beat
         if (timeElapsed >= spawnTime)
         {
-            bool playerHasBeat = unlockedBeats.Contains(nextTickId);
+            bool playerHasBeat = unlockedBeats.Contains(nextBeatId);
 
-            int spelldInTickSlot = playerActiveSpellsHandler.GetSpellIdFromSlotId(nextTickId);
+            int spelldInBeatSlot = playerActiveSpellsHandler.GetSpellIdFromSlotId(nextBeatId);
 
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, spelldInTickSlot > 0 ? tickIdToColor[spelldInTickSlot] : Color.white, endGraphic, beatSpawnPoint.position, stepSize, nextTickId, playerHasBeat);
+            beatItem.Init(this, spelldInBeatSlot > 0 ? beatIdToColor[spelldInBeatSlot] : Color.white, endGraphic, beatSpawnPoint.position, stepSize, nextBeatId, playerHasBeat);
 
             if(!playerHasBeat)
             {
@@ -133,10 +133,10 @@ public class BeatHandler : MonoBehaviour {
                 activeBeatSpawners[i].StartSpawnCountdown();
             }
 
-            nextTickId++;
-            if(nextTickId > maxTickId)
+            nextBeatId++;
+            if(nextBeatId > maxBeatId)
             {
-                nextTickId = 1;
+                nextBeatId = 1;
             }
 
             return;
@@ -153,7 +153,7 @@ public class BeatHandler : MonoBehaviour {
 
         if (!gm.BeatHit && percentage < 0.05f)
         {
-            gm.TriggerBeat(currentVisibleBeats[0].TickId);
+            gm.TriggerBeat(currentVisibleBeats[0].BeatId);
         }
     }
 
@@ -277,23 +277,23 @@ public class BeatHandler : MonoBehaviour {
 
         float beatItemSpeed = stepSize / Time.fixedDeltaTime;
 
-        int tickIdCurr = (int)(beatDistance / (bufferDistance + distanceToAdd));
+        int beatIdCurr = (int)(beatDistance / (bufferDistance + distanceToAdd));
 
-        int tickId = tickIdCurr;
+        int beatId = beatIdCurr;
 
         // spawn as many beat items that are needed given buffer passed and bar size
         for(int i = 0; beatDistance - bufferDistance - distanceToAdd * i > 0; i++)
         {
-            if(!unlockedBeats.Contains(tickId))
+            if(!unlockedBeats.Contains(beatId))
             {
-                tickId--;
+                beatId--;
                 continue;
             }
 
             Vector3 spawnPosition = new Vector3(beatSpawnPoint.position.x - distanceToAdd * i, endGraphic.transform.position.y, endGraphic.transform.position.z);
 
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, tickIdToColor[tickId], endGraphic, spawnPosition, stepSize, tickId);
+            beatItem.Init(this, beatIdToColor[beatId], endGraphic, spawnPosition, stepSize, beatId);
 
             currentVisibleBeats.Insert(0, beatItem);
 
@@ -310,21 +310,21 @@ public class BeatHandler : MonoBehaviour {
                 currentVisibleBeats.Add(additionalBeatItem);
             }
 
-            tickId--;
+            beatId--;
         }
 
-        this.nextTickId = tickIdCurr + 1;
+        this.nextBeatId = beatIdCurr + 1;
     }
 
     // adds tick id to hashset
     // unlocks annd unhides any ticks on bar
-    public void TickUnlocked(int tickId)
+    public void BeatUnlocked(int beatId)
     {
-        unlockedBeats.Add(tickId);
+        unlockedBeats.Add(beatId);
 
         for (int i = 0;i < currentVisibleBeats.Count;i++)
         {
-            if(currentVisibleBeats[i].TickId != tickId) continue;
+            if(currentVisibleBeats[i].BeatId != beatId) continue;
 
             currentVisibleBeats[i].GetComponent<SpriteRenderer>().enabled = true;
             currentVisibleBeats[i].Unlocked = true;

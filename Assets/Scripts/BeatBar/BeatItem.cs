@@ -12,10 +12,10 @@ public class BeatItem : MonoBehaviour
     // end gameobject
     private GameObject endGoal;
 
-    private int tickId = 0;
-    public int TickId
+    private int beatId = 0;
+    public int BeatId
     {
-        get { return tickId; }
+        get { return beatId; }
     }
 
     private bool unlocked = false;
@@ -56,7 +56,7 @@ public class BeatItem : MonoBehaviour
         // set color
         GetComponent<SpriteRenderer>().color = colour;
 
-        this.tickId = tickId;
+        this.beatId = tickId;
 
         this.unlocked = unlocked;
     }
