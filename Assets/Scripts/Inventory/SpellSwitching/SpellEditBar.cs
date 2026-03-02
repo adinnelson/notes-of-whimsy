@@ -85,13 +85,7 @@ public class SpellEditBar : MonoBehaviour
             setting = Setting.Swap;
         }
 
-        for(int i = 1;i <= PlayerActiveSpellsHandler.SPELL_SLOT_NUM;i++)
-        {
-            if(!playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i)) continue;
-            if(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i) == null) continue;
-
-            spellBoxes[i - 1].SetSpellIcon(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i).SpellIcon);
-        }
+        UpdateIcons();
     }
 
     // close
@@ -101,6 +95,17 @@ public class SpellEditBar : MonoBehaviour
         spellToBePlaced = null;
         associatedSpellPickup = null;
         initialSlotId = null;
+    }
+
+    public void UpdateIcons()
+    {
+        for(int i = 1;i <= PlayerActiveSpellsHandler.SPELL_SLOT_NUM;i++)
+        {
+            if(!playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i)) continue;
+            if(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i) == null) continue;
+
+            spellBoxes[i - 1].SetSpellIcon(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i).SpellIcon);
+        }
     }
 
     // places spell
@@ -143,6 +148,10 @@ public class SpellEditBar : MonoBehaviour
 
         playerActiveSpellsHandler.EquipSpell(slot1, spell2);
         playerActiveSpellsHandler.EquipSpell(slot2, spell1);
+
+        initialSlotId = null;
+
+        UpdateIcons();
     }
 
     private void OnMinimizeInventory(InputAction.CallbackContext context)
