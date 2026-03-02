@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public abstract class EnemyBase : MonoBehaviour
 {
-    protected enum State { Idle, Chase, Telegraph, Attack, Recover, Hurt, Dead }
+    protected enum State { Idle, Chase, Telegraph, Recover, Hurt, Dead }
 
     [Header("Core")]
     [SerializeField] protected EnemyConfig config;
@@ -16,11 +16,11 @@ public abstract class EnemyBase : MonoBehaviour
     protected Rigidbody2D rb;
     protected State state;
 
+    private GameManager gameManager;
+    private int recoverBeatsRemaining = 0;
+
     private Health health;
     private Collider2D col;
-
-    protected float stateTimer;
-    protected float cooldownTimer;
 
     protected HashSet<string> stunEffects = new HashSet<string>();
 
@@ -47,189 +47,146 @@ public abstract class EnemyBase : MonoBehaviour
         }
     }
 
-    // initialize the enemy into the Idle state.
     protected virtual void Start()
     {
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        if (gameManager == null)
+        {
+            Debug.LogError($"{name}: No GameObject with tag 'GameManager' found in scene.");
+        }
+
+        gameManager.OnOddBeatTriggered += OnBeat;
+
         EnterState(State.Idle);
     }
 
-    // Handles "global" timers (cooldown + stateTimer) and updates the current state's behavior.
-    protected virtual void Update()
-    {
-        if (stunEffects.Count > 0)
-        {
-            return;
-        }
-
-        if (target == null)
-        {
-            return;
-        }
-
-        if (state == State.Dead)
-        {
-            return;
-        }
-
-        if (cooldownTimer > 0.0f)
-        {
-            cooldownTimer -= Time.deltaTime;
-        }
-
-        stateTimer -= Time.deltaTime;
-
-        TickState(Time.deltaTime);
-    }
-
-    // State machine transition, switches to a new state and runs one-time "enter" logic
+    // State machine transition, switches to a new state and immediately runs state logic.
     protected void EnterState(State newState)
     {
         state = newState;
-        OnEnterState(newState);
+        RunStateLogic();
     }
 
-    // Runs once when changing state to do things like set timer, trigger one-shot anim/sfx/vfx
-    protected virtual void OnEnterState(State newState)
-    {
-        switch (newState)
-        {
-            case State.Idle:
-                stateTimer = 0.0f;
-                OnIdleStart();
-                break;
-
-            case State.Chase:
-                stateTimer = 0.0f;
-                OnChaseStart();
-                break;
-
-            case State.Telegraph:
-                stateTimer = config.telegraphSeconds;
-                OnTelegraphStart();
-                break;
-
-            case State.Attack:
-                stateTimer = config.attackSeconds;
-                OnAttackStart();
-                break;
-
-            case State.Recover:
-                stateTimer = config.recoverSeconds;
-                OnRecoverStart();
-                break;
-
-            case State.Hurt:
-                stateTimer = config.hurtSeconds;
-                OnHurtStart();
-                break;
-
-            case State.Dead:
-                stateTimer = 0.0f;
-                StopMovement();
-                break;
-        }
-    }
-
-    // Runs every frame while in current state.
-    protected void TickState(float dt)
+    // Run current state logic.
+    protected void RunStateLogic()
     {
         switch (state)
         {
-            case State.Idle: IdleTick(dt); break;
-            case State.Chase: ChaseTick(dt); break;
-            case State.Telegraph: TelegraphTick(dt); break;
-            case State.Attack: AttackTick(dt); break;
-            case State.Recover: RecoverTick(dt); break;
-            case State.Hurt: HurtTick(dt); break;
-            case State.Dead: DeadTick(dt); break;
+            case State.Idle:
+                OnIdle();
+                break;
+
+            case State.Chase:
+                OnChase();
+                break;
+
+            case State.Telegraph:
+                OnTelegraph(gameManager.GetBPM());
+                break;
+
+            case State.Recover:
+                OnRecover();
+                break;
+
+            case State.Hurt:
+                OnHurt();
+                break;
+
+            case State.Dead:
+                break;
         }
+     }
+
+    // Runs on odd beats to handle beat-synced behaviour based on current state.
+    protected virtual void OnBeat()
+    {
+        if (target == null || state == State.Dead)
+        {
+            return;
+        }
+
+        // If stunned, skip beat logic until stun is removed. Stun clears remaining recovery,
+        // but does not cancel an attack already queued for this beat.
+        if (stunEffects.Count > 0)
+        {
+            recoverBeatsRemaining = 0;
+            return;
+        }
+
+        // NOTE: EnterState also runs state logic and may cause two states to run in one beat.
+        RunStateLogic();
     }
 
-    // returns true if the enemy can attack right now. IF attack cooldown is finished AND player is within attack range.
-    protected bool IsReadyAndInRange()
+    // Returns true if the target is within this enemy's attack range.
+    protected bool TargetInAttackRange()
     {
-        if (cooldownTimer > 0.0f)
-        {
-            return false;
-        }
         return DistanceToTarget() <= config.attackRange;
     }
 
-    // Chase state behavior, Move toward the target until we're within stopDistance, and if this enemy decides it can attack, transition into Telegraph.
-    protected virtual void ChaseTick(float dt)
+    // Returns true if the target is within this enemy's visual aggeo range.
+    protected bool TargetInAggroRange()
     {
-        ChaseUntilStopDistance(config.chaseSpeed, config.attackRange);
-
-        if (CanStartAttack())
-        {
-            EnterState(State.Telegraph);
-        }
-    }
-
-    // Telegraph state behavior, Enemy holds still during wind-up. When the telegraph timer ends, transition into Attack
-    protected virtual void TelegraphTick(float dt)
-    {
-        StopMovement();
-
-        if (stateTimer <= 0.0f)
-        {
-            EnterState(State.Attack); 
-        }
-    }
-
-    // Attack state behavior, Runs enemy-specific attack logic each frame. When the attack window ends, stop the attack, start cooldown, and transition into Recover.
-    protected virtual void AttackTick(float dt)
-    {
-        OnAttackTick(dt);
-
-        if (stateTimer <= 0.0f)
-        {
-            OnAttackEnd();
-            cooldownTimer = config.cooldownSeconds;
-            EnterState(State.Recover);
-        }
-    }
-
-    // Recover state behavior, Enemy holds still during recovery. When recover timer ends, return to Chase
-    protected virtual void RecoverTick(float dt)
-    {
-        StopMovement();
-
-        if (stateTimer <= 0.0f)
-        {
-            EnterState(State.Chase);
-        }
+        return DistanceToTarget() <= config.aggroRange;
     }
 
     // Idle state behavior, Enemy holds still until the player gets within aggroRange, then transitions into Chase.
-    protected virtual void IdleTick(float dt)
+    protected virtual void OnIdle()
     {
         StopMovement();
 
-        if (DistanceToTarget() <= config.aggroRange)
+        if (TargetInAggroRange())
         {
             EnterState(State.Chase);
         }
     }
 
-    // Hurt state behavior, Enemy holds still while "stunned/flinching". Once hurt timer ends, transition back to Chase.
-    protected virtual void HurtTick(float dt)
+    protected virtual void OnTelegraph(float bpm)
     {
-        StopMovement();
+        recoverBeatsRemaining = config.recoverBeats;
 
-        if (stateTimer <= 0.0f)
+        float secondsPerBeat = 60.0f / bpm;
+        float timeToNextbeat = secondsPerBeat;
+
+        // If no attack queued, queue attack for next beat.
+        if (!IsInvoking(nameof(OnAttack)))
         {
-            EnterState(State.Chase);
+            Invoke(nameof(OnAttack), timeToNextbeat);
+        }
+
+        state = State.Recover;
+    }
+
+    // Recover state behavior. After recoverBeats, switch back to Idle.
+    protected virtual void OnRecover()
+    {
+        recoverBeatsRemaining--;
+
+        if (recoverBeatsRemaining <= 0)
+        {
+            // Switch to idle but skip the one-shot OnEnterState since this beat is the recovery beat
+            state = State.Idle;
         }
     }
 
-    // Dead state behavior, Enemy does nothing except enforce no movement. (Later you might disable collisions, play death anim, or return to pool.)
-    protected virtual void DeadTick(float dt)
+    // Hurt state behavior, enemy is briefly vulnerable and cannot act
+    protected virtual void OnHurt()
     {
-        StopMovement();
+        state = State.Recover;
+
+        if (config.hurtInterruptsAttack)
+        {
+            // Stop any queued attacks
+            CancelInvoke(nameof(OnAttack));
+        }
+
+        if (recoverBeatsRemaining > config.hurtBeats)
+        {
+            return;
+        }
+        recoverBeatsRemaining = config.hurtBeats;
     }
 
-    // call this when the enemy takes damage. If configured to interrupt attacks, switch to Hurt state. (Timer and one-shot effects are handled in OnEnterState(Hurt).)
+    // Call when the enemy takes damage. If configured to interrupt attacks, enter Hurt.
     public void NotifyDamaged()
     {
         if (state == State.Dead)
@@ -239,7 +196,7 @@ public abstract class EnemyBase : MonoBehaviour
 
         if (config.hurtInterruptsAttack)
         {
-            EnterState(State.Hurt); 
+            EnterState(State.Hurt);
         }
     }
 
@@ -290,6 +247,7 @@ public abstract class EnemyBase : MonoBehaviour
     {
         stunEffects.Remove(key);
     }
+
     protected virtual void HandleDeath()
     {
         if (state == State.Dead)
@@ -298,6 +256,9 @@ public abstract class EnemyBase : MonoBehaviour
         }
 
         EnterState(State.Dead);
+
+        // Stop attacks
+        CancelInvoke(nameof(OnAttack));
 
         // Stop physics interactions
         StopMovement();
@@ -311,24 +272,24 @@ public abstract class EnemyBase : MonoBehaviour
             gameObject.SetActive(false);   // pooled-friendly death for enemy pooling later
         }
     }
+
     protected virtual void OnDestroy()
     {
         if (health != null)
         {
             health.OnDeath -= HandleDeath;
         }
+
+        if (gameManager != null)
+        {
+            gameManager.OnOddBeatTriggered -= OnBeat;
+        }
     }
 
     // Required attack customization
     protected abstract bool CanStartAttack();
-    protected abstract void OnAttackStart();
-    protected abstract void OnAttackTick(float dt);
-    protected abstract void OnAttackEnd();
 
     // one-shot hooks for other states
-    protected virtual void OnIdleStart() { }
-    protected virtual void OnChaseStart() { }
-    protected virtual void OnTelegraphStart() { }
-    protected virtual void OnRecoverStart() { }
-    protected virtual void OnHurtStart() { }
+    protected virtual void OnChase() { }
+    protected virtual void OnAttack() { }
 }
