@@ -91,7 +91,7 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     // shoot projectile
     public override void Fire()
     {
-        if (onCooldown) return;
+        //if (onCooldown) return;
 
         
         note.SetOwner(this.gameObject);
