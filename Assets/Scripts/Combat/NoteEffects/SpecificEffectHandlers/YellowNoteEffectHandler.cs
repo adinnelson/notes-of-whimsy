@@ -27,27 +27,12 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     private List<EnemyBase> enemies = new List<EnemyBase>();
 
     // layer mask for effect
-    [SerializeField] private LayerMask enemyMask;
+    private LayerMask enemyMask;
 
     // Temp Lighning effects
-    [SerializeField] private TempLightingEffectLogic lightningEffect;
-     private ObjectPool<TempLightingEffectLogic> lightningChainPool;
+    private TempLightingEffectLogic lightningEffect;
+    private ObjectPool<TempLightingEffectLogic> lightningChainPool;
     private List<TempLightingEffectLogic> currentVisibleLightningChains = new List<TempLightingEffectLogic>();
-
-    void Awake()
-    {
-        lightningChainPool = new ObjectPool<TempLightingEffectLogic>(
-            createFunc: CreateItem,
-            actionOnGet: OnGet,
-            actionOnRelease: OnRelease,
-            actionOnDestroy: OnDestroyItem,
-            collectionCheck: true,   // helps catch double-release mistakes
-            defaultCapacity: 10,
-            maxSize: 50
-        );
-
-        
-    }  
 
     void FixedUpdate() 
     {
@@ -78,6 +63,29 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         }
 
         timeElapsed +=  Time.fixedDeltaTime;
+    }
+
+    public void CustomYellowInit(TempLightingEffectLogic lightningEffect, LayerMask enemyMask)
+    {
+        this.lightningEffect = lightningEffect;
+        this.enemyMask = enemyMask;
+
+        lightningChainPool = new ObjectPool<TempLightingEffectLogic>(
+            createFunc: CreateItem,
+            actionOnGet: OnGet,
+            actionOnRelease: OnRelease,
+            actionOnDestroy: OnDestroyItem,
+            collectionCheck: true,   // helps catch double-release mistakes
+            defaultCapacity: 10,
+            maxSize: 50
+        );
+    }
+
+    public override void Init(SpellDataSO spellData, PlayerAttack playerAttack)
+    {
+        this.spellData = spellData;
+        this.playerAttack = playerAttack;
+        this.note = spellData.NoteProjectilePrefab;
     }
 
     // shoot projectile

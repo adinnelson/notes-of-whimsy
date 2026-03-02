@@ -159,7 +159,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Next"",
                     ""type"": ""Button"",
                     ""id"": ""b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -204,6 +204,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""FireBlue"",
                     ""type"": ""Button"",
                     ""id"": ""30995772-f6f3-44b2-82c2-91a303974399"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Escape"",
+                    ""type"": ""Button"",
+                    ""id"": ""590b3090-42fa-4558-a5d8-89d7c9822d03"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpellSlots"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e5b8833-3f04-4742-94f0-6c5f9e9b637a"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -725,6 +743,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Touch"",
                     ""action"": ""FireBlue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1380f988-7ce8-4c16-99e9-a401c922a09d"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d6b0d05d-dac2-4448-acb5-2af0e85af1b9"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5c5d062b-be1e-4642-b731-96665234d902"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpellSlots"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1325,6 +1376,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_FirePurple = m_Player.FindAction("FirePurple", throwIfNotFound: true);
         m_Player_FireRed = m_Player.FindAction("FireRed", throwIfNotFound: true);
         m_Player_FireBlue = m_Player.FindAction("FireBlue", throwIfNotFound: true);
+        m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
+        m_Player_SpellSlots = m_Player.FindAction("SpellSlots", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1431,6 +1484,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_FirePurple;
     private readonly InputAction m_Player_FireRed;
     private readonly InputAction m_Player_FireBlue;
+    private readonly InputAction m_Player_Escape;
+    private readonly InputAction m_Player_SpellSlots;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1494,6 +1549,14 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/FireBlue".
         /// </summary>
         public InputAction @FireBlue => m_Wrapper.m_Player_FireBlue;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Escape".
+        /// </summary>
+        public InputAction @Escape => m_Wrapper.m_Player_Escape;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SpellSlots".
+        /// </summary>
+        public InputAction @SpellSlots => m_Wrapper.m_Player_SpellSlots;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1559,6 +1622,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @FireBlue.started += instance.OnFireBlue;
             @FireBlue.performed += instance.OnFireBlue;
             @FireBlue.canceled += instance.OnFireBlue;
+            @Escape.started += instance.OnEscape;
+            @Escape.performed += instance.OnEscape;
+            @Escape.canceled += instance.OnEscape;
+            @SpellSlots.started += instance.OnSpellSlots;
+            @SpellSlots.performed += instance.OnSpellSlots;
+            @SpellSlots.canceled += instance.OnSpellSlots;
         }
 
         /// <summary>
@@ -1609,6 +1678,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @FireBlue.started -= instance.OnFireBlue;
             @FireBlue.performed -= instance.OnFireBlue;
             @FireBlue.canceled -= instance.OnFireBlue;
+            @Escape.started -= instance.OnEscape;
+            @Escape.performed -= instance.OnEscape;
+            @Escape.canceled -= instance.OnEscape;
+            @SpellSlots.started -= instance.OnSpellSlots;
+            @SpellSlots.performed -= instance.OnSpellSlots;
+            @SpellSlots.canceled -= instance.OnSpellSlots;
         }
 
         /// <summary>
@@ -2000,6 +2075,20 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnFireBlue(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Escape" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnEscape(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SpellSlots" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpellSlots(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

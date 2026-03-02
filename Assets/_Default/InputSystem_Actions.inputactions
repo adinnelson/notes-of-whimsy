@@ -73,7 +73,7 @@
                     "name": "Next",
                     "type": "Button",
                     "id": "b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -118,6 +118,24 @@
                     "name": "FireBlue",
                     "type": "Button",
                     "id": "30995772-f6f3-44b2-82c2-91a303974399",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "590b3090-42fa-4558-a5d8-89d7c9822d03",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SpellSlots",
+                    "type": "Button",
+                    "id": "0e5b8833-3f04-4742-94f0-6c5f9e9b637a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -639,6 +657,39 @@
                     "processors": "",
                     "groups": ";Touch",
                     "action": "FireBlue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1380f988-7ce8-4c16-99e9-a401c922a09d",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d6b0d05d-dac2-4448-acb5-2af0e85af1b9",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5c5d062b-be1e-4642-b731-96665234d902",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpellSlots",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

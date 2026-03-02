@@ -139,6 +139,7 @@ MonoBehaviour:
   key: yellow
   name: Yellow
   desc: Yellow note that chains
+  spellIcon: {fileID: 5716504807486476903, guid: 33fdb23fcc60f0d42be17988a4ccedbf, type: 3}
 --- !u!58 &-5968953057158646297
 CircleCollider2D:
   m_ObjectHideFlags: 0

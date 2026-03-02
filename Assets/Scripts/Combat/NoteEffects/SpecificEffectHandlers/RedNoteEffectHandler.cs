@@ -12,6 +12,13 @@ public class RedNoteEffectHandler : NoteEffectHandler
 
     List<GameObject> enemiesInRange = new List<GameObject>();
 
+    public override void Init(SpellDataSO spellData, PlayerAttack playerAttack)
+    {
+        this.spellData = spellData;
+        this.playerAttack = playerAttack;
+        this.note = spellData.NoteProjectilePrefab;
+    }
+
     public override void HitEnemy(IDamageable damageable)
     {
         enemiesInRange.Clear();

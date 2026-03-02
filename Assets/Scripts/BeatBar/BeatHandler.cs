@@ -55,13 +55,9 @@ public class BeatHandler : MonoBehaviour {
     Dictionary<int, Color> tickIdToColor = new Dictionary<int, Color>
     {
         { 1, Color.red },
-        { 2, Color.orange },
-        { 3, Color.yellow },
-        { 4, Color.pink },
-        { 5, Color.purple },
-        { 6, Color.cyan },
-        { 7, Color.blue },
-        { 8, Color.green }
+        { 2, Color.yellow },
+        { 3, Color.purple },
+        { 4, Color.blue }
     };
 
     // current beats on track
@@ -115,8 +111,10 @@ public class BeatHandler : MonoBehaviour {
         {
             bool playerHasBeat = unlockedBeats.Contains(nextTickId);
 
+            int spelldInTickSlot = playerActiveSpellsHandler.GetSpellIdFromSlotId(nextTickId);
+
             BeatItem beatItem = beatPool.Get();
-            beatItem.Init(this, tickIdToColor[nextTickId], endGraphic, beatSpawnPoint.position, stepSize, nextTickId, playerHasBeat);
+            beatItem.Init(this, spelldInTickSlot > 0 ? tickIdToColor[spelldInTickSlot] : Color.white, endGraphic, beatSpawnPoint.position, stepSize, nextTickId, playerHasBeat);
 
             if(!playerHasBeat)
             {
