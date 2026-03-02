@@ -97,6 +97,7 @@ public class SpellEditBar : MonoBehaviour
         initialSlotId = null;
     }
 
+    // reloads icons
     public void UpdateIcons()
     {
         for(int i = 1;i <= PlayerActiveSpellsHandler.SPELL_SLOT_NUM;i++)
