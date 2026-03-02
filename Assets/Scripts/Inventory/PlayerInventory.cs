@@ -49,6 +49,35 @@ public class PlayerInventory : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D objToPickup)
     {
+        //check for boostables pickup
+        BoostableItem boost = objToPickup.GetComponent<BoostableItem>();
+        if (boost != null)
+        {
+            var stats = GetComponent<PlayerStats>();
+            var health = GetComponent<Health>();
+
+            switch (boost.Type)
+            {
+                case BoostType.HealthPotion:
+                    if (health != null)
+                    {
+                        health.CurrentHealth += (int)boost.Amount;
+                    }
+                    break;
+                case BoostType.MaxHealth:
+                    stats.AddHealthBonus((int)boost.Amount);
+                    break;
+                case BoostType.Speed:
+                    stats.AddMovementSpeed(boost.Amount);
+                    break;
+                case BoostType.Damage:
+                    stats.AddDamageBonus((int)boost.Amount);
+                    break;
+            }
+            Destroy(boost.gameObject);
+            return;
+        }
+
         PickupItem pickup = objToPickup.GetComponent<PickupItem>();
 
         if (pickup == null)

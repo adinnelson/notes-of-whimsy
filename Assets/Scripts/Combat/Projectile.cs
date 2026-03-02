@@ -5,7 +5,9 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float speed = 12.0f;
     [SerializeField] private float lifetimeSeconds = 2.0f;
-    [SerializeField] private float damage = 1.0f;
+    [SerializeField] private float damage = 1.0f; //default damage
+
+    private float currDamage; //runtime damage, which can be overriden by player damage boosts
     private ProjectilePoolManager poolManager;
     private Projectile owningPrefab;
     private const float MIN_DIRECTION_SQR = 0.0001f;
@@ -38,12 +40,22 @@ public class Projectile : MonoBehaviour
 
         despawnTime = Time.time + lifetimeSeconds;
         isActive = true;
+
+        currDamage = damage;
+        //make damage boostable but only for the player
+        if (owner != null && owner.TryGetComponent<PlayerStats>(out var stats))
+        {
+            currDamage = stats.Damage; //permanent damage boost applied here
+        }
     }
 
     protected void Despawn()
     {
         rigidbody.linearVelocity = Vector2.zero;
         isActive = false;
+
+        //reset for the pooling
+        currDamage = damage;
 
         if (poolManager != null && owningPrefab != null)
         {

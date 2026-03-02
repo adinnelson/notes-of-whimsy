@@ -4,10 +4,11 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float acceleration = 1.25f;
-    [SerializeField] private float maxSpeed = 5.0f;
+    //[SerializeField] private float maxSpeed = 5.0f;
 
     private InputSystem_Actions inputActions;
     private new Rigidbody2D rigidbody;
+    private PlayerStats stats;
 
     void OnDisable()
     {
@@ -19,6 +20,13 @@ public class PlayerMovement : MonoBehaviour
     {
         inputActions = new InputSystem_Actions();
         rigidbody = GetComponent<Rigidbody2D>();
+        stats = GetComponent<PlayerStats>();
+
+        if (stats == null)
+        {
+            Debug.LogError("PlayerStats component missing!");
+        }
+
         inputActions.Player.Enable();
     }
 
@@ -39,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
             movement.Normalize();
         }
 
-        Vector2 targetVelocity = movement * maxSpeed;
+        Vector2 targetVelocity = movement * stats.Speed;
 
         rigidbody.linearVelocity = Vector2.Lerp(rigidbody.linearVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
     }
