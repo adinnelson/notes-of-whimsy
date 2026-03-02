@@ -362,11 +362,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c60adaff799403748ac815fdfc727c39, type: 3}
---- !u!1 &690044464 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-  m_PrefabInstance: {fileID: 1460984151}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &838938510
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,34 +698,23 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
   m_PrefabInstance: {fileID: 1460984151}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 690044464}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b140c8372181b34caa928b56b88c69a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
---- !u!114 &1278789940
+--- !u!114 &1278789940 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 3173876067419357927, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+  m_PrefabInstance: {fileID: 1460984151}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 690044464}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ae285ad7b17a1044af9dcc14fe1ed25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerActiveSpellsHandler
-  spellData:
-  - {fileID: 11400000, guid: 12bf1f82535eb0d4ba66704598c9118f, type: 2}
-  - {fileID: 11400000, guid: 6e7001c4cdddc114a8f79e40cfa8fea6, type: 2}
-  - {fileID: 11400000, guid: f910ce51fc721ec49b7222f4d878bed5, type: 2}
-  - {fileID: 11400000, guid: 14378c7eebfb8154d88eb2b4cf7c5f30, type: 2}
-  enemyMask:
-    serializedVersion: 2
-    m_Bits: 8
-  lightningEffect: {fileID: 8046267622772934418, guid: 6ee47fdd172e450498f0d56812dd828c, type: 3}
-  laserPrefab: {fileID: -5741139717231234517, guid: 3e9e1b16b71bbd940954b08ad1827808, type: 3}
 --- !u!1 &1289567962
 GameObject:
   m_ObjectHideFlags: 0
@@ -916,46 +900,10 @@ PrefabInstance:
       propertyPath: playerActiveSpellsHandler
       value: 
       objectReference: {fileID: 1278789940}
-    - target: {fileID: 1734703644410629698, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: SpellData
-      value: 
-      objectReference: {fileID: 11400000, guid: 6e7001c4cdddc114a8f79e40cfa8fea6, type: 2}
-    - target: {fileID: 1734703644410629698, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: spellData
-      value: 
-      objectReference: {fileID: 11400000, guid: 6e7001c4cdddc114a8f79e40cfa8fea6, type: 2}
-    - target: {fileID: 1734703644410629698, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: lightningEffect
-      value: 
-      objectReference: {fileID: 8046267622772934418, guid: 6ee47fdd172e450498f0d56812dd828c, type: 3}
-    - target: {fileID: 1734703644410629698, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: enemyMask.m_Bits
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4426264664621214320, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: note
-      value: 
-      objectReference: {fileID: 8835509098591157618, guid: d7e7d2b19e2f7ff488c56e7733dbdf20, type: 3}
-    - target: {fileID: 4426264664621214320, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: SpellData
-      value: 
-      objectReference: {fileID: 11400000, guid: 14378c7eebfb8154d88eb2b4cf7c5f30, type: 2}
-    - target: {fileID: 4426264664621214320, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: spellData
-      value: 
-      objectReference: {fileID: 11400000, guid: 14378c7eebfb8154d88eb2b4cf7c5f30, type: 2}
-    - target: {fileID: 4426264664621214320, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: playerAttack
-      value: 
-      objectReference: {fileID: 1278789926}
     - target: {fileID: 5189259256147739164, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.2873125
@@ -1001,68 +949,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1240768399}
     - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: projectilePool
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 8835509098591157618, guid: 8500acdd58d2a6d42b2b2711d5255fc6, type: 3}
-    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: projectilePrefabA
-      value: 
-      objectReference: {fileID: 2852815562626469276, guid: 73861d502ca7f38499b1af206113828b, type: 3}
-    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: projectilePrefabB
-      value: 
-      objectReference: {fileID: 8835509098591157618, guid: 8500acdd58d2a6d42b2b2711d5255fc6, type: 3}
-    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: playerActiveSpellsHandler
       value: 
       objectReference: {fileID: 1278789940}
-    - target: {fileID: 7752919813059416915, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: note
-      value: 
-      objectReference: {fileID: 8835509098591157618, guid: eb963c59930fc8a48b3b3a90113a4d83, type: 3}
-    - target: {fileID: 7752919813059416915, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: SpellData
-      value: 
-      objectReference: {fileID: 11400000, guid: 12bf1f82535eb0d4ba66704598c9118f, type: 2}
-    - target: {fileID: 7752919813059416915, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: spellData
-      value: 
-      objectReference: {fileID: 11400000, guid: 12bf1f82535eb0d4ba66704598c9118f, type: 2}
-    - target: {fileID: 7752919813059416915, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: playerAttack
-      value: 
-      objectReference: {fileID: 1278789926}
-    - target: {fileID: 7996963532604069450, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: note
-      value: 
-      objectReference: {fileID: 8835509098591157618, guid: 6b430ec2757a87c45b2de9757d94bc54, type: 3}
-    - target: {fileID: 7996963532604069450, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: SpellData
-      value: 
-      objectReference: {fileID: 11400000, guid: f910ce51fc721ec49b7222f4d878bed5, type: 2}
-    - target: {fileID: 7996963532604069450, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: spellData
-      value: 
-      objectReference: {fileID: 11400000, guid: f910ce51fc721ec49b7222f4d878bed5, type: 2}
-    - target: {fileID: 7996963532604069450, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: playerAttack
-      value: 
-      objectReference: {fileID: 1278789926}
-    m_RemovedComponents:
-    - {fileID: 7752919813059416915, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-    - {fileID: 1734703644410629698, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-    - {fileID: 7996963532604069450, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-    - {fileID: 4426264664621214320, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1278789940}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
 --- !u!1001 &1491172275
 PrefabInstance:

@@ -139,8 +139,6 @@ public class SpellEditBar : MonoBehaviour
     // swap 2 spells
     private void Swap(int slot1, int slot2)
     {
-        Debug.Log("swapping");
-
         int spell1 = playerActiveSpellsHandler.GetSpellIdFromSlotId(slot1);
         int spell2 = playerActiveSpellsHandler.GetSpellIdFromSlotId(slot2);
 
