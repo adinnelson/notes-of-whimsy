@@ -10,17 +10,17 @@ public class GameManager : MonoBehaviour
     private List<SimpleTimer> timers = new List<SimpleTimer>();
 
     // enabled when a beat is within acceptable range
-    public bool TickHit = false;
+    public bool BeatHit = false;
 
-    public Action OnTickTriggered = null;
+    public Action OnBeatTriggered = null;
 
-    // important to call separate for enemies who only react to odd ticks
-    public Action OnOddTickTriggered = null;
+    // important to call separate for enemies who only react to odd beats
+    public Action OnOddBeatTriggered = null;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     void FixedUpdate()
@@ -29,22 +29,31 @@ public class GameManager : MonoBehaviour
         for(int i = 0;i < timers.Count;i++)
         {
             timers[i].UpdateTimer(Time.fixedDeltaTime);
-        }        
+        }
     }
 
-    public void TriggerTick(int tickId)
+    public void TriggerBeat(int beatId)
     {
-        TickHit = true;
+        BeatHit = true;
 
-        if(OnTickTriggered == null) return;
+        if(OnBeatTriggered == null) return;
 
-        OnTickTriggered.Invoke();
+        OnBeatTriggered.Invoke();
 
-        if(tickId % 2 == 0) return;
+        if(beatId % 2 == 0) return;
+
+        if(OnOddBeatTriggered == null) return;
+
+        OnOddBeatTriggered.Invoke();
     }
 
     public void AddTimer(SimpleTimer timer)
     {
         timers.Add(timer);
+    }
+
+    public float GetBPM()
+    {
+        return beatHandler.GetBPM();
     }
 }

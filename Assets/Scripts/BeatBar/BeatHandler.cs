@@ -147,9 +147,9 @@ public class BeatHandler : MonoBehaviour {
         // check interval of first one in list
         CheckValidAttackInterval(percentage);
 
-        if (!gm.TickHit && percentage < 0.05f)
+        if (!gm.BeatHit && percentage < 0.05f)
         {
-            gm.TriggerTick(currentVisibleBeats[0].TickId);   
+            gm.TriggerBeat(currentVisibleBeats[0].TickId);
         }
     }
 
@@ -215,7 +215,7 @@ public class BeatHandler : MonoBehaviour {
         }
 
         RemoveFrontBeat();
-        gm.TickHit = false;
+        gm.BeatHit = false;
     }
 
     // returns front beat
@@ -321,9 +321,9 @@ public class BeatHandler : MonoBehaviour {
         for (int i = 0;i < currentVisibleBeats.Count;i++)
         {
             if(currentVisibleBeats[i].TickId != tickId) continue;
-            
+
             currentVisibleBeats[i].GetComponent<SpriteRenderer>().enabled = true;
-            currentVisibleBeats[i].Unlocked = true; 
+            currentVisibleBeats[i].Unlocked = true;
         }
     }
 
