@@ -8,36 +8,26 @@ public class DummyEnemy : EnemyBase
 
     protected override bool CanStartAttack()
     {
-        return IsReadyAndInRange();
+        return TargetInAttackRange();
     }
 
-    protected override void OnAttackStart()
+    protected override void OnAttack()
     {
         //if (logStateChanges) Debug.Log("[DummyEnemy] Attack START");
         // For a dummy: do nothing else
     }
 
-    protected override void OnAttackTick(float dt)
-    {
-        // For a dummy: do nothing each frame
-    }
-
-    protected override void OnAttackEnd()
-    {
-        //if (logStateChanges) Debug.Log("[DummyEnemy] Attack END");
-    }
-
-    protected override void OnTelegraphStart()
+    protected override void OnTelegraph(float bpm)
     {
         //if (logStateChanges) Debug.Log("[DummyEnemy] Telegraph START");
     }
 
-    protected override void OnRecoverStart()
+    protected override void OnRecover()
     {
         //if (logStateChanges) Debug.Log("[DummyEnemy] Recover START");
     }
 
-    protected override void OnHurtStart()
+    protected override void OnHurt()
     {
         //if (logStateChanges) Debug.Log("[DummyEnemy] Hurt START");
     }
