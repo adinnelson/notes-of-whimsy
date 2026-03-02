@@ -52,7 +52,7 @@ public class BeatHandler : MonoBehaviour {
     private int maxBeatId = 8;
 
     // tempory until the adding and removing effects system update occurs
-    Dictionary<int, Color> beatIdToColor = new Dictionary<int, Color>
+    private Dictionary<int, Color> beatIdToColor = new Dictionary<int, Color>
     {
         { 1, Color.red },
         { 2, Color.yellow },

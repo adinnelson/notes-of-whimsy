@@ -6,8 +6,6 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
 {
     public const int SPELL_SLOT_NUM = 8;
 
-    private PlayerAttack playerAttack;
-
     [SerializeField] private List<SpellDataSO> spellData = new List<SpellDataSO>();
 
     // Yellow Note needed prefabs
@@ -15,6 +13,8 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     [SerializeField] private TempLightingEffectLogic lightningEffect;
 
     [SerializeField] private LaserBeam laserPrefab;
+
+    private PlayerAttack playerAttack;
 
     private struct SlotSpell
     {

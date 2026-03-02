@@ -8,7 +8,7 @@ public class PlayerAttack : MonoBehaviour
     public const string MISSED_ATTACK_LOCK_KEY = "MISSED_ATTACK";
 
     [SerializeField] private BeatHandler beathandler;
-    [SerializeField] private PlayerActiveSpellsHandler playerActiveSpellsHandler;
+    private PlayerActiveSpellsHandler playerActiveSpellsHandler;
     [SerializeField] private Transform firePoint;
     [SerializeField] private Projectile projectilePrefab;
     [SerializeField] private float fireCooldownSeconds = 0.2f;
@@ -56,7 +56,7 @@ public class PlayerAttack : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        playerActiveSpellsHandler = FindObjectOfType<PlayerActiveSpellsHandler>();
     }
 
     private void Update()
