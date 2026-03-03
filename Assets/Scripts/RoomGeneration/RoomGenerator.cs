@@ -190,23 +190,14 @@ idea is to make it work for any size and shape room to have creativity and relea
     {
         // do check for valid room here so the room can be changed here instead of later
         int selectedRoomNum = Random.Range(0, roomPool.Count);
-        // RoomInfo testRoomInfo = roomPool[selectedRoomNum].GetComponent<RoomInfo>();
-        // // make sure the dungeon isnt instantly capped off
-        // while(testRoomInfo.nodeList.Count == 1)
-        // {
-        //     print("bad room choice go againe " + roomPool.Count);
-        //     selectedRoomNum = Random.Range(0, roomPool.Count);
-        //     testRoomInfo = roomPool[selectedRoomNum].GetComponent<RoomInfo>();
-        // }
         GameObject spawnedRoom = Instantiate(roomPool[selectedRoomNum],roomsParent.transform);
         RoomInfo spawnedRoomInfo = spawnedRoom.GetComponent<RoomInfo>();
-
         spawnedRoom.transform.position = node.position - spawnedRoom.GetComponent<RoomInfo>().GetNode(direction).transform.localPosition;
         // spawnedRoom.name = node.name + "spawned" + numberOfRooms;
         spawnedRoomInfo.nodeList.Remove(spawnedRoomInfo.GetNode(direction));
         spawnedRoomInfo.SetParentNode(node);
         spawnedRoomInfo.SetSpawnedNode(spawnedRoomInfo.GetNode(direction).transform);
-
+        
         return spawnedRoom;
     }
 
@@ -219,8 +210,9 @@ idea is to make it work for any size and shape room to have creativity and relea
     /// </summary>
     private void CapOffHoles()
     {
+        
         GameObject spawnedRoom = null;
-        List<GameObject> intersection;
+        List<GameObject> single;
         for(int i = 0; i < numberOfRooms; i++)
         {
             RoomInfo currentRoomInfo = spawnedRooms[i].GetComponent<RoomInfo>();
@@ -236,23 +228,30 @@ idea is to make it work for any size and shape room to have creativity and relea
                 switch (nodes[j].name.ToLower())
                 {
                     case "leftnode":
-                        intersection = rightConnections.Intersect(starterRooms).ToList();
-                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "right");
+                        single = rightConnections.Where(room => room.GetComponent<RoomInfo>().nodeList.Count == 1).ToList();
+                        spawnedRoom = SpawnNextRoom(single, nodes[j].transform, "right");
                         currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("left"));
                     break;
                     case "rightnode":
-                        intersection = leftConnections.Intersect(starterRooms).ToList();
-                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "left");
+                        // single = leftConnections.Intersect(starterRooms).ToList();
+                        single = leftConnections.Where(room => room.GetComponent<RoomInfo>().nodeList.Count == 1).ToList();
+                        print(single.Count);
+                        spawnedRoom = SpawnNextRoom(single, nodes[j].transform, "left");
                         currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("right"));
                     break;
                     case "topnode":
-                        intersection = bottomConnections.Intersect(starterRooms).ToList();
-                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "bottom");
+                        // single = bottomConnections.Intersect(starterRooms).ToList();
+                        single = bottomConnections.Where(room => room.GetComponent<RoomInfo>().nodeList.Count == 1).ToList();
+
+                        print(single.Count);
+
+                        spawnedRoom = SpawnNextRoom(single, nodes[j].transform, "bottom");
                         currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("top"));
                     break;
                     case "bottomnode":
-                        intersection = topConnections.Intersect(starterRooms).ToList();
-                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "top");
+                        // single = topConnections.Intersect(starterRooms).ToList();
+                        single = topConnections.Where(room => room.GetComponent<RoomInfo>().nodeList.Count == 1).ToList();
+                        spawnedRoom = SpawnNextRoom(single, nodes[j].transform, "top");
                         currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("bottom"));
                     break;
                     default:

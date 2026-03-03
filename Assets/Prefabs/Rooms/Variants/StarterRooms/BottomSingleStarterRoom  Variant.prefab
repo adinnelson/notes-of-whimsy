@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: IS_SAFE
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 269826643049264406, guid: a722eb3bdcd47cd4680b06d63977bc45, type: 3}
+      propertyPath: roomType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2391994253782251007, guid: a722eb3bdcd47cd4680b06d63977bc45, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.data[0].Array.size
       value: 4

@@ -196,6 +196,10 @@ PrefabInstance:
       propertyPath: IS_SAFE
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6646651980054104096, guid: 3bec38e326686dd43ba09d95d642b830, type: 3}
+      propertyPath: roomType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7689101506527074657, guid: 3bec38e326686dd43ba09d95d642b830, type: 3}
       propertyPath: m_Name
       value: LeftSingleStarterRoom  Variant
