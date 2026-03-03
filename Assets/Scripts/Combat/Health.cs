@@ -6,7 +6,7 @@ public class Health : MonoBehaviour, IDamageable
 {
     public event Action OnDeath;
 
-    //[SerializeField] private float maxHealth = 100.0f;
+    [SerializeField] private float enemyMaxHealth = 100.0f;
     [SerializeField] private GameObject healthPrefab; // HealthDisplay prefab
 
     private float currentHealth;
@@ -14,14 +14,17 @@ public class Health : MonoBehaviour, IDamageable
     private bool isPlayer = false;
     private PlayerStats stats;
 
-    public float MaxHealth => stats.MaxHealth;
+    public float MaxHealth => stats != null ? stats.MaxHealth : enemyMaxHealth;
 
     void Awake()
     {
         stats = GetComponent<PlayerStats>();
-        stats.OnMaxHealthIncreased += OnMaxHealthIncreased;
+        if (stats != null)
+        {
+            stats.OnMaxHealthIncreased += OnMaxHealthIncreased;
+        }
 
-        currentHealth = stats.MaxHealth;
+        currentHealth = MaxHealth;
         SpawnHealthUI();
 
         isPlayer = GetComponent<PlayerAttack>() != null;
@@ -78,10 +81,18 @@ public class Health : MonoBehaviour, IDamageable
         }
     }
 
+    private void OnDestroy()
+    {
+        if (stats != null)
+        {
+            stats.OnMaxHealthIncreased -= OnMaxHealthIncreased;
+        }
+    }
+
     private void OnMaxHealthIncreased(int amount)
     {
         currentHealth += amount;
-        currentHealth = Mathf.Min(currentHealth, stats.MaxHealth);
+        currentHealth = Mathf.Min(currentHealth, MaxHealth);
         UI?.UpdateText();
     }
 
@@ -90,7 +101,7 @@ public class Health : MonoBehaviour, IDamageable
         get => currentHealth;
         set
         {
-            currentHealth = Mathf.Clamp(value, 0, stats.MaxHealth);
+            currentHealth = Mathf.Clamp(value, 0.0f, MaxHealth);
             UI?.UpdateText();
         }
     }
