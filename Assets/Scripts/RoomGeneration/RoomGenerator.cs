@@ -79,6 +79,12 @@ idea is to make it work for any size and shape room to have creativity and relea
         {
             ResetGeneration();
         }
+
+        // if(Keyboard.current.pKey.wasPressedThisFrame)
+        // {
+        //     // HACK: this is just for testing purposes, remove once generation is working
+        //     OnDungeonComplete?.Invoke();
+        // }
     }
 
     private void ResetGeneration()
@@ -162,7 +168,7 @@ idea is to make it work for any size and shape room to have creativity and relea
                 j =0;
             }
             // TODO: find best spot for this
-            PopulateEnemies(currentRoomInfo);
+            // PopulateEnemies(currentRoomInfo);
             // Break if no rooms were spawned this iteration (dungeon is closed off)
             if (numberOfRooms == roomsSpawnedThisIteration)
             {
@@ -172,7 +178,8 @@ idea is to make it work for any size and shape room to have creativity and relea
         }
 
         CapOffHoles();
-        OnDungeonComplete?.Invoke();
+
+        // OnDungeonComplete?.Invoke();
 
     }
 
@@ -229,23 +236,18 @@ idea is to make it work for any size and shape room to have creativity and relea
                         currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("left"));
                     break;
                     case "rightnode":
-                        // single = leftConnections.Intersect(starterRooms).ToList();
                         single = leftConnections.Where(room => room.GetComponent<RoomInfo>().nodeList.Count == 1).ToList();
                         print(single.Count);
                         spawnedRoom = SpawnNextRoom(single, nodes[j].transform, "left");
                         currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("right"));
                     break;
                     case "topnode":
-                        // single = bottomConnections.Intersect(starterRooms).ToList();
                         single = bottomConnections.Where(room => room.GetComponent<RoomInfo>().nodeList.Count == 1).ToList();
-
                         print(single.Count);
-
                         spawnedRoom = SpawnNextRoom(single, nodes[j].transform, "bottom");
                         currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("top"));
                     break;
                     case "bottomnode":
-                        // single = topConnections.Intersect(starterRooms).ToList();
                         single = topConnections.Where(room => room.GetComponent<RoomInfo>().nodeList.Count == 1).ToList();
                         spawnedRoom = SpawnNextRoom(single, nodes[j].transform, "top");
                         currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("bottom"));
@@ -263,6 +265,15 @@ idea is to make it work for any size and shape room to have creativity and relea
                 numberOfRooms++;
             }
         }
+        
+        // Populate enemies for all rooms
+        for(int i = 0; i < spawnedRooms.Count; i++)
+        {
+            RoomInfo roomInfo = spawnedRooms[i].GetComponent<RoomInfo>();
+            PopulateEnemies(roomInfo);
+        }
+        
+        OnDungeonComplete?.Invoke();
     }
 
 
