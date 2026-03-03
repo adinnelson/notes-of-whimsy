@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -45,6 +44,8 @@ public class RoomGenerator : MonoBehaviour
 
     [SerializeField]
     private List<GameObject> bottomConnections;
+    [SerializeField]
+    private List<GameObject> shopRooms;
 
 
     public static event System.Action OnDungeonComplete;
@@ -104,7 +105,6 @@ idea is to make it work for any size and shape room to have creativity and relea
     private void CreateFloorLayout()
     {
         GameObject spawnedRoom = null;
-        RoomInfo spawnedRoomInfo = null;
         RoomInfo currentRoomInfo = null;
         int roomSelector = 0;
 
@@ -115,14 +115,11 @@ idea is to make it work for any size and shape room to have creativity and relea
         roomsParent.transform.position.Set(0,0,0);
         }
         // pull from the starter rooms list and spawn one at random
-
-        // todo: add randomization
         roomSelector = Random.Range(0, starterRooms.Count);
         GameObject currentRoom = Instantiate(starterRooms[roomSelector], roomsParent.transform);
         spawnedRooms.Add(currentRoom);
         numberOfRooms++;
         // Transform[] nodes = currentRoom.GetComponentsInChildren<Transform>();
-        // todo: loop through room spawn points and pick a room to attach
         for (int i = 0; numberOfRooms < desiredRoomNumber; i++)
         {
             currentRoom = spawnedRooms[i];
@@ -202,7 +199,6 @@ idea is to make it work for any size and shape room to have creativity and relea
     }
 
     /// <summary>
-    /// todo: implement
     /// loop through all created rooms
     /// check to see if the nodes still exist
     /// yes? => add a room with 1 connection to it
@@ -220,7 +216,7 @@ idea is to make it work for any size and shape room to have creativity and relea
 
             if(currentRoomInfo.nodeList.Count <= 0) continue;
 
-            for(int j = 0; j < nodes.Count; j++)
+            for(int j = nodes.Count - 1; j >= 0; j--)
             {
                 if(nodes[j] == null) continue;
 
@@ -259,14 +255,12 @@ idea is to make it work for any size and shape room to have creativity and relea
                     continue;
                 }
                 if(spawnedRoom == null) {
-                    j = 0;
                     continue;
                 }
 
                 spawnedRooms.Add(spawnedRoom);
                 currentRoomInfo.AddSubRoom(spawnedRoom);
                 numberOfRooms++;
-                j =0;
             }
         }
     }
@@ -292,7 +286,7 @@ idea is to make it work for any size and shape room to have creativity and relea
             }
             else
             {
-                Debug.LogWarning("Fill out Enemy pool on Generator");
+                Debug.LogWarning("Fill out Enemy pool on Generator Prefab");
             }
         }
     }
