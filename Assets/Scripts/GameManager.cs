@@ -36,15 +36,14 @@ public class GameManager : MonoBehaviour
     {
         BeatHit = true;
 
-        if(OnBeatTriggered == null) return;
+        OnBeatTriggered?.Invoke();
 
-        OnBeatTriggered.Invoke();
+        if (beatId % 2 == 0)
+        {
+            return;
+        }
 
-        if(beatId % 2 == 0) return;
-
-        if(OnOddBeatTriggered == null) return;
-
-        OnOddBeatTriggered.Invoke();
+        OnOddBeatTriggered?.Invoke();
     }
 
     public void AddTimer(SimpleTimer timer)
