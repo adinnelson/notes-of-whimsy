@@ -44,12 +44,14 @@ public class PlayerAttack : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Player.Enable();
-        inputActions.Player.FireYellow.performed += OnFirePerformed;
+        inputActions.Player.Fire.performed += OnBeatActionPerformed;
+        inputActions.Player.Sprint.performed += OnBeatActionPerformed;
     }
 
     private void OnDisable()
     {
-        inputActions.Player.FireYellow.performed -= OnFirePerformed;
+        inputActions.Player.Sprint.performed -= OnBeatActionPerformed;
+        inputActions.Player.Fire.performed -= OnBeatActionPerformed;
         inputActions.Player.Disable();
     }
 
@@ -66,7 +68,7 @@ public class PlayerAttack : MonoBehaviour
         UpdateAimSourceFromMouseMovement();
     }
 
-    private void OnFirePerformed(InputAction.CallbackContext context)
+    private void OnBeatActionPerformed(InputAction.CallbackContext context)
     {
         // whichever device (Mouse or Controller) that fired gets to be the active aim source for this shot.
         SetAimSourceFromFireDevice(context);
@@ -88,12 +90,31 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        BeatItem frontBeatItem = beathandler.GetFrontBeat();
-        
-        playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(frontBeatItem.BeatId)?.Fire();
+        switch(context.action.name)
+        {
+            case "Fire":
+            {
+                BeatItem frontBeatItem = beathandler.GetFrontBeat();
+    
+                playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(frontBeatItem.BeatId)?.Fire();
+
+                lastFireTimeSeconds = Time.time;
+                break;
+            }
+            case "Sprint":
+            {
+                Vector3 mouseScreenPosition = Mouse.current.position.value;
+                Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
+                Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
+
+                Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+                rb.AddForce(direction * 400);
+                break;
+            }
+        }
 
         beathandler.RemoveFrontBeat();
-        lastFireTimeSeconds = Time.time;
     }
 
     private bool IsOffCooldown()
