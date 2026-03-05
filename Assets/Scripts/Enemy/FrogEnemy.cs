@@ -63,13 +63,13 @@ public class FrogEnemy : EnemyBase
         }
 
         // Explode on beat 1 and 3
-        if (beatIndex == 1 || beatIndex == 3)
+        if (beatIndex % 2 == 1)
         {
             ExplodePending();
         }
 
         // Telegraph on beat 2 and 4
-        if (beatIndex == 2 || beatIndex == 4)
+        else
         {
             SpawnTelegraph();
         }
