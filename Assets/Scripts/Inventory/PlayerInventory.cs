@@ -1,44 +1,100 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 public class PlayerInventory : MonoBehaviour
 {
-    private Dictionary<ItemType, SpellDataSO> activeSpells = new Dictionary<ItemType, SpellDataSO>(); //keep track of spells -- only allowed 1 of each type
-    private Dictionary<ItemType, GameObject> activeIcon = new Dictionary<ItemType, GameObject>(); //keep track of the spell Icons -- swap them out when new spell is learned
+    //now allows multiple same type spells 
+    private List<SpellDataSO> activeSpells = new List<SpellDataSO>(); 
+    private List<GameObject> activeIcon = new List<GameObject>();
+
+    [SerializeField] private BeatHandler beatHandler;
 
     [Header("InventoryUI")]
     [SerializeField] private Transform contentsParent;
+    [SerializeField] private SpellEditBar spellEditBar;
+    [SerializeField] private PlayerActiveSpellsHandler playerActiveSpellsHandler;
 
-    private void OnTriggerEnter2D(Collider2D objToPickup)
+    private InputSystem_Actions inputActions;
+
+    private void Awake()
     {
-        PickupItem pickup = objToPickup.GetComponent<PickupItem>();
+        inputActions = new InputSystem_Actions();
+    }
 
-        if (pickup == null || pickup.spell == null)
+    private void OnEnable()
+    {
+        inputActions.Player.Enable();
+        inputActions.Player.SpellSlots.performed += OnOpenInventory;
+    }
+
+    private void OnDisable()
+    {
+        inputActions.Player.SpellSlots.performed -= OnOpenInventory;
+        inputActions.Player.Disable();
+    }
+
+    public void TryToPickup(SpellDataSO newSpell, GameObject worldObject)
+    {
+        if (newSpell == null)
         {
-            Debug.LogWarning($"Object to pickup was empty! Collider: {objToPickup.name}");
+            Debug.LogWarning("tried to add a null spell");
             return;
         }
 
-        SpellDataSO newSpell = pickup.spell;
-        ItemType type = newSpell.SpellType;
+        activeSpells.Add(newSpell);
 
-        /*
-         * only 1 spell of each ItemType allowed at a time. 
-         * if we find a new spell but already have a spell of that ItemType known, we automatically swap for the new one.
-         * future task: no auto swap new spell -> will have a pop up of stats for the new spell and player can choose to replace active spell with the new spell
-         */
-        if (activeSpells.ContainsKey(type))
+        spellEditBar.Open(newSpell, worldObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D objToPickup)
+    {
+        //check for boostables pickup
+        BoostableItem boost = objToPickup.GetComponent<BoostableItem>();
+        if (boost != null)
         {
-            Debug.Log($"Swapping {activeSpells[type].name} for {newSpell.name}");
-            if (activeIcon.ContainsKey(type))
+            var stats = GetComponent<PlayerStats>();
+            var health = GetComponent<Health>();
+
+            switch (boost.Type)
             {
-                Destroy(activeIcon[type]);
-                activeIcon.Remove(type);
+                case BoostType.HealthPotion:
+                    if (health != null)
+                    {
+                        health.CurrentHealth += (int)boost.Amount;
+                    }
+                    break;
+                case BoostType.MaxHealth:
+                    stats.AddHealthBonus((int)boost.Amount);
+                    break;
+                case BoostType.Speed:
+                    stats.AddMovementSpeed(boost.Amount);
+                    break;
+                case BoostType.Damage:
+                    stats.AddDamageBonus((int)boost.Amount);
+                    break;
             }
+            Destroy(boost.gameObject);
+            return;
         }
 
-        activeSpells[type] = newSpell;
-        SpawnIcon(newSpell);
+        PickupItem pickup = objToPickup.GetComponent<PickupItem>();
+
+        if (pickup == null)
+        {
+            //Debug.LogWarning($"Not A Valid PickUp Item! Collider: {objToPickup.name}");
+            return;
+        }
+
+        if (pickup.beatId == 0)
+        {
+            return;
+        }
+
+        beatHandler.BeatUnlocked(pickup.beatId);
+        
+        playerActiveSpellsHandler.UnlockSlot(pickup.beatId);
+
         Destroy(objToPickup.gameObject);
     }
 
@@ -52,20 +108,11 @@ public class PlayerInventory : MonoBehaviour
 
         GameObject iconInstance = Instantiate(spell.UIIconPrefab, contentsParent);
         iconInstance.SetActive(true);
-        activeIcon[spell.SpellType] = iconInstance;
+        activeIcon.Add(iconInstance);
     }
 
-    public SpellDataSO GetSpellByType(ItemType type)
+    private void OnOpenInventory(InputAction.CallbackContext context)
     {
-        return activeSpells.TryGetValue(type, out SpellDataSO spell) ? spell : null;
+        spellEditBar.Open();
     }
-
-    /*
-     * FUTURE TODO:
-     * public void SaveInventory()
-     * public void LoadInventory()
-     * either use a spell library with all spells accessible in a specific spell folder 
-     *              or 
-     * can use SO SpellDatabase with: public List<SpellDataSO> allSpellsDatabase;
-     */
 }

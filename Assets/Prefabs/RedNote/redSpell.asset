@@ -15,3 +15,5 @@ MonoBehaviour:
   SpellType: 3
   NoteProjectilePrefab: {fileID: 8835509098591157618, guid: eb963c59930fc8a48b3b3a90113a4d83, type: 3}
   UIIconPrefab: {fileID: 5716504807486476903, guid: cdae62b8736d8ba4781ef1770d7f5994, type: 3}
+  NoteGameObj: {fileID: 3054110513573341902, guid: 3c144305244dabd4a8e1c9fd92ef2529, type: 3}
+  spellId: 1

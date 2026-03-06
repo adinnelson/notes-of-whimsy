@@ -13,14 +13,11 @@ public class EnemyConfig : ScriptableObject
 
     [Header("Attack")]
     public float damage = 10.0f;        // Damage dealt per hit
-    public float telegraphSeconds = 0.25f; // How long the enemy stays in the Telegraph state before the attack actually happens.
-    public float attackSeconds = 0.25f; // How long the enemy stays in the Attack state, meaning the attack is active.
 
     [Header("Recovery")]
-    public float recoverSeconds = 0.2f;     // Post-attack downtime
-    public float cooldownSeconds = 0.8f;    // Time before next attack can start
+    public int recoverBeats = 1;     // Post-attack recovery time in beats
 
     [Header("Hurt Reaction")]
     public bool hurtInterruptsAttack = true;
-    public float hurtSeconds = 0.15f;
+    public int hurtBeats = 1;       // Beats of vulnerability after being hurt
 }

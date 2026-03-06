@@ -12,7 +12,7 @@ public class RangedEnemy : EnemyBase
         base.Start();
     }
 
-    protected override void ChaseTick(float dt)
+    protected override void OnChase()
     {
         StopMovement();
 
@@ -24,25 +24,12 @@ public class RangedEnemy : EnemyBase
 
     protected override bool CanStartAttack()
     {
-        if (!IsReadyAndInRange())
-        {
-            return false;
-        }
-
-        return true;
+        return TargetInAttackRange();
     }
 
-    protected override void OnAttackStart()
+    protected override void OnAttack()
     {
         FireTripleShot();
-    }
-
-    protected override void OnAttackTick(float dt)
-    {
-    }
-
-    protected override void OnAttackEnd()
-    {
     }
 
     private Vector2 GetTargetPosition()
