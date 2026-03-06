@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4737589745518292538}
   m_Layer: 0
   m_Name: Walls
-  m_TagString: Untagged
+  m_TagString: Walls
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1998,6 +1998,9 @@ MonoBehaviour:
   spawnedNode: {fileID: 0}
   enemies: []
   IS_SAFE: 0
+  roomType: 0
+  isShop: 0
+  itemSpawnLocations: []
 --- !u!61 &3843382522913789850
 BoxCollider2D:
   m_ObjectHideFlags: 0
