@@ -10,13 +10,14 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private BeatHandler beathandler;
     private PlayerActiveSpellsHandler playerActiveSpellsHandler;
     [SerializeField] private Transform firePoint;
-    [SerializeField] private Projectile projectilePrefab;
+    [SerializeField] private GameObject attackBeamPrefab;
     [SerializeField] private float fireCooldownSeconds = 0.2f;
     private const float MIN_AIM_DEADZONE_SQR = 0.0001f;
     private const float MIN_STICK_DEADZONE_SQR = 0.09f;
     private const float MOUSE_MOVE_DETECT_SQR = 0.1f;
     private InputSystem_Actions inputActions;
     private Camera mainCamera;
+    private GameManager gm;
 
     private float lastFireTimeSeconds;
 
@@ -59,6 +60,7 @@ public class PlayerAttack : MonoBehaviour
     void Start()
     {
         playerActiveSpellsHandler = FindObjectOfType<PlayerActiveSpellsHandler>();
+        gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
     }
 
     private void Update()
@@ -250,13 +252,55 @@ public class PlayerAttack : MonoBehaviour
         return mouseWorldPosition - originWorldPosition;
     }
 
+    private GameObject SpawnAttackBeam(Vector2 start, Vector2 end, int? spellId)
+    {
+        Vector2 pos = (start + end) / 2f;
+
+        GameObject attackBeam = Instantiate(attackBeamPrefab, pos, Quaternion.identity);
+
+        Vector2 d = end - start;
+
+        float angle = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg;
+        attackBeam.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        attackBeam.transform.localScale = new Vector3(d.magnitude, 0.2f, 1f);
+        SpriteRenderer spriteRenderer = attackBeam.GetComponent<SpriteRenderer>();
+
+
+        switch(spellId)
+        {
+            case 1:
+            {
+                spriteRenderer.color = Color.red;
+                break;
+            }
+            case 2:
+            {
+                spriteRenderer.color = Color.yellow;
+                break;
+            }
+            case 3:
+            {
+                spriteRenderer.color = Color.purple;
+                break;
+            }
+            case 4:
+            {
+                spriteRenderer.color = Color.blue;
+                break;
+            }
+        }
+
+        return attackBeam;
+    }
+
     public void FireProjectile(Projectile projectilePrefab, NoteEffectHandler noteEffectHandler = null, GameObject owner = null)
     {
         Vector3 projectileSpawnPosition = GetProjectileSpawnPosition();
         Vector2 finalDirection = GetFinalFireDirection(projectileSpawnPosition);
 
         // Shooter asks the manager for a projectile of its assigned prefab
-        ProjectilePoolManager manager = ProjectilePoolManager.GetOrCreate();
+        /*ProjectilePoolManager manager = ProjectilePoolManager.GetOrCreate();
         Projectile projectile = manager.Get(projectilePrefab);
 
         if (projectile == null) 
@@ -267,8 +311,36 @@ public class PlayerAttack : MonoBehaviour
         if (owner != null)
         {
             projectile.SetOwner(owner);
+        }*/
+        //projectile.Activate(projectileSpawnPosition, finalDirection, noteEffectHandler);
+
+        //Fire raycast if we hit anything call noteEffectHandler hit
+        // probalbly can draw a line as well
+        
+        Vector3 spawnPoint = projectileSpawnPosition + (Vector3)finalDirection;
+
+        RaycastHit2D hit = Physics2D.Raycast(spawnPoint, finalDirection);
+
+        Vector3 endBeamPos;
+
+        IDamageable damageable = hit.collider?.gameObject?.GetComponent<IDamageable>();
+
+        if(hit.collider?.gameObject != null)
+        { 
+            endBeamPos = hit.collider.gameObject.transform.position;
         }
-        projectile.Activate(projectileSpawnPosition, finalDirection, noteEffectHandler);
+        else
+        {
+            endBeamPos = spawnPoint + 10 * (Vector3)finalDirection;
+        }
+
+        if(damageable != null)
+        {
+            noteEffectHandler?.HitEnemy(damageable);
+        }
+        GameObject attackBeamInstance = SpawnAttackBeam(spawnPoint, endBeamPos, noteEffectHandler?.SpellData.spellId);
+        SimpleTimer timer = new SimpleTimer();
+        timer.StartTimer(0.5f, onFinish: () => Destroy(attackBeamInstance) ,gameManager: gm);
     }
 
 
