@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
 public class RoomInfo : MonoBehaviour
 {
+    // SERIALIZED FIELDS
     [Header("TileMaps")]
     [SerializeField]
     private Tilemap floor;
@@ -14,65 +16,61 @@ public class RoomInfo : MonoBehaviour
     [SerializeField]
     private Tilemap roomLock;
 
-
     [Header("Attachment Nodes")]
-    public GameObject leftNode;
-    public GameObject rightNode;
-    public GameObject topNode;
-    public GameObject bottomNode;
+    [SerializeField]
+    private GameObject leftNode;
+    [SerializeField]
+    private GameObject rightNode;
+    [SerializeField]
+    private GameObject topNode;
+    [SerializeField]
+    private GameObject bottomNode;
 
     [Header("Child Lists")]
-    public List<GameObject> nodeList;
-    public List<GameObject> subRooms;
+    [SerializeField]
+    private List<GameObject> nodeList;
+    [SerializeField]
+    private List<GameObject> subRooms;
     [SerializeField]
     private Transform parentNode;
     [SerializeField]
     private Transform spawnedNode;
 
-    [Header("Enemy logic")]
-    public List<GameObject> enemies;
-    public bool IS_SAFE;
+    [Header("Enemy Logic")]
+    [SerializeField]
+    private List<GameObject> enemies;
 
+    [Header("Room Type")]
+    [SerializeField]
+    private bool isSafe;
+    [SerializeField]
+    private RoomTypes roomType;
 
+    [Header("Shop Attributes")]
+    [SerializeField]
+    private bool isShop;
+    [SerializeField]
+    private List<GameObject> itemSpawnLocations;
 
-    public int NumberOfNodes {get; private set;}
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
+    // PROPERTIES
+    public int NumberOfNodes { get; private set; }
+
+    // EVENTS
+    public static event System.Action<GameObject> OnFloorOverlap;
+    // UNITY LIFECYCLE METHODS
+
+    private void Awake()
     {
         RoomGenerator.OnDungeonComplete += HandleDungeonCompletion;
-        for(int i =0; i < transform.childCount; i++)
-        {
-            string childName = transform.GetChild(i).name.ToLower();
-            if(childName == "floor")
-            {
-                floor = transform.GetChild(i).GetComponent<Tilemap>();
-                // transform.GetChild(i).AddComponent<FloorInfo>();
-                break;
-            }else if(childName == "walls")
-            {
-                walls = transform.GetChild(i).GetComponent<Tilemap>();
-            }else if(childName == "roomLock")
-            {
-                roomLock = transform.GetChild(i).GetComponent<Tilemap>();
-            }
-        }
-
-
+        CacheChildTilemaps();
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         RoomGenerator.OnDungeonComplete -= HandleDungeonCompletion;
     }
 
-    private void HandleDungeonCompletion()
-    {
-        PopulateEnemies();
-    }
-
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Keyboard.current.mKey.wasPressedThisFrame && parentNode != null)
         {
@@ -80,21 +78,22 @@ public class RoomInfo : MonoBehaviour
         }
     }
 
-    private void PopulateEnemies()
-    {
-        foreach (GameObject enemy in enemies)
-        {
-            // print("spawning");
-            // FIXME: get better logic for finding a spot to spawn enemy
-            Instantiate(enemy, floor.CellToWorld(Vector3Int.RoundToInt(floor.localBounds.center) + new Vector3Int(Random.Range(0,2),Random.Range(0,2), 0 )), Quaternion.identity,transform);
-        }
-    }
+    // PUBLIC METHODS
 
+    /// <summary>
+    /// Gets the floor tilemap for this room
+    /// </summary>
+    /// <returns>The floor tilemap component</returns>
     public Tilemap GetFloor()
     {
         return floor;
     }
 
+    /// <summary>
+    /// Gets a node by direction name
+    /// </summary>
+    /// <param name="name">The direction name: "left", "right", "top", or "bottom"</param>
+    /// <returns>The node GameObject in the specified direction, or null if not found</returns>
     public GameObject GetNode(string name)
     {
         return name.ToLower() switch
@@ -107,39 +106,66 @@ public class RoomInfo : MonoBehaviour
         };
     }
 
-    public void SetParentNode(Transform parentNode)
+    /// <summary>
+    /// Sets the parent node for this room
+    /// </summary>
+    /// <param name="newParentNode">The transform of the parent node</param>
+    public void SetParentNode(Transform newParentNode)
     {
-        this.parentNode = parentNode;
+        parentNode = newParentNode;
     }
 
+    /// <summary>
+    /// Gets the parent node of this room
+    /// </summary>
+    /// <returns>The parent node transform</returns>
     public Transform GetParentNode()
     {
         return parentNode;
     }
 
+    /// <summary>
+    /// Removes a node from the node list
+    /// </summary>
+    /// <param name="node">The node to remove</param>
     public void RemoveNode(GameObject node)
     {
         nodeList.Remove(node);
     }
 
-    public void SetSpawnedNode(Transform spawnedNode)
+    /// <summary>
+    /// Sets the spawned node for this room
+    /// </summary>
+    /// <param name="newSpawnedNode">The transform of the spawned node</param>
+    public void SetSpawnedNode(Transform newSpawnedNode)
     {
-        this.spawnedNode = spawnedNode;
+        spawnedNode = newSpawnedNode;
     }
 
+    /// <summary>
+    /// Gets the spawned node of this room
+    /// </summary>
+    /// <returns>The spawned node transform</returns>
     public Transform GetSpawnedNode()
     {
         return spawnedNode;
     }
 
+    /// <summary>
+    /// Adds a sub-room (child room) to this room
+    /// </summary>
+    /// <param name="room">The room to add as a sub-room</param>
     public void AddSubRoom(GameObject room)
     {
         subRooms.Add(room);
     }
 
+    /// <summary>
+    /// Clears all sub-rooms and destroys them
+    /// </summary>
     public void ClearSubRooms()
     {
-        for(int i = 0; i < subRooms.Count; i++)
+        for (int i = 0; i < subRooms.Count; i++)
         {
             subRooms[i].GetComponent<RoomInfo>().ClearSubRooms();
             Destroy(subRooms[i]);
@@ -147,13 +173,156 @@ public class RoomInfo : MonoBehaviour
         subRooms.Clear();
     }
 
+    /// <summary>
+    /// Gets the list of available nodes for this room
+    /// </summary>
+    /// <returns>The node list</returns>
     public List<GameObject> GetNodeList()
     {
         return nodeList;
     }
 
+    /// <summary>
+    /// Gets whether this room is safe from enemies
+    /// </summary>
+    /// <returns>True if the room is safe, false otherwise</returns>
     public bool GetSafety()
     {
-        return IS_SAFE;
+        return isSafe;
     }
+
+    /// <summary>
+    /// Gets the walls tilemap for this room
+    /// </summary>
+    /// <returns>The walls tilemap component</returns>
+    public Tilemap GetWalls()
+    {
+        return walls;
+    }
+
+    /// <summary>
+    /// Gets the room lock tilemap for this room
+    /// </summary>
+    /// <returns>The room lock tilemap component</returns>
+    public Tilemap GetRoomLock()
+    {
+        return roomLock;
+    }
+
+    /// <summary>
+    /// Gets the list of sub-rooms for this room
+    /// </summary>
+    /// <returns>The sub-rooms list</returns>
+    public List<GameObject> GetSubRooms()
+    {
+        return subRooms;
+    }
+
+    /// <summary>
+    /// Gets the list of enemies assigned to this room
+    /// </summary>
+    /// <returns>The enemies list</returns>
+    public List<GameObject> GetEnemies()
+    {
+        return enemies;
+    }
+
+    /// <summary>
+    /// Gets the room type
+    /// </summary>
+    /// <returns>The room type enum value</returns>
+    public RoomTypes GetRoomType()
+    {
+        return roomType;
+    }
+
+    /// <summary>
+    /// Gets whether this room is a shop
+    /// </summary>
+    /// <returns>True if this is a shop room, false otherwise</returns>
+    public bool GetIsShop()
+    {
+        return isShop;
+    }
+
+    /// <summary>
+    /// Gets the list of item spawn locations in this room
+    /// </summary>
+    /// <returns>The item spawn locations list</returns>
+    public List<GameObject> GetItemSpawnLocations()
+    {
+        return itemSpawnLocations;
+    }
+
+    // PRIVATE METHODS
+
+    /// <summary>
+    /// Caches references to child tilemaps by their names
+    /// </summary>
+    private void CacheChildTilemaps()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            string childName = transform.GetChild(i).name.ToLower();
+            if (childName == "floor")
+            {
+                floor = transform.GetChild(i).GetComponent<Tilemap>();
+                // transform.GetChild(i).AddComponent<FloorInfo>();
+                break;
+            }
+            else if (childName == "walls")
+            {
+                walls = transform.GetChild(i).GetComponent<Tilemap>();
+            }
+            else if (childName == "roomLock")
+            {
+                roomLock = transform.GetChild(i).GetComponent<Tilemap>();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Handles dungeon completion event by spawning enemies in this room
+    /// </summary>
+    private void HandleDungeonCompletion()
+    {
+        PopulateEnemies();
+    }
+
+    /// <summary>
+    /// Spawns all enemies assigned to this room at random positions on the floor
+    /// </summary>
+    private void PopulateEnemies()
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            print($"{gameObject.name} is spawning enemies");
+            // FIXME: get better logic for finding a spot to spawn enemy
+            Instantiate(enemy, floor.CellToWorld(Vector3Int.RoundToInt(floor.localBounds.center) + new Vector3Int(Random.Range(0, 2), Random.Range(0, 2), 0)), Quaternion.identity, transform);
+        }
+    }
+
+    /// <summary>
+    /// Handles collision detection for floor overlaps
+    /// </summary>
+    /// <param name="collision">The collider that entered the trigger</param>
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // print($"collision with {collision.name}");
+        if (collision.name == "Floor" && collision.gameObject != floor.gameObject)
+        {
+            OnFloorOverlap?.Invoke(gameObject);
+        }
+    }
+
+}
+
+public enum RoomTypes
+{
+    Starter,
+    Generic,
+    Combat,
+    Shop,
+    Reward
+
 }
