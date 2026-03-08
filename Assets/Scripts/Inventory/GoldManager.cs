@@ -22,7 +22,7 @@ public class GoldManager : MonoBehaviour
 
     public void AddMoreGold(int amount)
     {
-        if (amount < 0)
+        if (amount <= 0)
         {
             return;
         }
@@ -33,7 +33,7 @@ public class GoldManager : MonoBehaviour
     //will not allow purchase to be made if player does not have enough gold collected; makes the purchase if player can afford
     public bool MakePurchase(int amount)
     {
-        if (currGold < amount || amount < 0)
+        if (currGold < amount || amount <= 0)
         {
             return false;
         }

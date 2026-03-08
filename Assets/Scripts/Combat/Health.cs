@@ -77,6 +77,7 @@ public class Health : MonoBehaviour, IDamageable
 
         if(isPlayer)
         {
+            GoldManager.Instance.ResetGold();
             SceneManager.LoadScene("Main", LoadSceneMode.Single);
         }
     }

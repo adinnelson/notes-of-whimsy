@@ -4,8 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))] //have Trigger set Yes
 public class GoldCoin : MonoBehaviour
 {
-    [Header("Gold Amount")]
-    [SerializeField] private int amount = 1;
-
+    private const int amount = 1;
     public int Amount => amount;
 }

@@ -17,6 +17,7 @@ public class GoldUI : MonoBehaviour
 
     private void Start()
     {
+        GoldManager.Instance.OnGoldChanged += UpdateGold;
         UpdateGold(GoldManager.Instance.CurrentGold);
     }
 
