@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class NodeInfo : MonoBehaviour
 {
+    private RoomInfo parentRoomInfo;
 
-    public RoomInfo parentRoomInfo;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         parentRoomInfo = this.GetComponentInParent<RoomInfo>();
