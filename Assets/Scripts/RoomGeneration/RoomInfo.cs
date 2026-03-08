@@ -254,6 +254,8 @@ public class RoomInfo : MonoBehaviour
         return itemSpawnLocations;
     }
 
+
+
     // PRIVATE METHODS
 
     /// <summary>
@@ -323,6 +325,7 @@ public enum RoomTypes
     Generic,
     Combat,
     Shop,
-    Reward
+    Reward,
+    End
 
 }
