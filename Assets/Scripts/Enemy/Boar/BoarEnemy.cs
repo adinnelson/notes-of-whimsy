@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// Fodder enemy that telegraphs a short charge on beats 1 and 3, then executes it on beats 2 and 4.
-/// The damage hitbox is only active while charging, so the player can walk through the boar freely
+/// The damage hitbox is only active while charging, so the player can walk through the boar freely if it's not charging
 
 public class BoarEnemy : EnemyBase
 {
@@ -19,13 +19,16 @@ public class BoarEnemy : EnemyBase
     [SerializeField] private float chaseSpeed = 2.5f;
 
     private BoarHitbox hitbox;
+    private Collider2D bodyCollider;
     private Vector2 lockedChargeDir;
     private bool isCharging = false;
-    private int beatIndex = 0;
+    private bool shouldTelegraphNext = true;
 
     protected override void Awake()
     {
         base.Awake();
+
+        bodyCollider = GetComponent<Collider2D>();
 
         hitbox = GetComponentInChildren<BoarHitbox>(includeInactive: true);
         if (hitbox == null)
@@ -38,6 +41,7 @@ public class BoarEnemy : EnemyBase
         }
 
         SetHitboxActive(false);
+        SetPlayerCollisionEnabled(false);
     }
 
     // Boar has no range gate — it always enters the charge cycle once aggroed
@@ -54,9 +58,7 @@ public class BoarEnemy : EnemyBase
             return;
         }
 
-        beatIndex = (beatIndex % 4) + 1;
-
-        if (beatIndex % 2 == 1)
+        if (shouldTelegraphNext)
         {
             TelegraphCharge();
         }
@@ -64,6 +66,8 @@ public class BoarEnemy : EnemyBase
         {
             ExecuteCharge();
         }
+
+        shouldTelegraphNext = !shouldTelegraphNext;
     }
 
     private void FixedUpdate()
@@ -81,6 +85,7 @@ public class BoarEnemy : EnemyBase
     {
         isCharging = false;
         SetHitboxActive(false);
+        SetPlayerCollisionEnabled(false);
         HideTelegraphVisual();
 
         base.HandleDeath();
@@ -92,6 +97,7 @@ public class BoarEnemy : EnemyBase
     {
         isCharging = false;
         SetHitboxActive(false);
+        SetPlayerCollisionEnabled(false);  // player can walk through while telegraphing/idle
         StopMovement();
 
         lockedChargeDir = CalculateJitteredDirection();
@@ -108,6 +114,7 @@ public class BoarEnemy : EnemyBase
 
         isCharging = true;
         SetHitboxActive(true);
+        SetPlayerCollisionEnabled(true);  // body collider on — boar carries the player
 
         rb.linearVelocity = lockedChargeDir * chargeSpeed;
 
@@ -154,5 +161,22 @@ public class BoarEnemy : EnemyBase
         }
 
         hitbox.SetEnabled(active);
+    }
+
+    /// Toggles whether the boar's body collider physically blocks/pushes the player.
+    /// Enabled during charge so the boar carries the player with it; disabled otherwise
+    /// so the player can freely walk through the boar body.
+    private void SetPlayerCollisionEnabled(bool enabled)
+    {
+        if (target == null || bodyCollider == null)
+        {
+            return;
+        }
+        Collider2D playerCol = target.GetComponent<Collider2D>();
+
+        if (playerCol != null)
+        {
+            Physics2D.IgnoreCollision(bodyCollider, playerCol, !enabled);
+        }
     }
 }
