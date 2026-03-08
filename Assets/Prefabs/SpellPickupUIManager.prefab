@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2656434928218695992
+--- !u!1 &5786938354391600605
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,54 +8,54 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1915041869223752468}
-  - component: {fileID: 3027072088303196211}
-  - component: {fileID: 6217259528008205229}
+  - component: {fileID: 6389477975202821523}
+  - component: {fileID: 4498809807541415706}
+  - component: {fileID: 3297469467616122564}
   m_Layer: 0
-  m_Name: GameManager
-  m_TagString: GameManager
+  m_Name: SpellPickupUIManager
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1915041869223752468
+--- !u!4 &6389477975202821523
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2656434928218695992}
+  m_GameObject: {fileID: 5786938354391600605}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.67028, y: 3.03205, z: 0}
+  m_LocalPosition: {x: -7.83367, y: -20.16055, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3027072088303196211
+--- !u!114 &4498809807541415706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2656434928218695992}
+  m_GameObject: {fileID: 5786938354391600605}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c779819e6cb62043a25efdd159efef4, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e37550bc7c4e1a4cbad1e67eaf0db84, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  beatHandler: {fileID: 0}
-  BeatHit: 0
---- !u!114 &6217259528008205229
+  m_EditorClassIdentifier: Assembly-CSharp::SpellPickupUI
+  panel: {fileID: 0}
+--- !u!114 &3297469467616122564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2656434928218695992}
+  m_GameObject: {fileID: 5786938354391600605}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 672692ac34f18d14ab9e9413d9caf926, type: 3}
+  m_Script: {fileID: 11500000, guid: d1407206f99d96c40b37291ea1db2e92, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GoldManager
+  m_EditorClassIdentifier: Assembly-CSharp::GoldUI
+  goldText: {fileID: 0}
