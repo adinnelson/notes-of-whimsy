@@ -267,6 +267,16 @@ public abstract class EnemyBase : MonoBehaviour
             col.enabled = false;
         }
 
+        // gold drops from enemies when they die
+        if (config.goldCoinPrefab != null)
+        {
+            for (int i = 0; i < config.goldCoinCount;  i++)
+            {
+                Vector2 offset = UnityEngine.Random.insideUnitCircle * 0.5f;
+                Instantiate(config.goldCoinPrefab, transform.position + (Vector3)offset, Quaternion.identity);
+            }
+        }
+
         if (disableOnDeath)
         {
             gameObject.SetActive(false);   // pooled-friendly death for enemy pooling later

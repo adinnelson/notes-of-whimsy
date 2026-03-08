@@ -20,4 +20,8 @@ public class EnemyConfig : ScriptableObject
     [Header("Hurt Reaction")]
     public bool hurtInterruptsAttack = true;
     public int hurtBeats = 1;       // Beats of vulnerability after being hurt
+
+    [Header("Gold Drop")]
+    public GameObject goldCoinPrefab;
+    public int goldCoinCount = 1;   //base amount of gold coins an enemy has
 }

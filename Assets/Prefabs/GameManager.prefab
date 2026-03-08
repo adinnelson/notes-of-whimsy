@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1915041869223752468}
   - component: {fileID: 3027072088303196211}
+  - component: {fileID: 6217259528008205229}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -46,3 +47,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   beatHandler: {fileID: 0}
   BeatHit: 0
+--- !u!114 &6217259528008205229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2656434928218695992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 672692ac34f18d14ab9e9413d9caf926, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoldManager
