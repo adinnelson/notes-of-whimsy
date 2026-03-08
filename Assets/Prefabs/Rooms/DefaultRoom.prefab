@@ -1997,8 +1997,8 @@ MonoBehaviour:
   parentNode: {fileID: 0}
   spawnedNode: {fileID: 0}
   enemies: []
-  IS_SAFE: 0
-  roomType: 0
+  isSafe: 0
+  roomType: 1
   isShop: 0
   itemSpawnLocations: []
 --- !u!61 &3843382522913789850
