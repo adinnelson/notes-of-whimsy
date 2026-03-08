@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float speed = 12.0f;
+    [SerializeField] private float speed = 120.0f;
     [SerializeField] private float lifetimeSeconds = 2.0f;
     [SerializeField] private float damage = 1.0f; //default damage
 

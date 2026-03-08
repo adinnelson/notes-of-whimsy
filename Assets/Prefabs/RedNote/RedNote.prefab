@@ -139,7 +139,6 @@ MonoBehaviour:
   key: red
   name: red
   desc: 'red note AOE knockback '
-  spellIcon: {fileID: 5716504807486476903, guid: cdae62b8736d8ba4781ef1770d7f5994, type: 3}
 --- !u!58 &-5968953057158646297
 CircleCollider2D:
   m_ObjectHideFlags: 0
