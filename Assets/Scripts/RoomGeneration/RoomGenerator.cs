@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,17 +6,12 @@ using UnityEngine.Tilemaps;
 
 public class RoomGenerator : MonoBehaviour
 {
+    // SERIALIZED FIELDS
+    [Header("Enemy Pool")]
     [SerializeField]
-    private List<GameObject> enemyPool ;
-
-    [Header("Object References")]
-    private GameObject roomsParent;
-
+    private List<GameObject> enemyPool;
 
     [Header("Layout Controls")]
-    [SerializeField]
-    private int numberOfRooms;
-    // the number of rooms before generation stops not the end number of rooms
     [SerializeField]
     private int desiredRoomNumber;
     [SerializeField]
@@ -27,140 +21,153 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField]
     private int maxEnemies;
 
-    [SerializeField]
-    private List<GameObject> spawnedRooms;
-
-
     [Header("Room Pools")]
     [SerializeField]
     private List<GameObject> starterRooms;
     [SerializeField]
     private List<GameObject> leftConnections;
-
     [SerializeField]
     private List<GameObject> rightConnections;
-
     [SerializeField]
     private List<GameObject> topConnections;
-
     [SerializeField]
     private List<GameObject> bottomConnections;
+    [SerializeField]
+    private List<GameObject> shopRooms;
 
+    // CONSTANTS
+    private const int ROOMS_SPAWNED_RESET_THRESHOLD = 0;
 
+    // PRIVATE FIELDS
+    [SerializeField]
+    private List<GameObject> spawnedRooms;
+    private GameObject roomsParent;
+    private int numberOfRooms;
+
+    // EVENTS
     public static event System.Action OnDungeonComplete;
 
+    // DEBUG
+    [SerializeField]
+    private bool allowRegeneration = true;
 
-    // DEBUG VARIABLE FOR ALLOWING REGENERATION
-    public bool allowRegeneration = true;
-
-/*
-idea is to make it work for any size and shape room to have creativity and releave staleness of levels
-*/
-    void Awake()
+    private void Awake()
     {
-        FloorInfo.OnFloorOverlap += HandleFloorOverlap;
+        RoomInfo.OnFloorOverlap += HandleFloorOverlap;
         CreateFloorLayout();
     }
     // remembird
     // tre'sombre'd
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Update()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration
-            || spawnedRooms.Count < minRooms)
+        if ((Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration) || spawnedRooms.Count < minRooms)
         {
-            Destroy(roomsParent);
-            roomsParent = null;
-            print("resetting floors");
-            numberOfRooms = 0;
-            spawnedRooms.Clear();
-            CreateFloorLayout();
+            ResetGeneration();
         }
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
-        FloorInfo.OnFloorOverlap -= HandleFloorOverlap;
+        RoomInfo.OnFloorOverlap -= HandleFloorOverlap;
     }
 
-    void HandleFloorOverlap(GameObject overlappingFloor)
+    // PUBLIC METHODS
+
+    /// <summary>
+    /// Resets the dungeon generation by destroying the current layout and generating a new one
+    /// </summary>
+    public void ResetGeneration()
     {
-        // TODO: Handle floor overlap here
-        Debug.LogWarning($"Floor overlap detected with {overlappingFloor.name}", overlappingFloor);
+        Destroy(roomsParent);
+        roomsParent = null;
+        print("Resetting floors");
+        numberOfRooms = 0;
+        spawnedRooms.Clear();
+        CreateFloorLayout();
     }
-    private void CreateFloorLayout()
+
+    /// <summary>
+    /// Handles floor overlap events by resetting generation when rooms overlap
+    /// </summary>
+    /// <param name="overlappingFloor">The floor GameObject that overlapped</param>
+    private void HandleFloorOverlap(GameObject overlappingFloor)
+    {
+        ResetGeneration();
+        // Debug.LogWarning($"Floor overlap detected with {overlappingFloor.name}", overlappingFloor);
+    }
+
+    /// <summary>
+    /// Creates the floor layout of the dungeon by spawning rooms from the respective room pools and connecting them together until
+    /// the desired number of rooms is reached or there are no more available nodes to spawn on.
+    /// </summary>
+    public void CreateFloorLayout()
     {
         GameObject spawnedRoom = null;
-        RoomInfo spawnedRoomInfo = null;
         RoomInfo currentRoomInfo = null;
         int roomSelector = 0;
 
         if (roomsParent == null)
         {
-        roomsParent = new GameObject("Floor Layout");
-        roomsParent.transform.SetParent(transform);
-        roomsParent.transform.position.Set(0,0,0);
+            roomsParent = new GameObject("Floor Layout");
+            roomsParent.transform.SetParent(transform);
+            roomsParent.transform.position = Vector3.zero;
         }
-        // pull from the starter rooms list and spawn one at random
-
-        // todo: add randomization
+        // Spawn a random starter room and add it to the list of spawned rooms
         roomSelector = Random.Range(0, starterRooms.Count);
         GameObject currentRoom = Instantiate(starterRooms[roomSelector], roomsParent.transform);
         spawnedRooms.Add(currentRoom);
         numberOfRooms++;
-        // Transform[] nodes = currentRoom.GetComponentsInChildren<Transform>();
-        // todo: loop through room spawn points and pick a room to attach
+
+        // Loop through the list of spawned rooms and spawn new rooms on each available node until the desired number of rooms is reached or there are no more available nodes
         for (int i = 0; numberOfRooms < desiredRoomNumber; i++)
         {
             currentRoom = spawnedRooms[i];
             currentRoomInfo = currentRoom.GetComponent<RoomInfo>();
-            List<GameObject> nodes = currentRoomInfo.nodeList;
+            List<GameObject> nodes = currentRoomInfo.GetNodeList();
 
             int roomsSpawnedThisIteration = numberOfRooms;
 
-            for(int j = 0; j < nodes.Count; j++)
+            for (int j = 0; j < nodes.Count; j++)
             {
-                if(nodes[j] == null) continue;
+                if (nodes[j] == null)
+                {
+                    continue;
+                }
 
                 // spawn new rooms on each free node
                 switch (nodes[j].name.ToLower())
                 {
                     case "leftnode":
                         spawnedRoom = SpawnNextRoom(rightConnections, nodes[j].transform, "right");
-                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("left"));
-                    break;
+                        currentRoomInfo.GetNodeList().Remove(currentRoomInfo.GetNode("left"));
+                        break;
                     case "rightnode":
                         spawnedRoom = SpawnNextRoom(leftConnections, nodes[j].transform, "left");
-                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("right"));
-                    break;
+                        currentRoomInfo.GetNodeList().Remove(currentRoomInfo.GetNode("right"));
+                        break;
                     case "topnode":
                         spawnedRoom = SpawnNextRoom(bottomConnections, nodes[j].transform, "bottom");
-                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("top"));
-                    break;
+                        currentRoomInfo.GetNodeList().Remove(currentRoomInfo.GetNode("top"));
+                        break;
                     case "bottomnode":
                         spawnedRoom = SpawnNextRoom(topConnections, nodes[j].transform, "top");
-                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("bottom"));
-                    break;
+                        currentRoomInfo.GetNodeList().Remove(currentRoomInfo.GetNode("bottom"));
+                        break;
                     default:
-                    spawnedRoom = null;
+                        spawnedRoom = null;
+                        continue;
+                }
+                if (spawnedRoom == null)
+                {
                     continue;
                 }
-                if(spawnedRoom == null) continue;
                 spawnedRooms.Add(spawnedRoom);
                 currentRoomInfo.AddSubRoom(spawnedRoom);
                 numberOfRooms++;
                 j =0;
             }
-            // TODO: find best spot for this
-            PopulateEnemies(currentRoomInfo);
-            // Break if no rooms were spawned this iteration (dungeon is closed off)
+            // Exit if dungeon is fully closed off and no new rooms can be spawned
             if (numberOfRooms == roomsSpawnedThisIteration)
             {
                 print("Dungeon generation complete: no more available nodes.");
@@ -169,35 +176,33 @@ idea is to make it work for any size and shape room to have creativity and relea
         }
 
         CapOffHoles();
-        OnDungeonComplete?.Invoke();
 
     }
 
+    // PRIVATE METHODS
+
     /// <summary>
-    /// Handles the creation and placement of the next room to spawn
+    /// Spawns a room from the given pool and connects it to the given node in the current room
     /// </summary>
-    /// <param name="roomPool">the list of rooms to place</param>
-    /// <param name="node">the attachment node of the current room</param>
+    /// <param name="roomPool">The list of rooms to place</param>
+    /// <param name="node">The attachment node of the current room</param>
     /// <param name="direction">The direction of the node to connect to the current room in the spawned room</param>
-    /// <returns>The GameObject of the spawned room </returns>
+    /// <returns>The GameObject of the spawned room</returns>
     private GameObject SpawnNextRoom(List<GameObject> roomPool, Transform node, string direction)
     {
-        // do check for valid room here so the room can be changed here instead of later
+        // TODO: update logic to check for special rooms and maybe add some weighted randomness to the room selection
+
+        // room selection logic
         int selectedRoomNum = Random.Range(0, roomPool.Count);
-        // RoomInfo testRoomInfo = roomPool[selectedRoomNum].GetComponent<RoomInfo>();
-        // // make sure the dungeon isnt instantly capped off
-        // while(testRoomInfo.nodeList.Count == 1)
-        // {
-        //     print("bad room choice go againe " + roomPool.Count);
-        //     selectedRoomNum = Random.Range(0, roomPool.Count);
-        //     testRoomInfo = roomPool[selectedRoomNum].GetComponent<RoomInfo>();
-        // }
-        GameObject spawnedRoom = Instantiate(roomPool[selectedRoomNum],roomsParent.transform);
+        GameObject spawnedRoom = Instantiate(roomPool[selectedRoomNum], roomsParent.transform);
         RoomInfo spawnedRoomInfo = spawnedRoom.GetComponent<RoomInfo>();
 
-        spawnedRoom.transform.position = node.position - spawnedRoom.GetComponent<RoomInfo>().GetNode(direction).transform.localPosition;
-        spawnedRoom.name = node.name + "spawned" + numberOfRooms;
-        spawnedRoomInfo.nodeList.Remove(spawnedRoomInfo.GetNode(direction));
+        // Position the spawned room so its matching node aligns with the parent node
+        spawnedRoom.transform.position = node.position - spawnedRoomInfo.GetNode(direction).transform.localPosition;
+
+        // Prevent spawning new rooms from the opposite side to avoid recursion
+        spawnedRoomInfo.GetNodeList().Remove(spawnedRoomInfo.GetNode(direction));
+
         spawnedRoomInfo.SetParentNode(node);
         spawnedRoomInfo.SetSpawnedNode(spawnedRoomInfo.GetNode(direction).transform);
 
@@ -205,89 +210,96 @@ idea is to make it work for any size and shape room to have creativity and relea
     }
 
     /// <summary>
-    /// todo: implement
-    /// loop through all created rooms
-    /// check to see if the nodes still exist
-    /// yes? => add a room with 1 connection to it
-    /// no go next
+    /// Fills any remaining open nodes with single-connection end rooms to close off dead ends
     /// </summary>
     private void CapOffHoles()
     {
         GameObject spawnedRoom = null;
-        List<GameObject> intersection;
-        for(int i = 0; i < numberOfRooms; i++)
+        List<GameObject> singleConnectionRooms;
+        for (int i = 0; i < numberOfRooms; i++)
         {
             RoomInfo currentRoomInfo = spawnedRooms[i].GetComponent<RoomInfo>();
-            List<GameObject> nodes = currentRoomInfo.nodeList;
+            List<GameObject> nodes = currentRoomInfo.GetNodeList();
 
-            if(currentRoomInfo.nodeList.Count <= 0) continue;
-
-            for(int j = 0; j < nodes.Count; j++)
+            if (currentRoomInfo.GetNodeList().Count <= 0)
             {
-                if(nodes[j] == null) continue;
+                continue;
+            }
 
-                // spawn new rooms on each free node
+            for (int j = nodes.Count - 1; j >= 0; j--)
+            {
+                if (nodes[j] == null)
+                {
+                    continue;
+                }
+
                 switch (nodes[j].name.ToLower())
                 {
                     case "leftnode":
-                        intersection = rightConnections.Intersect(starterRooms).ToList();
-                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "right");
-                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("left"));
-                    break;
+                        // Filter for single-connection rooms to ensure dead-end rooms are placed, not mid-corridor rooms
+                        singleConnectionRooms = rightConnections.Where(room => room.GetComponent<RoomInfo>().GetNodeList().Count == 1).ToList();
+                        spawnedRoom = SpawnNextRoom(singleConnectionRooms, nodes[j].transform, "right");
+                        currentRoomInfo.GetNodeList().Remove(currentRoomInfo.GetNode("left"));
+                        break;
                     case "rightnode":
-                        intersection = leftConnections.Intersect(starterRooms).ToList();
-                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "left");
-                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("right"));
-                    break;
+                        singleConnectionRooms = leftConnections.Where(room => room.GetComponent<RoomInfo>().GetNodeList().Count == 1).ToList();
+                        spawnedRoom = SpawnNextRoom(singleConnectionRooms, nodes[j].transform, "left");
+                        currentRoomInfo.GetNodeList().Remove(currentRoomInfo.GetNode("right"));
+                        break;
                     case "topnode":
-                        intersection = bottomConnections.Intersect(starterRooms).ToList();
-                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "bottom");
-                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("top"));
-                    break;
+                        singleConnectionRooms = bottomConnections.Where(room => room.GetComponent<RoomInfo>().GetNodeList().Count == 1).ToList();
+                        spawnedRoom = SpawnNextRoom(singleConnectionRooms, nodes[j].transform, "bottom");
+                        currentRoomInfo.GetNodeList().Remove(currentRoomInfo.GetNode("top"));
+                        break;
                     case "bottomnode":
-                        intersection = topConnections.Intersect(starterRooms).ToList();
-                        spawnedRoom = SpawnNextRoom(intersection, nodes[j].transform, "top");
-                        currentRoomInfo.nodeList.Remove(currentRoomInfo.GetNode("bottom"));
-                    break;
+                        singleConnectionRooms = topConnections.Where(room => room.GetComponent<RoomInfo>().GetNodeList().Count == 1).ToList();
+                        spawnedRoom = SpawnNextRoom(singleConnectionRooms, nodes[j].transform, "top");
+                        currentRoomInfo.GetNodeList().Remove(currentRoomInfo.GetNode("bottom"));
+                        break;
                     default:
-                    spawnedRoom = null;
+                        spawnedRoom = null;
+                        continue;
+                }
+                if (spawnedRoom == null)
+                {
                     continue;
                 }
-                if(spawnedRoom == null) continue;
+
                 spawnedRooms.Add(spawnedRoom);
                 currentRoomInfo.AddSubRoom(spawnedRoom);
                 numberOfRooms++;
-                j =0;
             }
         }
+        // Populate enemies for all spawned rooms
+        for (int i = 0; i < spawnedRooms.Count; i++)
+        {
+            RoomInfo roomInfo = spawnedRooms[i].GetComponent<RoomInfo>();
+            PopulateEnemies(roomInfo);
+        }
+
+        OnDungeonComplete?.Invoke();
     }
 
 
-    //spawns enemies into rooms
-    // TODO: re-implement with proper logic
+    /// <summary>
+    /// Populates the given room with random enemies from the enemy pool if it is not a safe room
+    /// </summary>
+    /// <param name="currentRoom">The room to populate with enemies</param>
     private void PopulateEnemies(RoomInfo currentRoom)
     {
-        int enemyCount = Random.Range(minEnemies,maxEnemies);
-        // HACK: choose a random number of enemies to add to the rooms list of enemies
-        Tilemap floor = currentRoom.GetFloor();
-        // print(floor.cellBounds.center);
+        if (currentRoom.GetSafety())
+            return;
 
-        if (currentRoom.GetSafety() == false)
+        if (enemyPool.Count == 0)
         {
-            if(enemyPool.Count > 0)
-            {
-                // FIXME: change to GetEnemies once implemented also add randomization
-                for(int i = 0; i < enemyCount; i++)
-                {
+            Debug.LogWarning("Enemy pool is empty on Generator Prefab");
+            return;
+        }
 
-                currentRoom.enemies.Add(enemyPool[Random.Range(0, enemyPool.Count)]);
-                }
-
-            }
-            else
-            {
-                Debug.LogWarning("Fill out Enemy pool on Generator");
-            }
+        int enemyCount = Random.Range(minEnemies, maxEnemies);
+        for (int i = 0; i < enemyCount; i++)
+        {
+            currentRoom.GetEnemies().Add(enemyPool[Random.Range(0, enemyPool.Count)]);
         }
     }
 
