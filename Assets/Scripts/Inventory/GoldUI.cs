@@ -5,20 +5,15 @@ public class GoldUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI goldText;
 
-    private void OnEnable()
+    private void Start()
     {
         GoldManager.Instance.OnGoldChanged += UpdateGold;
+        UpdateGold(GoldManager.Instance.CurrentGold);
     }
 
     private void OnDisable()
     {
         GoldManager.Instance.OnGoldChanged -= UpdateGold;
-    }
-
-    private void Start()
-    {
-        GoldManager.Instance.OnGoldChanged += UpdateGold;
-        UpdateGold(GoldManager.Instance.CurrentGold);
     }
 
     private void UpdateGold(int newGoldAmount)
