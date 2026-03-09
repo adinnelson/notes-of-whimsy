@@ -16,8 +16,7 @@ public class FrogEnemy : EnemyBase
     private Rigidbody2D targetRb;
 
     private FrogAOE pendingAoe = null;
-
-    private int beatIndex = 0;
+    private bool shouldExplodeNext = false;
 
     protected override void Start()
     {
@@ -55,24 +54,16 @@ public class FrogEnemy : EnemyBase
             return;
         }
 
-        beatIndex++;
-
-        if (beatIndex > 4)
-        {
-            beatIndex = 1;
-        }
-
-        // Explode on beat 1 and 3
-        if (beatIndex % 2 == 1)
+        if (shouldExplodeNext)
         {
             ExplodePending();
         }
-
-        // Telegraph on beat 2 and 4
         else
         {
             SpawnTelegraph();
         }
+
+        shouldExplodeNext = !shouldExplodeNext;
     }
 
     // Spawns the AoE telegraph aimed slightly ahead of the player's movement.
