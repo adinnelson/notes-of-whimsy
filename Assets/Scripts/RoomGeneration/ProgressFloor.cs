@@ -1,8 +1,10 @@
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ProgressFloor : MonoBehaviour
 {
+    private static int floorsCompleted = 0;
     private Scene currentScene;
     private void Start()
     {
@@ -12,6 +14,7 @@ public class ProgressFloor : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            floorsCompleted++;
             NextScene();
         }
     }
@@ -23,6 +26,16 @@ public class ProgressFloor : MonoBehaviour
     /// </summary>
     private void NextScene()
     {
-        SceneManager.LoadScene(currentScene.name);
+        if(floorsCompleted >= 3)
+        {
+            print("End Scene Reached");
+            //make sure the scene is in the build settings for this to work
+            SceneManager.LoadScene("EndScene");
+        }
+        else
+        {
+            SceneManager.LoadScene(currentScene.name);
+            
+        }
     }
 }
