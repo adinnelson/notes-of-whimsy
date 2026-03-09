@@ -24,10 +24,15 @@ public class BoarEnemy : EnemyBase
     private bool isCharging = false;
     private bool shouldTelegraphNext = true;
 
+    private Animator animator;
+
+    private EnemyFlip enemyFlip;
+
     protected override void Awake()
     {
         base.Awake();
-
+        animator = GetComponent<Animator>();
+        enemyFlip = GetComponent<EnemyFlip>();
         bodyCollider = GetComponent<Collider2D>();
 
         hitbox = GetComponentInChildren<BoarHitbox>(includeInactive: true);
@@ -96,6 +101,8 @@ public class BoarEnemy : EnemyBase
     private void TelegraphCharge()
     {
         isCharging = false;
+        animator.SetBool("Charging", false);
+        enemyFlip.FlipEnemy();
         SetHitboxActive(false);
         SetPlayerCollisionEnabled(false);  // player can walk through while telegraphing/idle
         StopMovement();
@@ -113,6 +120,7 @@ public class BoarEnemy : EnemyBase
         HideTelegraphVisual();
 
         isCharging = true;
+        animator.SetBool("Charging", true);
         SetHitboxActive(true);
         SetPlayerCollisionEnabled(true);  // body collider on — boar carries the player
 
