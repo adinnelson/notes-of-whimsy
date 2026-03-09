@@ -19,3 +19,5 @@ MonoBehaviour:
   recoverBeats: 1
   hurtInterruptsAttack: 1
   hurtBeats: 1
+  goldCoinPrefab: {fileID: 3259159612588635551, guid: d56a58421faef94459b51c617b2dd48a, type: 3}
+  goldCoinCount: 1
