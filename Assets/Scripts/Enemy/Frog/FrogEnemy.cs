@@ -18,8 +18,11 @@ public class FrogEnemy : EnemyBase
     private FrogAOE pendingAoe = null;
     private bool shouldExplodeNext = false;
 
+    private Animator animator;
+
     protected override void Start()
     {
+        animator = GetComponent<Animator>();
         base.Start();
 
         poolManager = ProjectilePoolManager.GetOrCreate();
@@ -97,8 +100,9 @@ public class FrogEnemy : EnemyBase
         {
             return;
         }
-
+        
         pendingAoe.ActivateTelegraphOnly(finalPos, aoeRadius);
+        animator.SetTrigger("Charge");
     }
 
     // Triggers the stored AoE explosion.
@@ -109,7 +113,9 @@ public class FrogEnemy : EnemyBase
             return;
         }
 
+        
         pendingAoe.ExplodeNow(aoeDamage);
+        animator.SetTrigger("Pop");
         pendingAoe = null;
     }
 
