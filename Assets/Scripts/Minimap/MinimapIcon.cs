@@ -3,6 +3,7 @@ using UnityEngine;
 public class MinimapIcon : MonoBehaviour
 {
     RectTransform icon;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,7 +30,7 @@ public class MinimapIcon : MonoBehaviour
     {
         if (icon != null)
         {
-            OnDestroy(icon.gameObject);
+            Destroy(icon.gameObject);
             icon = null;
         }
     }

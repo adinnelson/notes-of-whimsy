@@ -87,6 +87,12 @@ public class RoomGenerator : MonoBehaviour
         CreateFloorLayout();
     }
 
+    //get Minimap access to the generated rooms
+    public List<GameObject> GetSpawnedRooms()
+    {
+        return spawnedRooms;
+    }
+
     /// <summary>
     /// Handles floor overlap events by resetting generation when rooms overlap
     /// </summary>
@@ -165,7 +171,7 @@ public class RoomGenerator : MonoBehaviour
                 spawnedRooms.Add(spawnedRoom);
                 currentRoomInfo.AddSubRoom(spawnedRoom);
                 numberOfRooms++;
-                j =0;
+                j = 0;
             }
             // Exit if dungeon is fully closed off and no new rooms can be spawned
             if (numberOfRooms == roomsSpawnedThisIteration)
@@ -302,5 +308,4 @@ public class RoomGenerator : MonoBehaviour
             currentRoom.GetEnemies().Add(enemyPool[Random.Range(0, enemyPool.Count)]);
         }
     }
-
 }

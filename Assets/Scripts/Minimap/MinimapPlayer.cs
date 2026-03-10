@@ -14,6 +14,11 @@ public class MinimapPlayer : MonoBehaviour
 
     void Update()
     {
+        if (player == null || mapContainer == null || MinimapManager.Instance == null)
+        {
+            return;
+        }
+
         Vector2 worldPos = player.position;
         Vector2 mapPos = worldPos * worldToMapScale;
         rect.anchoredPosition = mapPos;
