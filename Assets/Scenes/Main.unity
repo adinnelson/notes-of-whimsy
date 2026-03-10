@@ -516,6 +516,35 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8571626184657687215, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
   m_PrefabInstance: {fileID: 1779312108}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &598177736 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2103473749924576479, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
+  m_PrefabInstance: {fileID: 1779312108}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &598177737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598177736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.PixelPerfectCamera
+  m_ComponentVersion: 1
+  m_AssetsPPU: 32
+  m_RefResolutionX: 480
+  m_RefResolutionY: 270
+  m_CropFrame: 2
+  m_GridSnapping: 2
+  m_FilterMode: 0
+  m_UpscaleRT: 0
+  m_PixelSnapping: 0
+  m_CropFrameX: 0
+  m_CropFrameY: 0
+  m_StretchFill: 0
 --- !u!1001 &660520479
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -771,6 +800,14 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5189259256147739164, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5189259256147739164, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5189259256147739164, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.39141
       objectReference: {fileID: 0}
@@ -847,6 +884,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8571626184657687215, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -905,7 +946,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8571626184657687215, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 861844976}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2103473749924576479, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 598177737}
   m_SourcePrefab: {fileID: 100100000, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
