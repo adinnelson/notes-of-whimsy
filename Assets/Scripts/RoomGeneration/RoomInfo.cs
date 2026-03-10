@@ -36,9 +36,11 @@ public class RoomInfo : MonoBehaviour
     [SerializeField]
     private Transform spawnedNode;
 
-    [Header("Enemy Logic")]
+    [Header("Enemy Spawning")]
     [SerializeField]
-    private List<GameObject> enemies;
+    private List<GameObject> enemyPrefabs;
+    [SerializeField]
+    private int numberOfWaves;
 
     [Header("Room Type")]
     [SerializeField]
@@ -59,15 +61,12 @@ public class RoomInfo : MonoBehaviour
     public static event System.Action<GameObject> OnFloorOverlap;
     // UNITY LIFECYCLE METHODS
 
+    private EnemyWaveController enemyWaveController;
+
     private void Awake()
     {
-        RoomGenerator.OnDungeonComplete += HandleDungeonCompletion;
         CacheChildTilemaps();
-    }
-
-    private void OnDestroy()
-    {
-        RoomGenerator.OnDungeonComplete -= HandleDungeonCompletion;
+        enemyWaveController = GetComponentInChildren<EnemyWaveController>();
     }
 
     private void Update()
@@ -219,15 +218,6 @@ public class RoomInfo : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets the list of enemies assigned to this room
-    /// </summary>
-    /// <returns>The enemies list</returns>
-    public List<GameObject> GetEnemies()
-    {
-        return enemies;
-    }
-
-    /// <summary>
     /// Gets the room type
     /// </summary>
     /// <returns>The room type enum value</returns>
@@ -254,6 +244,45 @@ public class RoomInfo : MonoBehaviour
         return itemSpawnLocations;
     }
 
+    /// <summary>
+    /// Gets the list of enemy prefabs assigned to this room
+    /// </summary>
+    /// <returns>The enemy prefabs list</returns>
+    public List<GameObject> GetEnemyPrefabs()
+    {
+        return enemyPrefabs;
+    }
+
+    /// <summary>
+    /// Gets the number of enemy waves assigned to this room
+    /// </summary>
+    /// <returns>The number of waves</returns>
+    public int GetNumberOfWaves()
+    {
+        return numberOfWaves;
+    }
+
+    public void LockRoom()
+    {
+        print("Locking room");
+
+        if (roomLock != null)
+        {
+            roomLock.gameObject.SetActive(true);
+        }
+        {
+            print("No room lock tilemap found on " + gameObject.name);
+        }
+    }
+
+    public void UnlockRoom()
+    {
+        print("Unlocking room");
+        if (roomLock != null)
+        {
+            roomLock.gameObject.SetActive(false);
+        }
+    }
 
 
     // PRIVATE METHODS
@@ -280,27 +309,6 @@ public class RoomInfo : MonoBehaviour
             {
                 roomLock = transform.GetChild(i).GetComponent<Tilemap>();
             }
-        }
-    }
-
-    /// <summary>
-    /// Handles dungeon completion event by spawning enemies in this room
-    /// </summary>
-    private void HandleDungeonCompletion()
-    {
-        PopulateEnemies();
-    }
-
-    /// <summary>
-    /// Spawns all enemies assigned to this room at random positions on the floor
-    /// </summary>
-    private void PopulateEnemies()
-    {
-        foreach (GameObject enemy in enemies)
-        {
-            print($"{gameObject.name} is spawning enemies");
-            // FIXME: get better logic for finding a spot to spawn enemy
-            Instantiate(enemy, floor.CellToWorld(Vector3Int.RoundToInt(floor.localBounds.center) + new Vector3Int(Random.Range(0, 2), Random.Range(0, 2), 0)), Quaternion.identity, transform);
         }
     }
 
