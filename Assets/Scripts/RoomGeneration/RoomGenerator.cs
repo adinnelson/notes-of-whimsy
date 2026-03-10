@@ -59,14 +59,13 @@ public class RoomGenerator : MonoBehaviour
     {
         RoomInfo.OnFloorOverlap += HandleFloorOverlap;
         CreateRoomPools();
-        CreateFloorLayout();
+        // CreateFloorLayout();
     }
-    // remembird
-    // tre'sombre'd
 
     private void Update()
     {
-        if ((Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration) || spawnedRooms.Count < minRooms)
+        //TODO: uncomment for testing purposes, maybe add some conditions to prevent accidental resets during gameplay
+        if ((Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration) /*|| spawnedRooms.Count < minRooms*/)
         {
             ResetGeneration();
         }
@@ -89,7 +88,7 @@ public class RoomGenerator : MonoBehaviour
         print("Resetting floors");
         numberOfRooms = 0;
         spawnedRooms.Clear();
-        CreateFloorLayout();
+        // CreateFloorLayout();
     }
 
     /// <summary>
@@ -98,7 +97,7 @@ public class RoomGenerator : MonoBehaviour
     /// <param name="overlappingFloor">The floor GameObject that overlapped</param>
     private void HandleFloorOverlap(GameObject overlappingFloor)
     {
-        ResetGeneration();
+        // ResetGeneration();
         // Debug.LogWarning($"Floor overlap detected with {overlappingFloor.name}", overlappingFloor);
     }
 

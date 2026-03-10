@@ -10,9 +10,12 @@ public enum BoostType
 
 public class BoostableItem : MonoBehaviour
 {
+    [SerializeField] private RewardType rewardType;
     [SerializeField] private BoostType boostType;
     [SerializeField] private float amount = 1.0f;
 
+    public RewardType RewardType => rewardType;
     public BoostType Type => boostType;
     public float Amount => amount;
+
 }

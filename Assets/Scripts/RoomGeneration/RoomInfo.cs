@@ -49,6 +49,7 @@ public class RoomInfo : MonoBehaviour
     [Header("Shop Attributes")]
     [SerializeField]
     private bool isShop;
+    
     [SerializeField]
     private List<GameObject> itemSpawnLocations;
 
