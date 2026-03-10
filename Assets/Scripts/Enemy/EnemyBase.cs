@@ -236,6 +236,19 @@ public abstract class EnemyBase : MonoBehaviour
         }
     }
 
+    /// Temporarily cranks up linear drag so the knockback impulse decelerates naturally
+    /// instead of sliding forever. Saves and restores the original drag value.
+    public void StartKnockbackDecay(float duration = 0.2f)
+    {
+        StartCoroutine(KnockbackDecayRoutine(duration));
+    }
+
+    private IEnumerator KnockbackDecayRoutine(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        rb.linearVelocity = Vector2.zero;
+    }
+
     public void AddStunEffect(string key)
     {
         if(stunEffects.Contains(key)) return;

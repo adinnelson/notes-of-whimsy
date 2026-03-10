@@ -62,6 +62,20 @@ public class FrogAOE : MonoBehaviour
 
             explosionBaseDiameter = MeasureDiameter(explosionVisualInstance);
         }
+
+        // FrogAOE uses OverlapCircleAll — disable every collider on the whole hierarchy
+        // so nothing can ever physically block projectiles or receive trigger events
+        DisableAllColliders();
+    }
+
+    // FrogAOE uses Physics2D.OverlapCircleAll for damage — it needs zero physics colliders.
+    // Disabling them all prevents the telegraph/explosion visuals from blocking projectiles.
+    private void DisableAllColliders()
+    {
+        foreach (Collider2D col in GetComponentsInChildren<Collider2D>(includeInactive: true))
+        {
+            col.enabled = false;
+        }
     }
 
     // Resets the AoE visuals and stops timers when the object is disabled.
