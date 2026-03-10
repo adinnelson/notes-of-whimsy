@@ -41,6 +41,8 @@ public class RoomInfo : MonoBehaviour
     private List<GameObject> enemyPrefabs;
     [SerializeField]
     private int numberOfWaves;
+    [SerializeField]
+    private int extraCombatWaves;
 
     [Header("Room Type")]
     [SerializeField]
@@ -254,12 +256,13 @@ public class RoomInfo : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets the number of enemy waves assigned to this room
+    /// Gets the number of enemy waves assigned to this room, including extra waves if this is a combat room
     /// </summary>
     /// <returns>The number of waves</returns>
     public int GetNumberOfWaves()
     {
-        return numberOfWaves;
+        // Return base number of waves plus extra combat waves if this is a combat room
+        return numberOfWaves + (roomType == RoomTypes.Combat ? extraCombatWaves : 0);
     }
 
     public void LockRoom()

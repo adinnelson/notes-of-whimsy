@@ -1,21 +1,27 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class EnemyWaveController : MonoBehaviour
 {
-    private int numberOfWaves;
-
     // Has the player entered the room before?
     private bool hasEntered = false;
+    private bool wavesComplete = false;
+    private int numberOfWaves;
+    private bool isCombatRoom;
+    private bool spawningEnemies = false;
     private int currentWave = 0;
+    private int pendingSpawns = 0;
 
     private List<GameObject> spawnedEnemies = new List<GameObject>();
     private List<GameObject> enemyPrefabs = new List<GameObject>();
 
     private RoomInfo roomInfo;
 
-    private const int BASE_ENEMIES_PER_WAVE = 3;
-    private const int WAVE_ENEMY_MULTIPLIER = 2;
+    private const int BASE_ENEMIES_PER_WAVE = 1;
+    private const float GENERIC_WAVE_ENEMY_SCALAR = 1.5f;
+    private const float CHALLENGE_WAVE_SCALAR = 2.0f;
+    private const float ENEMY_SPAWN_EFFECT_DURATION = 1.0f;
 
      private void Awake()
     {
@@ -27,12 +33,13 @@ public class EnemyWaveController : MonoBehaviour
     {
         enemyPrefabs = roomInfo.GetEnemyPrefabs();
         numberOfWaves = roomInfo.GetNumberOfWaves();
+        isCombatRoom = roomInfo.GetRoomType() == RoomTypes.Combat;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!hasEntered || roomInfo.GetSafety())
+        if (!hasEntered || roomInfo.GetSafety() || spawningEnemies)
             return;
 
         // Check if all enemies in the current wave have been defeated
@@ -42,14 +49,29 @@ public class EnemyWaveController : MonoBehaviour
             {
                 SpawnEnemyWave();
             }
-            else
-            {
-                roomInfo.UnlockRoom();
-            }
+        }
+
+        if (currentWave >= numberOfWaves && spawnedEnemies.Count == 0 && !wavesComplete)
+        {
+            wavesComplete = true;
+            roomInfo.UnlockRoom();
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    /// <summary>
+    /// Called by an enemy when it dies to remove itself from the spawnedEnemies list
+    /// </summary>
+    /// <param name="enemy"></param>
+    public void OnEnemyDeath(GameObject enemy)
+    {
+        spawnedEnemies.Remove(enemy);
+    }
+
+    /// <summary>
+    /// When the player enters the room for the first time, lock the room and start spawning enemy waves. If the room is already safe or has been entered before, do nothing.
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (hasEntered || roomInfo.GetSafety() || numberOfWaves <= 0)
         {
@@ -71,18 +93,26 @@ public class EnemyWaveController : MonoBehaviour
     private void SpawnEnemyWave()
     {
         currentWave++;
+        spawningEnemies = true;
 
-        int enemyCount = BASE_ENEMIES_PER_WAVE + (currentWave * WAVE_ENEMY_MULTIPLIER);
+        float waveMultiplier = isCombatRoom ? CHALLENGE_WAVE_SCALAR : GENERIC_WAVE_ENEMY_SCALAR;
+        int enemyCount = BASE_ENEMIES_PER_WAVE +
+                        (int)(currentWave * waveMultiplier);
 
+        pendingSpawns = enemyCount;
         for (int i = 0; i < enemyCount; i++)
         {
             // TODO: Replace with actual floor bounds (with padding) instead of random range
-            Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0);
+            Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), 0);
             SpawnRandomEnemy(spawnPosition);
         }
     }
 
-    void SpawnRandomEnemy(Vector3 spawnPosition)
+    /// <summary>
+    /// Spawns a random enemy from the list of enemy prefabs at the given position with a spawn effect
+    /// </summary>
+    /// <param name="spawnPosition"></param>
+    private void SpawnRandomEnemy(Vector3 spawnPosition)
     {
         if (enemyPrefabs.Count == 0)
         {
@@ -94,13 +124,46 @@ public class EnemyWaveController : MonoBehaviour
         int randomIndex = Random.Range(0, enemyPrefabs.Count);
         GameObject enemyPrefab = enemyPrefabs[randomIndex];
 
-        // Instantiate the enemy and add it to the spawnedEnemies list
-        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, transform);
-        spawnedEnemies.Add(enemy);
+        StartCoroutine(SpawnEnemyWithEffect(spawnPosition, enemyPrefab, ENEMY_SPAWN_EFFECT_DURATION));
     }
 
-    public void OnEnemyDeath(GameObject enemy)
+    /// <summary>
+    /// Coroutine to spawn a primitive object then scale up from zero over x seconds before replacing with the actual enemy prefab
+    /// </summary>
+    /// <param name="spawnPosition"></param>
+    /// <param name="enemyPrefab"></param>
+    /// <param name="effectDuration"></param>
+    private IEnumerator SpawnEnemyWithEffect(Vector3 spawnPosition, GameObject enemyPrefab, float effectDuration)
     {
-        spawnedEnemies.Remove(enemy);
+        // Placeholder spawn effect using a sphere that scales up from zero
+        // TODO: Replace with actual spawn effect
+        GameObject spawnEffect = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        spawnEffect.transform.position = spawnPosition;
+        spawnEffect.transform.localScale = Vector3.zero;
+        spawnEffect.GetComponent<Collider>().enabled = false;
+
+        // Scale up the spawn effect over time
+        float elapsedTime = 0.0f;
+        while (elapsedTime < effectDuration)
+        {
+            float scale = Mathf.Lerp(0.0f, 1.0f, elapsedTime / effectDuration);
+            spawnEffect.transform.localScale = new Vector3(scale, scale, scale);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure the spawn effect is fully scaled up
+        spawnEffect.transform.localScale = Vector3.one;
+
+        // Instantiate the actual enemy prefab at the same position
+        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, transform);
+        spawnedEnemies.Add(enemy);
+
+        // Destroy the spawn effect object
+        Destroy(spawnEffect);
+
+        pendingSpawns--;
+        if (pendingSpawns <= 0)
+            spawningEnemies = false;
     }
 }

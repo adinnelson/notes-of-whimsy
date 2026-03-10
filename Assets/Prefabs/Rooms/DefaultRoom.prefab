@@ -2090,7 +2090,8 @@ MonoBehaviour:
   spawnedNode: {fileID: 0}
   enemyPrefabs:
   - {fileID: 5603674919516484741, guid: 268f4a5934c000c4e83145e0bd8ccd74, type: 3}
-  numberOfWaves: 3
+  numberOfWaves: 2
+  extraCombatWaves: 1
   isSafe: 0
   roomType: 1
   isShop: 0
