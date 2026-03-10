@@ -25,11 +25,21 @@ public class MinimapIcon : MonoBehaviour
         }
     }
 
+    void OnDisable()
+    {
+        if (icon != null)
+        {
+            OnDestroy(icon.gameObject);
+            icon = null;
+        }
+    }
+
     void OnDestroy()
     {
         if ( icon != null )
         {
             Destroy(icon.gameObject);
+            icon = null;
         }
     }
 }
