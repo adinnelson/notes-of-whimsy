@@ -99,9 +99,9 @@ public class PlayerInventory : MonoBehaviour
             return;
         }
 
-        beatHandler.BeatUnlocked(pickup.beatId);
-        
-        playerActiveSpellsHandler.UnlockSlot(pickup.beatId);
+        int slotId = playerActiveSpellsHandler.UnlockSlot();
+
+        beatHandler.BeatUnlocked(slotId);
 
         Destroy(objToPickup.gameObject);
     }
