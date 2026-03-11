@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -23,6 +24,8 @@ public class RoomGenerator : MonoBehaviour
 
     [Header("Room Pools")]
     [SerializeField]
+    private List<GameObject> mapPool;
+    [SerializeField]
     private List<GameObject> starterRooms;
     [SerializeField]
     private List<GameObject> leftConnections;
@@ -34,6 +37,7 @@ public class RoomGenerator : MonoBehaviour
     private List<GameObject> bottomConnections;
     [SerializeField]
     private List<GameObject> shopRooms;
+
 
     // CONSTANTS
     private const int ROOMS_SPAWNED_RESET_THRESHOLD = 0;
@@ -54,6 +58,7 @@ public class RoomGenerator : MonoBehaviour
     private void Awake()
     {
         RoomInfo.OnFloorOverlap += HandleFloorOverlap;
+        CreateRoomPools();
         CreateFloorLayout();
     }
     // remembird
@@ -165,7 +170,7 @@ public class RoomGenerator : MonoBehaviour
                 spawnedRooms.Add(spawnedRoom);
                 currentRoomInfo.AddSubRoom(spawnedRoom);
                 numberOfRooms++;
-                j = 0;
+                j =0;
             }
             // Exit if dungeon is fully closed off and no new rooms can be spawned
             if (numberOfRooms == roomsSpawnedThisIteration)
@@ -302,4 +307,22 @@ public class RoomGenerator : MonoBehaviour
             currentRoom.GetEnemies().Add(enemyPool[Random.Range(0, enemyPool.Count)]);
         }
     }
+
+    private void CreateRoomPools()
+    {
+        // mapPool is assigned via the Inspector
+
+        starterRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Starter).ToList();
+        leftConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("left") != null 
+                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
+        rightConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("right") != null 
+                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
+        topConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("top") != null 
+                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
+        bottomConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("bottom") != null 
+                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
+        shopRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Shop).ToList();
+
+    }
+
 }
