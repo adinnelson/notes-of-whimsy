@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-//blue note attack mapped to <e>
+//blue note
 public class BlueNoteEffectHandler : NoteEffectHandler
 {
     [Header("Fireball AOE specs")]
