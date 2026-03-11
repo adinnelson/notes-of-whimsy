@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 
 
+
+
 public class MusicManager : MonoBehaviour
 {
     //name of parameter condition in FMOD (used for transition condition)
@@ -52,6 +54,51 @@ public class MusicManager : MonoBehaviour
     }
 
 
+
+    private string parameterName = "roomChanging";
+
+    public enum RoomType
+    {
+        smallCombat,
+        bigCombat,
+        shopRoom
+    }
+
+
+    private void OnEnable()
+    {
+
+    Debug.Log($"Looking for RoomInfo. Type exists: {typeof(RoomInfo) != null}");
+    Debug.Log($"Full type name: {typeof(RoomInfo).FullName}");
+        // Subscribe to the room entry event
+
+    RoomInfo.OnEnterRoom += HandleRoomEntered;
+
+
+    }
+
+    private void OnDisable()
+    {
+        // Unsubscribe to prevent memory leaks
+        RoomInfo.OnEnterRoom -= HandleRoomEntered;
+        
+    }
+
+
+        private void HandleRoomEntered(GameObject room)
+    {
+        RoomInfo roomInfo = room.GetComponent<RoomInfo>();
+        if (roomInfo != null)
+        {
+            ChangeMusicForRoom(roomInfo);
+        }
+    }
+
+
+
+
+    [SerializeField]
+    private RoomType currentRoomType; // This will appear as a dropdown in Inspector
 
     //so other scripts can access the info here with
     //MusicManager.instance 
@@ -123,6 +170,7 @@ public class MusicManager : MonoBehaviour
             Debug.LogWarning("No music event assigned to MusicManager!");
         }
     }
+    
 
 
 
@@ -140,7 +188,11 @@ public class MusicManager : MonoBehaviour
 
 
 
+<<<<<<< Updated upstream
     // Convert using RoomTpyes to music related to the room 
+=======
+        // Convert RoomTypes to your MusicManager RoomType
+>>>>>>> Stashed changes
     private void ChangeMusicForRoom(RoomInfo roomInfo)
     {
         RoomTypes roomType = roomInfo.GetRoomType();
@@ -153,6 +205,7 @@ public class MusicManager : MonoBehaviour
             case RoomTypes.Generic:
                 musicLabel = "smallCombat";
                 break;
+<<<<<<< Updated upstream
 
             case RoomTypes.Combat:
                 musicLabel = "bigCombat";
@@ -174,6 +227,29 @@ public class MusicManager : MonoBehaviour
         }
 
         // Change the label so if OnValidate() is called music will change
+=======
+                
+            case RoomTypes.Combat:
+                musicLabel = "bigCombat";
+                break;
+                
+            case RoomTypes.Shop:
+                musicLabel = "shopRoom";
+                break;
+                
+            case RoomTypes.Reward:
+                // You might want to add a new music type for reward rooms
+                musicLabel = "smallCombat"; // or keep existing music
+                break;
+                
+            // case RoomTypes.End:
+            //     // You might want special boss music
+            //     musicLabel = "bigCombat"; // or create a new "boss" type
+            //     break;
+        }
+
+        // Change the music
+>>>>>>> Stashed changes
         if (!string.IsNullOrEmpty(musicLabel))
         {
             SetRoomMusicByLabel(musicLabel);
@@ -182,6 +258,7 @@ public class MusicManager : MonoBehaviour
 
 
 
+<<<<<<< Updated upstream
     // Called if the room is changed 
     private void OnValidate()
     {
@@ -198,6 +275,25 @@ public class MusicManager : MonoBehaviour
             bus.setVolume(volumeControl);
         }
 #endif
+=======
+    // Called if the value in the inspector is updated
+    private void OnValidate()
+    {
+
+    #if UNITY_EDITOR
+    // Only try to set if we're in Play Mode and instance is valid
+    if (UnityEditor.EditorApplication.isPlaying && musicInstance.isValid())
+    {
+        SetRoomMusicByLabel(currentRoomType.ToString());
+    }
+    
+    // Handle volume in Editor
+    if (bus.isValid())
+    {
+        bus.setVolume(volumeControl);
+    }
+    #endif
+>>>>>>> Stashed changes
     }
 
 
@@ -296,26 +392,43 @@ public class MusicManager : MonoBehaviour
 
 
 
+<<<<<<< Updated upstream
     // Communicate with FMOD to change the change the music based on the room
+=======
+        // Method to set parameter by label name (for labeled parameters)
+>>>>>>> Stashed changes
     public void SetParameterWithLabel(string parameterName, string labelName)
     {
         if (musicInstance.isValid())
         {
+<<<<<<< Updated upstream
             // method in FMOD set parameters by label
+=======
+            // FMOD has a built-in method to set parameters by label
+>>>>>>> Stashed changes
             musicInstance.setParameterByNameWithLabel(parameterName, labelName);
             Debug.Log($"Set parameter '{parameterName}' to label '{labelName}'");
         }
         else
         {
+<<<<<<< Updated upstream
             // Debug.LogWarning($"Cannot set parameter - musicInstance is not valid!");
         }
     }
 
     // change the label related to a conditional parameter 
+=======
+            Debug.LogWarning($"Cannot set parameter - musicInstance is not valid!");
+        }
+    }
+
+    // FIXED: This method now calls SetParameterWithLabel directly
+>>>>>>> Stashed changes
     public void SetRoomMusicByLabel(string labelName)
     {
         if (musicInstance.isValid())
         {
+<<<<<<< Updated upstream
 
             SetParameterWithLabel(parameterName, labelName);
             // Debug.Log($"Music changed to: {labelName}");
@@ -323,6 +436,14 @@ public class MusicManager : MonoBehaviour
         else
         {
             // Debug.LogWarning($"Cannot set music - musicInstance is not valid!");
+=======
+            SetParameterWithLabel(parameterName, labelName);
+            Debug.Log($"Music changed to: {labelName}");
+        }
+        else
+        {
+            Debug.LogWarning($"Cannot set music - musicInstance is not valid!");
+>>>>>>> Stashed changes
         }
     }
 
