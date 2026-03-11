@@ -92,6 +92,12 @@ public class RoomGenerator : MonoBehaviour
         CreateFloorLayout();
     }
 
+    //get Minimap access to the generated rooms
+    public List<GameObject> GetSpawnedRooms()
+    {
+        return spawnedRooms;
+    }
+
     /// <summary>
     /// Handles floor overlap events by resetting generation when rooms overlap
     /// </summary>
