@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 /// Fodder enemy that telegraphs a short charge on beats 1 and 3, then executes it on beats 2 and 4.
 /// The damage hitbox is only active while charging, so the player can walk through the boar freely if it's not charging
@@ -186,5 +187,32 @@ public class BoarEnemy : EnemyBase
         {
             Physics2D.IgnoreCollision(bodyCollider, playerCol, !enabled);
         }
+    }
+
+    public void CancelChargeForKnockback()
+    {
+        if (state == State.Dead) return;
+
+        isCharging = false;
+        animator.SetBool("Charging", false);
+
+        SetHitboxActive(false);
+        SetPlayerCollisionEnabled(false);
+        HideTelegraphVisual();
+
+        shouldTelegraphNext = true;
+        state = State.Chase;
+
+        // Stun briefly so FixedUpdate doesn't overwrite the knockback velocity
+        // with MoveTowardsTarget on the very next physics frame
+        StartCoroutine(KnockbackStunRoutine());
+    }
+
+    private IEnumerator KnockbackStunRoutine()
+    {
+        const string knockbackStunKey = "knockback";
+        AddStunEffect(knockbackStunKey);
+        yield return new WaitForSeconds(0.3f);
+        RemoveStunEffect(knockbackStunKey);
     }
 }
