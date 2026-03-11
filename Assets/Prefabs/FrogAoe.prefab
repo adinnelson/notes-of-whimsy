@@ -46,17 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6954cdfa9fadc5b4c948baf64d52a4cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FrogAOE
-  telegraphVisualPrefab: {fileID: 6748023661102452975, guid: 8500acdd58d2a6d42b2b2711d5255fc6, type: 3}
-  explosionVisualPrefab: {fileID: 6748023661102452975, guid: eb963c59930fc8a48b3b3a90113a4d83, type: 3}
-  damageDebugVisualPrefab: {fileID: 0}
-  damageDebugVisualLifetimeSeconds: 0.6
+  telegraphVisualPrefab: {fileID: 6748023661102452975, guid: ea8c2a6a31b38ad4aad854d71562e461, type: 3}
+  explosionVisualPrefab: {fileID: 6748023661102452975, guid: 570b66f33c34d3d4daf9c025dedf65dc, type: 3}
   explosionLifetimeSeconds: 1
   damageMask:
     serializedVersion: 2
     m_Bits: 1
-  debugDrawDamage: 0
-  debugDrawSeconds: 0.6
-  debugCircleSegments: 28
 --- !u!1 &4334601882965169009
 GameObject:
   m_ObjectHideFlags: 0
