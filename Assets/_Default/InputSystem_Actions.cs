@@ -174,7 +174,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""FireYellow"",
+                    ""name"": ""Fire"",
                     ""type"": ""Button"",
                     ""id"": ""94d03d1c-eda5-4b18-a469-77ca8ac42ede"",
                     ""expectedControlType"": """",
@@ -621,7 +621,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""FireYellow"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -632,7 +632,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""FireYellow"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -643,7 +643,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Touch"",
-                    ""action"": ""FireYellow"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1372,7 +1372,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Previous = m_Player.FindAction("Previous", throwIfNotFound: true);
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_FireYellow = m_Player.FindAction("FireYellow", throwIfNotFound: true);
+        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_FirePurple = m_Player.FindAction("FirePurple", throwIfNotFound: true);
         m_Player_FireRed = m_Player.FindAction("FireRed", throwIfNotFound: true);
         m_Player_FireBlue = m_Player.FindAction("FireBlue", throwIfNotFound: true);
@@ -1480,7 +1480,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Previous;
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_FireYellow;
+    private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_FirePurple;
     private readonly InputAction m_Player_FireRed;
     private readonly InputAction m_Player_FireBlue;
@@ -1534,9 +1534,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         /// <summary>
-        /// Provides access to the underlying input action "Player/FireYellow".
+        /// Provides access to the underlying input action "Player/Fire".
         /// </summary>
-        public InputAction @FireYellow => m_Wrapper.m_Player_FireYellow;
+        public InputAction @Fire => m_Wrapper.m_Player_Fire;
         /// <summary>
         /// Provides access to the underlying input action "Player/FirePurple".
         /// </summary>
@@ -1610,9 +1610,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @FireYellow.started += instance.OnFireYellow;
-            @FireYellow.performed += instance.OnFireYellow;
-            @FireYellow.canceled += instance.OnFireYellow;
+            @Fire.started += instance.OnFire;
+            @Fire.performed += instance.OnFire;
+            @Fire.canceled += instance.OnFire;
             @FirePurple.started += instance.OnFirePurple;
             @FirePurple.performed += instance.OnFirePurple;
             @FirePurple.canceled += instance.OnFirePurple;
@@ -1666,9 +1666,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @FireYellow.started -= instance.OnFireYellow;
-            @FireYellow.performed -= instance.OnFireYellow;
-            @FireYellow.canceled -= instance.OnFireYellow;
+            @Fire.started -= instance.OnFire;
+            @Fire.performed -= instance.OnFire;
+            @Fire.canceled -= instance.OnFire;
             @FirePurple.started -= instance.OnFirePurple;
             @FirePurple.performed -= instance.OnFirePurple;
             @FirePurple.canceled -= instance.OnFirePurple;
@@ -2048,12 +2048,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSprint(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "FireYellow" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Fire" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnFireYellow(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "FirePurple" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

@@ -1309,51 +1309,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoostableItem
   boostType: 3
   amount: 10
---- !u!1 &1523953775
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1523953777}
-  - component: {fileID: 1523953776}
-  m_Layer: 0
-  m_Name: GoldUI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1523953776
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1523953775}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1407206f99d96c40b37291ea1db2e92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GoldUI
-  goldText: {fileID: 275729292}
---- !u!4 &1523953777
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1523953775}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 323.94916, y: -25.99405, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1620945966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1365,6 +1320,7 @@ GameObject:
   - component: {fileID: 1620945968}
   - component: {fileID: 1620945967}
   - component: {fileID: 1620945969}
+  - component: {fileID: 1620945970}
   m_Layer: 0
   m_Name: SpellPickupUIManager
   m_TagString: Untagged
@@ -1412,6 +1368,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672692ac34f18d14ab9e9413d9caf926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoldManager
+--- !u!114 &1620945970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620945966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1407206f99d96c40b37291ea1db2e92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoldUI
+  goldText: {fileID: 275729292}
 --- !u!1 &1640331355
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,7 +1520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fece6337a7e96244298d25053dd584fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoldCoin
-  amount: 1
 --- !u!58 &1988061898
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2351,4 +2319,3 @@ SceneRoots:
   - {fileID: 2135402406}
   - {fileID: 1988061901}
   - {fileID: 1640331356}
-  - {fileID: 1523953777}

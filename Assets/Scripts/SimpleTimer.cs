@@ -44,9 +44,9 @@ public class SimpleTimer
         if (gameManager == null)
         {
             gameManager = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
-            gameManager?.AddTimer(this);
         }
 
+        gameManager?.AddTimer(this);
     }
 
     public void Stop()

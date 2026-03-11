@@ -16,11 +16,13 @@ public class FrogEnemy : EnemyBase
     private Rigidbody2D targetRb;
 
     private FrogAOE pendingAoe = null;
+    private bool shouldExplodeNext = false;
 
-    private int beatIndex = 0;
+    private Animator animator;
 
     protected override void Start()
     {
+        animator = GetComponent<Animator>();
         base.Start();
 
         poolManager = ProjectilePoolManager.GetOrCreate();
@@ -55,24 +57,16 @@ public class FrogEnemy : EnemyBase
             return;
         }
 
-        beatIndex++;
-
-        if (beatIndex > 4)
-        {
-            beatIndex = 1;
-        }
-
-        // Explode on beat 1 and 3
-        if (beatIndex % 2 == 1)
+        if (shouldExplodeNext)
         {
             ExplodePending();
         }
-
-        // Telegraph on beat 2 and 4
         else
         {
             SpawnTelegraph();
         }
+
+        shouldExplodeNext = !shouldExplodeNext;
     }
 
     // Spawns the AoE telegraph aimed slightly ahead of the player's movement.
@@ -106,8 +100,9 @@ public class FrogEnemy : EnemyBase
         {
             return;
         }
-
+        
         pendingAoe.ActivateTelegraphOnly(finalPos, aoeRadius);
+        animator.SetTrigger("Charge");
     }
 
     // Triggers the stored AoE explosion.
@@ -118,7 +113,9 @@ public class FrogEnemy : EnemyBase
             return;
         }
 
+        
         pendingAoe.ExplodeNow(aoeDamage);
+        animator.SetTrigger("Pop");
         pendingAoe = null;
     }
 
