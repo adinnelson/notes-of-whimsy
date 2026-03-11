@@ -1,31 +1,23 @@
 using System;
-using System.ComponentModel.Design;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class ShopItem : MonoBehaviour
 {
-
     [SerializeField]
     private SpriteRenderer itemSpriteRenderer;
-    private Sprite itemSprite = null;
 
     [SerializeField]
     private SpriteRenderer interactionIndicator;
-
 
     [SerializeField]
     private GameObject rewardPrefab;
 
     [SerializeField]
     private GameObject player;
-    static public float distanceToPlayer = float.MaxValue;
 
-    private float myDistanceToPlayer = float.MaxValue;
-
-    [SerializeField] 
+    [SerializeField]
     private float interactionDistance = 1.5f;
 
     [SerializeField]
@@ -37,36 +29,44 @@ public class ShopItem : MonoBehaviour
     [SerializeField]
     private Color cannotInteractColor = Color.grey;
 
+    private Sprite itemSprite;
+    private float myDistanceToPlayer = float.MaxValue;
+
+    public static float DistanceToPlayer = float.MaxValue;
+
     private void Awake()
     {
-       player = GameObject.FindGameObjectWithTag("Player");
-       if (player == null)
-       {
-        Debug.LogWarning("ShopItem: Player reference missing from scene");
-       }
-       SetItemSprite(itemSpriteRenderer);
-       shopManager = transform.parent.GetComponent<ShopManager>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogWarning("ShopItem: Player reference missing from scene");
+        }
+
+        SetItemSprite(itemSpriteRenderer);
+        shopManager = transform.parent.GetComponent<ShopManager>();
     }
 
-
-    void Update()
+    private void Update()
     {
         myDistanceToPlayer = GetDistanceToPlayer();
-        distanceToPlayer = Math.Min(myDistanceToPlayer, distanceToPlayer);
+        DistanceToPlayer = Math.Min(myDistanceToPlayer, DistanceToPlayer);
         CanPurchase();
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
-        distanceToPlayer = float.MaxValue;
-        
-
+        DistanceToPlayer = float.MaxValue;
     }
 
-    public void HideShopItem()
+    private void HideShopItem()
     {
         gameObject.SetActive(false);
     }
+
+    /// <summary>
+    /// Configures this shop item to represent the provided reward prefab.
+    /// </summary>
+    /// <param name="prefab">The reward prefab associated with this shop item.</param>
     public void SetUpShopItem(GameObject prefab)
     {
         SetItemSprite(prefab.GetComponent<SpriteRenderer>());
@@ -75,21 +75,19 @@ public class ShopItem : MonoBehaviour
 
     private float GetDistanceToPlayer()
     {
-        if (player != null)        {
-            
+        if (player != null)
+        {
             return (player.transform.position - transform.position).magnitude;
         }
-        else
-        {
-            return float.MaxValue;
-        }
+
+        return float.MaxValue;
     }
 
-    private void SetItemSprite(SpriteRenderer itemSpriteRenderer)
+    private void SetItemSprite(SpriteRenderer sourceSpriteRenderer)
     {
-        itemSprite = itemSpriteRenderer.sprite;
+        itemSprite = sourceSpriteRenderer.sprite;
         this.itemSpriteRenderer.sprite = itemSprite;
-        this.itemSpriteRenderer.color = itemSpriteRenderer.color;
+        this.itemSpriteRenderer.color = sourceSpriteRenderer.color;
     }
 
     private void CanPurchase()
@@ -113,12 +111,11 @@ public class ShopItem : MonoBehaviour
 
     private bool PlayerWithinRange()
     {
-        return FloatEqual(myDistanceToPlayer, distanceToPlayer) && myDistanceToPlayer <= interactionDistance;
+        return FloatEqual(myDistanceToPlayer, DistanceToPlayer) && myDistanceToPlayer <= interactionDistance;
     }
 
     private bool FloatEqual(float a, float b, float epsilon = 0.01f)
     {
         return Mathf.Abs(a - b) < epsilon;
     }
-
 }
