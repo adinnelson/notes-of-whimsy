@@ -112,12 +112,14 @@ public class RoomInfo : MonoBehaviour
 
     private void GiveRewards()
     {
-        if (isShop)
+        // possible edge case to talk about 
+        // both given rewards here and checking for starter room
+        if (isShop && !hasGivenRewards)
         {
             // Give rewards for shop room
             shopManager.GenerateShopRewards();
         }
-        else if(!hasGivenRewards && !isShop)
+        else if(!hasGivenRewards && !isShop && roomType != RoomTypes.Starter)
         {
             // TODO: maybe add odds to drop an item in general
             // Give rewards for non-shop room
