@@ -7,7 +7,7 @@ public class RedNoteEffectHandler : NoteEffectHandler
 {
     [Header("Fireball AOE specs")]
     [SerializeField] private float knockbackRadius = 1.0f;
-    [SerializeField] private float knockbackForce = 500.0f;
+    [SerializeField] private float knockbackForce = 15.0f;
     [SerializeField] private float damage = 20.0f;
 
     List<GameObject> enemiesInRange = new List<GameObject>();
@@ -36,16 +36,17 @@ public class RedNoteEffectHandler : NoteEffectHandler
 
             foreach (Collider2D hit in hitColliders)
             {
-                if (hit.TryGetComponent<IDamageable>(out IDamageable targetDamageable))
-                {
-                    if (hit.CompareTag("Player"))
-                    {
-                        continue;
-                    }
+                if (hit.CompareTag("Player")) continue;
 
-                    if (!enemiesInRange.Contains(hit.gameObject))
+                // Use GetComponentInParent so we always resolve to the root enemy GameObject,
+                // preventing double-damage when an enemy has colliders on both parent and child objects.
+                IDamageable targetDamageable = hit.GetComponentInParent<IDamageable>();
+                if (targetDamageable != null)
+                {
+                    GameObject root = (targetDamageable as MonoBehaviour).gameObject;
+                    if (!enemiesInRange.Contains(root))
                     {
-                        enemiesInRange.Add(hit.gameObject);
+                        enemiesInRange.Add(root);
                     }
                 }
             }
@@ -87,8 +88,16 @@ public class RedNoteEffectHandler : NoteEffectHandler
                 Debug.DrawRay(targetPosition, direction * 2, Color.blue, 1.0f);
             }
 
-            rb.linearVelocity = Vector2.zero;
-            rb.AddForce(direction * knockbackForce);
+            rb.linearVelocity = direction * knockbackForce;
+
+            if (target.TryGetComponent<BoarEnemy>(out BoarEnemy boar))
+            {
+                boar.CancelChargeForKnockback();
+            }
+            else if (target.TryGetComponent<EnemyBase>(out EnemyBase enemy))
+            {
+                enemy.StartKnockbackDecay();
+            }
         }
     }
 
