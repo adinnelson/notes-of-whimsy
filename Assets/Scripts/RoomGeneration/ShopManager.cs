@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,7 +13,12 @@ public class ShopManager : MonoBehaviour
     private List<GameObject> rewardLocations = new();
 
     private RoomInfo roomInfo;
+    private ShopItem shopItem;
+
+    private GameManager gameManager;
     private RewardManager rewardManager;
+    private GoldManager goldManager;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -20,11 +26,22 @@ public class ShopManager : MonoBehaviour
         roomInfo = GetComponent<RoomInfo>();
         rewardLocations = roomInfo.GetItemSpawnLocations();
 
-        rewardManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<RewardManager>();
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        if(gameManager == null)
+        {
+            Debug.LogWarning("ShopManager: GameManager reference missing from scene");
+        }
+        rewardManager = gameManager.GetComponent<RewardManager>();
         if(rewardManager == null)
         {
             Debug.LogWarning("ShopManager: RewardManager reference missing from GameManager");
         }
+        goldManager = gameManager.GetComponent<GoldManager>();
+        if(goldManager == null)
+        {
+            Debug.LogWarning("ShopManager: GoldManager reference missing from GameManager");
+        }
+
         rewardPrefabs = rewardManager.GetRewardPrefabs();
         
     }
@@ -39,6 +56,23 @@ public class ShopManager : MonoBehaviour
         
     }
 
+    public bool BuyItem(GameObject item, Transform location)
+    {
+        int itemCost = rewardManager.GetGoldCost(item);
+        print("Attempting to buy item for " + itemCost + " gold.");
+        bool canAfford = GoldManager.Instance.MakePurchase(itemCost);
+         if (!canAfford)
+        {
+            print("Not enough gold to buy this item.");
+            return canAfford;
+        }
+        
+        rewardManager.SpawnReward(item, location);
+
+        return canAfford;
+    }
+
+
 
     private void GenerateShopRewards()
     {
@@ -46,10 +80,14 @@ public class ShopManager : MonoBehaviour
         // TODO: fix
         foreach (GameObject location in rewardLocations)
         {
-            RewardType rewardType = rewardManager.SpawnReward(location);
+            print(location.name);
+            shopItem = location.GetComponent<ShopItem>();
+            RewardType rewardType = rewardManager.SpawnReward(location.transform, true);
             GameObject rewardPrefab = rewardManager.GetRewardPrefab(rewardType);
             // Instantiate(rewardPrefab, location.transform.position, Quaternion.identity, location.transform);
+            print(rewardPrefab.name);
             UpdateShopText(location, rewardType); 
+            shopItem.SetUpShopItem(rewardPrefab);
 
         }
     }
@@ -66,7 +104,7 @@ public class ShopManager : MonoBehaviour
     }
 
     private void UpdateItemSprite(){
-        
+
     }
 
 

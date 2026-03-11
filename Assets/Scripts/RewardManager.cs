@@ -75,16 +75,57 @@ public class RewardManager : MonoBehaviour
         return prefab;
     }
 
-    public RewardType SpawnReward(GameObject location, bool isShopReward = false)
+    public RewardType SpawnReward(Transform location, bool isShopReward = false)
     {
         RewardType rewardType = GetRandomReward();
         GameObject rewardPrefab = GetRewardPrefab(rewardType);
         if (rewardPrefab != null && !isShopReward)
         {
-            Instantiate(rewardPrefab, location.transform.position, Quaternion.identity, location.transform);
+            Instantiate(rewardPrefab, location.transform.position, Quaternion.identity);
         }
 
         return rewardType;
+    }
+
+    /// <summary>
+    /// Overload of SpawnReward that takes in a specific prefab to spawn, used for shop rewards where we want to control the reward type
+     /// and just need to spawn the prefab at the correct location
+    /// </summary>
+    /// <param name="rewardPrefab"></param>
+    /// <param name="location"></param>
+    public void SpawnReward(GameObject rewardPrefab, Transform location)
+    {
+        if (rewardPrefab != null)
+        {
+            Instantiate(rewardPrefab, location.transform.position, Quaternion.identity);
+        }
+    }
+
+    public int GetGoldCost(RewardType rewardType)
+    {
+        if (rewardCosts.TryGetValue(rewardType, out int cost))
+        {
+            return cost;
+        }
+        else
+        {
+            Debug.LogError($"No cost defined for reward type {rewardType}");
+            return int.MaxValue; // Default to very expensive if not defined
+        }
+    }
+
+    public int GetGoldCost(GameObject rewardPrefab)
+    {
+        BoostableItem boost = rewardPrefab.GetComponent<BoostableItem>();
+        if (boost != null)
+        {
+            return GetGoldCost(boost.RewardType);
+        }
+        else
+        {
+            Debug.LogError($"Prefab {rewardPrefab.name} does not have a BoostableItem component");
+            return int.MaxValue;
+        }
     }
 
 

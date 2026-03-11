@@ -8,7 +8,7 @@ public enum BoostType
     HealthPotion,
     None
 }
-
+[RequireComponent(typeof(SpriteRenderer))]
 public class BoostableItem : MonoBehaviour
 {
     [SerializeField] private RewardType rewardType;

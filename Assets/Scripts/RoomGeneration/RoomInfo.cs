@@ -319,7 +319,9 @@ public class RoomInfo : MonoBehaviour
         }
         if (collision.CompareTag("Player"))
         {
+            print(gameObject.name + " has been entered by the player!" + roomType );
             OnEnterRoom?.Invoke(gameObject);
+            
         }
     }
 
