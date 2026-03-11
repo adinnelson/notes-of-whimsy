@@ -309,22 +309,4 @@ public class RoomGenerator : MonoBehaviour
         shopRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Shop).ToList();
 
     }
-
-    private void CreateRoomPools()
-    {
-        // mapPool is assigned via the Inspector
-
-        starterRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Starter).ToList();
-        leftConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("left") != null 
-                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        rightConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("right") != null 
-                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        topConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("top") != null 
-                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        bottomConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("bottom") != null 
-                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        shopRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Shop).ToList();
-
-    }
-
 }
