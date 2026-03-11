@@ -115,11 +115,28 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     }
 
     // unlock slot
-    public void UnlockSlot(int slotId)
+    public int  UnlockSlot(int? slotId = null)
     {
-        SlotSpell slotSpell = slotSpells[slotId];
+        if(slotId == null)
+        {
+            List<int> lockedSlots = new List<int>();
+
+            for(int i = 1;i < slotSpells.Count + 1;i++)
+            {
+                if(slotSpells[i].unlocked) continue;
+
+                lockedSlots.Add(i);
+            }
+
+            slotId = lockedSlots[Random.Range(0, lockedSlots.Count)];   
+        }
+
+        SlotSpell slotSpell = slotSpells[(int)slotId];
         slotSpell.unlocked = true;
-        slotSpells[slotId] = slotSpell;
+
+        slotSpells[(int)slotId] = slotSpell;
+
+        return (int)slotId;
     }
 
     // returns if slot is unlocked

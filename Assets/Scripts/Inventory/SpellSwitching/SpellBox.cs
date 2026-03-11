@@ -35,4 +35,11 @@ public class SpellBox : MonoBehaviour, IPointerClickHandler
         spellIcon = Instantiate(spellIconPrefab, transform.position, transform.rotation);
         spellIcon.transform.SetParent(transform);
     }
+
+    public void SetColour(Color colour)
+    {
+        SpriteRenderer spriteRenderer= GetComponent<SpriteRenderer>();
+
+        spriteRenderer.color = colour;
+    }
 }
