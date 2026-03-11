@@ -81,6 +81,8 @@ public class PlayerInventory : MonoBehaviour
                 case BoostType.Damage:
                     stats.AddDamageBonus((int)boost.Amount);
                     break;
+                default:
+                    break;
             }
             Destroy(boost.gameObject);
             return;
@@ -99,9 +101,9 @@ public class PlayerInventory : MonoBehaviour
             return;
         }
 
-        beatHandler.BeatUnlocked(pickup.beatId);
-        
-        playerActiveSpellsHandler.UnlockSlot(pickup.beatId);
+        int slotId = playerActiveSpellsHandler.UnlockSlot();
+
+        beatHandler.BeatUnlocked(slotId);
 
         Destroy(objToPickup.gameObject);
     }

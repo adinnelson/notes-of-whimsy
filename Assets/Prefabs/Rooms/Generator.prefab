@@ -46,32 +46,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomGenerator
   enemyPool:
-  - {fileID: 3917825305028578068, guid: 7240480c5f77cea45a6ad835eceb219c, type: 3}
-  numberOfRooms: 0
+  - {fileID: 35604427116287388, guid: d285fa5f3b6a56b4881b788684c05461, type: 3}
+  - {fileID: 5690374572714891280, guid: 598795d092b29f64cbabb0c6adeb8572, type: 3}
+  - {fileID: 5603674919516484741, guid: 268f4a5934c000c4e83145e0bd8ccd74, type: 3}
   desiredRoomNumber: 10
   minRooms: 4
   minEnemies: 2
   maxEnemies: 5
-  spawnedRooms: []
-  starterRooms:
+  mapPool:
+  - {fileID: 7052457801854364891, guid: eb7bbf69df6126248951b9d8c9474483, type: 3}
+  - {fileID: 3834276531175236695, guid: a722eb3bdcd47cd4680b06d63977bc45, type: 3}
+  - {fileID: 6309157112508883362, guid: d5d2b0c5b47bcde409bb5952576fe680, type: 3}
+  - {fileID: 6056417628185097731, guid: 106be7126bc5f6a42a9ff8f1acca32ba, type: 3}
+  - {fileID: 167603225339737800, guid: ee6b1c6c473d52c4cacdd3d90a32f8c3, type: 3}
+  - {fileID: 7689101506527074657, guid: 3bec38e326686dd43ba09d95d642b830, type: 3}
+  - {fileID: 2320255755634343439, guid: 09afc069bcab34747a764d4f8ca1658b, type: 3}
+  - {fileID: 1247444356238104183, guid: 97bd7f18fbc832647aeb2e4f8af72239, type: 3}
   - {fileID: 5809351762855307295, guid: c8eb3c7d7f730e04695babf28e765e95, type: 3}
   - {fileID: 2960902605508290741, guid: 5cdb067a8c70bf3418155c48065a6a1c, type: 3}
   - {fileID: 2935493060984338722, guid: 72a7c94c6533d964da2be52f44beea52, type: 3}
   - {fileID: 1041415166973672473, guid: d9a603176219d55459d52c7c841e7eac, type: 3}
-  leftConnections:
-  - {fileID: 7052457801854364891, guid: eb7bbf69df6126248951b9d8c9474483, type: 3}
-  - {fileID: 167603225339737800, guid: ee6b1c6c473d52c4cacdd3d90a32f8c3, type: 3}
-  - {fileID: 7689101506527074657, guid: 3bec38e326686dd43ba09d95d642b830, type: 3}
-  rightConnections:
-  - {fileID: 7052457801854364891, guid: eb7bbf69df6126248951b9d8c9474483, type: 3}
-  - {fileID: 167603225339737800, guid: ee6b1c6c473d52c4cacdd3d90a32f8c3, type: 3}
-  - {fileID: 2320255755634343439, guid: 09afc069bcab34747a764d4f8ca1658b, type: 3}
-  topConnections:
-  - {fileID: 7052457801854364891, guid: eb7bbf69df6126248951b9d8c9474483, type: 3}
-  - {fileID: 1247444356238104183, guid: 97bd7f18fbc832647aeb2e4f8af72239, type: 3}
-  bottomConnections:
-  - {fileID: 7052457801854364891, guid: eb7bbf69df6126248951b9d8c9474483, type: 3}
-  - {fileID: 3834276531175236695, guid: a722eb3bdcd47cd4680b06d63977bc45, type: 3}
+  starterRooms: []
+  leftConnections: []
+  rightConnections: []
+  topConnections: []
+  bottomConnections: []
+  shopRooms: []
+  spawnedRooms: []
   allowRegeneration: 1
 --- !u!156049354 &2145482322479185504
 Grid:

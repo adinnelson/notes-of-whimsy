@@ -295,6 +295,12 @@ public abstract class EnemyBase : MonoBehaviour
         {
             StartCoroutine(FadeOutAndDisable());
         }
+
+        EnemyWaveController controller = transform.parent.GetComponent<EnemyWaveController>();
+        if (controller != null)
+        {
+            controller.OnEnemyDeath(gameObject);
+        }
     }
 
     private IEnumerator FadeOutAndDisable()

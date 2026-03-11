@@ -5,8 +5,16 @@ using UnityEngine.Events;
 using UnityEngine.Pool;
 using UnityEngine.InputSystem;
 using System.Globalization;
+using FMODUnity;
 
-public class BeatHandler : MonoBehaviour {
+public class BeatHandler : MonoBehaviour
+{
+
+    //Adding beat percussion sound (working on it)
+    [Header("FMOD Settings")]
+    [SerializeField] private EventReference beatEndEvent;
+    private MusicManager musicManager;
+    private float lastCheckedBPM = 0f;
 
     private const float REQUIRED_ACCURACY = 0.1f;
 
@@ -84,10 +92,11 @@ public class BeatHandler : MonoBehaviour {
 
     void Start()
     {
+        musicManager = MusicManager.instance;
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
         playerActiveSpellsHandler = GameObject.FindWithTag("Player")?.GetComponent<PlayerActiveSpellsHandler>();
 
-        beatDistance =  beatSpawnPoint.position.x - endGraphic.transform.position.x;
+        beatDistance = beatSpawnPoint.position.x - endGraphic.transform.position.x;
         spawnTime = 60.0f / bpm;
 
         unlockedBeats.Add(1);
@@ -116,7 +125,7 @@ public class BeatHandler : MonoBehaviour {
             BeatItem beatItem = beatPool.Get();
             beatItem.Init(this, spelldInBeatSlot > 0 ? beatIdToColor[spelldInBeatSlot] : Color.white, endGraphic, beatSpawnPoint.position, stepSize, nextBeatId, playerHasBeat);
 
-            if(!playerHasBeat)
+            if (!playerHasBeat)
             {
                 beatItem.GetComponent<SpriteRenderer>().enabled = false;
             }
@@ -128,13 +137,13 @@ public class BeatHandler : MonoBehaviour {
             currentVisibleBeats.Add(beatItem);
             timeElapsed = 0.0f;
 
-            for(int i = 0;i < activeBeatSpawners.Count;i++)
+            for (int i = 0; i < activeBeatSpawners.Count; i++)
             {
                 activeBeatSpawners[i].StartSpawnCountdown();
             }
 
             nextBeatId++;
-            if(nextBeatId > maxBeatId)
+            if (nextBeatId > maxBeatId)
             {
                 nextBeatId = 1;
             }
@@ -144,7 +153,7 @@ public class BeatHandler : MonoBehaviour {
 
         timeElapsed += Time.fixedDeltaTime;
 
-        if(currentVisibleBeats.Count == 0) return;
+        if (currentVisibleBeats.Count == 0) return;
 
         float percentage = GetPercentRemainingFrontBeat();
 
@@ -192,7 +201,7 @@ public class BeatHandler : MonoBehaviour {
     }
 
     // sets flag if beatItem is close enough end point
-    public void CheckValidAttackInterval (float percentage)
+    public void CheckValidAttackInterval(float percentage)
     {
         // if the percentage of track on BeatItem remaining is at acceptable distance for input
         if (currentVisibleBeats[0].Unlocked && percentage <= REQUIRED_ACCURACY)
@@ -208,7 +217,7 @@ public class BeatHandler : MonoBehaviour {
     // called when beat item hits end of track
     public void BeatArrived(BeatItem beatItem)
     {
-        if(beatItem != currentVisibleBeats[0])
+        if (beatItem != currentVisibleBeats[0])
         {
             Debug.Log("Beats arrived out of order!");
         }
@@ -226,13 +235,13 @@ public class BeatHandler : MonoBehaviour {
     // or null if no beats
     public BeatItem GetFrontBeat(bool onlyVisible = true)
     {
-        if(currentVisibleBeats.Count <= 0) return null;
+        if (currentVisibleBeats.Count <= 0) return null;
 
-        if(onlyVisible)
+        if (onlyVisible)
         {
-            for(int i = 0;i < currentVisibleBeats.Count;i++)
+            for (int i = 0; i < currentVisibleBeats.Count; i++)
             {
-                if(!currentVisibleBeats[i].Unlocked) continue;
+                if (!currentVisibleBeats[i].Unlocked) continue;
 
                 return currentVisibleBeats[i];
             }
@@ -282,9 +291,9 @@ public class BeatHandler : MonoBehaviour {
         int beatId = beatIdCurr;
 
         // spawn as many beat items that are needed given buffer passed and bar size
-        for(int i = 0; beatDistance - bufferDistance - distanceToAdd * i > 0; i++)
+        for (int i = 0; beatDistance - bufferDistance - distanceToAdd * i > 0; i++)
         {
-            if(!unlockedBeats.Contains(beatId))
+            if (!unlockedBeats.Contains(beatId))
             {
                 beatId--;
                 continue;
@@ -298,11 +307,11 @@ public class BeatHandler : MonoBehaviour {
             currentVisibleBeats.Insert(0, beatItem);
 
             // spawns in child spawners initial beat items throughout beatbar
-            for(int j = 0;j > activeBeatSpawners.Count;j++)
+            for (int j = 0; j > activeBeatSpawners.Count; j++)
             {
                 Vector3 additionalSpawnPosition = spawnPosition - Vector3.left * beatItemSpeed * activeBeatSpawners[j].SpawnTime;
 
-                if(additionalSpawnPosition.x < beatSpawnPoint.position.x) break;
+                if (additionalSpawnPosition.x < beatSpawnPoint.position.x) break;
 
                 BeatItem additionalBeatItem = beatPool.Get();
                 additionalBeatItem.Init(this, activeBeatSpawners[j].Colour, endGraphic, additionalSpawnPosition, stepSize, 0);
@@ -322,9 +331,9 @@ public class BeatHandler : MonoBehaviour {
     {
         unlockedBeats.Add(beatId);
 
-        for (int i = 0;i < currentVisibleBeats.Count;i++)
+        for (int i = 0; i < currentVisibleBeats.Count; i++)
         {
-            if(currentVisibleBeats[i].BeatId != beatId) continue;
+            if (currentVisibleBeats[i].BeatId != beatId) continue;
 
             currentVisibleBeats[i].GetComponent<SpriteRenderer>().enabled = true;
             currentVisibleBeats[i].Unlocked = true;
@@ -334,5 +343,78 @@ public class BeatHandler : MonoBehaviour {
     public float GetBPM()
     {
         return bpm;
+    }
+
+
+    //Update the Beat bar bpm to reflect the changing between rooms
+    void Update()
+    {
+        // Check for BPM changes to update the Beat bar according to music switch 
+        if (musicManager != null)
+        {
+            float currentMusicBPM = musicManager.GetCurrentBPM();
+            if (currentMusicBPM > 0 && Mathf.Abs(lastCheckedBPM - currentMusicBPM) > 0.01f)
+            {
+                // Debug.Log(currentMusicBPM);
+                lastCheckedBPM = currentMusicBPM;
+                ChangeBPM(currentMusicBPM);
+            }
+        }
+
+
+        
+        // //For testing:
+        // var keyboard = Keyboard.current;
+        // if (keyboard == null) return; // No keyboard connected
+        // if (keyboard.bKey.wasPressedThisFrame)
+        // {
+        //     ChangeBPM(100f);
+        // }
+        // if (keyboard.nKey.wasPressedThisFrame)
+        // {
+        //     ChangeBPM(120f);
+        // }
+    }
+
+    // method to reset the Beat bar to a new bpm 
+    public void ChangeBPM(float newBPM)
+    {
+        // Stop current beat generation
+        StopAllCoroutines(); // If using coroutines
+
+        // Clear all existing beats from the track
+        ClearAllBeats();
+
+        // Update BPM
+        bpm = newBPM;
+
+        // Recalculate spawn time
+        spawnTime = 60.0f / bpm;
+
+        // Reset timing
+        timeElapsed = 0.0f;
+
+        // Reset beat ID if needed
+        nextBeatId = 1;
+
+        // Repopulate the beat bar
+        PopulateBeatBar();
+    }
+
+    private void ClearAllBeats()
+    {
+        // Return all beats to pool
+        foreach (var beat in currentVisibleBeats)
+        {
+            beatPool.Release(beat);
+        }
+        currentVisibleBeats.Clear();
+
+        // Clear any active spawners
+        foreach (var spawner in activeBeatSpawners)
+        {
+            Destroy(spawner.gameObject);
+        }
+        activeBeatSpawners.Clear();
     }
 }

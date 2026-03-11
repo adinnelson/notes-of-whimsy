@@ -86,6 +86,7 @@ public class SpellEditBar : MonoBehaviour
         }
 
         UpdateIcons();
+        UpdateSpellBox();
     }
 
     // close
@@ -106,6 +107,21 @@ public class SpellEditBar : MonoBehaviour
             if(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i) == null) continue;
 
             spellBoxes[i - 1].SetSpellIcon(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i).SpellIcon);
+        }
+    }
+
+    public void UpdateSpellBox()
+    {
+        for(int i = 1;i <= PlayerActiveSpellsHandler.SPELL_SLOT_NUM;i++)
+        {
+            if(playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i))
+            {
+                spellBoxes[i-1].SetColour(Color.darkGray);   
+            } 
+            else
+            {
+                spellBoxes[i-1].SetColour(Color.grey);
+            }
         }
     }
 
