@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-//red note attack mapped to <e>
+//blue note attack mapped to <e>
 public class BlueNoteEffectHandler : NoteEffectHandler
 {
     [Header("Fireball AOE specs")]
@@ -50,11 +50,11 @@ public class BlueNoteEffectHandler : NoteEffectHandler
                 }
             }
             DoDamage(enemiesInRange);
-            PullIn(enemiesInRange, impactPosition, playerPosition);
+            Knockback(enemiesInRange, impactPosition, playerPosition);
         }
     }
 
-    private void PullIn(List<GameObject> targets, Vector3 impactPoint, Vector3 moveAwayFrom)
+    private void Knockback(List<GameObject> targets, Vector3 impactPoint, Vector3 moveAwayFrom)
     {
         if (targets == null || !targets.Any())
         {
