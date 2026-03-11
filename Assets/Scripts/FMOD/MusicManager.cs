@@ -3,6 +3,7 @@ using FMODUnity;
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Rendering;
+using UnityEngine.InputSystem;
 
 
 
@@ -20,20 +21,22 @@ public class MusicManager : MonoBehaviour
     }
     //For testing the change of music in the inspector
     [SerializeField]
-    private RoomType currentRoomType; 
+    private RoomType currentRoomType;
 
 
     //Two method for to control the
     //public static event System.Action<GameObject>
     private void OnEnable()
     {
-    // event used in RoomInfo to indecate the room changed
-    RoomInfo.OnEnterRoom += HandleRoomEntered;
+        // event used in RoomInfo to indecate the room changed
+        RoomInfo.OnEnterRoom += HandleRoomEntered;
+
+
     }
     private void OnDisable()
     {
         // preventing memory leaks
-        RoomInfo.OnEnterRoom -= HandleRoomEntered;  
+        RoomInfo.OnEnterRoom -= HandleRoomEntered;
     }
 
     //method to get room information
@@ -44,8 +47,11 @@ public class MusicManager : MonoBehaviour
         {
             //change the music to reflect which room you are in
             ChangeMusicForRoom(roomInfo);
+
         }
     }
+
+
 
     //so other scripts can access the info here with
     //MusicManager.instance 
@@ -85,7 +91,7 @@ public class MusicManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            
+
             // Initialize timelineInfo early
             timelineInfo = new TimelineInfo();
         }
@@ -99,17 +105,17 @@ public class MusicManager : MonoBehaviour
         if (!music.IsNull)
         {
             musicInstance = RuntimeManager.CreateInstance(music);
-            
+
             // Set up callback BEFORE starting
             beatCallback = new FMOD.Studio.EVENT_CALLBACK(BeatEventCallback);
             timelineHandle = GCHandle.Alloc(timelineInfo, GCHandleType.Pinned);
-            musicInstance.setCallback(beatCallback, 
-                FMOD.Studio.EVENT_CALLBACK_TYPE.TIMELINE_BEAT | 
+            musicInstance.setCallback(beatCallback,
+                FMOD.Studio.EVENT_CALLBACK_TYPE.TIMELINE_BEAT |
                 FMOD.Studio.EVENT_CALLBACK_TYPE.TIMELINE_MARKER);
-            
+
             // Set user data for the callback
             musicInstance.setUserData(GCHandle.ToIntPtr(timelineHandle));
-            
+
             musicInstance.start();
         }
         else
@@ -117,7 +123,7 @@ public class MusicManager : MonoBehaviour
             Debug.LogWarning("No music event assigned to MusicManager!");
         }
     }
-    
+
 
 
     //Getting bus info and setting volume
@@ -126,7 +132,7 @@ public class MusicManager : MonoBehaviour
         //get the bus info from FMOD bank
         bus = RuntimeManager.GetBus("bus:/");
         if (bus.isValid())
-        {   
+        {
             //set the volume according to the inspector value
             bus.setVolume(volumeControl);
         }
@@ -134,7 +140,7 @@ public class MusicManager : MonoBehaviour
 
 
 
-    // Convert from RoomTpyes to music related to the room 
+    // Convert using RoomTpyes to music related to the room 
     private void ChangeMusicForRoom(RoomInfo roomInfo)
     {
         RoomTypes roomType = roomInfo.GetRoomType();
@@ -147,23 +153,23 @@ public class MusicManager : MonoBehaviour
             case RoomTypes.Generic:
                 musicLabel = "smallCombat";
                 break;
-                
+
             case RoomTypes.Combat:
                 musicLabel = "bigCombat";
                 break;
-                
+
             case RoomTypes.Shop:
                 musicLabel = "shopRoom";
                 break;
-            
+
             //not needed yet
             case RoomTypes.Reward:
                 // musicLabel = "smallCombat"; 
                 break;
-                
+
             case RoomTypes.End:
-            //    // You might want special boss music
-            //     musicLabel = "bigCombat"; // or create a new "boss" type
+                //    // You might want special boss music
+                //     musicLabel = "bigCombat"; // or create a new "boss" type
                 break;
         }
 
@@ -179,19 +185,19 @@ public class MusicManager : MonoBehaviour
     // Called if the room is changed 
     private void OnValidate()
     {
-    #if UNITY_EDITOR
-    // Only try to set if we're in Play Mode and instance is valid
-    if (UnityEditor.EditorApplication.isPlaying && musicInstance.isValid())
-    {
-        SetRoomMusicByLabel(currentRoomType.ToString());
-    }
-    
-    // Handle volume in Editor
-    if (bus.isValid())
-    {
-        bus.setVolume(volumeControl);
-    }
-    #endif
+#if UNITY_EDITOR
+        // Only try to set if we're in Play Mode and instance is valid
+        if (UnityEditor.EditorApplication.isPlaying && musicInstance.isValid())
+        {
+            SetRoomMusicByLabel(currentRoomType.ToString());
+        }
+
+        // Handle volume in Editor
+        if (bus.isValid())
+        {
+            bus.setVolume(volumeControl);
+        }
+#endif
     }
 
 
@@ -205,24 +211,24 @@ public class MusicManager : MonoBehaviour
             musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             musicInstance.release();
         }
-        
+
         // Check timelineHandle is allocated
         if (timelineHandle.IsAllocated)
         {
-            timelineHandle.Free(); 
+            timelineHandle.Free();
         }
     }
 
 
     //Display beat and marker name (chords for the music)
 #if UNITY_EDITOR // Development_build
-    void OnGUI() 
+    void OnGUI()
     {
         // FIX: Add null check for timelineInfo
         if (timelineInfo != null)
         {
             // GUILayout.Box($"Current Beat = {timelineInfo.currentBeat}, Last Marker = {(string)timelineInfo.lastMarker}");
-            GUILayout.Box($" Last Marker = {(string)timelineInfo.lastMarker}");
+            GUILayout.Box($" Last Marker = {(string)timelineInfo.lastMarker}, Bpm = {(timelineInfo.currentBpm)}");
         }
         else
         {
@@ -259,11 +265,11 @@ public class MusicManager : MonoBehaviour
                         var parameter = (FMOD.Studio.TIMELINE_BEAT_PROPERTIES)Marshal.PtrToStructure(
                             parameterPtr, typeof(FMOD.Studio.TIMELINE_BEAT_PROPERTIES));
                         timelineInfo.currentBeat = parameter.beat;
-                        
+
 
                         //capturing the bpm to send it to BeatHandler for later
                         timelineInfo.currentBpm = parameter.tempo;
-                        
+
                     }
                     break;
                 case FMOD.Studio.EVENT_CALLBACK_TYPE.TIMELINE_MARKER:
@@ -310,7 +316,7 @@ public class MusicManager : MonoBehaviour
     {
         if (musicInstance.isValid())
         {
-            
+
             SetParameterWithLabel(parameterName, labelName);
             // Debug.Log($"Music changed to: {labelName}");
         }
@@ -327,4 +333,44 @@ public class MusicManager : MonoBehaviour
             return timelineInfo.currentBpm;
         return 120f; // Default fallback
     }
+
 }
+
+
+
+
+
+
+
+
+//For Testing: ////////////////////////////////////////////////////////
+// void Update()
+// {
+//     var keyboard = Keyboard.current;
+//     if (keyboard == null) return;
+
+//     // cycle between rooms by pressing (s)
+//     if (keyboard.sKey.wasPressedThisFrame)
+//     {
+//         currentRoomType = GetNextRoomType(currentRoomType);
+//         SetRoomMusicByLabel(currentRoomType.ToString());
+//     }
+// }
+
+// // Helper for cycle 
+// private RoomType GetNextRoomType(RoomType current)
+// {
+//     switch (current)
+//     {
+//         case RoomType.smallCombat:
+//             return RoomType.bigCombat;
+//         case RoomType.bigCombat:
+//             return RoomType.shopRoom;
+//         case RoomType.shopRoom:
+//             return RoomType.smallCombat;
+//         default:
+//             return RoomType.smallCombat;
+//     }
+// }
+
+
