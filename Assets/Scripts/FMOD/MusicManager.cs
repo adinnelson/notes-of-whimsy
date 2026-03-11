@@ -4,8 +4,48 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Rendering;
 
+
+
 public class MusicManager : MonoBehaviour
 {
+    //name of parameter condition in FMOD (used for transition condition)
+    private string parameterName = "roomChanging";
+
+    //Three room options in the inspector for testing
+    public enum RoomType
+    {
+        smallCombat,
+        bigCombat,
+        shopRoom
+    }
+    //For testing the change of music in the inspector
+    [SerializeField]
+    private RoomType currentRoomType; 
+
+
+    //Two method for to control the
+    //public static event System.Action<GameObject>
+    private void OnEnable()
+    {
+    // event used in RoomInfo to indecate the room changed
+    RoomInfo.OnEnterRoom += HandleRoomEntered;
+    }
+    private void OnDisable()
+    {
+        // preventing memory leaks
+        RoomInfo.OnEnterRoom -= HandleRoomEntered;  
+    }
+
+    //method to get room information
+    private void HandleRoomEntered(GameObject room)
+    {
+        RoomInfo roomInfo = room.GetComponent<RoomInfo>();
+        if (roomInfo != null)
+        {
+            //change the music to reflect which room you are in
+            ChangeMusicForRoom(roomInfo);
+        }
+    }
 
     //so other scripts can access the info here with
     //MusicManager.instance 
@@ -77,6 +117,7 @@ public class MusicManager : MonoBehaviour
             Debug.LogWarning("No music event assigned to MusicManager!");
         }
     }
+    
 
 
     //Getting bus info and setting volume
@@ -84,23 +125,73 @@ public class MusicManager : MonoBehaviour
     {
         //get the bus info from FMOD bank
         bus = RuntimeManager.GetBus("bus:/");
-
         if (bus.isValid())
         {   
             //set the volume according to the inspector value
             bus.setVolume(volumeControl);
         }
-
     }
 
-    // Called if the value in the inspector is updated
+
+
+    // Convert from RoomTpyes to music related to the room 
+    private void ChangeMusicForRoom(RoomInfo roomInfo)
+    {
+        RoomTypes roomType = roomInfo.GetRoomType();
+        string musicLabel = "";
+
+        // Map RoomTypes to your music labels
+        switch (roomType)
+        {
+            case RoomTypes.Starter:
+            case RoomTypes.Generic:
+                musicLabel = "smallCombat";
+                break;
+                
+            case RoomTypes.Combat:
+                musicLabel = "bigCombat";
+                break;
+                
+            case RoomTypes.Shop:
+                musicLabel = "shopRoom";
+                break;
+            
+            //not needed yet
+            case RoomTypes.Reward:
+                // musicLabel = "smallCombat"; 
+                break;
+                
+            case RoomTypes.End:
+            //    // You might want special boss music
+            //     musicLabel = "bigCombat"; // or create a new "boss" type
+                break;
+        }
+
+        // Change the label so if OnValidate() is called music will change
+        if (!string.IsNullOrEmpty(musicLabel))
+        {
+            SetRoomMusicByLabel(musicLabel);
+        }
+    }
+
+
+
+    // Called if the room is changed 
     private void OnValidate()
     {
-        // if the bus is valid and the game is running 
-        if (Application.isPlaying && bus.isValid())
-        {
-            bus.setVolume(volumeControl); //change the volume accordingly       }
-        }   
+    #if UNITY_EDITOR
+    // Only try to set if we're in Play Mode and instance is valid
+    if (UnityEditor.EditorApplication.isPlaying && musicInstance.isValid())
+    {
+        SetRoomMusicByLabel(currentRoomType.ToString());
+    }
+    
+    // Handle volume in Editor
+    if (bus.isValid())
+    {
+        bus.setVolume(volumeControl);
+    }
+    #endif
     }
 
 
@@ -130,7 +221,8 @@ public class MusicManager : MonoBehaviour
         // FIX: Add null check for timelineInfo
         if (timelineInfo != null)
         {
-            GUILayout.Box($"Current Beat = {timelineInfo.currentBeat}, Last Marker = {(string)timelineInfo.lastMarker}");
+            // GUILayout.Box($"Current Beat = {timelineInfo.currentBeat}, Last Marker = {(string)timelineInfo.lastMarker}");
+            GUILayout.Box($" Last Marker = {(string)timelineInfo.lastMarker}");
         }
         else
         {
@@ -138,8 +230,6 @@ public class MusicManager : MonoBehaviour
         }
     }
 #endif 
-
-
 
     //C# <-> C++ communication because FMOD use C# 
     //Needed to update beat/marker info
@@ -195,6 +285,38 @@ public class MusicManager : MonoBehaviour
         if (musicInstance.isValid())
         {
             musicInstance.setParameterByName(parameterName, value);
+        }
+    }
+
+
+
+    // Communicate with FMOD to change the change the music based on the room
+    public void SetParameterWithLabel(string parameterName, string labelName)
+    {
+        if (musicInstance.isValid())
+        {
+            // method in FMOD set parameters by label
+            musicInstance.setParameterByNameWithLabel(parameterName, labelName);
+            Debug.Log($"Set parameter '{parameterName}' to label '{labelName}'");
+        }
+        else
+        {
+            // Debug.LogWarning($"Cannot set parameter - musicInstance is not valid!");
+        }
+    }
+
+    // change the label related to a conditional parameter 
+    public void SetRoomMusicByLabel(string labelName)
+    {
+        if (musicInstance.isValid())
+        {
+            
+            SetParameterWithLabel(parameterName, labelName);
+            // Debug.Log($"Music changed to: {labelName}");
+        }
+        else
+        {
+            // Debug.LogWarning($"Cannot set music - musicInstance is not valid!");
         }
     }
 
