@@ -38,6 +38,8 @@ public class RoomInfo : MonoBehaviour
 
     [Header("Enemy Spawning")]
     [SerializeField]
+    private bool isCompleted;
+    [SerializeField]
     private List<GameObject> enemyPrefabs;
     [SerializeField]
     private int numberOfWaves;
@@ -53,14 +55,22 @@ public class RoomInfo : MonoBehaviour
     [Header("Shop Attributes")]
     [SerializeField]
     private bool isShop;
+    
     [SerializeField]
     private List<GameObject> itemSpawnLocations;
+
+    private ShopManager shopManager;
+
+    private RewardManager rewardManager;
+
+    private bool hasGivenRewards;
 
     // PROPERTIES
     public int NumberOfNodes { get; private set; }
 
     // EVENTS
     public static event System.Action<GameObject> OnFloorOverlap;
+    public static event System.Action<GameObject> OnEnterRoom;
     // UNITY LIFECYCLE METHODS
 
     private EnemyWaveController enemyWaveController;
@@ -68,6 +78,21 @@ public class RoomInfo : MonoBehaviour
     private void Awake()
     {
         CacheChildTilemaps();
+        if(roomType == RoomTypes.Shop)
+        {
+            isShop = true;
+            shopManager = GetComponent<ShopManager>();
+            if(shopManager == null)
+            {
+                Debug.LogWarning("RoomInfo: ShopManager component missing from shop room");
+            }
+        }
+        rewardManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<RewardManager>();
+        if(rewardManager == null)
+        {
+            Debug.LogWarning("RoomInfo: RewardManager reference missing from GameManager");
+        }
+
         enemyWaveController = GetComponentInChildren<EnemyWaveController>();
     }
 
@@ -77,6 +102,35 @@ public class RoomInfo : MonoBehaviour
         {
             transform.position = parentNode.position - spawnedNode.localPosition;
         }
+        isCompleted = CheckIsRoomCompleted();
+        if (isCompleted)
+        {
+            // unlock room            roomLock.gameObject.SetActive(false);
+            GiveRewards();
+            print($"no more enemies in {gameObject.name} spawning rewards");
+        }
+    }
+
+    private void GiveRewards()
+    {
+        // possible edge case to talk about 
+        // both given rewards here and checking for starter room
+        if (isShop && !hasGivenRewards)
+        {
+            // Give rewards for shop room
+            shopManager.GenerateShopRewards();
+        }
+        else if(!hasGivenRewards && !isShop && roomType != RoomTypes.Starter)
+        {
+            // TODO: maybe add odds to drop an item in general
+            // Give rewards for non-shop room
+            foreach (GameObject location in itemSpawnLocations)
+            {
+                rewardManager.SpawnReward(location.transform);
+            }
+        }
+        hasGivenRewards = true;
+
     }
 
     // PUBLIC METHODS
@@ -246,6 +300,16 @@ public class RoomInfo : MonoBehaviour
         return itemSpawnLocations;
     }
 
+    public bool IsCompleted()
+    {
+        return isCompleted;
+    }
+
+    public void SetEnemyPrefabs(List<GameObject> enemyPrefabs)
+    {
+        this.enemyPrefabs = enemyPrefabs;
+    }
+
     /// <summary>
     /// Gets the list of enemy prefabs assigned to this room
     /// </summary>
@@ -326,6 +390,22 @@ public class RoomInfo : MonoBehaviour
         {
             OnFloorOverlap?.Invoke(gameObject);
         }
+        if (collision.CompareTag("Player"))
+        {
+            print(gameObject.name + " has been entered by the player!" + roomType );
+            OnEnterRoom?.Invoke(gameObject);
+            
+        }
+    }
+
+    private bool CheckIsRoomCompleted()
+    {
+        if(enemyPrefabs.Count == 0)
+        {
+            isCompleted = true;
+            return true;
+        }
+        return false;
     }
 
 }

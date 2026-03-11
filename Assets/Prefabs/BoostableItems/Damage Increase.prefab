@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: boostType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7651831631326572719, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: rewardType
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

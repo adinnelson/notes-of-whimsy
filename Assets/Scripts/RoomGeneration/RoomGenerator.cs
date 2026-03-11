@@ -61,11 +61,10 @@ public class RoomGenerator : MonoBehaviour
         CreateRoomPools();
         CreateFloorLayout();
     }
-    // remembird
-    // tre'sombre'd
 
     private void Update()
     {
+        //TODO: uncomment for testing purposes, maybe add some conditions to prevent accidental resets during gameplay
         if ((Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration) || spawnedRooms.Count < minRooms)
         {
             ResetGeneration();
@@ -279,11 +278,14 @@ public class RoomGenerator : MonoBehaviour
         for (int i = 0; i < spawnedRooms.Count; i++)
         {
             RoomInfo roomInfo = spawnedRooms[i].GetComponent<RoomInfo>();
+
+            if(roomInfo.GetSafety()) continue;
+
+            roomInfo.SetEnemyPrefabs(enemyPool);
         }
 
         OnDungeonComplete?.Invoke();
     }
-
 
     private void CreateRoomPools()
     {
