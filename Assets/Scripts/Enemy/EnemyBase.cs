@@ -294,6 +294,12 @@ public abstract class EnemyBase : MonoBehaviour
         {
             gameObject.SetActive(false);   // pooled-friendly death for enemy pooling later
         }
+
+        EnemyWaveController controller = transform.parent.GetComponent<EnemyWaveController>();
+        if (controller != null)
+        {
+            controller.OnEnemyDeath(gameObject);
+        }
     }
 
     protected virtual void OnDestroy()

@@ -80,6 +80,10 @@ PrefabInstance:
       propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[0].Array.data[3].Y
       value: -57500000
       objectReference: {fileID: 0}
+    - target: {fileID: 1078024863710459548, guid: 09afc069bcab34747a764d4f8ca1658b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1638113477297041230, guid: 09afc069bcab34747a764d4f8ca1658b, type: 3}
       propertyPath: isSafe
       value: 1
