@@ -2090,9 +2090,7 @@ MonoBehaviour:
   parentNode: {fileID: 0}
   spawnedNode: {fileID: 0}
   isCompleted: 0
-  enemies: []
-  enemyPrefabs:
-  - {fileID: 5603674919516484741, guid: 268f4a5934c000c4e83145e0bd8ccd74, type: 3}
+  enemyPrefabs: []
   numberOfWaves: 2
   extraCombatWaves: 1
   isSafe: 0

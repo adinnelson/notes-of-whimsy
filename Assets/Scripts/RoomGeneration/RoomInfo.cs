@@ -305,6 +305,11 @@ public class RoomInfo : MonoBehaviour
         return isCompleted;
     }
 
+    public void SetEnemyPrefabs(List<GameObject> enemyPrefabs)
+    {
+        this.enemyPrefabs = enemyPrefabs;
+    }
+
     /// <summary>
     /// Gets the list of enemy prefabs assigned to this room
     /// </summary>
@@ -395,7 +400,7 @@ public class RoomInfo : MonoBehaviour
 
     private bool CheckIsRoomCompleted()
     {
-        if(enemies.Count == 0)
+        if(enemyPrefabs.Count == 0)
         {
             isCompleted = true;
             return true;

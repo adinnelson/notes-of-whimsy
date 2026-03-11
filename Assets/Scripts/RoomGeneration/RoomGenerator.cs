@@ -278,11 +278,14 @@ public class RoomGenerator : MonoBehaviour
         for (int i = 0; i < spawnedRooms.Count; i++)
         {
             RoomInfo roomInfo = spawnedRooms[i].GetComponent<RoomInfo>();
+
+            if(roomInfo.GetSafety()) continue;
+
+            roomInfo.SetEnemyPrefabs(enemyPool);
         }
 
         OnDungeonComplete?.Invoke();
     }
-
 
     private void CreateRoomPools()
     {
