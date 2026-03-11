@@ -7,7 +7,7 @@ public class BlueNoteEffectHandler : NoteEffectHandler
 {
     [Header("Fireball AOE specs")]
     [SerializeField] private float knockbackRadius = 1.0f;
-    [SerializeField] private float knockbackForce = 500.0f;
+    [SerializeField] private float knockbackForce = 45.0f;
     [SerializeField] private float damage = 20.0f;
 
     List<GameObject> enemiesInRange = new List<GameObject>();
