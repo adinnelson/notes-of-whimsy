@@ -4,13 +4,6 @@ public class MinimapPlayer : MonoBehaviour
 {
     public Transform player;
     public RectTransform mapContainer;
-    public float worldToMapScale = 2.0f;
-    RectTransform rect;
-
-    void Start()
-    {
-        rect = GetComponent<RectTransform>();
-    }
 
     void Update()
     {
@@ -19,9 +12,7 @@ public class MinimapPlayer : MonoBehaviour
             return;
         }
 
-        Vector2 worldPos = player.position;
-        Vector2 mapPos = worldPos * worldToMapScale;
-        rect.anchoredPosition = mapPos;
+        Vector2 mapPos = MinimapManager.Instance.WorldToMap(player.position);
         mapContainer.anchoredPosition = -mapPos;
     }
 }

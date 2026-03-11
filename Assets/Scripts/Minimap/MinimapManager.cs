@@ -8,11 +8,8 @@ public class MinimapManager : MonoBehaviour
     [Header("Room Layout")]
     public Transform roomsContainer;
     public GameObject roomPrefab;
-    public float roomSpacing = 60.0f;
 
-    [Header("Icon Layout")]
-    public Transform iconsContainer;
-    public GameObject itemsPrefab;
+    [Header("Map Scale")]
     public float worldToMapScale = 2.0f;
 
     private RoomGenerator roomGenerator;
@@ -21,6 +18,22 @@ public class MinimapManager : MonoBehaviour
     {
         Instance = this;
         roomGenerator = FindFirstObjectByType<RoomGenerator>();
+
+        if (roomGenerator == null)
+        {
+            Debug.LogWarning("MinimapManager: Could not find a RoomGenerator in the scene.");
+        }
+
+        if (roomsContainer == null)
+        {
+            Debug.LogError("MinimapManager: roomsContainer is not assigned in the Inspector.");
+        }
+
+        if (roomPrefab == null)
+        {
+            Debug.LogError("MinimapManager: roomPrefab is not assigned in the Inspector.");
+        }
+
         RoomGenerator.OnDungeonComplete += BuildMinimapFromDungeon;
     }
 
@@ -31,18 +44,13 @@ public class MinimapManager : MonoBehaviour
 
     void Start()
     {
-        //GenerateTestRooms();
-        //iconsContainer.SetAsLastSibling();
-        if (iconsContainer != null)
-        {
-            iconsContainer.SetAsLastSibling();
-        }
         BuildMinimapFromDungeon();
     }
 
     public void BuildMinimapFromDungeon()
     {
         ClearRoomIcons();
+
         if (roomGenerator == null)
         {
             Debug.LogWarning("MinimapManager could not find RoomGenerator.");
@@ -50,6 +58,7 @@ public class MinimapManager : MonoBehaviour
         }
 
         List<GameObject> rooms = roomGenerator.GetSpawnedRooms();
+
         foreach (GameObject room in rooms)
         {
             CreateRoomFromWorld(room.transform.position);
@@ -71,22 +80,6 @@ public class MinimapManager : MonoBehaviour
         rect.anchoredPosition = WorldToMap(worldPosition);
     }
 
-    public RectTransform RegisterIcon(MinimapIcon worldIcon)
-    {
-        Debug.Log($"Registering minimap icon for {worldIcon.gameObject.name}");
-
-        GameObject icon = Instantiate(itemsPrefab, iconsContainer);
-        RectTransform rect = icon.GetComponent<RectTransform>();
-        rect.SetAsLastSibling();
-
-        if (rect == null)
-        {
-            Debug.LogError("Entity icon prefab does not have a RectTransform.");
-        }
-
-        return rect;
-    }
-
     public Vector2 WorldToMap(Vector2 worldPos)
     {
         return worldPos * worldToMapScale;
@@ -96,9 +89,11 @@ public class MinimapManager : MonoBehaviour
 
 
     /// <summary>
-    /// below methods:
+    /// below methods are for testing:
     /// testing the minimap with set rooms -> unattached to RoomGenerator procedural generation
     /// </summary>
+
+    private float roomSpacing = 60.0f;
 
     // Generate minimap layout of test rooms
     void GenerateTestRooms()
