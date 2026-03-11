@@ -12,7 +12,26 @@ public class SpellPickupUI : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        panel.SetActive(false);
+
+
+        //if not assigned, find the display panel -> PickupPopup/Panel should be a child object of SpellPickupUIManager
+        if (panel == null )
+        {
+            Transform panelTransform = transform.Find("PickupPopup/Panel");
+            if (panelTransform != null )
+            {
+                panel = panelTransform.gameObject;
+            }
+            else
+            {
+                Debug.LogError("SpellPickupUI: Could not find 'PickupPop/Panel' as a child!");
+            }
+        }
+        if (panel != null)
+        {
+            panel.SetActive(false);
+        }
+        
         playerInventory = FindObjectOfType<PlayerInventory>();
     }
 
@@ -20,11 +39,20 @@ public class SpellPickupUI : MonoBehaviour
     {
         currentPickup = pickup;
 
+        if (panel == null)
+        {
+            Debug.LogWarning("Spell Pickup Popup called but panel is NULL");
+            return;
+        }
+
         //set the pop-up menu to appear by the object we are picking up
         Vector2 screenPos = Camera.main.WorldToScreenPoint(pickup.transform.position);
         panel.transform.position = screenPos;
 
-        panel.SetActive(true);
+        if (panel != null)
+        {
+            panel.SetActive(true);
+        }
     }
 
     public void Pickup()
@@ -37,7 +65,10 @@ public class SpellPickupUI : MonoBehaviour
         {
             Debug.LogWarning("Pickup called but currentPickup is null!");
         }
-        panel.SetActive(false);
+        if (panel != null)
+        {
+            panel.SetActive(false);
+        }
         currentPickup = null;
     }
 
@@ -51,7 +82,10 @@ public class SpellPickupUI : MonoBehaviour
         {
             Debug.LogWarning("Discard called but currentPickup is null!");
         }
-        panel.SetActive(false);
+        if (panel != null)
+        {
+            panel.SetActive(false);
+        }
         currentPickup = null;
     }
 }

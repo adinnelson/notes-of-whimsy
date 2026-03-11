@@ -43,12 +43,20 @@ public class PlayerInventory : MonoBehaviour
         }
 
         activeSpells.Add(newSpell);
-
         spellEditBar.Open(newSpell, worldObject);
     }
 
     private void OnTriggerEnter2D(Collider2D objToPickup)
     {
+        //check for gold pickup
+        GoldCoin gold = objToPickup.GetComponent<GoldCoin>();
+        if (gold != null)
+        {
+            GoldManager.Instance.AddMoreGold(gold.Amount);
+            Destroy(gold.gameObject);
+            return;
+        }
+
         //check for boostables pickup
         BoostableItem boost = objToPickup.GetComponent<BoostableItem>();
         if (boost != null)
