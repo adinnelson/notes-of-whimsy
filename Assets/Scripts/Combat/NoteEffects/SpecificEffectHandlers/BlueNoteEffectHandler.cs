@@ -112,13 +112,13 @@ public class BlueNoteEffectHandler : NoteEffectHandler
     {
         if (playerAttack == null)
         {
-            Debug.LogError("RedNoteEffectHandler: 'playerAttack' is not assigned in the Inspector!");
+            Debug.LogError("BlueNoteEffectHandler: 'playerAttack' is not assigned in the Inspector!");
             return;
         }
 
         if (note == null)
         {
-            Debug.LogError("RedNoteEffectHandler: 'note' (the prefab) is not assigned in the Inspector!");
+            Debug.LogError("BLueNoteEffectHandler: 'note' (the prefab) is not assigned in the Inspector!");
             return;
         }
 
