@@ -718,6 +718,10 @@ PrefabInstance:
       propertyPath: m_TileSpriteArray.Array.data[4].m_RefCount
       value: 192
       objectReference: {fileID: 0}
+    - target: {fileID: 610817950312684348, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1167656958354785006, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: roomType
       value: 5

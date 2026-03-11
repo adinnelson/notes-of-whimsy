@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1915041869223752468}
   - component: {fileID: 3027072088303196211}
   - component: {fileID: 6217259528008205229}
+  - component: {fileID: 8151056128312024119}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -59,3 +60,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672692ac34f18d14ab9e9413d9caf926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoldManager
+--- !u!114 &8151056128312024119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2656434928218695992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a8588f4569b6f4a9ae735614af9a2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  rewardPrefabs:
+  - {fileID: 1261791518388323891, guid: b4eb9d51ac74cbf4bb2590f358b3eb48, type: 3}
+  - {fileID: 5760904881652416645, guid: e4fbda0bcc704144d917214bf1e4d15f, type: 3}
+  - {fileID: 3394618241391367391, guid: ca2c0b2a4e777a5438a7931c270de9a2, type: 3}
+  - {fileID: 7159632872626190546, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+  - {fileID: 6583895424280364812, guid: ff3810b195d9d0843ba447df2e0aaf05, type: 3}
+  rewardPool: 
