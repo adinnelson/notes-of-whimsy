@@ -46,7 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomGenerator
   enemyPool:
+  - {fileID: 35604427116287388, guid: d285fa5f3b6a56b4881b788684c05461, type: 3}
   - {fileID: 3917825305028578068, guid: 7240480c5f77cea45a6ad835eceb219c, type: 3}
+  - {fileID: 5690374572714891280, guid: 598795d092b29f64cbabb0c6adeb8572, type: 3}
   desiredRoomNumber: 10
   minRooms: 4
   minEnemies: 2
