@@ -48,7 +48,7 @@ public class ShopManager : MonoBehaviour
 
     void Start()
     {
-        GenerateShopRewards();
+        
     }
     // Update is called once per frame
     void Update()
@@ -74,7 +74,7 @@ public class ShopManager : MonoBehaviour
 
 
 
-    private void GenerateShopRewards()
+    public void GenerateShopRewards()
     {
         // current code is perfect for general room logic
         // TODO: fix

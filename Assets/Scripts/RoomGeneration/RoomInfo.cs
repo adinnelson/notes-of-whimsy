@@ -38,6 +38,8 @@ public class RoomInfo : MonoBehaviour
 
     [Header("Enemy Logic")]
     [SerializeField]
+    private bool isCompleted;
+    [SerializeField]
     private List<GameObject> enemies;
 
     [Header("Room Type")]
@@ -53,6 +55,12 @@ public class RoomInfo : MonoBehaviour
     [SerializeField]
     private List<GameObject> itemSpawnLocations;
 
+    private ShopManager shopManager;
+
+    private RewardManager rewardManager;
+
+    private bool hasGivenRewards;
+
     // PROPERTIES
     public int NumberOfNodes { get; private set; }
 
@@ -65,6 +73,21 @@ public class RoomInfo : MonoBehaviour
     {
         RoomGenerator.OnDungeonComplete += HandleDungeonCompletion;
         CacheChildTilemaps();
+        if(roomType == RoomTypes.Shop)
+        {
+            isShop = true;
+            shopManager = GetComponent<ShopManager>();
+            if(shopManager == null)
+            {
+                Debug.LogWarning("RoomInfo: ShopManager component missing from shop room");
+            }
+        }
+        rewardManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<RewardManager>();
+        if(rewardManager == null)
+        {
+            Debug.LogWarning("RoomInfo: RewardManager reference missing from GameManager");
+        }
+
     }
 
     private void OnDestroy()
@@ -78,6 +101,33 @@ public class RoomInfo : MonoBehaviour
         {
             transform.position = parentNode.position - spawnedNode.localPosition;
         }
+        isCompleted = CheckIsRoomCompleted();
+        if (isCompleted)
+        {
+            // unlock room            roomLock.gameObject.SetActive(false);
+            GiveRewards();
+            print($"no more enemies in {gameObject.name} spawning rewards");
+        }
+    }
+
+    private void GiveRewards()
+    {
+        if (isShop)
+        {
+            // Give rewards for shop room
+            shopManager.GenerateShopRewards();
+        }
+        else if(!hasGivenRewards && !isShop)
+        {
+            // TODO: maybe add odds to drop an item in general
+            // Give rewards for non-shop room
+            foreach (GameObject location in itemSpawnLocations)
+            {
+                rewardManager.SpawnReward(location.transform);
+            }
+        }
+        hasGivenRewards = true;
+
     }
 
     // PUBLIC METHODS
@@ -256,6 +306,11 @@ public class RoomInfo : MonoBehaviour
         return itemSpawnLocations;
     }
 
+    public bool IsCompleted()
+    {
+        return isCompleted;
+    }
+
 
 
     // PRIVATE METHODS
@@ -323,6 +378,16 @@ public class RoomInfo : MonoBehaviour
             OnEnterRoom?.Invoke(gameObject);
             
         }
+    }
+
+    private bool CheckIsRoomCompleted()
+    {
+        if(enemies.Count == 0)
+        {
+            isCompleted = true;
+            return true;
+        }
+        return false;
     }
 
 }

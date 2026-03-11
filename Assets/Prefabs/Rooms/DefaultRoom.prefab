@@ -1967,6 +1967,7 @@ Transform:
   - {fileID: 3919734681024048283}
   - {fileID: 6694167894248424549}
   - {fileID: 3114283500349447262}
+  - {fileID: 3142056495075940331}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1167656958354785006
@@ -1996,11 +1997,13 @@ MonoBehaviour:
   subRooms: []
   parentNode: {fileID: 0}
   spawnedNode: {fileID: 0}
+  isCompleted: 0
   enemies: []
   isSafe: 0
   roomType: 1
   isShop: 0
-  itemSpawnLocations: []
+  itemSpawnLocations:
+  - {fileID: 3435326922334342358}
 --- !u!61 &3843382522913789850
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4147,6 +4150,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1bdeddd91e03554d9f17073b1a9d3fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorInfo
+--- !u!1 &3435326922334342358
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3142056495075940331}
+  m_Layer: 0
+  m_Name: ItemSpawnLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3142056495075940331
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3435326922334342358}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6517839853926421496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1753542685266908442
 PrefabInstance:
   m_ObjectHideFlags: 0
