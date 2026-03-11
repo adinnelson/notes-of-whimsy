@@ -11,6 +11,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     [Header("Death Behavior")]
     [SerializeField] private bool disableOnDeath = true;
+    [SerializeField] private float deathFadeDuration = 0.5f;
 
     protected Transform target;
     protected Rigidbody2D rb;
@@ -292,7 +293,7 @@ public abstract class EnemyBase : MonoBehaviour
 
         if (disableOnDeath)
         {
-            gameObject.SetActive(false);   // pooled-friendly death for enemy pooling later
+            StartCoroutine(FadeOutAndDisable());
         }
 
         EnemyWaveController controller = transform.parent.GetComponent<EnemyWaveController>();
@@ -300,6 +301,34 @@ public abstract class EnemyBase : MonoBehaviour
         {
             controller.OnEnemyDeath(gameObject);
         }
+    }
+
+    private IEnumerator FadeOutAndDisable()
+    {
+        SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>();
+
+        // Capture starting colours so we preserve any tints already on sprites
+        Color[] startColors = new Color[renderers.Length];
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            startColors[i] = renderers[i].color;
+        }
+
+        float elapsed = 0.0f;
+        while (elapsed < deathFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(1.0f, 0.0f, elapsed / deathFadeDuration);
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                Color c = startColors[i];
+                c.a = alpha;
+                renderers[i].color = c;
+            }
+            yield return null;
+        }
+
+        gameObject.SetActive(false);
     }
 
     protected virtual void OnDestroy()
