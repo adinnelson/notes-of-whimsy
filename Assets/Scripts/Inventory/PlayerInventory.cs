@@ -81,6 +81,8 @@ public class PlayerInventory : MonoBehaviour
                 case BoostType.Damage:
                     stats.AddDamageBonus((int)boost.Amount);
                     break;
+                default:
+                    break;
             }
             Destroy(boost.gameObject);
             return;

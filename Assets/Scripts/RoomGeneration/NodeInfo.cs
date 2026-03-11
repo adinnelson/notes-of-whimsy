@@ -21,7 +21,7 @@ public class NodeInfo : MonoBehaviour
         // tells the room if a node connection has been made as a result of the room choice
         if(collision.CompareTag("Room Node"))
         {
-            print(collision.name);
+            // print(collision.name);
             
             string oppositeNode = collision.name.ToLower() switch
             {
@@ -34,7 +34,7 @@ public class NodeInfo : MonoBehaviour
             // collision.GetComponent<NodeInfo>().GetParentInfo().RemoveNode(collision.GameObject());
 
             // collision.GetComponent<NodeInfo>().GetParentInfo().RemoveNode(collision.gameObject);
-            print(parentRoomInfo.GetNodeList());
+            // print(parentRoomInfo.GetNodeList());
             parentRoomInfo.RemoveNode(this.GameObject());
             
             // print(collision.name);

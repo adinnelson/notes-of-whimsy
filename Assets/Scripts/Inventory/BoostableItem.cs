@@ -5,7 +5,8 @@ public enum BoostType
     Speed,
     MaxHealth,
     Damage,
-    HealthPotion
+    HealthPotion,
+    None
 }
 
 public class BoostableItem : MonoBehaviour

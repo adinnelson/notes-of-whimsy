@@ -49,6 +49,11 @@ public class RewardManager : MonoBehaviour
         }
     }
 
+    public List<GameObject> GetRewardPrefabs()
+    {
+        return rewardPrefabs;
+    }
+
     public RewardType GetRandomReward()
     {
         if (rewardPool.Count == 0)
@@ -69,6 +74,20 @@ public class RewardManager : MonoBehaviour
         }
         return prefab;
     }
+
+    public RewardType SpawnReward(GameObject location, bool isShopReward = false)
+    {
+        RewardType rewardType = GetRandomReward();
+        GameObject rewardPrefab = GetRewardPrefab(rewardType);
+        if (rewardPrefab != null && !isShopReward)
+        {
+            Instantiate(rewardPrefab, location.transform.position, Quaternion.identity, location.transform);
+        }
+
+        return rewardType;
+    }
+
+
 
 
 

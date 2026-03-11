@@ -58,6 +58,7 @@ public class RoomInfo : MonoBehaviour
 
     // EVENTS
     public static event System.Action<GameObject> OnFloorOverlap;
+    public static event System.Action<GameObject> OnEnterRoom;
     // UNITY LIFECYCLE METHODS
 
     private void Awake()
@@ -315,6 +316,10 @@ public class RoomInfo : MonoBehaviour
         if (collision.name == "Floor" && collision.gameObject != floor.gameObject)
         {
             OnFloorOverlap?.Invoke(gameObject);
+        }
+        if (collision.CompareTag("Player"))
+        {
+            OnEnterRoom?.Invoke(gameObject);
         }
     }
 
