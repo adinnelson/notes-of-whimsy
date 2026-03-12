@@ -145,6 +145,7 @@ public class SpellEditBar : MonoBehaviour
         if(initialSlotId == null)
         {
             initialSlotId = slotId;
+            spellBoxes[slotId - 1].SetColour(Color.green);
             return;
         }
 
@@ -164,6 +165,7 @@ public class SpellEditBar : MonoBehaviour
         playerActiveSpellsHandler.EquipSpell(slot1, spell2);
         playerActiveSpellsHandler.EquipSpell(slot2, spell1);
 
+        spellBoxes[(int)initialSlotId - 1].SetColour(Color.grey);
         initialSlotId = null;
 
         UpdateIcons();

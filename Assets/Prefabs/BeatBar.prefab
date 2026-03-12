@@ -139,6 +139,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59aa8152b834b1a4abd9eb7cfc962aba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BeatHandler
+  beatEndEvent:
+    Guid:
+      Data1: 1085249483
+      Data2: 1082627026
+      Data3: -1565945687
+      Data4: -1061657180
+    Path: event:/UnlockedBeat
   playerAttack: {fileID: 0}
   bpm: 120
   beatSpawnPoint: {fileID: 7153632319040493981}

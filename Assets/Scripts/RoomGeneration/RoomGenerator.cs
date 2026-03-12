@@ -91,6 +91,12 @@ public class RoomGenerator : MonoBehaviour
         CreateFloorLayout();
     }
 
+    //get Minimap access to the generated rooms
+    public List<GameObject> GetSpawnedRooms()
+    {
+        return spawnedRooms;
+    }
+
     /// <summary>
     /// Handles floor overlap events by resetting generation when rooms overlap
     /// </summary>
@@ -303,5 +309,4 @@ public class RoomGenerator : MonoBehaviour
         shopRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Shop).ToList();
 
     }
-
 }

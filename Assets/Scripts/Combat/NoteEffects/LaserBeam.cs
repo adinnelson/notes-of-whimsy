@@ -12,6 +12,10 @@ public class LaserBeam : MonoBehaviour
     [Header("Lifetime (beats)")]
     [SerializeField] private float activeBeats = 2.0f;
 
+    [Header("Range")]
+    [SerializeField] private float maxDistance = 50.0f;
+    [SerializeField] private string wallTag = "Walls";
+
     [Header("Damage")]
     [SerializeField] private float damagePerSecond = 20.0f;
     [SerializeField] private float hitRadius = 0.2f;
@@ -92,12 +96,28 @@ public class LaserBeam : MonoBehaviour
         Vector3 worldMouse = cam.ScreenToWorldPoint(mouseScreen);
         worldMouse.z = startTransform.position.z;
 
+        Vector2 origin = (Vector2)startTransform.position;
+        Vector2 dir = ((Vector2)worldMouse - origin).normalized;
+
+        // Raycast in that direction and find the closest wall by tag
+        RaycastHit2D[] allHits = Physics2D.RaycastAll(origin, dir, maxDistance);
+        Vector2 endpoint = origin + dir * maxDistance;
+        float closestDist = maxDistance;
+        foreach (var hit in allHits)
+        {
+            if (hit.collider != null && hit.collider.CompareTag(wallTag) && hit.distance < closestDist)
+            {
+                closestDist = hit.distance;
+                endpoint = hit.point;
+            }
+        }
+
         // local vector for beam_logic visuals
-        Vector2 localVector = transform.InverseTransformPoint(worldMouse);
+        Vector2 localVector = transform.InverseTransformPoint(endpoint);
         beam.SetVector(localVector);
 
         // damage along beam
-        ApplyBeamDamage((Vector2)startTransform.position, (Vector2)worldMouse);
+        ApplyBeamDamage(origin, endpoint);
     }
 
     private void ApplyBeamDamage(Vector2 start, Vector2 end)
