@@ -43,6 +43,17 @@ public class CameraMovement : MonoBehaviour
     [Range(0.01f, 2f)]
     public float smoothTime = 0.2f;
 
+    [Header("Inside Bounds Follow")]
+    [Tooltip("How strongly the camera follows the player while inside bounds. 0 = room center, 1 = player position.")]
+    [Range(0f, 1f)]
+    [SerializeField]
+    private float insideBoundsFollowAmount = 0.85f;
+
+    [Tooltip("Multiplier applied to smoothTime while inside bounds. Lower values feel more locked-on.")]
+    [Range(0.1f, 1f)]
+    [SerializeField]
+    private float insideBoundsSmoothTimeMultiplier = 0.6f;
+
     private const float CAMERA_Z_OFFSET = -10f;
     private Vector3 currentVelocity;
 
@@ -193,8 +204,25 @@ public class CameraMovement : MonoBehaviour
             activeCameraBoundsShape
         );
 
-        Vector3 desiredCameraPosition = roomCenter;
-        if (!isPlayerInsideRoomCameraBounds)
+        Vector3 desiredCameraPosition;
+        if (isPlayerInsideRoomCameraBounds)
+        {
+            desiredCameraPosition = Vector3.Lerp(roomCenter, playerPosition, insideBoundsFollowAmount);
+
+            Vector2 desiredOffsetFromRoomCenter = new Vector2(
+                desiredCameraPosition.x - roomCenter.x,
+                desiredCameraPosition.y - roomCenter.y
+            );
+            Vector2 clampedOffset = ClampOffsetToCameraBounds(
+                desiredOffsetFromRoomCenter,
+                horizontalArmHalfLength,
+                verticalArmHalfLength,
+                activeCrossArmHalfThickness,
+                activeCameraBoundsShape
+            );
+            desiredCameraPosition = new Vector3(roomCenter.x + clampedOffset.x, roomCenter.y + clampedOffset.y, CAMERA_Z_OFFSET);
+        }
+        else
         {
             Vector3 playerFromCamera = playerPosition - cameraPosition;
             float sqrDistanceFromPlayerToCamera = playerFromCamera.sqrMagnitude;
@@ -221,12 +249,16 @@ public class CameraMovement : MonoBehaviour
             desiredCameraPosition = new Vector3(roomCenter.x + clampedOffset.x, roomCenter.y + clampedOffset.y, CAMERA_Z_OFFSET);
         }
 
+        float appliedSmoothTime = isPlayerInsideRoomCameraBounds
+            ? smoothTime * insideBoundsSmoothTimeMultiplier
+            : smoothTime;
+
         currentSqrDistanceFromCameraToRoomCenter = (desiredCameraPosition - roomCenter).sqrMagnitude;
         transform.position = Vector3.SmoothDamp(
             cameraPosition,
             desiredCameraPosition,
             ref currentVelocity,
-            smoothTime
+            appliedSmoothTime
         );
         transform.position = new Vector3(transform.position.x, transform.position.y, CAMERA_Z_OFFSET);
     }
