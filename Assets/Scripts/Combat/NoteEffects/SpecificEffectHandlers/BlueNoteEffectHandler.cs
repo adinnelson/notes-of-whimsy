@@ -5,9 +5,9 @@ using System.Linq;
 //blue note
 public class BlueNoteEffectHandler : NoteEffectHandler
 {
-    [Header("Fireball AOE specs")]
-    [SerializeField] private float knockbackRadius = 1.0f;
-    [SerializeField] private float knockbackForce = 45.0f;
+    [Header("Pull AOE specs")]
+    [SerializeField] private float pullRadius = 1.0f;
+    [SerializeField] private float pullForce = 45.0f;
     [SerializeField] private float damage = 20.0f;
 
     List<GameObject> enemiesInRange = new List<GameObject>();
@@ -19,6 +19,9 @@ public class BlueNoteEffectHandler : NoteEffectHandler
         this.note = spellData.NoteProjectilePrefab;
     }
 
+    /// <summary>
+    /// On hit, deals damage to all enemies within <see cref="pullRadius"/> of the hit enemy and pulls them towards it.
+    /// </summary>
     public override void HitEnemy(IDamageable damageable)
     {
         enemiesInRange.Clear();
@@ -26,13 +29,13 @@ public class BlueNoteEffectHandler : NoteEffectHandler
 
         if (enemyComponent != null)
         {
-            Vector3 impactPosition = enemyComponent.transform.position;
+            Vector3 pullOrigin = enemyComponent.transform.position;
             Vector3 playerPosition = playerAttack.transform.position;
 
             enemiesInRange.Add(enemyComponent.gameObject);
-            DebugDrawCircle(impactPosition, knockbackRadius, Color.cyan, 2.0f);
+            DebugDrawCircle(pullOrigin, pullRadius, Color.cyan, 2.0f);
 
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(impactPosition, knockbackRadius);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(pullOrigin, pullRadius);
 
             foreach (Collider2D hit in hitColliders)
             {
@@ -50,11 +53,11 @@ public class BlueNoteEffectHandler : NoteEffectHandler
                 }
             }
             DoDamage(enemiesInRange);
-            Knockback(enemiesInRange, impactPosition, playerPosition);
+            Pull(enemiesInRange, pullOrigin, playerPosition);
         }
     }
 
-    private void Knockback(List<GameObject> targets, Vector3 impactPoint, Vector3 moveAwayFrom)
+    private void Pull(List<GameObject> targets, Vector3 pullOrigin, Vector3 moveTowards)
     {
         if (targets == null || !targets.Any())
         {
@@ -70,25 +73,22 @@ public class BlueNoteEffectHandler : NoteEffectHandler
                 continue;
             }
 
-            Vector2 direction;
+            Vector2 pullDirection;
             Vector3 targetPosition = target.transform.position;
-            Vector3 offset = targetPosition - impactPoint;
-
-            Debug.DrawLine(impactPoint, targetPosition, Color.yellow, 1.0f);
-
+            Vector3 offset = pullOrigin - targetPosition;
+            Debug.DrawLine(pullOrigin, targetPosition, Color.yellow, 1.0f);
             if (offset.sqrMagnitude < 0.0001f)
             {
-                direction = (targetPosition - moveAwayFrom).normalized;
-                Debug.DrawRay(targetPosition, direction * 2, Color.red, 1.0f);
+                pullDirection = (moveTowards - targetPosition).normalized;
+                Debug.DrawRay(targetPosition, pullDirection * 2, Color.red, 1.0f);
             }
             else
             {
-                direction = offset.normalized;
-                Debug.DrawRay(targetPosition, direction * 2, Color.blue, 1.0f);
+                pullDirection = offset.normalized;
+                Debug.DrawRay(targetPosition, pullDirection * 2, Color.blue, 1.0f);
             }
-
             rb.linearVelocity = Vector2.zero;
-            rb.AddForce(-direction * knockbackForce);
+            rb.AddForce(pullDirection * pullForce);
         }
     }
 
@@ -112,13 +112,13 @@ public class BlueNoteEffectHandler : NoteEffectHandler
     {
         if (playerAttack == null)
         {
-            Debug.LogError("RedNoteEffectHandler: 'playerAttack' is not assigned in the Inspector!");
+            Debug.LogError("BlueNoteEffectHandler: 'playerAttack' is not assigned in the Inspector!");
             return;
         }
 
         if (note == null)
         {
-            Debug.LogError("RedNoteEffectHandler: 'note' (the prefab) is not assigned in the Inspector!");
+            Debug.LogError("BLueNoteEffectHandler: 'note' (the prefab) is not assigned in the Inspector!");
             return;
         }
 
