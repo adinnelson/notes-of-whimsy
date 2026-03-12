@@ -25,11 +25,16 @@ public class TreantEnemy : EnemyBase
     private bool isCharging = false;
     private bool shouldTelegraphNext = true;
     private int wallStunBeatsRemaining = 0;
+    private Animator animator;
+
+    private EnemyFlip enemyFlip;
 
     protected override void Awake()
     {
         base.Awake();
-
+        animator = GetComponent<Animator>();
+        enemyFlip = GetComponent<EnemyFlip>();
+        
         bodyCollider = GetComponent<Collider2D>();
 
         hitbox = GetComponentInChildren<TreantHitbox>(includeInactive: true);
@@ -140,6 +145,7 @@ public class TreantEnemy : EnemyBase
     protected override void HandleDeath()
     {
         isCharging = false;
+        animator.SetBool("Charging", false);
         SetHitboxActive(false);
         SetPlayerCollisionEnabled(false);
         HideTelegraphVisual();
@@ -153,6 +159,8 @@ public class TreantEnemy : EnemyBase
     private void TelegraphCharge()
     {
         isCharging = false;
+        animator.SetBool("Charging", false);
+        enemyFlip.FlipEnemy();
         SetHitboxActive(false);
         SetPlayerCollisionEnabled(false);
         StopMovement();
@@ -170,6 +178,7 @@ public class TreantEnemy : EnemyBase
         HideTelegraphVisual();
 
         isCharging = true;
+         animator.SetBool("Charging", true);
         SetHitboxActive(true);
         SetPlayerCollisionEnabled(true);
         rb.linearVelocity = lockedChargeDir * chargeSpeed;

@@ -172,6 +172,10 @@ PrefabInstance:
       propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[0].Array.data[3].Y
       value: 70000000
       objectReference: {fileID: 0}
+    - target: {fileID: 4578205612344647396, guid: 97bd7f18fbc832647aeb2e4f8af72239, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7892284428623959584, guid: 97bd7f18fbc832647aeb2e4f8af72239, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
