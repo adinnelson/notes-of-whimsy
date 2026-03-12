@@ -9,12 +9,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2237572867809442826, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7482667652216324306, guid: b4074d9ffbb9e044da3f31d35582101c, type: 3}
+    - target: {fileID: 2237572867809442826, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
       propertyPath: m_Color.b
-      value: 0.28608894
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2237572867809442826, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2237572867809442826, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
       propertyPath: m_Color.r
@@ -67,6 +71,10 @@ PrefabInstance:
     - target: {fileID: 7159632872626190546, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7217919039076496189, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7651831631326572719, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
       propertyPath: boostType
