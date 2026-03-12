@@ -81,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Health
   enemyMaxHealth: 30
   healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
+  healthBarUpdater: {fileID: 0}
 --- !u!114 &1899808367031961602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,9 +96,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BoarEnemy
   config: {fileID: 11400000, guid: 879efa59b3b92b84b93a418048288bc0, type: 2}
   disableOnDeath: 1
+  deathFadeDuration: 0.5
   telegraphJitterDegrees: 20
   telegraphVisual: {fileID: 8509544298852323261}
-  chargeSpeed: 7
+  chargeSpeed: 35
+  chargeTime: 0.1
   chaseSpeed: 2.5
 --- !u!212 &907784824050106942
 SpriteRenderer:
@@ -204,12 +207,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.32917333, y: -0.39930904}
-      - {x: -0.35748816, y: -0.44653726}
-      - {x: -0.34025753, y: -0.5000993}
-      - {x: 0.34342456, y: -0.4969324}
-      - {x: 0.354321, y: -0.43545294}
-      - {x: 0.33392358, y: -0.39930904}
+    - - {x: -0.3417971, y: -0.11076665}
+      - {x: -0.43864095, y: -0.2986592}
+      - {x: -0.34206092, y: -0.46583486}
+      - {x: 0.3271942, y: -0.46627474}
+      - {x: 0.3831756, y: -0.31642914}
+      - {x: 0.34113693, y: -0.10896301}
   m_UseDelaunayMesh: 1
 --- !u!95 &5999560372166084607
 Animator:
@@ -324,12 +327,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.33234012, y: -0.39930892}
-      - {x: -0.3559047, y: -0.44970417}
+    - - {x: -0.35398078, y: -0.07109177}
+      - {x: -0.49296248, y: -0.30543292}
       - {x: -0.34025753, y: -0.4969324}
-      - {x: 0.34342456, y: -0.4969324}
-      - {x: 0.35590482, y: -0.4370365}
-      - {x: 0.33550715, y: -0.39772558}
+      - {x: 0.36506534, y: -0.4933256}
+      - {x: 0.41722035, y: -0.29997873}
+      - {x: 0.36977148, y: -0.08393562}
   m_UseDelaunayMesh: 1
 --- !u!114 &8359519053447819602
 MonoBehaviour:

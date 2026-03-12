@@ -86,6 +86,9 @@ public class BeatHandler : MonoBehaviour
         unlockedBeats.Add(5);
         playerActiveSpellsHandler.UnlockSlot(5);
         playerActiveSpellsHandler.EquipSpell(5, 3);
+        unlockedBeats.Add(6);
+        playerActiveSpellsHandler.UnlockSlot(6);
+        playerActiveSpellsHandler.EquipSpell(6, 2);
 
         PopulateBeatBar();
     }

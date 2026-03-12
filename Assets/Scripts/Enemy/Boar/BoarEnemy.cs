@@ -14,7 +14,8 @@ public class BoarEnemy : EnemyBase
     [SerializeField] private GameObject telegraphVisual;
 
     [Header("Boar - Charge")]
-    [SerializeField] private float chargeSpeed = 14.0f;
+    [SerializeField] private float chargeSpeed = 30.0f;
+    [SerializeField] private float chargeTime = 0.1f;
 
     [Header("Boar - Chase")]
     [SerializeField] private float chaseSpeed = 2.5f;
@@ -29,6 +30,8 @@ public class BoarEnemy : EnemyBase
     private Animator animator;
 
     private EnemyFlip enemyFlip;
+
+    float chargeTimer = 0f;
 
     protected override void Awake()
     {
@@ -85,11 +88,19 @@ public class BoarEnemy : EnemyBase
     {
         if (state == State.Dead) return;
         if (target == null) return;
-        if (isCharging) return;
+        if (isCharging)
+        {
+            chargeTimer -= Time.fixedDeltaTime;
+            if (chargeTimer < 0)
+            {
+                CancelChargeForKnockback();
+                StopMovement();
+            }
+        }
         if (state == State.Telegraph) return;
         if (stunEffects.Count > 0) return;
 
-        MoveTowardsTarget(chaseSpeed);
+        //MoveTowardsTarget(chaseSpeed);
     }
 
     protected override void HandleDeath()
@@ -130,6 +141,8 @@ public class BoarEnemy : EnemyBase
         SetHitboxActive(true);
         SetPlayerCollisionEnabled(true);  // body collider on — boar carries the player
 
+        chargeTimer = chargeTime;
+
         rb.linearVelocity = lockedChargeDir * chargeSpeed;
 
         state = State.Chase;
@@ -156,7 +169,7 @@ public class BoarEnemy : EnemyBase
         telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
 
         float secondsPerBeat = 60.0f / gameManager.GetBPM();
-        float chargeDistance = chargeSpeed * secondsPerBeat;
+        float chargeDistance = chargeSpeed * chargeTime;
 
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, chargeDistance);
         foreach (RaycastHit2D hit in hits)
