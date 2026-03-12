@@ -38,6 +38,9 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField]
     private List<GameObject> shopRooms;
 
+    [SerializeField]
+    private GameObject endPrefab;
+
 
     // CONSTANTS
     private const int ROOMS_SPAWNED_RESET_THRESHOLD = 0;
@@ -188,7 +191,6 @@ public class RoomGenerator : MonoBehaviour
         CapOffHoles();
 
     }
-
     // PRIVATE METHODS
 
     /// <summary>
@@ -200,12 +202,13 @@ public class RoomGenerator : MonoBehaviour
     /// <returns>The GameObject of the spawned room</returns>
     private GameObject SpawnNextRoom(List<GameObject> roomPool, Transform node, string direction)
     {
+        GameObject spawnedRoom = null;
+        RoomInfo spawnedRoomInfo = null;
         // TODO: update logic to check for special rooms and maybe add some weighted randomness to the room selection
-
         // room selection logic
         int selectedRoomNum = Random.Range(0, roomPool.Count);
-        GameObject spawnedRoom = Instantiate(roomPool[selectedRoomNum], roomsParent.transform);
-        RoomInfo spawnedRoomInfo = spawnedRoom.GetComponent<RoomInfo>();
+        spawnedRoom = Instantiate(roomPool[selectedRoomNum], roomsParent.transform);
+        spawnedRoomInfo = spawnedRoom.GetComponent<RoomInfo>();
 
         // Position the spawned room so its matching node aligns with the parent node
         spawnedRoom.transform.position = node.position - spawnedRoomInfo.GetNode(direction).transform.localPosition;
@@ -280,6 +283,11 @@ public class RoomGenerator : MonoBehaviour
                 numberOfRooms++;
             }
         }
+        GameObject endRoom = spawnedRooms[spawnedRooms.Count - 1];
+        RoomInfo endRoomInfo = endRoom.GetComponent<RoomInfo>();
+        endRoomInfo.SetRoomType(RoomTypes.End);
+        endRoomInfo.SetSafety(true);
+        Instantiate(endPrefab, endRoom.transform.position, Quaternion.identity, endRoom.transform);
         // Populate enemies for all spawned rooms
         for (int i = 0; i < spawnedRooms.Count; i++)
         {
@@ -309,4 +317,6 @@ public class RoomGenerator : MonoBehaviour
         shopRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Shop).ToList();
 
     }
+
+    
 }
