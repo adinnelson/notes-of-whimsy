@@ -125,6 +125,11 @@ public class BeatHandler : MonoBehaviour
                 gm.TriggerBeat(onBeatIndex + 1);
             }
 
+            if (unlockedBeats.Contains(beatIndex + 1)) 
+            {
+                PlayBeatEndSound();
+            }
+
             onBeatIndex = (onBeatIndex + 1) % BEAT_NUM;
             beatIndexHasChanged = false;
             percentToNextBeat -= 1f;
@@ -234,7 +239,7 @@ public class BeatHandler : MonoBehaviour
         }
 
 
-        
+
         // //For testing:
         // var keyboard = Keyboard.current;
         // if (keyboard == null) return; // No keyboard connected
@@ -258,5 +263,13 @@ public class BeatHandler : MonoBehaviour
         beatIndex = 0;
         onBeatIndex = 0;
         beatIndexHasChanged = true;
+    }
+
+    private void PlayBeatEndSound()
+    {
+        if (!beatEndEvent.IsNull)
+        {
+            RuntimeManager.PlayOneShot(beatEndEvent);
+        }
     }
 }
