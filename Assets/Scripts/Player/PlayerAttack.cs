@@ -12,7 +12,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject attackBeamPrefab;
     [SerializeField] private float fireCooldownSeconds = 0.2f;
-    private LayerMask layerMask;
+    private LayerMask ignoredLayersMask;
     private const float MIN_AIM_DEADZONE_SQR = 0.0001f;
     private const float MIN_STICK_DEADZONE_SQR = 0.09f;
     private const float MOUSE_MOVE_DETECT_SQR = 0.1f;
@@ -63,7 +63,7 @@ public class PlayerAttack : MonoBehaviour
         playerActiveSpellsHandler = FindObjectOfType<PlayerActiveSpellsHandler>();
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
 
-        layerMask = LayerMask.GetMask("Pickupables", "Player");
+        ignoredLayersMask = LayerMask.GetMask("Pickupables", "Player", "Default");
     }
 
     private void Update()
@@ -89,7 +89,7 @@ public class PlayerAttack : MonoBehaviour
         }
 
         // if you fire off beat lock attacks until next beat
-        if (beathandler != null && !beathandler.ValidAttackInterval) 
+        if (beathandler != null && !beathandler.ValidAttackInterval)
         {
             AddAttackLock(MISSED_ATTACK_LOCK_KEY);
             return;
@@ -100,7 +100,7 @@ public class PlayerAttack : MonoBehaviour
             case "Fire":
             {
                 int beatID = beathandler.GetBeatIndex();
-    
+
                 playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID)?.Fire();
 
                 lastFireTimeSeconds = Time.time;
@@ -190,7 +190,7 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    // Depending on which device triggered the fire action, Use the Cached Aim direction from that device. 
+    // Depending on which device triggered the fire action, Use the Cached Aim direction from that device.
     private void SetAimSourceFromFireDevice(InputAction.CallbackContext context)
     {
         // Get the input device (mouse or gamepad) that triggered this action
@@ -310,7 +310,7 @@ public class PlayerAttack : MonoBehaviour
         /*ProjectilePoolManager manager = ProjectilePoolManager.GetOrCreate();
         Projectile projectile = manager.Get(projectilePrefab);
 
-        if (projectile == null) 
+        if (projectile == null)
         {
             return;
         }
@@ -323,17 +323,17 @@ public class PlayerAttack : MonoBehaviour
 
         //Fire raycast if we hit anything call noteEffectHandler hit
         // probalbly can draw a line as well
-        
+
         Vector3 spawnPoint = projectileSpawnPosition + (Vector3)finalDirection;
 
-        RaycastHit2D hit = Physics2D.Raycast(spawnPoint, finalDirection, 100, ~layerMask);
+        RaycastHit2D hit = Physics2D.Raycast(spawnPoint, finalDirection, 100, ~ignoredLayersMask);
 
         Vector3 endBeamPos;
 
         IDamageable damageable = hit.collider?.gameObject?.GetComponent<IDamageable>();
 
         if(hit.collider?.gameObject != null)
-        { 
+        {
             endBeamPos = hit.collider.gameObject.transform.position;
         }
         else
