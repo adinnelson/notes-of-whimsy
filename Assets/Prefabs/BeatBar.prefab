@@ -57,7 +57,7 @@ MonoBehaviour:
   beatEndSpawnDistance: 0
   beatStartSpawnDistance: 1.25
   numBeatsShown: 3
-  beatGraphic: {fileID: 7350653073411354262, guid: 6e7f8e362457c494da8148f143b3070a, type: 3}
+  beatGraphic: {fileID: 52993827244715164, guid: 6e7f8e362457c494da8148f143b3070a, type: 3}
   ValidAttackInterval: 0
 --- !u!1 &4751044665787246736
 GameObject:

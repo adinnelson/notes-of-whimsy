@@ -32,7 +32,7 @@ public class BeatHandler : MonoBehaviour
     [SerializeField] private float numBeatsShown;
 
     // beat item to spawn
-    [SerializeField] private BeatItem beatGraphic;
+    [SerializeField] private GameObject beatGraphic;
 
     private SpriteRenderer spriteRenderer;
 
@@ -51,8 +51,8 @@ public class BeatHandler : MonoBehaviour
     private bool beatIndexHasChanged = true;
 
     // lists of left and right beat items
-    private List<BeatItem> leftBeatItemGraphics = new List<BeatItem>();
-    private List<BeatItem> rightBeatItemGraphics = new List<BeatItem>();
+    private List<GameObject> leftBeatItemGraphics = new List<GameObject>();
+    private List<GameObject> rightBeatItemGraphics = new List<GameObject>();
 
     // Unlocked beat and order variables
     private HashSet<int> unlockedBeats = new HashSet<int>();
@@ -152,8 +152,8 @@ public class BeatHandler : MonoBehaviour
             // gets the index of the beat item from left to right based on the current beat index
             int adjustedBeatIndex = (((i - onBeatIndex) % BEAT_NUM) + BEAT_NUM) % BEAT_NUM;
 
-            BeatItem curLeftGraphic = leftBeatItemGraphics[i];
-            BeatItem curRightGraphic = rightBeatItemGraphics[i];
+            GameObject curLeftGraphic = leftBeatItemGraphics[i];
+            GameObject curRightGraphic = rightBeatItemGraphics[i];
             SpriteRenderer curLeftSprite = curLeftGraphic.transform.Find("visual").GetComponent<SpriteRenderer>();
             SpriteRenderer curRightSprite = curRightGraphic.transform.Find("visual").GetComponent<SpriteRenderer>();
 
@@ -185,11 +185,11 @@ public class BeatHandler : MonoBehaviour
     {
         for (int i = 0; i < BEAT_NUM; i++)
         {
-            BeatItem newLeftGraphic = Instantiate<BeatItem>(beatGraphic);
+            GameObject newLeftGraphic = Instantiate<GameObject>(beatGraphic);
             newLeftGraphic.transform.SetParent(transform);
             leftBeatItemGraphics.Add(newLeftGraphic);
 
-            BeatItem newRightGraphic = Instantiate<BeatItem>(beatGraphic);
+            GameObject newRightGraphic = Instantiate<GameObject>(beatGraphic);
             newRightGraphic.transform.SetParent(transform);
             rightBeatItemGraphics.Add(newRightGraphic);
         }
