@@ -273,7 +273,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
       propertyPath: enemyPool.Array.size
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
       propertyPath: 'enemyPool.Array.data[0]'
@@ -287,6 +287,22 @@ PrefabInstance:
       propertyPath: 'enemyPool.Array.data[2]'
       value: 
       objectReference: {fileID: 5690374572714891280, guid: 598795d092b29f64cbabb0c6adeb8572, type: 3}
+    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
+      propertyPath: 'enemyPool.Array.data[3]'
+      value: 
+      objectReference: {fileID: 35604427116287388, guid: d285fa5f3b6a56b4881b788684c05461, type: 3}
+    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
+      propertyPath: 'enemyPool.Array.data[4]'
+      value: 
+      objectReference: {fileID: 35604427116287388, guid: d285fa5f3b6a56b4881b788684c05461, type: 3}
+    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
+      propertyPath: 'enemyPool.Array.data[5]'
+      value: 
+      objectReference: {fileID: 35604427116287388, guid: d285fa5f3b6a56b4881b788684c05461, type: 3}
+    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
+      propertyPath: 'enemyPool.Array.data[6]'
+      value: 
+      objectReference: {fileID: 5603674919516484741, guid: 268f4a5934c000c4e83145e0bd8ccd74, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
