@@ -274,6 +274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Health
   enemyMaxHealth: 100
   healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
+  healthBarUpdater: {fileID: 0}
 --- !u!114 &3173876067419357927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,6 +297,7 @@ MonoBehaviour:
     m_Bits: 8
   lightningEffect: {fileID: 8046267622772934418, guid: 6ee47fdd172e450498f0d56812dd828c, type: 3}
   laserPrefab: {fileID: -5741139717231234517, guid: 3e9e1b16b71bbd940954b08ad1827808, type: 3}
+  explosion: {fileID: 8659360273826524317, guid: a3c244a8b81773849b6802e47ae1bd09, type: 3}
 --- !u!114 &1421404821173559249
 MonoBehaviour:
   m_ObjectHideFlags: 0
