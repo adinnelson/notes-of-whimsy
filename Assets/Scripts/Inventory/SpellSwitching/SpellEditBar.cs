@@ -187,6 +187,7 @@ public class SpellEditBar : MonoBehaviour
 
     private void OnMinimizeInventory(InputAction.CallbackContext context)
     {
+        if(gameObject.activeSelf)
         Close();
     }
 }
