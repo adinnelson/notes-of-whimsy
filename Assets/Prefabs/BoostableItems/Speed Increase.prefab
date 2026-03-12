@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7651831631326572719}
   - component: {fileID: 2237572867809442826}
   - component: {fileID: 7217919039076496189}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Speed Increase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1644c4e7b89c13429c2d80efd7aafde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoostableItem
+  rewardType: 2
   boostType: 0
   amount: 1
 --- !u!212 &2237572867809442826

@@ -64,8 +64,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Health Potion
       objectReference: {fileID: 0}
+    - target: {fileID: 7159632872626190546, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7651831631326572719, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
       propertyPath: boostType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7651831631326572719, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: rewardType
       value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []

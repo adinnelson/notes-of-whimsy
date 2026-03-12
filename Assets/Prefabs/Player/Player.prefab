@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 2087837152091443109}
   - component: {fileID: 8709322123461927523}
   - component: {fileID: 3173876067419357927}
+  - component: {fileID: 1421404821173559249}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -173,12 +174,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.25, y: 0.43359375}
-      - {x: -0.5, y: 0}
-      - {x: -0.25, y: -0.43359375}
-      - {x: 0.25, y: -0.43359375}
-      - {x: 0.5, y: 0}
-      - {x: 0.25, y: 0.43359375}
+    - - {x: -0.20026223, y: -0.30584082}
+      - {x: -0.2546271, y: -0.37469107}
+      - {x: -0.22015733, y: -0.44354135}
+      - {x: 0.2533158, y: -0.44354135}
+      - {x: 0.3238351, y: -0.38986444}
+      - {x: 0.26326337, y: -0.30915672}
   m_UseDelaunayMesh: 1
 --- !u!114 &5369474722563365308
 MonoBehaviour:
@@ -193,9 +194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   beathandler: {fileID: 0}
-  playerActiveSpellsHandler: {fileID: 3173876067419357927}
   firePoint: {fileID: 5189259256147739164}
-  projectilePrefab: {fileID: 8835509098591157618, guid: 8500acdd58d2a6d42b2b2711d5255fc6, type: 3}
+  attackBeamPrefab: {fileID: 0}
   fireCooldownSeconds: 0.2
 --- !u!114 &1155841396824913759
 MonoBehaviour:
@@ -210,7 +210,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   acceleration: 10
-  maxSpeed: 5
 --- !u!114 &-7864820753085434846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,7 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df253cfd76d7c444bb2c365f00ac69b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 100
+  enemyMaxHealth: 100
   healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
 --- !u!114 &3173876067419357927
 MonoBehaviour:
@@ -297,3 +296,18 @@ MonoBehaviour:
     m_Bits: 8
   lightningEffect: {fileID: 8046267622772934418, guid: 6ee47fdd172e450498f0d56812dd828c, type: 3}
   laserPrefab: {fileID: -5741139717231234517, guid: 3e9e1b16b71bbd940954b08ad1827808, type: 3}
+--- !u!114 &1421404821173559249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4169916575795475163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34da6159dc83ea34e8e224e9c1f7da4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  maxSpeed: 3
+  maxHealth: 100
+  maxDamage: 1

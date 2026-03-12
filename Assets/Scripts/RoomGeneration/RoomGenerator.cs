@@ -61,11 +61,10 @@ public class RoomGenerator : MonoBehaviour
         CreateRoomPools();
         CreateFloorLayout();
     }
-    // remembird
-    // tre'sombre'd
 
     private void Update()
     {
+        //TODO: uncomment for testing purposes, maybe add some conditions to prevent accidental resets during gameplay
         if ((Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration) || spawnedRooms.Count < minRooms)
         {
             ResetGeneration();
@@ -90,6 +89,12 @@ public class RoomGenerator : MonoBehaviour
         numberOfRooms = 0;
         spawnedRooms.Clear();
         CreateFloorLayout();
+    }
+
+    //get Minimap access to the generated rooms
+    public List<GameObject> GetSpawnedRooms()
+    {
+        return spawnedRooms;
     }
 
     /// <summary>
@@ -279,33 +284,13 @@ public class RoomGenerator : MonoBehaviour
         for (int i = 0; i < spawnedRooms.Count; i++)
         {
             RoomInfo roomInfo = spawnedRooms[i].GetComponent<RoomInfo>();
-            PopulateEnemies(roomInfo);
+
+            if(roomInfo.GetSafety()) continue;
+
+            roomInfo.SetEnemyPrefabs(enemyPool);
         }
 
         OnDungeonComplete?.Invoke();
-    }
-
-
-    /// <summary>
-    /// Populates the given room with random enemies from the enemy pool if it is not a safe room
-    /// </summary>
-    /// <param name="currentRoom">The room to populate with enemies</param>
-    private void PopulateEnemies(RoomInfo currentRoom)
-    {
-        if (currentRoom.GetSafety())
-            return;
-
-        if (enemyPool.Count == 0)
-        {
-            Debug.LogWarning("Enemy pool is empty on Generator Prefab");
-            return;
-        }
-
-        int enemyCount = Random.Range(minEnemies, maxEnemies);
-        for (int i = 0; i < enemyCount; i++)
-        {
-            currentRoom.GetEnemies().Add(enemyPool[Random.Range(0, enemyPool.Count)]);
-        }
     }
 
     private void CreateRoomPools()
@@ -313,16 +298,15 @@ public class RoomGenerator : MonoBehaviour
         // mapPool is assigned via the Inspector
 
         starterRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Starter).ToList();
-        leftConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("left") != null 
+        leftConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("left") != null
                                         && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        rightConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("right") != null 
+        rightConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("right") != null
                                         && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        topConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("top") != null 
+        topConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("top") != null
                                         && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        bottomConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("bottom") != null 
+        bottomConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("bottom") != null
                                         && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
         shopRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Shop).ToList();
 
     }
-
 }

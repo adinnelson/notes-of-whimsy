@@ -5,9 +5,17 @@ using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.Pool;
+using System.Globalization;
+using FMODUnity;
 
-public class BeatHandler : MonoBehaviour {
+public class BeatHandler : MonoBehaviour
+{
+
+    //Adding beat percussion sound (working on it)
+    [Header("FMOD Settings")]
+    [SerializeField] private EventReference beatEndEvent;
+    private MusicManager musicManager;
+    private float lastCheckedBPM = 0f;
 
     private const float REQUIRED_ACCURACY = 0.25f;
     private const int BEAT_NUM = 8;
@@ -67,6 +75,7 @@ public class BeatHandler : MonoBehaviour {
     {
 
         spriteRenderer = transform.Find("beatBarCenter").GetComponent<SpriteRenderer>();
+        musicManager = MusicManager.instance;
 
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
         playerActiveSpellsHandler = GameObject.FindWithTag("Player")?.GetComponent<PlayerActiveSpellsHandler>();
@@ -207,5 +216,47 @@ public class BeatHandler : MonoBehaviour {
     public int GetBeatIndex()
     {
         return beatIndex + 1;
+    }
+
+    //Update the Beat bar bpm to reflect the changing between rooms
+    void Update()
+    {
+        // Check for BPM changes to update the Beat bar according to music switch 
+        if (musicManager != null)
+        {
+            float currentMusicBPM = musicManager.GetCurrentBPM();
+            if (currentMusicBPM > 0 && Mathf.Abs(lastCheckedBPM - currentMusicBPM) > 0.01f)
+            {
+                // Debug.Log(currentMusicBPM);
+                lastCheckedBPM = currentMusicBPM;
+                ChangeBPM(currentMusicBPM);
+            }
+        }
+
+
+        
+        // //For testing:
+        // var keyboard = Keyboard.current;
+        // if (keyboard == null) return; // No keyboard connected
+        // if (keyboard.bKey.wasPressedThisFrame)
+        // {
+        //     ChangeBPM(100f);
+        // }
+        // if (keyboard.nKey.wasPressedThisFrame)
+        // {
+        //     ChangeBPM(120f);
+        // }
+    }
+
+    // method to reset the Beat bar to a new bpm 
+    public void ChangeBPM(float newBPM)
+    {
+        bpm = newBPM;
+
+        // Reset beat ID if needed
+        percentToNextBeat = 1f;
+        beatIndex = 0;
+        onBeatIndex = 0;
+        beatIndexHasChanged = true;
     }
 }

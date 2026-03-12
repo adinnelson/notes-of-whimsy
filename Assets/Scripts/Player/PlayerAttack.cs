@@ -12,6 +12,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject attackBeamPrefab;
     [SerializeField] private float fireCooldownSeconds = 0.2f;
+    private LayerMask layerMask;
     private const float MIN_AIM_DEADZONE_SQR = 0.0001f;
     private const float MIN_STICK_DEADZONE_SQR = 0.09f;
     private const float MOUSE_MOVE_DETECT_SQR = 0.1f;
@@ -61,6 +62,8 @@ public class PlayerAttack : MonoBehaviour
     {
         playerActiveSpellsHandler = FindObjectOfType<PlayerActiveSpellsHandler>();
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
+
+        layerMask = LayerMask.GetMask("Pickupables", "Player");
     }
 
     private void Update()
@@ -105,11 +108,17 @@ public class PlayerAttack : MonoBehaviour
             }
             case "Sprint":
             {
+
+                Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+                if(rb.linearVelocity.magnitude > 0)
+                {
+                    rb.AddForce(rb.linearVelocity.normalized * 400);
+                    break;
+                }
                 Vector3 mouseScreenPosition = Mouse.current.position.value;
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
-
-                Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
                 rb.AddForce(direction * 400);
                 break;
@@ -317,7 +326,7 @@ public class PlayerAttack : MonoBehaviour
         
         Vector3 spawnPoint = projectileSpawnPosition + (Vector3)finalDirection;
 
-        RaycastHit2D hit = Physics2D.Raycast(spawnPoint, finalDirection);
+        RaycastHit2D hit = Physics2D.Raycast(spawnPoint, finalDirection, 100, ~layerMask);
 
         Vector3 endBeamPos;
 
