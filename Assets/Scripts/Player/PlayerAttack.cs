@@ -96,9 +96,9 @@ public class PlayerAttack : MonoBehaviour
         {
             case "Fire":
             {
-                BeatItem frontBeatItem = beathandler.GetFrontBeat();
+                int beatID = beathandler.GetBeatIndex();
     
-                playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(frontBeatItem.BeatId)?.Fire();
+                playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID)?.Fire();
 
                 lastFireTimeSeconds = Time.time;
                 break;
@@ -115,8 +115,6 @@ public class PlayerAttack : MonoBehaviour
                 break;
             }
         }
-
-        beathandler.RemoveFrontBeat();
     }
 
     private bool IsOffCooldown()
