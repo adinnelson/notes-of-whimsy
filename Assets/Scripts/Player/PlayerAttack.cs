@@ -113,14 +113,14 @@ public class PlayerAttack : MonoBehaviour
 
                 if(rb.linearVelocity.magnitude > 0)
                 {
-                    rb.AddForce(rb.linearVelocity.normalized * 2500);
+                    rb.AddForce(rb.linearVelocity.normalized * 3000);
                     break;
                 }
                 Vector3 mouseScreenPosition = Mouse.current.position.value;
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
 
-                rb.AddForce(direction * 2500);
+                rb.AddForce(direction * 3000);
                 break;
             }
         }
