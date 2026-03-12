@@ -51,6 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FrogEnemy
   config: {fileID: 11400000, guid: c8409ace7f7e021408dc85aa69de285e, type: 2}
   disableOnDeath: 1
+  deathFadeDuration: 0.5
   aoePrefab: {fileID: 8302048801898426064, guid: a15ece80bac87974b8d9739835ec044f, type: 3}
   aoeRadius: 1.5
   aoeDamage: 10
@@ -188,12 +189,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.40025854, y: -0.41200674}
-      - {x: -0.43666124, y: -0.45128775}
+    - - {x: -0.28844833, y: 0.19212925}
+      - {x: -0.44567823, y: -0.355708}
       - {x: -0.40201283, y: -0.49851584}
       - {x: 0.40834665, y: -0.5032661}
-      - {x: 0.4398284, y: -0.45603812}
-      - {x: 0.40834665, y: -0.40564275}
+      - {x: 0.4434352, y: -0.349638}
+      - {x: 0.28391266, y: 0.19127965}
   m_UseDelaunayMesh: 1
 --- !u!114 &-3272219819361422623
 MonoBehaviour:
@@ -209,6 +210,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Health
   enemyMaxHealth: 100
   healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
+  healthBarUpdater: {fileID: 0}
+  whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
+  defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  flashTime: 0.1
 --- !u!95 &1978793699212541612
 Animator:
   serializedVersion: 7

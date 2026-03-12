@@ -79,12 +79,14 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.8598503, y: -0.8238294}
-      - {x: -0.90866256, y: -0.92106247}
-      - {x: -0.8661374, y: -0.9962907}
+    - - {x: 0.78998995, y: 0.05065179}
+      - {x: -0.69736135, y: 0.07803702}
+      - {x: -0.938614, y: -0.33692706}
+      - {x: -0.9373039, y: -0.8995812}
+      - {x: -0.8661374, y: -1.0249319}
       - {x: 0.8849989, y: -0.9962907}
-      - {x: 0.9432417, y: -0.9147754}
-      - {x: 0.8881423, y: -0.8301166}
+      - {x: 0.95398223, y: -0.8574929}
+      - {x: 0.93468446, y: -0.31457317}
   m_UseDelaunayMesh: 1
 --- !u!114 &2396394601639180254
 MonoBehaviour:
@@ -241,8 +243,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TreantEnemy
   config: {fileID: 11400000, guid: 9fbd58611aaccd24e8b15adafb60b217, type: 2}
   disableOnDeath: 1
+  deathFadeDuration: 0.5
   chaseSpeed: 1.5
-  chargeSpeed: 5
+  chargeSpeed: 35
   telegraphJitterDegrees: 10
   telegraphVisual: {fileID: 8352904766734939973}
   wallTag: Walls
@@ -262,6 +265,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Health
   enemyMaxHealth: 100
   healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
+  healthBarUpdater: {fileID: 0}
+  whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
+  defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  flashTime: 0.1
 --- !u!60 &8950591962530085416
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -308,12 +315,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.86299384, y: -0.820686}
-      - {x: -0.9086627, y: -0.92106247}
+    - - {x: -0.64460397, y: -0.054531336}
+      - {x: -0.89434206, y: -0.3195951}
       - {x: -0.87556803, y: -1.0057213}
-      - {x: 0.88499874, y: -0.9962907}
-      - {x: 0.94009817, y: -0.9179189}
-      - {x: 0.9007164, y: -0.83326006}
+      - {x: 0.8527772, y: -0.96406937}
+      - {x: 0.86849487, y: -0.29855084}
+      - {x: 0.6393646, y: -0.052784562}
   m_UseDelaunayMesh: 1
 --- !u!95 &6552306522324509073
 Animator:
