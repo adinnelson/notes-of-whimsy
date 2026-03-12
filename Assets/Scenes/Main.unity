@@ -262,6 +262,26 @@ PrefabInstance:
       propertyPath: playerAttack
       value: 
       objectReference: {fileID: 1586885464}
+    - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: beatEndEvent.Path
+      value: event:/UnlockedBeat
+      objectReference: {fileID: 0}
+    - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: beatEndEvent.Guid.Data1
+      value: 1085249483
+      objectReference: {fileID: 0}
+    - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: beatEndEvent.Guid.Data2
+      value: 1082627026
+      objectReference: {fileID: 0}
+    - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: beatEndEvent.Guid.Data3
+      value: -1565945687
+      objectReference: {fileID: 0}
+    - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+      propertyPath: beatEndEvent.Guid.Data4
+      value: -1061657180
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

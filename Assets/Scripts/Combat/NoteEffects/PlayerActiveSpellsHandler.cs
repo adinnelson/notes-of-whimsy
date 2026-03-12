@@ -10,7 +10,7 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
 
     // Yellow Note needed prefabs
     [SerializeField] private LayerMask enemyMask;
-    [SerializeField] private TempLightingEffectLogic lightningEffect;
+    [SerializeField] private LightningVisualLogic lightningEffect;
 
     [SerializeField] private LaserBeam laserPrefab;
 

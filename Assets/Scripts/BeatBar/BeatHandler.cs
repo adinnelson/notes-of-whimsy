@@ -14,7 +14,7 @@ public class BeatHandler : MonoBehaviour
     private MusicManager musicManager;
     private float lastCheckedBPM = 0f;
 
-    private const float REQUIRED_ACCURACY = 0.25f;
+    private const float REQUIRED_ACCURACY = 0.75f;
     private const int BEAT_NUM = 8;
 
     [SerializeField] private PlayerAttack playerAttack;
@@ -83,6 +83,9 @@ public class BeatHandler : MonoBehaviour
         unlockedBeats.Add(5);
         playerActiveSpellsHandler.UnlockSlot(5);
         playerActiveSpellsHandler.EquipSpell(5, 3);
+        unlockedBeats.Add(6);
+        playerActiveSpellsHandler.UnlockSlot(6);
+        playerActiveSpellsHandler.EquipSpell(6, 2);
 
         PopulateBeatBar();
     }

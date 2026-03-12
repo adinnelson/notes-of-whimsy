@@ -7,9 +7,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float acceleration = 1.25f;
     //[SerializeField] private float maxSpeed = 5.0f;
 
+    private SpriteRenderer sprite;
+
     private InputSystem_Actions inputActions;
     private new Rigidbody2D rigidbody;
     private PlayerStats stats;
+
+    private void Awake()
+    {
+        sprite = GetComponent<SpriteRenderer>();
+    }
 
     void OnDisable()
     {
@@ -46,6 +53,15 @@ public class PlayerMovement : MonoBehaviour
         if (movement.magnitude > 1)
         {
             movement.Normalize();
+        }
+
+        if (moveHorizontal > 0)
+        {
+            sprite.flipX = false;
+        }
+        else if (moveHorizontal < 0)
+        {
+            sprite.flipX = true;
         }
 
         Vector2 targetVelocity = movement * stats.Speed;
