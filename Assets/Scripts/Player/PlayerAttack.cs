@@ -108,11 +108,17 @@ public class PlayerAttack : MonoBehaviour
             }
             case "Sprint":
             {
+
+                Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+                if(rb.linearVelocity.magnitude > 0)
+                {
+                    rb.AddForce(rb.linearVelocity.normalized * 400);
+                    break;
+                }
                 Vector3 mouseScreenPosition = Mouse.current.position.value;
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
-
-                Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
                 rb.AddForce(direction * 400);
                 break;
