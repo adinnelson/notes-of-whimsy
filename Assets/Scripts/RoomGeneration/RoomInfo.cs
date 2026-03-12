@@ -265,6 +265,10 @@ public class RoomInfo : MonoBehaviour
     {
         return isSafe;
     }
+    public void SetSafety(bool safe)
+    {
+        isSafe = safe;
+    }
 
     /// <summary>
     /// Gets the walls tilemap for this room
@@ -304,6 +308,12 @@ public class RoomInfo : MonoBehaviour
     public RoomTypes GetRoomType()
     {
         return roomType;
+    }
+
+    // sets room type
+    public void SetRoomType(RoomTypes newType)
+    {
+        roomType = newType;
     }
 
     /// <summary>
