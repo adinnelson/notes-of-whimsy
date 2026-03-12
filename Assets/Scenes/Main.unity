@@ -185,23 +185,23 @@ PrefabInstance:
       objectReference: {fileID: 1586885464}
     - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: beatEndEvent.Path
-      value: event:/Unlocked
+      value: event:/UnlockedBeat
       objectReference: {fileID: 0}
     - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: beatEndEvent.Guid.Data1
-      value: -1676616669
+      value: 1085249483
       objectReference: {fileID: 0}
     - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: beatEndEvent.Guid.Data2
-      value: 1186455511
+      value: 1082627026
       objectReference: {fileID: 0}
     - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: beatEndEvent.Guid.Data3
-      value: -1285650552
+      value: -1565945687
       objectReference: {fileID: 0}
     - target: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
       propertyPath: beatEndEvent.Guid.Data4
-      value: 366151455
+      value: -1061657180
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -596,15 +596,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0.0072859745
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.9991267
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.9836066
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8571626184657687215, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_LocalPosition.x
