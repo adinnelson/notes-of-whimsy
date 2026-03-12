@@ -16,7 +16,8 @@ public class RewardManager : MonoBehaviour
         { RewardType.Damage, 5 },
         { RewardType.Speed, 5 },
         { RewardType.HealthPotion, 2 },
-        { RewardType.BeatTick, 10 }
+        { RewardType.BeatTick, 10 },
+        { RewardType.Note, 5 }
     };
 
     // Higher number means more common
@@ -26,7 +27,8 @@ public class RewardManager : MonoBehaviour
         { RewardType.Damage, 5 },
         { RewardType.Speed, 3 },
         { RewardType.HealthPotion, 10 },
-        { RewardType.BeatTick, 1 }
+        { RewardType.BeatTick, 1 },
+        { RewardType.Note, 2 }
     };
 
     private void Awake()
@@ -170,5 +172,6 @@ public enum RewardType
     Damage,
     Speed,
     HealthPotion,
-    BeatTick
+    BeatTick, 
+    Note
 }

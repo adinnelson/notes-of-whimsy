@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0;i < timers.Count;i++)
         {
-            Debug.Log("Timer Updated");
+            // Debug.Log("Timer Updated");
             timers[i].UpdateTimer(Time.fixedDeltaTime);
         }
     }

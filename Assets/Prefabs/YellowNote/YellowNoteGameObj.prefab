@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5300640467177143317}
   - component: {fileID: 7300330059075456764}
   - component: {fileID: 4482386950409991977}
+  - component: {fileID: 119030356271244576}
   m_Layer: 7
   m_Name: YellowNoteGameObj
   m_TagString: puObj
@@ -181,3 +182,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   spell: {fileID: 11400000, guid: 6e7001c4cdddc114a8f79e40cfa8fea6, type: 2}
   beatId: 0
+--- !u!114 &119030356271244576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6233256500731044169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1644c4e7b89c13429c2d80efd7aafde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoostableItem
+  rewardType: 5
+  boostType: 4
+  amount: 0

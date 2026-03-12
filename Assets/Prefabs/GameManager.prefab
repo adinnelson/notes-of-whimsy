@@ -78,4 +78,8 @@ MonoBehaviour:
   - {fileID: 3394618241391367391, guid: ca2c0b2a4e777a5438a7931c270de9a2, type: 3}
   - {fileID: 7159632872626190546, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
   - {fileID: 6583895424280364812, guid: ff3810b195d9d0843ba447df2e0aaf05, type: 3}
+  - {fileID: 1353094496553566408, guid: f87ccd90730bdae448441c50d26b31e0, type: 3}
+  - {fileID: 3054110513573341902, guid: 3c144305244dabd4a8e1c9fd92ef2529, type: 3}
+  - {fileID: 4161497147458546833, guid: cfa86319d3f63ec4fa5b3affa0e249c1, type: 3}
+  - {fileID: 6233256500731044169, guid: 40eec704274fcf24a9be35095cf47995, type: 3}
   rewardPool: 
