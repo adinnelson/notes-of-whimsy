@@ -17,7 +17,7 @@ public class BeatHandler : MonoBehaviour
     private MusicManager musicManager;
     private float lastCheckedBPM = 0f;
 
-    private const float REQUIRED_ACCURACY = 0.25f;
+    private const float REQUIRED_ACCURACY = 0.75f;
     private const int BEAT_NUM = 8;
 
     [SerializeField] private PlayerAttack playerAttack;
