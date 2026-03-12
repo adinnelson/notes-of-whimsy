@@ -118,7 +118,6 @@ public class YellowNoteEffectHandler : NoteEffectHandler
             enemies.Add(collider.gameObject.GetComponent<EnemyBase>());
 
         }
-        Debug.Log(enemies.Count);
 
         enemies = enemies.OrderBy(enemy => Vector3.Distance(enemyHealth.transform.position, enemy.transform.position)).ToList();
         enemies.Insert(0, enemyHealth.gameObject.GetComponent<EnemyBase>());
