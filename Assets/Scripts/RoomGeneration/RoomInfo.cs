@@ -336,6 +336,7 @@ public class RoomInfo : MonoBehaviour
 
     public void LockRoom()
     {
+        // todo: add visual 
         print("Locking room");
 
         if (roomLock != null && isSafe == false)
@@ -350,6 +351,7 @@ public class RoomInfo : MonoBehaviour
 
     public void UnlockRoom()
     {
+        // todo: add visual 
         print("Unlocking room");
         if (roomLock != null)
         {
@@ -386,8 +388,7 @@ public class RoomInfo : MonoBehaviour
                 roomLock = transform.GetChild(i).gameObject;
                 CullRoomLockObjects();
                 UnlockRoom();
-                // for tilemaps
-                // roomLock = transform.GetChild(i).GetComponent<Tilemap>();
+
                 continue;
             }
         }

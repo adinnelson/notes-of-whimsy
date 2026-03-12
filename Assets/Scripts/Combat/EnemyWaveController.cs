@@ -13,8 +13,6 @@ public class EnemyWaveController : MonoBehaviour
     private int currentWave = 0;
     private int pendingSpawns = 0;
 
-    //TODO: REMOVE - testing only
-    [SerializeField]
     private List<GameObject> spawnedEnemies = new List<GameObject>();
     private List<GameObject> enemyPrefabs = new List<GameObject>();
 
@@ -53,7 +51,7 @@ public class EnemyWaveController : MonoBehaviour
             }
         }
 
-        if (currentWave >= numberOfWaves && spawnedEnemies.Count == 0 && !wavesComplete)
+        if (currentWave >= numberOfWaves && spawnedEnemies.Count == 0 && !wavesComplete && !spawningEnemies)
         {
             wavesComplete = true;
             roomInfo.UnlockRoom();
