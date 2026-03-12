@@ -1233,7 +1233,7 @@ PrefabInstance:
     - target: {fileID: 4113272350287645862, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
       propertyPath: goldSprite
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 9c77119778588214682553066e3d549a, type: 2}
     - target: {fileID: 4482519759379057503, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
       propertyPath: m_LocalPosition.x
       value: 500.25
