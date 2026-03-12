@@ -52,6 +52,11 @@ public class GameManager : MonoBehaviour
         timers.Add(timer);
     }
 
+    public void RemoveTimer(SimpleTimer timer)
+    {
+        timers.Remove(timer);
+    }
+
     public float GetBPM()
     {
         return beatHandler.GetBPM();

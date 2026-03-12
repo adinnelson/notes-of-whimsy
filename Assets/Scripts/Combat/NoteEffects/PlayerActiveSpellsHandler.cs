@@ -14,6 +14,8 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
 
     [SerializeField] private LaserBeam laserPrefab;
 
+    [SerializeField] private GameObject explosion;
+
     private PlayerAttack playerAttack;
 
     private struct SlotSpell
@@ -71,6 +73,7 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
         {
             case 1:
                 RedNoteEffectHandler redNoteEffectHandler = this.gameObject.AddComponent<RedNoteEffectHandler>(); 
+                redNoteEffectHandler.SetExplosion(explosion);
                 slotSpell.colour = Color.red;
                 slotSpell.noteEffectHandler = redNoteEffectHandler;
 
