@@ -9,6 +9,8 @@ public class SimpleTimer
     private bool on = false;
     private bool loop = false;
 
+    private GameManager gameManager;
+
     Action onFinish;
 
     public void UpdateTimer(float time)
@@ -19,7 +21,10 @@ public class SimpleTimer
 
         if (timeRemaining <= 0)
         {
-            if (onFinish != null) onFinish.Invoke();
+            if (onFinish != null) 
+            {
+                onFinish.Invoke();
+            }
 
             if(loop)
             {
@@ -28,6 +33,7 @@ public class SimpleTimer
             }
 
             on = false;
+            gameManager.RemoveTimer(this);
         }
     }
 
@@ -43,10 +49,14 @@ public class SimpleTimer
 
         if (gameManager == null)
         {
-            gameManager = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
+            this.gameManager = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
+        }
+        else
+        {
+            this.gameManager = gameManager;
         }
 
-        gameManager?.AddTimer(this);
+        this.gameManager?.AddTimer(this);
     }
 
     public void Stop()
