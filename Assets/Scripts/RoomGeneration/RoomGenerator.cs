@@ -309,6 +309,4 @@ public class RoomGenerator : MonoBehaviour
         shopRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Shop).ToList();
 
     }
-
-
 }
