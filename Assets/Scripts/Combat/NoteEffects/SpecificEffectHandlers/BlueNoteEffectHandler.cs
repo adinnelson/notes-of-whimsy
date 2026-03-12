@@ -19,6 +19,9 @@ public class BlueNoteEffectHandler : NoteEffectHandler
         this.note = spellData.NoteProjectilePrefab;
     }
 
+    /// <summary>
+    /// On hit, deals damage to all enemies within <see cref="pullRadius"/> of the hit enemy and pulls them towards it.
+    /// </summary>
     public override void HitEnemy(IDamageable damageable)
     {
         enemiesInRange.Clear();
