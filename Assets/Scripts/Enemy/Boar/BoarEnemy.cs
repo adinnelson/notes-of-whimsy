@@ -24,6 +24,7 @@ public class BoarEnemy : EnemyBase
     private Vector2 lockedChargeDir;
     private bool isCharging = false;
     private bool shouldTelegraphNext = true;
+    private Vector3 telegraphBaseScale;
 
     private Animator animator;
 
@@ -44,6 +45,10 @@ public class BoarEnemy : EnemyBase
         else
         {
             hitbox.Initialize(config.damage);
+        }
+        if (telegraphVisual != null)
+        {
+            telegraphBaseScale = telegraphVisual.transform.localScale;
         }
 
         SetHitboxActive(false);
@@ -149,6 +154,23 @@ public class BoarEnemy : EnemyBase
 
         float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
+
+        float secondsPerBeat = 60.0f / gameManager.GetBPM();
+        float chargeDistance = chargeSpeed * secondsPerBeat;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, chargeDistance);
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.collider.transform.IsChildOf(transform)) continue;
+            // Ignore walls we're already touching to prevent it from thinking we're right up against a wall and shrinking the telegraph to nothing
+            if (hit.distance < 0.3f) continue;
+            if (hit.collider.CompareTag("Walls") && hit.distance < chargeDistance)
+            {
+                chargeDistance = hit.distance;
+            }
+        }
+
+        telegraphVisual.transform.localScale = new Vector3(chargeDistance, telegraphBaseScale.y, telegraphBaseScale.z);
         telegraphVisual.SetActive(true);
     }
 
