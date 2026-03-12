@@ -17,7 +17,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected Rigidbody2D rb;
     protected State state;
 
-    private GameManager gameManager;
+    protected GameManager gameManager;
     private int recoverBeatsRemaining = 0;
 
     private Health health;
