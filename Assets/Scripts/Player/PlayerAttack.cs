@@ -12,6 +12,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject attackBeamPrefab;
     [SerializeField] private float fireCooldownSeconds = 0.2f;
+    [SerializeField] private float failedInputLockoutTime = 0.15f;
     private LayerMask ignoredLayersMask;
     private const float MIN_AIM_DEADZONE_SQR = 0.0001f;
     private const float MIN_STICK_DEADZONE_SQR = 0.09f;
@@ -26,6 +27,8 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector2 lastAimDirection = Vector2.right;
     private Vector2 lastMousePos;
+
+    private float lockoutTimer = 0f;
 
     // hashset of attack locks
     private HashSet<string> attackLocks = new HashSet<string>();
@@ -66,6 +69,11 @@ public class PlayerAttack : MonoBehaviour
         ignoredLayersMask = LayerMask.GetMask("Pickupables", "Player", "Default");
     }
 
+    private void FixedUpdate()
+    {
+        lockoutTimer -= Time.fixedDeltaTime;
+    }
+
     private void Update()
     {
         // Continuously check to update aim based on the most recent input (Mouse and/or Controller)
@@ -78,8 +86,14 @@ public class PlayerAttack : MonoBehaviour
         // whichever device (Mouse or Controller) that fired gets to be the active aim source for this shot.
         SetAimSourceFromFireDevice(context);
 
-        if(attackLocks.Count > 0)
+        //if(attackLocks.Count > 0)
+        //{
+        //    return;
+        //}
+
+        if (lockoutTimer > 0)
         {
+            lockoutTimer = failedInputLockoutTime;
             return;
         }
 
@@ -91,7 +105,8 @@ public class PlayerAttack : MonoBehaviour
         // if you fire off beat lock attacks until next beat
         if (beathandler != null && !beathandler.ValidAttackInterval)
         {
-            AddAttackLock(MISSED_ATTACK_LOCK_KEY);
+            //AddAttackLock(MISSED_ATTACK_LOCK_KEY);
+            lockoutTimer = failedInputLockoutTime;
             return;
         }
 
@@ -113,14 +128,14 @@ public class PlayerAttack : MonoBehaviour
 
                 if(rb.linearVelocity.magnitude > 0)
                 {
-                    rb.AddForce(rb.linearVelocity.normalized * 2500);
+                    rb.AddForce(rb.linearVelocity.normalized * 3000);
                     break;
                 }
                 Vector3 mouseScreenPosition = Mouse.current.position.value;
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
 
-                rb.AddForce(direction * 2500);
+                rb.AddForce(direction * 3000);
                 break;
             }
         }
