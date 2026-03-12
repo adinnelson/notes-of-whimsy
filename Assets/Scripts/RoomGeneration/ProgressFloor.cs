@@ -6,6 +6,16 @@ public class ProgressFloor : MonoBehaviour
 {
     private static int floorsCompleted = 0;
     private Scene currentScene;
+
+    void Awake()
+    {
+        Health.OnDeath += HandleDeath;
+    }
+
+    void OnDestroy()
+    {
+        Health.OnDeath -= HandleDeath;
+    }
     private void Start()
     {
         currentScene = SceneManager.GetActiveScene();
@@ -37,5 +47,11 @@ public class ProgressFloor : MonoBehaviour
             SceneManager.LoadScene(currentScene.name);
             
         }
+    }
+
+    private void HandleDeath()
+    {
+        //reset floors completed on death
+        floorsCompleted = 0;
     }
 }

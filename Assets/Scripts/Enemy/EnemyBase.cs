@@ -20,7 +20,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected GameManager gameManager;
     private int recoverBeatsRemaining = 0;
 
-    private Health health;
+    // private Health health;
     private Collider2D col;
 
     protected HashSet<string> stunEffects = new HashSet<string>();
@@ -31,11 +31,8 @@ public abstract class EnemyBase : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
 
-        health = GetComponent<Health>();
-        if (health != null)
-        {
-            health.OnDeath += HandleDeath;
-        }
+            Health.OnDeath += HandleDeath;
+
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
@@ -333,10 +330,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        if (health != null)
-        {
-            health.OnDeath -= HandleDeath;
-        }
+        Health.OnDeath -= HandleDeath;
 
         if (gameManager != null)
         {
