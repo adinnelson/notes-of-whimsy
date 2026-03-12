@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3262920337591521754}
   - component: {fileID: 1901393099527981830}
   - component: {fileID: 6871415077949318443}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PurpleNoteGameObj
   m_TagString: puObj
   m_Icon: {fileID: 0}
@@ -180,4 +180,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   spell: {fileID: 11400000, guid: f910ce51fc721ec49b7222f4d878bed5, type: 2}
-  tickId: 0
+  beatId: 0

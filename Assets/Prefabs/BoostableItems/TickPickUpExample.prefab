@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1088703958485626059}
   - component: {fileID: 3783909118820919616}
   - component: {fileID: 4413617094362450749}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TickPickUpExample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
