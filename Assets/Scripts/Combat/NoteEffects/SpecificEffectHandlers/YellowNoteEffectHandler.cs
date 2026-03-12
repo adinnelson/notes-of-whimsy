@@ -10,7 +10,7 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     private float detectionRadius = 3.5f;
     private float damage = 25.0f;
     private float cooldown = 5.0f;
-    private float timeBetweenTargets = 0.5f;
+    private float timeBetweenTargets = 0.1f;
     private float stunTime = 5.0f;
     private string stunKey = "yellow";
 
@@ -30,9 +30,9 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     private LayerMask enemyMask;
 
     // Temp Lighning effects
-    private TempLightingEffectLogic lightningEffect;
-    private ObjectPool<TempLightingEffectLogic> lightningChainPool;
-    private List<TempLightingEffectLogic> currentVisibleLightningChains = new List<TempLightingEffectLogic>();
+    private LightningVisualLogic lightningEffect;
+    private ObjectPool<LightningVisualLogic> lightningChainPool;
+    private List<LightningVisualLogic> currentVisibleLightningChains = new List<LightningVisualLogic>();
 
     void FixedUpdate() 
     {
@@ -65,12 +65,12 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         timeElapsed +=  Time.fixedDeltaTime;
     }
 
-    public void CustomYellowInit(TempLightingEffectLogic lightningEffect, LayerMask enemyMask)
+    public void CustomYellowInit(LightningVisualLogic lightningEffect, LayerMask enemyMask)
     {
         this.lightningEffect = lightningEffect;
         this.enemyMask = enemyMask;
 
-        lightningChainPool = new ObjectPool<TempLightingEffectLogic>(
+        lightningChainPool = new ObjectPool<LightningVisualLogic>(
             createFunc: CreateItem,
             actionOnGet: OnGet,
             actionOnRelease: OnRelease,
@@ -122,18 +122,17 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         enemies = enemies.OrderBy(enemy => Vector3.Distance(enemyHealth.transform.position, enemy.transform.position)).ToList();
         enemies.Insert(0, enemyHealth.gameObject.GetComponent<EnemyBase>());
 
-        TempLightingEffectLogic lightningChain = lightningChainPool.Get();
+        LightningVisualLogic lightningChain = lightningChainPool.Get();
         lightningChain.transform.position = enemies[0].transform.position;
-        lightningChain.TargetPos = enemies[0].transform.position;
+        lightningChain.SetWorldPoint(enemies[0].transform.position);
         currentVisibleLightningChains.Add(lightningChain);
-
-        lightningChain.StartBeam();
 
         StunEnemy(enemies[0]);
         enemies[0].GetComponent<Health>().TakeDamage(damage);
         enemies.RemoveAt(0);
 
-        lightingEffectInProgress = true;        
+        lightingEffectInProgress = true;
+        timeElapsed = 0f;
     }
 
     // stuns enemies or adds to stunTime to stun effect
@@ -188,8 +187,9 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     // updates chain to next target
     private void UpdateCurrentChain()
     {
-        Vector3 dir = currentVisibleLightningChains[currentVisibleLightningChains.Count - 1].transform.position - enemies[0].transform.position;
-        currentVisibleLightningChains[currentVisibleLightningChains.Count - 1].TargetPos = enemies[0].transform.position + (timeBetweenTargets - timeElapsed) / timeBetweenTargets * dir;
+        LightningVisualLogic curLightning = currentVisibleLightningChains[currentVisibleLightningChains.Count - 1];
+        Vector3 dir = enemies[0].transform.position - curLightning.transform.position;
+        currentVisibleLightningChains[currentVisibleLightningChains.Count - 1].SetWorldPoint(curLightning.transform.position + timeElapsed / timeBetweenTargets * dir);
     }
 
     // deals damages to finished chain and sets up next chain
@@ -206,12 +206,11 @@ public class YellowNoteEffectHandler : NoteEffectHandler
 
         if(enemies.Count <= 0) return;
 
-        TempLightingEffectLogic lightningChain = lightningChainPool.Get();
+        LightningVisualLogic lightningChain = lightningChainPool.Get();
         lightningChain.transform.position = enemySource.transform.position;
-        lightningChain.TargetPos = enemySource.transform.position;
+        lightningChain.SetWorldPoint(enemySource.transform.position);
         currentVisibleLightningChains.Add(lightningChain);
-
-        lightningChain.StartBeam();
+        timeElapsed = 0f;
     }
 
 
@@ -229,28 +228,28 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     }
 
     // Creates a new pooled GameObject the first time (and whenever the pool needs more).
-    private TempLightingEffectLogic CreateItem()
+    private LightningVisualLogic CreateItem()
     {
-        TempLightingEffectLogic lightningChain = Instantiate(lightningEffect, Vector2.zero, Quaternion.identity);
+        LightningVisualLogic lightningChain = Instantiate(lightningEffect, Vector2.zero, Quaternion.identity);
         lightningChain.gameObject.SetActive(false);
 
         return lightningChain;
     }
 
     // Called when an item is taken from the pool.
-    private void OnGet(TempLightingEffectLogic lightningChain)
+    private void OnGet(LightningVisualLogic lightningChain)
     {
         lightningChain.gameObject.SetActive(true);
     }
 
     // Called when an item is returned to the pool.
-    private void OnRelease(TempLightingEffectLogic lightningChain)
+    private void OnRelease(LightningVisualLogic lightningChain)
     {
         lightningChain.gameObject.SetActive(false);
     }
 
     // Called when the pool decides to destroy an item (e.g., above max size).
-    private void OnDestroyItem(TempLightingEffectLogic lightningChain)
+    private void OnDestroyItem(LightningVisualLogic lightningChain)
     {
         Destroy(lightningChain);
     }

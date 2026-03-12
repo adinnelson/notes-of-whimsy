@@ -2992,7 +2992,7 @@ PrefabInstance:
     - target: {fileID: 1167656958354785006, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: 'nodeList.Array.data[0]'
       value: 
-      objectReference: {fileID: 1247444356238104183}
+      objectReference: {fileID: 6498660813931387743}
     - target: {fileID: 1167656958354785006, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: 'nodeList.Array.data[1]'
       value: 
@@ -3105,11 +3105,6 @@ PrefabInstance:
       addedObject: {fileID: 8228319067230782375}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
---- !u!1 &1247444356238104183 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2791336798263055279, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
-  m_PrefabInstance: {fileID: 4031568354980480472}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7892284428623959584 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6517839853926421496, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}

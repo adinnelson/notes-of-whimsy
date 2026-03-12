@@ -1,11 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using System.Globalization;
 using FMODUnity;
 
 public class BeatHandler : MonoBehaviour
@@ -109,7 +106,7 @@ public class BeatHandler : MonoBehaviour
             {
                 gm.BeatHit = false;
             }
-            
+
             beatIndex = (beatIndex + 1) % BEAT_NUM;
 
             if (playerAttack != null && unlockedBeats.Contains(beatIndex))
@@ -128,7 +125,7 @@ public class BeatHandler : MonoBehaviour
                 gm.TriggerBeat(onBeatIndex + 1);
             }
 
-            if (unlockedBeats.Contains(onBeatIndex + 1)) 
+            if (unlockedBeats.Contains(onBeatIndex + 1))
             {
                 PlayBeatEndSound();
             }
@@ -207,7 +204,7 @@ public class BeatHandler : MonoBehaviour
     public bool CheckValidAttackInterval (float percentage)
     {
         return unlockedBeats.Contains(beatIndex + 1) && (percentage <= REQUIRED_ACCURACY || percentage >= 1f - REQUIRED_ACCURACY);
-        
+
     }
 
     // adds tick id to hashset
@@ -229,7 +226,7 @@ public class BeatHandler : MonoBehaviour
     //Update the Beat bar bpm to reflect the changing between rooms
     void Update()
     {
-        // Check for BPM changes to update the Beat bar according to music switch 
+        // Check for BPM changes to update the Beat bar according to music switch
         if (musicManager != null)
         {
             float currentMusicBPM = musicManager.GetCurrentBPM();
@@ -256,7 +253,7 @@ public class BeatHandler : MonoBehaviour
         // }
     }
 
-    // method to reset the Beat bar to a new bpm 
+    // method to reset the Beat bar to a new bpm
     public void ChangeBPM(float newBPM)
     {
         bpm = newBPM;
