@@ -125,7 +125,7 @@ public class BeatHandler : MonoBehaviour
                 gm.TriggerBeat(onBeatIndex + 1);
             }
 
-            if (unlockedBeats.Contains(beatIndex + 1)) 
+            if (unlockedBeats.Contains(onBeatIndex + 1)) 
             {
                 PlayBeatEndSound();
             }
