@@ -66,6 +66,7 @@ MonoBehaviour:
   - {fileID: 2960902605508290741, guid: 5cdb067a8c70bf3418155c48065a6a1c, type: 3}
   - {fileID: 2935493060984338722, guid: 72a7c94c6533d964da2be52f44beea52, type: 3}
   - {fileID: 1041415166973672473, guid: d9a603176219d55459d52c7c841e7eac, type: 3}
+  - {fileID: 4569931688597079672, guid: 1ceea9d8325779c4cbcfaa873bdc718a, type: 3}
   starterRooms: []
   leftConnections: []
   rightConnections: []
