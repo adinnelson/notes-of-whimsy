@@ -65,11 +65,9 @@ public class Health : MonoBehaviour, IDamageable
     private void UpdateHitFlash()
     {
         hitFlashTimer -= Time.fixedDeltaTime;
-        Debug.Log(hitFlashTimer);
 
         if (hitFlashTimer <= 0 && inHitFlash)
         {
-            Debug.Log("hit flash went away");
             sprite.material = defaultMaterial;
             inHitFlash = false;
         }

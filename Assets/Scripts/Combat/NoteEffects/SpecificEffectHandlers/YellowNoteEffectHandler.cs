@@ -40,7 +40,7 @@ public class YellowNoteEffectHandler : NoteEffectHandler
 
         if (!lightingEffectInProgress) 
         {
-            UpdateCooldown();
+            //UpdateCooldown();
 
             return;
         }

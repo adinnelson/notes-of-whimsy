@@ -8,7 +8,7 @@ public class BlueNoteEffectHandler : NoteEffectHandler
     [Header("Pull AOE specs")]
     [SerializeField] private float pullRadius = 1.0f;
     [SerializeField] private float pullForce = 45.0f;
-    [SerializeField] private float damage = 20.0f;
+    [SerializeField] private float damage = 40.0f;
 
     private GameObject whirlPool;
 
