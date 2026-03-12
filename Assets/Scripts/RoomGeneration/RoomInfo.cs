@@ -60,6 +60,25 @@ public class RoomInfo : MonoBehaviour
     [SerializeField]
     private List<GameObject> itemSpawnLocations;
 
+    [Header("Camera Bounds")]
+    [SerializeField]
+    private bool useCustomCameraBounds;
+
+    [SerializeField]
+    [Range(0f, 100f)]
+    private float customMaxSqrHorizontalCameraDistance = 5f;
+
+    [SerializeField]
+    [Range(0f, 100f)]
+    private float customMaxSqrVerticalCameraDistance = 5f;
+
+    [SerializeField]
+    private CameraBoundsShape customCameraBoundsShape = CameraBoundsShape.Cross;
+
+    [SerializeField]
+    [Range(0.1f, 10f)]
+    private float customCrossArmHalfThickness = 1f;
+
     private ShopManager shopManager;
 
     private RewardManager rewardManager;
@@ -305,6 +324,31 @@ public class RoomInfo : MonoBehaviour
         return itemSpawnLocations;
     }
 
+    public bool UseCustomCameraBounds()
+    {
+        return useCustomCameraBounds;
+    }
+
+    public float GetCustomMaxSqrHorizontalCameraDistance()
+    {
+        return customMaxSqrHorizontalCameraDistance;
+    }
+
+    public float GetCustomMaxSqrVerticalCameraDistance()
+    {
+        return customMaxSqrVerticalCameraDistance;
+    }
+
+    public CameraBoundsShape GetCustomCameraBoundsShape()
+    {
+        return customCameraBoundsShape;
+    }
+
+    public float GetCustomCrossArmHalfThickness()
+    {
+        return customCrossArmHalfThickness;
+    }
+
     public bool IsCompleted()
     {
         return isCompleted;
@@ -421,6 +465,29 @@ public class RoomInfo : MonoBehaviour
        return enemyWaveController == null || enemyWaveController.AreWavesComplete();
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        if (!useCustomCameraBounds)
+        {
+            return;
+        }
+
+        float horizontalHalfLength = Mathf.Sqrt(customMaxSqrHorizontalCameraDistance);
+        float verticalHalfLength = Mathf.Sqrt(customMaxSqrVerticalCameraDistance);
+        Vector3 center = transform.position;
+
+        Gizmos.color = Color.cyan;
+
+        if (customCameraBoundsShape == CameraBoundsShape.Box)
+        {
+            Gizmos.DrawWireCube(center, new Vector3(horizontalHalfLength * 2f, verticalHalfLength * 2f, 0f));
+            return;
+        }
+
+        Gizmos.DrawWireCube(center, new Vector3(horizontalHalfLength * 2f, customCrossArmHalfThickness * 2f, 0f));
+        Gizmos.DrawWireCube(center, new Vector3(customCrossArmHalfThickness * 2f, verticalHalfLength * 2f, 0f));
+    }
+
     private void CullRoomLockObjects()
     {
         int numberOfChildren = roomLock.transform.childCount;
@@ -489,4 +556,10 @@ public enum RoomTypes
     Reward,
     End
 
+}
+
+public enum CameraBoundsShape
+{
+    Cross,
+    Box
 }

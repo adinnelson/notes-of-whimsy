@@ -2483,6 +2483,11 @@ MonoBehaviour:
   isShop: 0
   itemSpawnLocations:
   - {fileID: 3435326922334342358}
+  useCustomCameraBounds: 1
+  customMaxSqrHorizontalCameraDistance: 32.2
+  customMaxSqrVerticalCameraDistance: 4
+  customCameraBoundsShape: 0
+  customCrossArmHalfThickness: 1
 --- !u!61 &3843382522913789850
 BoxCollider2D:
   m_ObjectHideFlags: 0
