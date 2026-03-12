@@ -573,6 +573,10 @@ PrefabInstance:
       propertyPath: fireCooldownSeconds
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: failedInputLockoutTime
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
