@@ -124,6 +124,74 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6962847951101663658, guid: d56a58421faef94459b51c617b2dd48a, type: 3}
   m_PrefabInstance: {fileID: 1695033474}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &86055947
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 938407676858534479, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 938407676858534479, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 938407676858534479, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 938407676858534479, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 938407676858534479, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 938407676858534479, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 938407676858534479, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 938407676858534479, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 938407676858534479, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 938407676858534479, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4440766949248969058, guid: a9d80850a4996044b84b44120109562f, type: 3}
+      propertyPath: m_Name
+      value: SpellBar
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a9d80850a4996044b84b44120109562f, type: 3}
+--- !u!114 &86055948 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2664865878006077555, guid: a9d80850a4996044b84b44120109562f, type: 3}
+  m_PrefabInstance: {fileID: 86055947}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f86e09c73e8f5f44a9b453c9d24069b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpellEditBar
 --- !u!1001 &92862707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -268,6 +336,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.y
+      value: 0.10982659
+      objectReference: {fileID: 0}
+    - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
+      propertyPath: m_NormalizedViewPortRect.width
+      value: 0.998374
+      objectReference: {fileID: 0}
+    - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
+      propertyPath: m_NormalizedViewPortRect.height
+      value: 0.7803468
       value: 0.2368932
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
@@ -672,6 +749,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+--- !u!114 &398185936 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
+  m_PrefabInstance: {fileID: 2029799645}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59aa8152b834b1a4abd9eb7cfc962aba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BeatHandler
 --- !u!4 &432016423 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6962847951101663658, guid: d56a58421faef94459b51c617b2dd48a, type: 3}
@@ -693,7 +781,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &476957966
 SpriteRenderer:
   serializedVersion: 2
@@ -762,7 +850,7 @@ Transform:
   m_GameObject: {fileID: 476957965}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.15, y: -11.89, z: 0}
+  m_LocalPosition: {x: -25.4, y: 16.2, z: 0}
   m_LocalScale: {x: 11, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -833,9 +921,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7864820753085434846, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: beatHandler
+      value: 
+      objectReference: {fileID: 398185936}
+    - target: {fileID: -7864820753085434846, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: spellEditBar
+      value: 
+      objectReference: {fileID: 86055948}
     - target: {fileID: 1421404821173559249, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: maxHealth
-      value: 2147483647
+      value: 2147483646
       objectReference: {fileID: 0}
     - target: {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_Name
@@ -897,6 +993,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: beathandler
+      value: 
+      objectReference: {fileID: 398185936}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackBeamPrefab
+      value: 
+      objectReference: {fileID: 378179467823393837, guid: 3e9e1b16b71bbd940954b08ad1827808, type: 3}
     - target: {fileID: 7752919813059416915, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: note
       value: 
@@ -1149,6 +1253,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 3027072088303196211, guid: 5a9e67a902ca9fd43983f8e21810f457, type: 3}
+      propertyPath: beatHandler
+      value: 
+      objectReference: {fileID: 398185936}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1273,6 +1381,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6962847951101663658, guid: d56a58421faef94459b51c617b2dd48a, type: 3}
   m_PrefabInstance: {fileID: 1237072610}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &998564839 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3173876067419357927, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+  m_PrefabInstance: {fileID: 509475683}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae285ad7b17a1044af9dcc14fe1ed25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerActiveSpellsHandler
 --- !u!4 &1011190431 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6962847951101663658, guid: d56a58421faef94459b51c617b2dd48a, type: 3}
@@ -1312,10 +1431,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f49bba311761c7b4aba3630e8f14c217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
-  beatHandler: {fileID: 0}
+  beatHandler: {fileID: 398185936}
   contentsParent: {fileID: 0}
-  spellEditBar: {fileID: 0}
-  playerActiveSpellsHandler: {fileID: 0}
+  spellEditBar: {fileID: 86055948}
+  playerActiveSpellsHandler: {fileID: 998564839}
 --- !u!4 &1119190798
 Transform:
   m_ObjectHideFlags: 0
@@ -2699,4 +2818,5 @@ SceneRoots:
   - {fileID: 755128601}
   - {fileID: 1915602601}
   - {fileID: 1243844990}
+  - {fileID: 86055947}
   - {fileID: 2126111046}

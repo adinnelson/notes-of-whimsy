@@ -14,7 +14,8 @@ public class RoomInfo : MonoBehaviour
     [SerializeField]
     private Tilemap walls;
     [SerializeField]
-    private Tilemap roomLock;
+    private GameObject roomLock;
+    // private Tilemap roomLock;
 
     [Header("Attachment Nodes")]
     [SerializeField]
@@ -94,6 +95,7 @@ public class RoomInfo : MonoBehaviour
         }
 
         enemyWaveController = GetComponentInChildren<EnemyWaveController>();
+        UnlockRoom();
     }
 
     private void Update()
@@ -107,7 +109,6 @@ public class RoomInfo : MonoBehaviour
         {
             // unlock room            roomLock.gameObject.SetActive(false);
             GiveRewards();
-            print($"no more enemies in {gameObject.name} spawning rewards");
         }
     }
 
@@ -120,7 +121,7 @@ public class RoomInfo : MonoBehaviour
             // Give rewards for shop room
             shopManager.GenerateShopRewards();
         }
-        else if(!hasGivenRewards && !isShop && roomType != RoomTypes.Starter)
+        else if(!hasGivenRewards && !isShop && roomType != RoomTypes.Starter && roomType != RoomTypes.End)
         {
             // TODO: maybe add odds to drop an item in general
             // Give rewards for non-shop room
@@ -259,7 +260,11 @@ public class RoomInfo : MonoBehaviour
     /// Gets the room lock tilemap for this room
     /// </summary>
     /// <returns>The room lock tilemap component</returns>
-    public Tilemap GetRoomLock()
+    // public Tilemap GetRoomLock()
+    // {
+    //     return roomLock;
+    // }
+    public GameObject GetRoomLock()
     {
         return roomLock;
     }
@@ -331,12 +336,14 @@ public class RoomInfo : MonoBehaviour
 
     public void LockRoom()
     {
+        // todo: add visual 
         print("Locking room");
 
-        if (roomLock != null)
+        if (roomLock != null && isSafe == false)
         {
-            roomLock.gameObject.SetActive(true);
+            roomLock.SetActive(true);
         }
+        else
         {
             print("No room lock tilemap found on " + gameObject.name);
         }
@@ -344,10 +351,12 @@ public class RoomInfo : MonoBehaviour
 
     public void UnlockRoom()
     {
+        // todo: add visual 
         print("Unlocking room");
         if (roomLock != null)
         {
-            roomLock.gameObject.SetActive(false);
+            isCompleted = true;
+            roomLock.SetActive(false);
         }
     }
 
@@ -365,16 +374,22 @@ public class RoomInfo : MonoBehaviour
             if (childName == "floor")
             {
                 floor = transform.GetChild(i).GetComponent<Tilemap>();
+                continue;
                 // transform.GetChild(i).AddComponent<FloorInfo>();
-                break;
             }
             else if (childName == "walls")
             {
                 walls = transform.GetChild(i).GetComponent<Tilemap>();
+                continue;
             }
-            else if (childName == "roomLock")
+            else if (childName == "roomlock 2")
             {
-                roomLock = transform.GetChild(i).GetComponent<Tilemap>();
+                // for gameobjects
+                roomLock = transform.GetChild(i).gameObject;
+                CullRoomLockObjects();
+                UnlockRoom();
+
+                continue;
             }
         }
     }
@@ -394,18 +409,78 @@ public class RoomInfo : MonoBehaviour
         {
             print(gameObject.name + " has been entered by the player!" + roomType );
             OnEnterRoom?.Invoke(gameObject);
+            if(roomType != RoomTypes.Shop && roomType != RoomTypes.Reward && roomType != RoomTypes.Starter)
+            {
+                // LockRoom();
+            }
             
         }
     }
 
     private bool CheckIsRoomCompleted()
     {
-        if(enemyPrefabs.Count == 0)
+       return enemyWaveController == null || enemyWaveController.AreWavesComplete();
+    }
+
+    private void CullRoomLockObjects()
+    {
+        int numberOfChildren = roomLock.transform.childCount;
+        GameObject nodeAttachment;
+        for (int i = numberOfChildren - 1; i >= 0; i--)
         {
-            isCompleted = true;
-            return true;
+            GameObject child = roomLock.transform.GetChild(i).gameObject;
+            switch (child.name.ToLower())
+            {
+                case "leftroomlock":
+                    nodeAttachment = GetNode("left");
+                    print("checking left node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
+                    if(nodeAttachment == null)
+                    {
+                        Destroy(child);
+                        continue;
+                    }
+                    child.transform.localPosition = nodeAttachment.transform.localPosition;
+                    break;
+                case "rightroomlock":
+                    nodeAttachment = GetNode("right");
+                        print("checking right node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
+                    if(nodeAttachment == null)
+                    {
+                        Destroy(child);
+                        continue;
+
+
+                    }
+                    child.transform.localPosition = nodeAttachment.transform.localPosition;
+                    break;
+                case "toproomlock":
+                    nodeAttachment = GetNode("top");
+                        print("checking top node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
+                    if(nodeAttachment == null)
+                    {
+                        Destroy(child);
+                        continue;
+
+
+                    }
+                    child.transform.localPosition = nodeAttachment.transform.localPosition;
+                    break;
+                case "bottomroomlock":
+                    nodeAttachment = GetNode("bottom");
+                        print("checking bottom node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
+                    if(nodeAttachment == null)
+                    {
+                        Destroy(child);
+                        continue;
+
+                    }
+                    child.transform.localPosition = nodeAttachment.transform.localPosition;
+                    break;
+                default:
+                    Destroy(child);
+                    break;
+            }
         }
-        return false;
     }
 
 }

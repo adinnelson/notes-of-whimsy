@@ -51,11 +51,16 @@ public class EnemyWaveController : MonoBehaviour
             }
         }
 
-        if (currentWave >= numberOfWaves && spawnedEnemies.Count == 0 && !wavesComplete)
+        if (currentWave >= numberOfWaves && spawnedEnemies.Count == 0 && !wavesComplete && !spawningEnemies)
         {
             wavesComplete = true;
             roomInfo.UnlockRoom();
         }
+    }
+
+    public bool AreWavesComplete()
+    {
+        return wavesComplete;
     }
 
     /// <summary>
