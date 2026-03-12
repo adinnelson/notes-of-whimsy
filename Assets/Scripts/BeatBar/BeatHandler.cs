@@ -157,6 +157,15 @@ public class BeatHandler : MonoBehaviour
 
         float percentage = GetPercentRemainingFrontBeat();
 
+
+    // Play sound when beat reaches the end graphic
+    if (currentVisibleBeats[0].Unlocked && !currentVisibleBeats[0].HasPlayedEndSound)
+    {
+        PlayBeatEndSound(currentVisibleBeats[0]);
+        currentVisibleBeats[0].HasPlayedEndSound = true;
+    }
+
+
         // check interval of first one in list
         CheckValidAttackInterval(percentage);
 
@@ -165,6 +174,23 @@ public class BeatHandler : MonoBehaviour
             gm.TriggerBeat(currentVisibleBeats[0].BeatId);
         }
     }
+
+
+
+
+    private void PlayBeatEndSound(BeatItem beatItem)
+    {
+        if (!beatEndEvent.IsNull)
+        {
+            RuntimeManager.PlayOneShot(beatEndEvent);
+        }
+
+        if (playerAttack != null)
+        {
+            playerAttack.RemoveAttackLock(PlayerAttack.MISSED_ATTACK_LOCK_KEY);
+        }
+    }
+
 
     // Creates a new pooled GameObject the first time (and whenever the pool needs more).
     private BeatItem CreateItem()
@@ -362,7 +388,7 @@ public class BeatHandler : MonoBehaviour
         }
 
 
-        
+
         // //For testing:
         // var keyboard = Keyboard.current;
         // if (keyboard == null) return; // No keyboard connected

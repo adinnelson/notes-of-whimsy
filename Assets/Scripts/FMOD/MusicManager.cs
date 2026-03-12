@@ -168,8 +168,8 @@ public class MusicManager : MonoBehaviour
                 break;
 
             case RoomTypes.End:
-                //    // You might want special boss music
-                //     musicLabel = "bigCombat"; // or create a new "boss" type
+                   // You might want special boss music
+                musicLabel = "bigCombat"; // or create a new "boss" type
                 break;
         }
 
