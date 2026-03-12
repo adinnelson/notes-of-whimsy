@@ -2487,7 +2487,7 @@ MonoBehaviour:
   customMaxSqrHorizontalCameraDistance: 32.2
   customMaxSqrVerticalCameraDistance: 4
   customCameraBoundsShape: 0
-  customCrossArmHalfThickness: 1
+  customCrossArmHalfThickness: 1.23
 --- !u!61 &3843382522913789850
 BoxCollider2D:
   m_ObjectHideFlags: 0
