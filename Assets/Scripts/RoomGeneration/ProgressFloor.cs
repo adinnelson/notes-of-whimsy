@@ -7,14 +7,21 @@ public class ProgressFloor : MonoBehaviour
     private static int floorsCompleted = 0;
     private Scene currentScene;
 
+    Health health;
+
     void Awake()
     {
-        Health.OnDeath += HandleDeath;
+        health = GetComponent<Health>();
+        if (health == null)
+        {
+            Debug.LogError($"{name}: No Health component found on player.");
+        }
+        health.OnDeath += HandleDeath;
     }
 
     void OnDestroy()
     {
-        Health.OnDeath -= HandleDeath;
+        health.OnDeath -= HandleDeath;
     }
     private void Start()
     {

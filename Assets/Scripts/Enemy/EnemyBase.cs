@@ -20,7 +20,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected GameManager gameManager;
     private int recoverBeatsRemaining = 0;
 
-    // private Health health;
+    private Health health;
     private Collider2D col;
 
     protected HashSet<string> stunEffects = new HashSet<string>();
@@ -31,7 +31,12 @@ public abstract class EnemyBase : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
 
-            Health.OnDeath += HandleDeath;
+        health = GetComponent<Health>();
+        if (health == null) 
+        {
+            Debug.LogError($"{name}: No Health component found on enemy.");
+        }
+        health.OnDeath += HandleDeath;
 
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -330,7 +335,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        Health.OnDeath -= HandleDeath;
+        health.OnDeath -= HandleDeath;
 
         if (gameManager != null)
         {

@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour, IDamageable
 {
-    public static event Action OnDeath;
+    public event Action OnDeath;
 
     [SerializeField] private float enemyMaxHealth = 100.0f;
     [SerializeField] private GameObject healthPrefab; // HealthDisplay prefab
