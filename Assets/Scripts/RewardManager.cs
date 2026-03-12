@@ -26,9 +26,9 @@ public class RewardManager : MonoBehaviour
         { RewardType.MaxHealth, 5 },
         { RewardType.Damage, 5 },
         { RewardType.Speed, 3 },
-        { RewardType.HealthPotion, 10 },
-        { RewardType.BeatTick, 1 },
-        { RewardType.Note, 2 }
+        { RewardType.HealthPotion, 5 },
+        { RewardType.BeatTick, 5 },
+        { RewardType.Note, 5 }
     };
 
     private void Awake()
@@ -172,6 +172,6 @@ public enum RewardType
     Damage,
     Speed,
     HealthPotion,
-    BeatTick, 
+    BeatTick,
     Note
 }
