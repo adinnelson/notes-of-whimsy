@@ -1170,7 +1170,7 @@ CompositeCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_GeometryType: 0
+  m_GeometryType: 1
   m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
@@ -3005,6 +3005,22 @@ PrefabInstance:
       propertyPath: 'nodeList.Array.data[3]'
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1964486195779292610, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: m_Size.x
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1964486195779292610, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: m_Size.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1964486195779292610, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1964486195779292610, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: m_Offset.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2791336798263055279, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Name
       value: TopSingleRoom Variant
@@ -3076,13 +3092,13 @@ PrefabInstance:
     - {fileID: 3190756977640528348, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6517839853926421496, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
-      insertIndex: -1
+      insertIndex: 1
       addedObject: {fileID: 6042756144851367123}
     - targetCorrespondingSourceObject: {fileID: 6517839853926421496, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
-      insertIndex: -1
+      insertIndex: 2
       addedObject: {fileID: 7667090860356089860}
     - targetCorrespondingSourceObject: {fileID: 6517839853926421496, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
-      insertIndex: -1
+      insertIndex: 3
       addedObject: {fileID: 7111907119091157816}
     - targetCorrespondingSourceObject: {fileID: 6517839853926421496, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       insertIndex: -1

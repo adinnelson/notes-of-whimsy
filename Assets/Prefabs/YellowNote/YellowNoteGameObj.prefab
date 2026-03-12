@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5300640467177143317}
   - component: {fileID: 7300330059075456764}
   - component: {fileID: 4482386950409991977}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: YellowNoteGameObj
   m_TagString: puObj
   m_Icon: {fileID: 0}
@@ -180,3 +180,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   spell: {fileID: 11400000, guid: 6e7001c4cdddc114a8f79e40cfa8fea6, type: 2}
+  beatId: 0

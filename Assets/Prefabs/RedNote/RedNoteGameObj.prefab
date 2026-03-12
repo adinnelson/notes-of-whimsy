@@ -180,3 +180,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   spell: {fileID: 11400000, guid: 12bf1f82535eb0d4ba66704598c9118f, type: 2}
+  beatId: 0

@@ -86,6 +86,7 @@ public class SpellEditBar : MonoBehaviour
         }
 
         UpdateIcons();
+        UpdateSpellBox();
     }
 
     // close
@@ -109,6 +110,21 @@ public class SpellEditBar : MonoBehaviour
         }
     }
 
+    public void UpdateSpellBox()
+    {
+        for(int i = 1;i <= PlayerActiveSpellsHandler.SPELL_SLOT_NUM;i++)
+        {
+            if(playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i))
+            {
+                spellBoxes[i-1].SetColour(Color.darkGray);   
+            } 
+            else
+            {
+                spellBoxes[i-1].SetColour(Color.grey);
+            }
+        }
+    }
+
     // places spell
     // Or saves swap ids
     public void SpellBoxClicked(int slotId)
@@ -129,6 +145,7 @@ public class SpellEditBar : MonoBehaviour
         if(initialSlotId == null)
         {
             initialSlotId = slotId;
+            spellBoxes[slotId - 1].SetColour(Color.green);
             return;
         }
 
@@ -148,6 +165,7 @@ public class SpellEditBar : MonoBehaviour
         playerActiveSpellsHandler.EquipSpell(slot1, spell2);
         playerActiveSpellsHandler.EquipSpell(slot2, spell1);
 
+        spellBoxes[(int)initialSlotId - 1].SetColour(Color.grey);
         initialSlotId = null;
 
         UpdateIcons();

@@ -14,7 +14,8 @@ public class RoomInfo : MonoBehaviour
     [SerializeField]
     private Tilemap walls;
     [SerializeField]
-    private Tilemap roomLock;
+    private GameObject roomLock;
+    // private Tilemap roomLock;
 
     [Header("Attachment Nodes")]
     [SerializeField]
@@ -36,9 +37,15 @@ public class RoomInfo : MonoBehaviour
     [SerializeField]
     private Transform spawnedNode;
 
-    [Header("Enemy Logic")]
+    [Header("Enemy Spawning")]
     [SerializeField]
-    private List<GameObject> enemies;
+    private bool isCompleted;
+    [SerializeField]
+    private List<GameObject> enemyPrefabs;
+    [SerializeField]
+    private int numberOfWaves;
+    [SerializeField]
+    private int extraCombatWaves;
 
     [Header("Room Type")]
     [SerializeField]
@@ -49,25 +56,46 @@ public class RoomInfo : MonoBehaviour
     [Header("Shop Attributes")]
     [SerializeField]
     private bool isShop;
+    
     [SerializeField]
     private List<GameObject> itemSpawnLocations;
+
+    private ShopManager shopManager;
+
+    private RewardManager rewardManager;
+
+    private bool hasGivenRewards;
 
     // PROPERTIES
     public int NumberOfNodes { get; private set; }
 
     // EVENTS
     public static event System.Action<GameObject> OnFloorOverlap;
+    public static event System.Action<GameObject> OnEnterRoom;
     // UNITY LIFECYCLE METHODS
+
+    private EnemyWaveController enemyWaveController;
 
     private void Awake()
     {
-        RoomGenerator.OnDungeonComplete += HandleDungeonCompletion;
         CacheChildTilemaps();
-    }
+        if(roomType == RoomTypes.Shop)
+        {
+            isShop = true;
+            shopManager = GetComponent<ShopManager>();
+            if(shopManager == null)
+            {
+                Debug.LogWarning("RoomInfo: ShopManager component missing from shop room");
+            }
+        }
+        rewardManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<RewardManager>();
+        if(rewardManager == null)
+        {
+            Debug.LogWarning("RoomInfo: RewardManager reference missing from GameManager");
+        }
 
-    private void OnDestroy()
-    {
-        RoomGenerator.OnDungeonComplete -= HandleDungeonCompletion;
+        enemyWaveController = GetComponentInChildren<EnemyWaveController>();
+        UnlockRoom();
     }
 
     private void Update()
@@ -76,6 +104,34 @@ public class RoomInfo : MonoBehaviour
         {
             transform.position = parentNode.position - spawnedNode.localPosition;
         }
+        isCompleted = CheckIsRoomCompleted();
+        if (isCompleted)
+        {
+            // unlock room            roomLock.gameObject.SetActive(false);
+            GiveRewards();
+        }
+    }
+
+    private void GiveRewards()
+    {
+        // possible edge case to talk about 
+        // both given rewards here and checking for starter room
+        if (isShop && !hasGivenRewards)
+        {
+            // Give rewards for shop room
+            shopManager.GenerateShopRewards();
+        }
+        else if(!hasGivenRewards && !isShop && roomType != RoomTypes.Starter && roomType != RoomTypes.End)
+        {
+            // TODO: maybe add odds to drop an item in general
+            // Give rewards for non-shop room
+            foreach (GameObject location in itemSpawnLocations)
+            {
+                rewardManager.SpawnReward(location.transform);
+            }
+        }
+        hasGivenRewards = true;
+
     }
 
     // PUBLIC METHODS
@@ -204,7 +260,11 @@ public class RoomInfo : MonoBehaviour
     /// Gets the room lock tilemap for this room
     /// </summary>
     /// <returns>The room lock tilemap component</returns>
-    public Tilemap GetRoomLock()
+    // public Tilemap GetRoomLock()
+    // {
+    //     return roomLock;
+    // }
+    public GameObject GetRoomLock()
     {
         return roomLock;
     }
@@ -216,15 +276,6 @@ public class RoomInfo : MonoBehaviour
     public List<GameObject> GetSubRooms()
     {
         return subRooms;
-    }
-
-    /// <summary>
-    /// Gets the list of enemies assigned to this room
-    /// </summary>
-    /// <returns>The enemies list</returns>
-    public List<GameObject> GetEnemies()
-    {
-        return enemies;
     }
 
     /// <summary>
@@ -254,6 +305,62 @@ public class RoomInfo : MonoBehaviour
         return itemSpawnLocations;
     }
 
+    public bool IsCompleted()
+    {
+        return isCompleted;
+    }
+
+    public void SetEnemyPrefabs(List<GameObject> enemyPrefabs)
+    {
+        this.enemyPrefabs = enemyPrefabs;
+    }
+
+    /// <summary>
+    /// Gets the list of enemy prefabs assigned to this room
+    /// </summary>
+    /// <returns>The enemy prefabs list</returns>
+    public List<GameObject> GetEnemyPrefabs()
+    {
+        return enemyPrefabs;
+    }
+
+    /// <summary>
+    /// Gets the number of enemy waves assigned to this room, including extra waves if this is a combat room
+    /// </summary>
+    /// <returns>The number of waves</returns>
+    public int GetNumberOfWaves()
+    {
+        // Return base number of waves plus extra combat waves if this is a combat room
+        return numberOfWaves + (roomType == RoomTypes.Combat ? extraCombatWaves : 0);
+    }
+
+    public void LockRoom()
+    {
+        // todo: add visual 
+        print("Locking room");
+
+        if (roomLock != null && isSafe == false)
+        {
+            roomLock.SetActive(true);
+        }
+        else
+        {
+            print("No room lock tilemap found on " + gameObject.name);
+        }
+    }
+
+    public void UnlockRoom()
+    {
+        // todo: add visual 
+        print("Unlocking room");
+        if (roomLock != null)
+        {
+            isCompleted = true;
+            roomLock.SetActive(false);
+        }
+    }
+
+
     // PRIVATE METHODS
 
     /// <summary>
@@ -267,38 +374,23 @@ public class RoomInfo : MonoBehaviour
             if (childName == "floor")
             {
                 floor = transform.GetChild(i).GetComponent<Tilemap>();
+                continue;
                 // transform.GetChild(i).AddComponent<FloorInfo>();
-                break;
             }
             else if (childName == "walls")
             {
                 walls = transform.GetChild(i).GetComponent<Tilemap>();
+                continue;
             }
-            else if (childName == "roomLock")
+            else if (childName == "roomlock 2")
             {
-                roomLock = transform.GetChild(i).GetComponent<Tilemap>();
+                // for gameobjects
+                roomLock = transform.GetChild(i).gameObject;
+                CullRoomLockObjects();
+                UnlockRoom();
+
+                continue;
             }
-        }
-    }
-
-    /// <summary>
-    /// Handles dungeon completion event by spawning enemies in this room
-    /// </summary>
-    private void HandleDungeonCompletion()
-    {
-        PopulateEnemies();
-    }
-
-    /// <summary>
-    /// Spawns all enemies assigned to this room at random positions on the floor
-    /// </summary>
-    private void PopulateEnemies()
-    {
-        foreach (GameObject enemy in enemies)
-        {
-            print($"{gameObject.name} is spawning enemies");
-            // FIXME: get better logic for finding a spot to spawn enemy
-            Instantiate(enemy, floor.CellToWorld(Vector3Int.RoundToInt(floor.localBounds.center) + new Vector3Int(Random.Range(0, 2), Random.Range(0, 2), 0)), Quaternion.identity, transform);
         }
     }
 
@@ -313,6 +405,82 @@ public class RoomInfo : MonoBehaviour
         {
             OnFloorOverlap?.Invoke(gameObject);
         }
+        if (collision.CompareTag("Player"))
+        {
+            print(gameObject.name + " has been entered by the player!" + roomType );
+            OnEnterRoom?.Invoke(gameObject);
+            if(roomType != RoomTypes.Shop && roomType != RoomTypes.Reward && roomType != RoomTypes.Starter)
+            {
+                // LockRoom();
+            }
+            
+        }
+    }
+
+    private bool CheckIsRoomCompleted()
+    {
+       return enemyWaveController == null || enemyWaveController.AreWavesComplete();
+    }
+
+    private void CullRoomLockObjects()
+    {
+        int numberOfChildren = roomLock.transform.childCount;
+        GameObject nodeAttachment;
+        for (int i = numberOfChildren - 1; i >= 0; i--)
+        {
+            GameObject child = roomLock.transform.GetChild(i).gameObject;
+            switch (child.name.ToLower())
+            {
+                case "leftroomlock":
+                    nodeAttachment = GetNode("left");
+                    print("checking left node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
+                    if(nodeAttachment == null)
+                    {
+                        Destroy(child);
+                        continue;
+                    }
+                    child.transform.localPosition = nodeAttachment.transform.localPosition;
+                    break;
+                case "rightroomlock":
+                    nodeAttachment = GetNode("right");
+                        print("checking right node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
+                    if(nodeAttachment == null)
+                    {
+                        Destroy(child);
+                        continue;
+
+
+                    }
+                    child.transform.localPosition = nodeAttachment.transform.localPosition;
+                    break;
+                case "toproomlock":
+                    nodeAttachment = GetNode("top");
+                        print("checking top node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
+                    if(nodeAttachment == null)
+                    {
+                        Destroy(child);
+                        continue;
+
+
+                    }
+                    child.transform.localPosition = nodeAttachment.transform.localPosition;
+                    break;
+                case "bottomroomlock":
+                    nodeAttachment = GetNode("bottom");
+                        print("checking bottom node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
+                    if(nodeAttachment == null)
+                    {
+                        Destroy(child);
+                        continue;
+
+                    }
+                    child.transform.localPosition = nodeAttachment.transform.localPosition;
+                    break;
+                default:
+                    Destroy(child);
+                    break;
+            }
+        }
     }
 
 }
@@ -323,6 +491,7 @@ public enum RoomTypes
     Generic,
     Combat,
     Shop,
-    Reward
+    Reward,
+    End
 
 }

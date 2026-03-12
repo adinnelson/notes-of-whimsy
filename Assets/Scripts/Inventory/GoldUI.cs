@@ -8,36 +8,8 @@ public class GoldUI : MonoBehaviour
 
     private void Awake()
     {
-        if (goldText == null)
-        {
-            Transform goldCount = transform.Find("GoldCanvas/GoldCount");
-            if (goldCount != null )
-            {
-                goldText = goldCount.GetComponent<TextMeshProUGUI>();
-            }
-            else
-            {
-                Debug.LogWarning("GoldUI could not find child object named GoldCount. Add GoldCanvas to scene hierarchy, and confirm GoldCount TMP is its child.");
-            }
-        }
-
-        if (goldSprite == null)
-        {
-            TMP_SpriteAsset[] sprites = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>();
-            foreach (var sprite in sprites)
-            {
-                if (sprite.name.ToLower().Contains("goldbag"))
-                {
-                    goldSprite = sprite;
-                    break;
-                }
-            }
-
-            if (goldSprite == null)
-            {
-                Debug.LogWarning("GoldUI: No TMP Sprite Asset assigned and none found containing 'goldbag'. Assign in PickupUIManager>GoldCount");
-            }
-        }
+        Debug.Assert(goldText != null, "GoldUI: goldText reference not assigned in inspector.");
+        Debug.Assert(goldSprite != null, "GoldUI: goldSprite reference not assigned in inspector.");
     }
 
     private void Start()

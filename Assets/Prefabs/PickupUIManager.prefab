@@ -539,6 +539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoldUI
   goldText: {fileID: 6677723215922088217}
+  goldSprite: {fileID: 11400000, guid: 9c77119778588214682553066e3d549a, type: 2}
 --- !u!1 &3435014638951816314
 GameObject:
   m_ObjectHideFlags: 0
