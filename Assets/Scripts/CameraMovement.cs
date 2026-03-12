@@ -62,7 +62,7 @@ public class CameraMovement : MonoBehaviour
     private float activeCrossArmHalfThickness;
     private CameraBoundsShape activeCameraBoundsShape;
 
-    
+
 
     /// <summary>
     /// Ensure the camera Z offset is correct when the camera is placed in the editor.
@@ -73,10 +73,11 @@ public class CameraMovement : MonoBehaviour
         if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) return;
         UnityEditor.EditorApplication.delayCall += () =>
         {
+            if (this == null) return;
             transform.position = new Vector3(0.0f, 0.0f, CAMERA_Z_OFFSET);
         };
     }
-    
+
     private void OnDrawGizmos()
     {
         if (currentRoomTransform == null)
@@ -132,7 +133,7 @@ public class CameraMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
