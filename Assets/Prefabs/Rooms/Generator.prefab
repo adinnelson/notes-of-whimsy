@@ -57,7 +57,6 @@ MonoBehaviour:
   - {fileID: 7052457801854364891, guid: eb7bbf69df6126248951b9d8c9474483, type: 3}
   - {fileID: 3834276531175236695, guid: a722eb3bdcd47cd4680b06d63977bc45, type: 3}
   - {fileID: 6309157112508883362, guid: d5d2b0c5b47bcde409bb5952576fe680, type: 3}
-  - {fileID: 6056417628185097731, guid: 106be7126bc5f6a42a9ff8f1acca32ba, type: 3}
   - {fileID: 167603225339737800, guid: ee6b1c6c473d52c4cacdd3d90a32f8c3, type: 3}
   - {fileID: 7689101506527074657, guid: 3bec38e326686dd43ba09d95d642b830, type: 3}
   - {fileID: 2320255755634343439, guid: 09afc069bcab34747a764d4f8ca1658b, type: 3}
@@ -73,6 +72,7 @@ MonoBehaviour:
   topConnections: []
   bottomConnections: []
   shopRooms: []
+  endPrefab: {fileID: 4981396245671621754, guid: afe4996a98a8f1e4da109e11a33f2b23, type: 3}
   spawnedRooms: []
   allowRegeneration: 1
 --- !u!156049354 &2145482322479185504
