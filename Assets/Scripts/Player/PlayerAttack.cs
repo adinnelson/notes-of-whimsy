@@ -63,7 +63,7 @@ public class PlayerAttack : MonoBehaviour
         playerActiveSpellsHandler = FindObjectOfType<PlayerActiveSpellsHandler>();
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
 
-        layerMask = LayerMask.GetMask("Pickupables", "Player");
+        layerMask = LayerMask.GetMask("Pickupables", "Player", "Default");
     }
 
     private void Update()

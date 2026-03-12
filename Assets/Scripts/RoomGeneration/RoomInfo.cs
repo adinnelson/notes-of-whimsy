@@ -352,7 +352,6 @@ public class RoomInfo : MonoBehaviour
     public void UnlockRoom()
     {
         // todo: add visual 
-        print("Unlocking room");
         if (roomLock != null)
         {
             isCompleted = true;
@@ -407,7 +406,7 @@ public class RoomInfo : MonoBehaviour
         }
         if (collision.CompareTag("Player"))
         {
-            print(gameObject.name + " has been entered by the player!" + roomType );
+            // print(gameObject.name + " has been entered by the player!" + roomType );
             OnEnterRoom?.Invoke(gameObject);
             if(roomType != RoomTypes.Shop && roomType != RoomTypes.Reward && roomType != RoomTypes.Starter)
             {
@@ -433,7 +432,6 @@ public class RoomInfo : MonoBehaviour
             {
                 case "leftroomlock":
                     nodeAttachment = GetNode("left");
-                    print("checking left node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
                     if(nodeAttachment == null)
                     {
                         Destroy(child);
@@ -443,7 +441,6 @@ public class RoomInfo : MonoBehaviour
                     break;
                 case "rightroomlock":
                     nodeAttachment = GetNode("right");
-                        print("checking right node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
                     if(nodeAttachment == null)
                     {
                         Destroy(child);
@@ -455,7 +452,6 @@ public class RoomInfo : MonoBehaviour
                     break;
                 case "toproomlock":
                     nodeAttachment = GetNode("top");
-                        print("checking top node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
                     if(nodeAttachment == null)
                     {
                         Destroy(child);
@@ -467,7 +463,6 @@ public class RoomInfo : MonoBehaviour
                     break;
                 case "bottomroomlock":
                     nodeAttachment = GetNode("bottom");
-                        print("checking bottom node for room lock attachment: " + (nodeAttachment != null ? nodeAttachment.name : "null"));
                     if(nodeAttachment == null)
                     {
                         Destroy(child);
