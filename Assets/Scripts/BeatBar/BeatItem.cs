@@ -4,6 +4,10 @@ using UnityEngine.Pool;
 
 public class BeatItem : MonoBehaviour
 {
+
+
+    [System.NonSerialized]
+    public bool HasPlayedEndSound = false;
     private const float LATE_OFFSET = 0.5f; 
 
     // reference to beat handler in in scene
@@ -59,6 +63,9 @@ public class BeatItem : MonoBehaviour
         this.beatId = tickId;
 
         this.unlocked = unlocked;
+
+
+         HasPlayedEndSound = false; // Reset the flag when initializing
     }
 
 }
