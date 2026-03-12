@@ -7,7 +7,7 @@ public class ProgressFloor : MonoBehaviour
     private static int floorsCompleted = 0;
     private Scene currentScene;
 
-    Health health;
+    private Health health;
 
     void Awake()
     {
