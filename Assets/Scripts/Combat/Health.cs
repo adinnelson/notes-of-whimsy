@@ -65,7 +65,7 @@ public class Health : MonoBehaviour, IDamageable
     private void UpdateHitFlash()
     {
         hitFlashTimer -= Time.fixedDeltaTime;
-        Debug.Log(hitFlashTimer);
+        // Debug.Log(hitFlashTimer);
 
         if (hitFlashTimer <= 0 && inHitFlash)
         {

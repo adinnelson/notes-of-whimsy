@@ -6,6 +6,23 @@ public class ProgressFloor : MonoBehaviour
 {
     private static int floorsCompleted = 0;
     private Scene currentScene;
+
+    private Health health;
+
+    void Awake()
+    {
+        health = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
+        if (health == null)
+        {
+            Debug.LogError($"{name}: No Health component found on player.");
+        }
+        health.OnDeath += HandleDeath;
+    }
+
+    void OnDestroy()
+    {
+        health.OnDeath -= HandleDeath;
+    }
     private void Start()
     {
         currentScene = SceneManager.GetActiveScene();
@@ -37,5 +54,11 @@ public class ProgressFloor : MonoBehaviour
             SceneManager.LoadScene(currentScene.name);
             
         }
+    }
+
+    private void HandleDeath()
+    {
+        //reset floors completed on death
+        floorsCompleted = 0;
     }
 }

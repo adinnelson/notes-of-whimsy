@@ -103,9 +103,12 @@ public class SpellEditBar : MonoBehaviour
     {
         for(int i = 1;i <= PlayerActiveSpellsHandler.SPELL_SLOT_NUM;i++)
         {
+            int childCount = spellBoxes[i - 1].transform.childCount;
+            if(childCount > 0) Destroy(spellBoxes[i - 1].transform.GetChild(0).gameObject);
             if(!playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i)) continue;
             if(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i) == null) continue;
-
+            GameObject spellIconPrefab = playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i).SpellIcon;
+            print("there should be 4 of these");
             spellBoxes[i - 1].SetSpellIcon(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i).SpellIcon);
         }
     }
@@ -156,23 +159,35 @@ public class SpellEditBar : MonoBehaviour
     // swap 2 spells
     private void Swap(int slot1, int slot2)
     {
+        if(slot1 == slot2) return;
+
         int spell1 = playerActiveSpellsHandler.GetSpellIdFromSlotId(slot1);
         int spell2 = playerActiveSpellsHandler.GetSpellIdFromSlotId(slot2);
-
+        // print(spell1 + " " + spell2);
+        // if(spell1 == -1 || spell2 == -1) return;
         playerActiveSpellsHandler.ClearSlot(slot1);
         playerActiveSpellsHandler.ClearSlot(slot2);
 
-        playerActiveSpellsHandler.EquipSpell(slot1, spell2);
-        playerActiveSpellsHandler.EquipSpell(slot2, spell1);
+        if(spell1 != -1)
+        {
+            playerActiveSpellsHandler.EquipSpell(slot2, spell1);
+        }
+        if(spell2 != -1)
+        {
+            playerActiveSpellsHandler.EquipSpell(slot1, spell2);
+        }
+        // playerActiveSpellsHandler.EquipSpell(slot1, spell2);
+        // playerActiveSpellsHandler.EquipSpell(slot2, spell1);
 
-        spellBoxes[(int)initialSlotId - 1].SetColour(Color.grey);
+        // spellBoxes[(int)initialSlotId - 1].SetColour(Color.grey);
         initialSlotId = null;
-
+        UpdateSpellBox();
         UpdateIcons();
     }
 
     private void OnMinimizeInventory(InputAction.CallbackContext context)
     {
+        if(gameObject.activeSelf)
         Close();
     }
 }

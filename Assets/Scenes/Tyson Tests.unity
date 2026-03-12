@@ -737,6 +737,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 119030356271244576, guid: 40eec704274fcf24a9be35095cf47995, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1123556899271242787, guid: 40eec704274fcf24a9be35095cf47995, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.840401
@@ -809,6 +813,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -188262200637398784, guid: 3c144305244dabd4a8e1c9fd92ef2529, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3054110513573341902, guid: 3c144305244dabd4a8e1c9fd92ef2529, type: 3}
       propertyPath: m_Name
       value: RedNoteGameObj
@@ -1424,6 +1432,10 @@ PrefabInstance:
     - target: {fileID: 847775409627178053, guid: ff3810b195d9d0843ba447df2e0aaf05, type: 3}
       propertyPath: beatId
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1088703958485626059, guid: ff3810b195d9d0843ba447df2e0aaf05, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2268818154868069881, guid: ff3810b195d9d0843ba447df2e0aaf05, type: 3}
       propertyPath: m_LocalPosition.x

@@ -32,10 +32,12 @@ public abstract class EnemyBase : MonoBehaviour
         col = GetComponent<Collider2D>();
 
         health = GetComponent<Health>();
-        if (health != null)
+        if (health == null) 
         {
-            health.OnDeath += HandleDeath;
+            Debug.LogError($"{name}: No Health component found on enemy.");
         }
+        health.OnDeath += HandleDeath;
+
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
@@ -333,10 +335,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        if (health != null)
-        {
-            health.OnDeath -= HandleDeath;
-        }
+        health.OnDeath -= HandleDeath;
 
         if (gameManager != null)
         {

@@ -58,17 +58,17 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     public void EquipSpell(int slotId, int spellId)
     {
         SlotSpell slotSpell = slotSpells[slotId];
-        
+        print($"Equipping spell {spellId} to slot {slotId}");
+        bool dontInitHandler = false;
         if (!slotSpell.unlocked)
         {
             return;
         }
-        
+
         if (slotSpell.noteEffectHandler != null)
         {
-            Instantiate(slotSpell.noteEffectHandler.SpellData.NoteGameObj, transform.position, transform.rotation);
+            GameObject s = Instantiate(slotSpell.noteEffectHandler.SpellData.NoteGameObj, transform.position, transform.rotation);
             ClearSlot(slotId);
-            
         }
 
         switch(spellId)
@@ -101,15 +101,23 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
                 slotSpell.noteEffectHandler = blueNoteEffectHandler;
 
                 break;
+            default:
+                dontInitHandler = true;
+                break;
         }
-
-        slotSpell.noteEffectHandler.Init(idToSpellData[spellId], playerAttack);
+        
+        if(!dontInitHandler)
+        {
+            slotSpell.noteEffectHandler.Init(idToSpellData[spellId], playerAttack);
+        }
+        // slotSpell.noteEffectHandler = null;
         slotSpells[slotId] = slotSpell;
     }
 
     // Clear slot at slot Id
     public void ClearSlot(int slotId)
     {
+        // print(slotId);
         Destroy(slotSpells[slotId].noteEffectHandler);
 
         SlotSpell slotSpell = slotSpells[slotId];
