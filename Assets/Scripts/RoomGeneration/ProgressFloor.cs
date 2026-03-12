@@ -11,7 +11,7 @@ public class ProgressFloor : MonoBehaviour
 
     void Awake()
     {
-        health = GetComponent<Health>();
+        health = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         if (health == null)
         {
             Debug.LogError($"{name}: No Health component found on player.");
