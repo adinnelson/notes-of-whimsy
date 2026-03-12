@@ -298,6 +298,7 @@ MonoBehaviour:
   lightningEffect: {fileID: 8046267622772934418, guid: 6ee47fdd172e450498f0d56812dd828c, type: 3}
   laserPrefab: {fileID: -5741139717231234517, guid: 3e9e1b16b71bbd940954b08ad1827808, type: 3}
   explosion: {fileID: 8659360273826524317, guid: a3c244a8b81773849b6802e47ae1bd09, type: 3}
+  whirlPool: {fileID: 287630347529981786, guid: 8f663a66e6225e5438d9db062550419f, type: 3}
 --- !u!114 &1421404821173559249
 MonoBehaviour:
   m_ObjectHideFlags: 0

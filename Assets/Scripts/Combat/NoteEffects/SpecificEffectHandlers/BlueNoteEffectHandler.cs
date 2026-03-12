@@ -10,6 +10,10 @@ public class BlueNoteEffectHandler : NoteEffectHandler
     [SerializeField] private float pullForce = 45.0f;
     [SerializeField] private float damage = 20.0f;
 
+    private GameObject whirlPool;
+
+    SimpleTimer whirlTimerDespawn;
+
     List<GameObject> enemiesInRange = new List<GameObject>();
 
     public override void Init(SpellDataSO spellData, PlayerAttack playerAttack)
@@ -54,7 +58,13 @@ public class BlueNoteEffectHandler : NoteEffectHandler
             }
             DoDamage(enemiesInRange);
             Pull(enemiesInRange, pullOrigin, playerPosition);
+            DoAnimation(enemyComponent.transform.position);
         }
+    }
+
+    public void SetWhirlPool(GameObject whirlPool)
+    {
+        this.whirlPool = whirlPool;
     }
 
     private void Pull(List<GameObject> targets, Vector3 pullOrigin, Vector3 moveTowards)
@@ -106,6 +116,17 @@ public class BlueNoteEffectHandler : NoteEffectHandler
                 damageable.TakeDamage(damage);
             }
         }
+    }
+
+    private void DoAnimation(Vector3 pointOfOrigin)
+    {
+        GameObject whirlInstance = Instantiate(whirlPool, pointOfOrigin, Quaternion.identity);
+        whirlTimerDespawn = new SimpleTimer();
+        whirlTimerDespawn.StartTimer(0.5f, onFinish: () => 
+            {
+                Destroy(whirlInstance);
+            }
+        );
     }
 
     public override void Fire()

@@ -16,6 +16,8 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
 
     [SerializeField] private GameObject explosion;
 
+    [SerializeField] private GameObject whirlPool;
+
     private PlayerAttack playerAttack;
 
     private struct SlotSpell
@@ -93,12 +95,11 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
                 
                 break;
             case 4:
-
-                // DOESN'T WORK AWAITING REDESIGN IMPLEMENTATION
                 BlueNoteEffectHandler blueNoteEffectHandler = this.gameObject.AddComponent<BlueNoteEffectHandler>();
+                blueNoteEffectHandler.SetWhirlPool(whirlPool);
                 slotSpell.colour = Color.blue;
                 slotSpell.noteEffectHandler = blueNoteEffectHandler;
-                
+
                 break;
         }
 
