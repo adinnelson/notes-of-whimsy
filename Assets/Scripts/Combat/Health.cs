@@ -99,6 +99,10 @@ public class Health : MonoBehaviour, IDamageable
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, MaxHealth);
         UI?.UpdateText();
+        if (healthBarUpdater != null)
+        {
+            healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
+        }
     }
 
     public float CurrentHealth
@@ -108,6 +112,11 @@ public class Health : MonoBehaviour, IDamageable
         {
             currentHealth = Mathf.Clamp(value, 0.0f, MaxHealth);
             UI?.UpdateText();
+            if (healthBarUpdater != null)
+            {
+                healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
+            }
+
         }
     }
 }
