@@ -275,6 +275,9 @@ MonoBehaviour:
   enemyMaxHealth: 100
   healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
   healthBarUpdater: {fileID: 0}
+  whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
+  defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  flashTime: 0.1
 --- !u!114 &3173876067419357927
 MonoBehaviour:
   m_ObjectHideFlags: 0
