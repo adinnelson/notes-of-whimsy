@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class SpellBox : MonoBehaviour, IPointerClickHandler
 {
     private SpellEditBar spellEditBar;
+    [SerializeField]
     private GameObject spellIcon = null;
     
     private int slotId;
@@ -29,9 +30,11 @@ public class SpellBox : MonoBehaviour, IPointerClickHandler
         if(spellIcon != null)
         {
             Destroy(spellIcon);
-            spellIcon = null;
+            // spellIcon = null;
+            
         }
 
+        print(spellIconPrefab.name + "djkasndjksabdkjsabndaksjbd");
         spellIcon = Instantiate(spellIconPrefab, transform.position, transform.rotation);
         spellIcon.transform.SetParent(transform);
     }

@@ -78,11 +78,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7217919039076496189, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 0.32
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7217919039076496189, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 0.32
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7651831631326572719, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: amount
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7651831631326572719, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
       propertyPath: boostType

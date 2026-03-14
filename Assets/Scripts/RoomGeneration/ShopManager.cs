@@ -100,11 +100,11 @@ public class ShopManager : MonoBehaviour
 
         foreach (GameObject location in rewardLocations)
         {
-            Debug.Log(location.name);
+            // Debug.Log(location.name);
             shopItem = location.GetComponent<ShopItem>();
             RewardType rewardType = rewardManager.SpawnReward(location.transform, true);
             GameObject rewardPrefab = rewardManager.GetRewardPrefab(rewardType);
-            Debug.Log(rewardPrefab.name);
+            // Debug.Log(rewardPrefab.name);
             UpdateShopText(location, rewardType);
             shopItem.SetUpShopItem(rewardPrefab);
         }

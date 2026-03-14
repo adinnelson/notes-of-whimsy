@@ -10,9 +10,13 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
 
     // Yellow Note needed prefabs
     [SerializeField] private LayerMask enemyMask;
-    [SerializeField] private TempLightingEffectLogic lightningEffect;
+    [SerializeField] private LightningVisualLogic lightningEffect;
 
     [SerializeField] private LaserBeam laserPrefab;
+
+    [SerializeField] private GameObject explosion;
+
+    [SerializeField] private GameObject whirlPool;
 
     private PlayerAttack playerAttack;
 
@@ -54,23 +58,24 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     public void EquipSpell(int slotId, int spellId)
     {
         SlotSpell slotSpell = slotSpells[slotId];
-        
+        print($"Equipping spell {spellId} to slot {slotId}");
+        bool dontInitHandler = false;
         if (!slotSpell.unlocked)
         {
             return;
         }
-        
+
         if (slotSpell.noteEffectHandler != null)
         {
-            Instantiate(slotSpell.noteEffectHandler.SpellData.NoteGameObj, transform.position, transform.rotation);
+            GameObject s = Instantiate(slotSpell.noteEffectHandler.SpellData.NoteGameObj, transform.position, transform.rotation);
             ClearSlot(slotId);
-            
         }
 
         switch(spellId)
         {
             case 1:
                 RedNoteEffectHandler redNoteEffectHandler = this.gameObject.AddComponent<RedNoteEffectHandler>(); 
+                redNoteEffectHandler.SetExplosion(explosion);
                 slotSpell.colour = Color.red;
                 slotSpell.noteEffectHandler = redNoteEffectHandler;
 
@@ -90,22 +95,29 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
                 
                 break;
             case 4:
-
-                // DOESN'T WORK AWAITING REDESIGN IMPLEMENTATION
                 BlueNoteEffectHandler blueNoteEffectHandler = this.gameObject.AddComponent<BlueNoteEffectHandler>();
+                blueNoteEffectHandler.SetWhirlPool(whirlPool);
                 slotSpell.colour = Color.blue;
                 slotSpell.noteEffectHandler = blueNoteEffectHandler;
-                
+
+                break;
+            default:
+                dontInitHandler = true;
                 break;
         }
-
-        slotSpell.noteEffectHandler.Init(idToSpellData[spellId], playerAttack);
+        
+        if(!dontInitHandler)
+        {
+            slotSpell.noteEffectHandler.Init(idToSpellData[spellId], playerAttack);
+        }
+        // slotSpell.noteEffectHandler = null;
         slotSpells[slotId] = slotSpell;
     }
 
     // Clear slot at slot Id
     public void ClearSlot(int slotId)
     {
+        // print(slotId);
         Destroy(slotSpells[slotId].noteEffectHandler);
 
         SlotSpell slotSpell = slotSpells[slotId];

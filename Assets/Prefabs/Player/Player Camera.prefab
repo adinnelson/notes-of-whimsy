@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3314921149183790115}
   - component: {fileID: 100599311994469411}
   - component: {fileID: 4144613677968770473}
-  - component: {fileID: 8968541271172998733}
   - component: {fileID: 8844821264573558904}
+  - component: {fileID: 3288139087913020603}
   - component: {fileID: 6481287036213185721}
+  - component: {fileID: 1778805470503458839}
   m_Layer: 0
   m_Name: Player Camera
   m_TagString: MainCamera
@@ -46,7 +47,7 @@ Camera:
   m_GameObject: {fileID: 2103473749924576479}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 4
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -72,7 +73,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4.21875
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -140,24 +141,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!114 &8968541271172998733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2103473749924576479}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85436c41a9400fa48926f6d2360612c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
-  target: {fileID: 0}
-  smoothSpeed: 5
-  enableLookAhead: 0
-  lookAheadDistance: 1
-  lookAheadMinSpeed: 0.5
-  lookAheadResponsiveness: 10
 --- !u!114 &8844821264573558904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,6 +165,30 @@ MonoBehaviour:
   m_CropFrameX: 0
   m_CropFrameY: 0
   m_StretchFill: 0
+--- !u!114 &3288139087913020603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103473749924576479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aa7bb0a04af50a45bf9a38124ce96ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraMovement
+  playerTransform: {fileID: 0}
+  currentRoomTransform: {fileID: 0}
+  sqrDistanceFromPlayerToRoomCenter: 0
+  sqrDistanceFromCameraToStartFollowing: 5
+  defaultMaxSqrHorizontalDistanceFromCameraToRoomCenter: 5
+  defaultMaxSqrVerticalDistanceFromCameraToRoomCenter: 5
+  defaultCrossArmHalfThickness: 1
+  defaultCameraBoundsShape: 0
+  currentSqrDistanceFromCameraToRoomCenter: 0
+  smoothTime: 0.2
+  insideBoundsFollowAmount: 0.85
+  insideBoundsSmoothTimeMultiplier: 0.6
 --- !u!114 &6481287036213185721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,3 +203,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
   nonRigidbodyVelocity: 0
   attenuationObject: {fileID: 0}
+--- !u!114 &1778805470503458839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103473749924576479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56666c5a40171f54783dd416a44f42bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.Physics2DRaycaster
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0

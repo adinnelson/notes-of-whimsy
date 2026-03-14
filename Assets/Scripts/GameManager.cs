@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0;i < timers.Count;i++)
         {
-            Debug.Log("Timer Updated");
+            // Debug.Log("Timer Updated");
             timers[i].UpdateTimer(Time.fixedDeltaTime);
         }
     }
@@ -50,6 +50,11 @@ public class GameManager : MonoBehaviour
     public void AddTimer(SimpleTimer timer)
     {
         timers.Add(timer);
+    }
+
+    public void RemoveTimer(SimpleTimer timer)
+    {
+        timers.Remove(timer);
     }
 
     public float GetBPM()

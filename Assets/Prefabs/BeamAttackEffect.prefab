@@ -88,6 +88,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaserBeam
   activeBeats: 2
+  maxDistance: 50
+  wallTag: Walls
   damagePerSecond: 20
   hitRadius: 0.2
   enemyMask:
@@ -5008,7 +5010,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 8543918897373044191, guid: eda073dcc78e1dd46b565a34bfc99b9e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

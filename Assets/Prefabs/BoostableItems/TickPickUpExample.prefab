@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   spell: {fileID: 0}
-  beatId: 0
+  beatId: 2
 --- !u!114 &1088703958485626059
 MonoBehaviour:
   m_ObjectHideFlags: 0

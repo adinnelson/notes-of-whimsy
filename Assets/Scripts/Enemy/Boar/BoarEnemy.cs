@@ -14,7 +14,8 @@ public class BoarEnemy : EnemyBase
     [SerializeField] private GameObject telegraphVisual;
 
     [Header("Boar - Charge")]
-    [SerializeField] private float chargeSpeed = 14.0f;
+    [SerializeField] private float chargeSpeed = 30.0f;
+    [SerializeField] private float chargeTime = 0.1f;
 
     [Header("Boar - Chase")]
     [SerializeField] private float chaseSpeed = 2.5f;
@@ -24,10 +25,13 @@ public class BoarEnemy : EnemyBase
     private Vector2 lockedChargeDir;
     private bool isCharging = false;
     private bool shouldTelegraphNext = true;
+    private Vector3 telegraphBaseScale;
 
     private Animator animator;
 
     private EnemyFlip enemyFlip;
+
+    float chargeTimer = 0f;
 
     protected override void Awake()
     {
@@ -44,6 +48,10 @@ public class BoarEnemy : EnemyBase
         else
         {
             hitbox.Initialize(config.damage);
+        }
+        if (telegraphVisual != null)
+        {
+            telegraphBaseScale = telegraphVisual.transform.localScale;
         }
 
         SetHitboxActive(false);
@@ -80,11 +88,19 @@ public class BoarEnemy : EnemyBase
     {
         if (state == State.Dead) return;
         if (target == null) return;
-        if (isCharging) return;
+        if (isCharging)
+        {
+            chargeTimer -= Time.fixedDeltaTime;
+            if (chargeTimer < 0)
+            {
+                CancelChargeForKnockback();
+                StopMovement();
+            }
+        }
         if (state == State.Telegraph) return;
         if (stunEffects.Count > 0) return;
 
-        MoveTowardsTarget(chaseSpeed);
+        //MoveTowardsTarget(chaseSpeed);
     }
 
     protected override void HandleDeath()
@@ -125,6 +141,8 @@ public class BoarEnemy : EnemyBase
         SetHitboxActive(true);
         SetPlayerCollisionEnabled(true);  // body collider on — boar carries the player
 
+        chargeTimer = chargeTime;
+
         rb.linearVelocity = lockedChargeDir * chargeSpeed;
 
         state = State.Chase;
@@ -149,6 +167,23 @@ public class BoarEnemy : EnemyBase
 
         float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
+
+        float secondsPerBeat = 60.0f / gameManager.GetBPM();
+        float chargeDistance = chargeSpeed * chargeTime;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, chargeDistance);
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.collider.transform.IsChildOf(transform)) continue;
+            // Ignore walls we're already touching to prevent it from thinking we're right up against a wall and shrinking the telegraph to nothing
+            if (hit.distance < 0.3f) continue;
+            if (hit.collider.CompareTag("Walls") && hit.distance < chargeDistance)
+            {
+                chargeDistance = hit.distance;
+            }
+        }
+
+        telegraphVisual.transform.localScale = new Vector3(chargeDistance, telegraphBaseScale.y, telegraphBaseScale.z);
         telegraphVisual.SetActive(true);
     }
 
