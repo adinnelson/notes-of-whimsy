@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1901393099527981830}
   - component: {fileID: 6871415077949318443}
   - component: {fileID: 1355071270598781712}
+  - component: {fileID: -7351512009909601555}
   m_Layer: 7
   m_Name: PurpleNoteGameObj
   m_TagString: puObj
@@ -197,3 +198,15 @@ MonoBehaviour:
   rewardType: 5
   boostType: 4
   amount: 0
+--- !u!114 &-7351512009909601555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4161497147458546833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e1f3895b52c674e89503dab300d2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapItem

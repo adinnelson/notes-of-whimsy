@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4353760905646107697}
   - component: {fileID: 35507463983643180}
   - component: {fileID: -482702851353476360}
+  - component: {fileID: 5335892721839437538}
   m_Layer: 7
   m_Name: BlueNoteGameObj
   m_TagString: puObj
@@ -197,3 +198,15 @@ MonoBehaviour:
   rewardType: 5
   boostType: 4
   amount: 0
+--- !u!114 &5335892721839437538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353094496553566408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e1f3895b52c674e89503dab300d2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapItem
