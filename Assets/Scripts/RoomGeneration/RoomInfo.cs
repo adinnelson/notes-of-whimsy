@@ -563,6 +563,7 @@ public enum RoomTypes
     Generic,
     Combat,
     Shop,
+    Boss,
     Reward,
     End
 
