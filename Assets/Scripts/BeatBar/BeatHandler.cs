@@ -59,8 +59,8 @@ public class BeatHandler : MonoBehaviour
     private Dictionary<int, Color> beatIdToColor = new Dictionary<int, Color>
     {
         { -1, Color.white },
-        { 1, new Color(1, 0, 0) },
-        { 2, new Color(0, 1, 1) },
+        { 1, new Color(1, 0, 0.2f) },
+        { 2, new Color(1, 1, 0) },
         { 3, new Color(1, 0.5f, 1) },
         { 4, new Color(0, 0.5f, 1) }
     };
