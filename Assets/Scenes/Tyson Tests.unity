@@ -1081,6 +1081,10 @@ PrefabInstance:
       propertyPath: playerActiveSpellsHandler
       value: 
       objectReference: {fileID: 1278789940}
+    - target: {fileID: 3173876067419357927, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: lightningEffect
+      value: 
+      objectReference: {fileID: 7702718193461565169, guid: ebeea1f957af4c14d92910c4860b94ed, type: 3}
     - target: {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_Name
       value: Player
