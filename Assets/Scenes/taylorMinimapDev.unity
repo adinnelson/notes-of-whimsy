@@ -180,6 +180,23 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a9e67a902ca9fd43983f8e21810f457, type: 3}
+--- !u!1 &312594570 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3054110513573341902, guid: 3c144305244dabd4a8e1c9fd92ef2529, type: 3}
+  m_PrefabInstance: {fileID: 1276594613}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &312594577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312594570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e1f3895b52c674e89503dab300d2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapItem
 --- !u!1 &838938510
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,7 +476,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3054110513573341902, guid: 3c144305244dabd4a8e1c9fd92ef2529, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 312594577}
   m_SourcePrefab: {fileID: 100100000, guid: 3c144305244dabd4a8e1c9fd92ef2529, type: 3}
 --- !u!114 &1278789926 stripped
 MonoBehaviour:
@@ -785,7 +805,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3917825305028578068, guid: 8801b97fddefa40308eb94005c935918, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1683341549}
   m_SourcePrefab: {fileID: 100100000, guid: 8801b97fddefa40308eb94005c935918, type: 3}
 --- !u!1001 &1650386388
 PrefabInstance:
@@ -844,6 +867,23 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a06cf0089aa00de408d434c20b3ebdc1, type: 3}
+--- !u!1 &1683341542 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3917825305028578068, guid: 8801b97fddefa40308eb94005c935918, type: 3}
+  m_PrefabInstance: {fileID: 1521210853}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1683341549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683341542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4a8eb6f9e251104d8647c34999aa33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapEnemy
 --- !u!1001 &1959339045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -901,6 +941,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
+--- !u!224 &2098284059 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3216200391846743759, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
+  m_PrefabInstance: {fileID: 7028815985210784426}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5746277316902161804
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1023,6 +1068,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4250065695694440703, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
+      propertyPath: m_ShowMaskGraphic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4980819648392239415, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1103,10 +1152,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5162028101374972472, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5162028101374972472, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5439754356465189227, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5439754356465189227, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4458171298751560944, guid: 2e1ada3f141691d4dbb6a6d6000ce12a, type: 3}
+    - target: {fileID: 7148849681274274453, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
+      propertyPath: iconContainer
+      value: 
+      objectReference: {fileID: 2098284059}
+    - target: {fileID: 7148849681274274453, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
+      propertyPath: itemIconPrefab
+      value: 
+      objectReference: {fileID: 5707852656619444207, guid: eb655e7bfca61724c97a538b26c79248, type: 3}
+    - target: {fileID: 7148849681274274453, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
+      propertyPath: enemyIconPrefab
+      value: 
+      objectReference: {fileID: 5707852656619444207, guid: 86722584524c7984289a4595cfa21d9a, type: 3}
     - target: {fileID: 7311011846551009356, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
       propertyPath: m_Name
       value: Minimap
       objectReference: {fileID: 0}
+    - target: {fileID: 7550960607171060313, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -5255005808724942606, guid: eaa9f493afb91dc42a36461d838bae53, type: 3}
     - target: {fileID: 8709410268779633227, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
       propertyPath: player
       value: 

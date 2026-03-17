@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7300330059075456764}
   - component: {fileID: 4482386950409991977}
   - component: {fileID: 119030356271244576}
+  - component: {fileID: -7103779137699603813}
   m_Layer: 7
   m_Name: YellowNoteGameObj
   m_TagString: puObj
@@ -197,3 +198,15 @@ MonoBehaviour:
   rewardType: 5
   boostType: 4
   amount: 0
+--- !u!114 &-7103779137699603813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6233256500731044169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e1f3895b52c674e89503dab300d2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapItem

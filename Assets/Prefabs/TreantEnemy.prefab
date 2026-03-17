@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 8950591962530085416}
   - component: {fileID: 6552306522324509073}
   - component: {fileID: 3792002309343800686}
+  - component: {fileID: 242563410111016902}
   m_Layer: 3
   m_Name: TreantEnemy
   m_TagString: Untagged
@@ -356,6 +357,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163cc5be27063014b888f23df76eae09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyFlip
+--- !u!114 &242563410111016902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5690374572714891280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4a8eb6f9e251104d8647c34999aa33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapEnemy
 --- !u!1 &8352904766734939973
 GameObject:
   m_ObjectHideFlags: 0

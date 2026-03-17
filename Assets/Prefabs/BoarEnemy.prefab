@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1197561663549590709}
   - component: {fileID: 5999560372166084607}
   - component: {fileID: 8825632645303220842}
+  - component: {fileID: 9170751542343010568}
   m_Layer: 3
   m_Name: BoarEnemy
   m_TagString: Untagged
@@ -251,6 +252,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163cc5be27063014b888f23df76eae09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyFlip
+--- !u!114 &9170751542343010568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35604427116287388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4a8eb6f9e251104d8647c34999aa33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapEnemy
 --- !u!1 &3812711871826109230
 GameObject:
   m_ObjectHideFlags: 0

@@ -60,15 +60,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8414471, g: 0.9009434, b: 0.89767694, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.9333334, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 4458171298751560944, guid: 2e1ada3f141691d4dbb6a6d6000ce12a, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -5255005808724942606, guid: eaa9f493afb91dc42a36461d838bae53, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -254,6 +254,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MinimapManager
   roomsContainer: {fileID: 7898031912948745505}
   roomPrefab: {fileID: 5276806440628284387, guid: 94d12c6d3ecfeb448a0fd2da6bd22a5a, type: 3}
+  iconContainer: {fileID: 3216200391846743759}
+  enemyIconPrefab: {fileID: 5707852656619444207, guid: 86722584524c7984289a4595cfa21d9a, type: 3}
+  itemIconPrefab: {fileID: 5707852656619444207, guid: eb655e7bfca61724c97a538b26c79248, type: 3}
   worldToMapScale: 2
 --- !u!1 &5905831228000719961
 GameObject:
@@ -459,7 +462,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 4458171298751560944, guid: 2e1ada3f141691d4dbb6a6d6000ce12a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -481,4 +484,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
-  m_ShowMaskGraphic: 0
+  m_ShowMaskGraphic: 1
