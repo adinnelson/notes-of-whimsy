@@ -168,6 +168,7 @@ public class BoarEnemy : EnemyBase
         float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
 
+        // Look at removing this line since it is not being used
         float secondsPerBeat = 60.0f / gameManager.GetBPM();
         float chargeDistance = chargeSpeed * chargeTime;
 

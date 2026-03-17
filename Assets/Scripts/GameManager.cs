@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Since the gamemanager is apart of the DontDestroyOnLoad, the reference to the beat handler gets lost when a new scene is loaded. 
+        if(beatHandler == null)
+        {
+            beatHandler = GameObject.Find("BeatBar").GetComponent<BeatHandler>();
+        }
 
         for(int i = 0;i < timers.Count;i++)
         {

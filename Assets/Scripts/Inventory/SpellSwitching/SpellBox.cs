@@ -34,7 +34,6 @@ public class SpellBox : MonoBehaviour, IPointerClickHandler
             
         }
 
-        print(spellIconPrefab.name + "djkasndjksabdkjsabndaksjbd");
         spellIcon = Instantiate(spellIconPrefab, transform.position, transform.rotation);
         spellIcon.transform.SetParent(transform);
     }

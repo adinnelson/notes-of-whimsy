@@ -58,7 +58,6 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     public void EquipSpell(int slotId, int spellId)
     {
         SlotSpell slotSpell = slotSpells[slotId];
-        print($"Equipping spell {spellId} to slot {slotId}");
         bool dontInitHandler = false;
         if (!slotSpell.unlocked)
         {
