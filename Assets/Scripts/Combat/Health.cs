@@ -114,6 +114,8 @@ public class Health : MonoBehaviour, IDamageable
         if(isPlayer)
         {
             GoldManager.Instance.ResetGold();
+            PlayerStats.Instance.ResetStats();
+            // TODO: load death scene
             SceneManager.LoadScene("Main", LoadSceneMode.Single);
         }
     }

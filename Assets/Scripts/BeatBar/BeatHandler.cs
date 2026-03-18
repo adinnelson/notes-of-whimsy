@@ -87,6 +87,8 @@ public class BeatHandler : MonoBehaviour
         playerActiveSpellsHandler.UnlockSlot(6);
         playerActiveSpellsHandler.EquipSpell(6, 2);
 
+        playerAttack = GameObject.FindWithTag("Player")?.GetComponent<PlayerAttack>();
+
         PopulateBeatBar();
     }
 
