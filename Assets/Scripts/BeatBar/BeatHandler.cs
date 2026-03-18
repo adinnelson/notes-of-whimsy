@@ -166,7 +166,7 @@ public class BeatHandler : MonoBehaviour
             curRightGraphic.transform.localPosition = new Vector3(-newOffset, 0, curRightGraphic.transform.localPosition.z);
             curRightGraphic.transform.localScale = new Vector3(-1, newSize, 1);
 
-            if (adjustedBeatIndex >= numBeatsShown || !unlockedBeats.Contains(i + 1))
+            if (adjustedBeatIndex >= numBeatsShown || (i % 2 != 0 && !unlockedBeats.Contains(i + 1)))
             {
                 curLeftSprite.color = Color.clear;
                 curRightSprite.color = Color.clear;
