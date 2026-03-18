@@ -14,6 +14,11 @@ public class BeatHandler : MonoBehaviour
     private MusicManager musicManager;
     private float lastCheckedBPM = 0f;
 
+
+    //FMOD music is now 8 beats divided 
+    int musicBeatIndex;
+    int prevMusicIndex = 0;
+
     private const float REQUIRED_ACCURACY = 0.75f;
     private const int BEAT_NUM = 8;
 
@@ -68,7 +73,9 @@ public class BeatHandler : MonoBehaviour
     // enabled when a beat is within acceptable range
     public bool ValidAttackInterval = false;
 
-    void Start()
+
+
+    void Awake()
     {
 
         spriteRenderer = transform.Find("beatBarCenter").GetComponent<SpriteRenderer>();
@@ -90,14 +97,47 @@ public class BeatHandler : MonoBehaviour
         PopulateBeatBar();
     }
 
-    void FixedUpdate()
+
+    //using Update to sync music and sound effect
+    void Update()
     {
+        //getting information about the current beat from music 
+        musicBeatIndex = musicManager.timelineInfo.currentBeat;
+
+        //Fire percussion sound on tempo if beat is unlocked 
+        if (prevMusicIndex != musicBeatIndex)
+        {
+            prevMusicIndex = musicBeatIndex;
+            // Debug.Log($"Music = {prevMusicIndex}");
+            if (unlockedBeats.Contains(prevMusicIndex))
+            {
+                PlayBeatEndSound();
+                // Debug.Log($"Music = {prevMusicIndex}");
+            }
+        }
+
+        // Check for BPM changes to update the Beat bar according to music switch
+        if (musicManager != null)
+        {
+            float currentMusicBPM = musicManager.GetCurrentBPM();
+            if (currentMusicBPM > 0 && Mathf.Abs(lastCheckedBPM - currentMusicBPM) > 0.01f)
+            {
+                // Debug.Log(currentMusicBPM);
+                lastCheckedBPM = currentMusicBPM;
+                ChangeBPM(currentMusicBPM);
+            }
+        }
+
         // place beatbar at mouse
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
 
         // needs to be x2 because we are fitting 8 beats into 4/4
-        percentToNextBeat += Time.fixedDeltaTime * bpm / 60f * 2f;
+        // Debug.Log(musicManager.timelineInfo.currentBeat);
+        // musicBeatIndex = musicManager.timelineInfo.currentBeat;
+        percentToNextBeat += Time.deltaTime * bpm / 60f * 2f;
+        // Debug.Log(percentToNextBeat);
+
 
         // fires on half beat
         if (percentToNextBeat > 0.5 && !beatIndexHasChanged)
@@ -108,6 +148,9 @@ public class BeatHandler : MonoBehaviour
             }
 
             beatIndex = (beatIndex + 1) % BEAT_NUM;
+            // musicBeatIndex = (musicBeatIndex + 1 ) % BEAT_NUM;
+            // Debug.Log($"Current = {beatIndex}");
+            // Debug.Log($"Music = {musicBeatIndex}");
 
             if (playerAttack != null && unlockedBeats.Contains(beatIndex))
             {
@@ -127,7 +170,8 @@ public class BeatHandler : MonoBehaviour
 
             if (unlockedBeats.Contains(onBeatIndex + 1))
             {
-                PlayBeatEndSound();
+                // PlayBeatEndSound();
+                // Debug.Log($"Current = {onBeatIndex + 1}");
             }
 
             onBeatIndex = (onBeatIndex + 1) % BEAT_NUM;
@@ -139,6 +183,9 @@ public class BeatHandler : MonoBehaviour
 
         ValidAttackInterval = CheckValidAttackInterval(percentToNextBeat);
     }
+
+
+
 
     private void UpdateBeatVisuals()
     {
@@ -201,7 +248,7 @@ public class BeatHandler : MonoBehaviour
     }
 
     // get whether an attack can be made based on the percentage to next beat
-    public bool CheckValidAttackInterval (float percentage)
+    public bool CheckValidAttackInterval(float percentage)
     {
         return unlockedBeats.Contains(beatIndex + 1) && (percentage <= REQUIRED_ACCURACY || percentage >= 1f - REQUIRED_ACCURACY);
 
@@ -224,34 +271,7 @@ public class BeatHandler : MonoBehaviour
     }
 
     //Update the Beat bar bpm to reflect the changing between rooms
-    void Update()
-    {
-        // Check for BPM changes to update the Beat bar according to music switch
-        if (musicManager != null)
-        {
-            float currentMusicBPM = musicManager.GetCurrentBPM();
-            if (currentMusicBPM > 0 && Mathf.Abs(lastCheckedBPM - currentMusicBPM) > 0.01f)
-            {
-                // Debug.Log(currentMusicBPM);
-                lastCheckedBPM = currentMusicBPM;
-                ChangeBPM(currentMusicBPM);
-            }
-        }
 
-
-
-        // //For testing:
-        // var keyboard = Keyboard.current;
-        // if (keyboard == null) return; // No keyboard connected
-        // if (keyboard.bKey.wasPressedThisFrame)
-        // {
-        //     ChangeBPM(100f);
-        // }
-        // if (keyboard.nKey.wasPressedThisFrame)
-        // {
-        //     ChangeBPM(120f);
-        // }
-    }
 
     // method to reset the Beat bar to a new bpm
     public void ChangeBPM(float newBPM)
@@ -273,3 +293,21 @@ public class BeatHandler : MonoBehaviour
         }
     }
 }
+
+
+
+    //Old code used for testing. 
+    // void Update()
+    // {
+    //     // //For testing:
+    //     // var keyboard = Keyboard.current;
+    //     // if (keyboard == null) return; // No keyboard connected
+    //     // if (keyboard.bKey.wasPressedThisFrame)
+    //     // {
+    //     //     ChangeBPM(100f);
+    //     // }
+    //     // if (keyboard.nKey.wasPressedThisFrame)
+    //     // {
+    //     //     ChangeBPM(120f);
+    //     // }
+    // }

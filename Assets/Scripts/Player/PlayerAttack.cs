@@ -115,6 +115,7 @@ public class PlayerAttack : MonoBehaviour
             case "Fire":
             {
                 int beatID = beathandler.GetBeatIndex();
+                Debug.Log(beatID);
 
                 playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID)?.Fire();
 
