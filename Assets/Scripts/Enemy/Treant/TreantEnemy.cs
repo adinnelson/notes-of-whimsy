@@ -28,6 +28,11 @@ public class TreantEnemy : EnemyBase
     private Vector3 telegraphBaseScale;
     private Animator animator;
 
+    // Track position between physics frames to detect when the charge is blocked
+    private Vector2 lastChargePosition;
+    private int stuckFrames = 0;
+    private const int stuckFrameThreshold = 3;
+
     private EnemyFlip enemyFlip;
 
     protected override void Awake()
@@ -120,7 +125,27 @@ public class TreantEnemy : EnemyBase
 
         if (isCharging)
         {
-            // Keep forcing charge velocity so knockback can't permanently stop the charge
+            // Check if the treant has barely moved since last physics frame.
+            // If blocked for several frames (e.g. player pinned against a wall),
+            // treat it the same as hitting a wall.
+            float distanceMoved = Vector2.Distance(rb.position, lastChargePosition);
+            float expectedDistance = chargeSpeed * Time.fixedDeltaTime * 0.5f;
+
+            if (distanceMoved < expectedDistance)
+            {
+                stuckFrames++;
+                if (stuckFrames >= stuckFrameThreshold)
+                {
+                    EnterWallStun();
+                    return;
+                }
+            }
+            else
+            {
+                stuckFrames = 0;
+            }
+
+            lastChargePosition = rb.position;
             rb.linearVelocity = lockedChargeDir * chargeSpeed;
             return;
         }
@@ -185,7 +210,9 @@ public class TreantEnemy : EnemyBase
         HideTelegraphVisual();
 
         isCharging = true;
-         animator.SetBool("Charging", true);
+        stuckFrames = 0;
+        lastChargePosition = rb.position;
+        animator.SetBool("Charging", true);
         SetHitboxActive(true);
         SetPlayerCollisionEnabled(true);
         rb.linearVelocity = lockedChargeDir * chargeSpeed;
