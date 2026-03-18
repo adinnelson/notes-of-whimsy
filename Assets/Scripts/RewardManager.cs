@@ -83,11 +83,13 @@ public class RewardManager : MonoBehaviour
     /// <returns>The matching reward prefab, or null if none exists.</returns>
     public GameObject GetRewardPrefab(RewardType rewardType)
     {
-        GameObject prefab = rewardPrefabs.FirstOrDefault(p => p.GetComponent<BoostableItem>()?.RewardType == rewardType);
-        if (prefab == null)
+        List<GameObject> prefabs = rewardPrefabs.Where(p => p.GetComponent<BoostableItem>()?.RewardType == rewardType).ToList();
+        if (prefabs.Count == 0)
         {
             Debug.LogError($"No prefab found for reward type {rewardType}");
+            return null;
         }
+        GameObject prefab = prefabs[Random.Range(0, prefabs.Count)];
 
         return prefab;
     }
