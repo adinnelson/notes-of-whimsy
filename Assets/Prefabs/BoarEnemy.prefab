@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1197561663549590709}
   - component: {fileID: 5999560372166084607}
   - component: {fileID: 8825632645303220842}
+  - component: {fileID: 9170751542343010568}
   m_Layer: 3
   m_Name: BoarEnemy
   m_TagString: Untagged
@@ -100,6 +101,8 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 879efa59b3b92b84b93a418048288bc0, type: 2}
   disableOnDeath: 1
   deathFadeDuration: 0.5
+  stunnedMaterial: {fileID: -876546973899608171, guid: 1ec764e42543a6e46bb597f1d9c7aeb0, type: 3}
+  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   telegraphJitterDegrees: 20
   telegraphVisual: {fileID: 8509544298852323261}
   chargeSpeed: 35
@@ -251,6 +254,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163cc5be27063014b888f23df76eae09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyFlip
+--- !u!114 &9170751542343010568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35604427116287388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4a8eb6f9e251104d8647c34999aa33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapEnemy
 --- !u!1 &3812711871826109230
 GameObject:
   m_ObjectHideFlags: 0

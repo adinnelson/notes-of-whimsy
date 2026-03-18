@@ -9,6 +9,11 @@ public class MinimapManager : MonoBehaviour
     public Transform roomsContainer;
     public GameObject roomPrefab;
 
+    [Header("Icon Layout")]
+    public Transform iconContainer;
+    public GameObject enemyIconPrefab;
+    public GameObject itemIconPrefab;
+
     [Header("Map Scale")]
     public float worldToMapScale = 2.0f;
 
@@ -32,6 +37,21 @@ public class MinimapManager : MonoBehaviour
         if (roomPrefab == null)
         {
             Debug.LogError("MinimapManager: roomPrefab is not assigned in the Inspector.");
+        }
+
+        if (iconContainer == null)
+        {
+            Debug.LogError("MinimapManager: iconContainer is not assigned in the Inspector.");
+        }
+
+        if (enemyIconPrefab == null)
+        {
+            Debug.LogWarning("MinimapManager: enemyIconPrefab is not assigned in the Inspector.");
+        }
+
+        if (itemIconPrefab == null)
+        {
+            Debug.LogWarning("MinimapManager: itemIconPrefab is not assigned in the Inspector.");
         }
 
         RoomGenerator.OnDungeonComplete += BuildMinimapFromDungeon;
@@ -79,6 +99,51 @@ public class MinimapManager : MonoBehaviour
         RectTransform rect = room.GetComponent<RectTransform>();
         rect.anchoredPosition = WorldToMap(worldPosition);
     }
+
+    public RectTransform RegisterEnemyIcon()
+    {
+        if (iconContainer == null || enemyIconPrefab == null)
+        {
+            Debug.LogWarning("MinimapManager: Cannot register enemy icon because iconsContainer or enemyIconPrefab is missing.");
+            return null;
+        }
+
+        GameObject icon = Instantiate(enemyIconPrefab, iconContainer);
+        RectTransform rect = icon.GetComponent<RectTransform>();
+
+        if (rect == null)
+        {
+            Debug.LogWarning("MinimapManager: enemyIconPrefab is missing a RectTransform.");
+            return null;
+        }
+
+        rect.SetAsLastSibling();
+        return rect;
+    }
+
+    public RectTransform RegisterItemIcon()
+    {
+        if (iconContainer == null || itemIconPrefab == null)
+        {
+            Debug.LogWarning("MinimapManager: Cannot register item icon because iconsContainer or itemIconPrefab is missing.");
+            return null;
+        }
+
+        GameObject icon = Instantiate(itemIconPrefab, iconContainer);
+        RectTransform rect = icon.GetComponent<RectTransform>();
+
+        if (rect == null)
+        {
+            Debug.LogWarning("MinimapManager: itemIconPrefab is missing a RectTransform.");
+            return null;
+        }
+
+        rect.SetAsLastSibling();
+        return rect;
+    }
+
+
+
 
     public Vector2 WorldToMap(Vector2 worldPos)
     {

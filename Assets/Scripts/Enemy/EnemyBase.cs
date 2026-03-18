@@ -13,6 +13,11 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] private bool disableOnDeath = true;
     [SerializeField] private float deathFadeDuration = 0.5f;
 
+    [Header("Stunned")]
+    [SerializeField] protected Material stunnedMaterial;
+    [SerializeField] protected Material defaultMaterial;
+    protected SpriteRenderer sprite;
+
     protected Transform target;
     protected Rigidbody2D rb;
     protected State state;
@@ -30,6 +35,7 @@ public abstract class EnemyBase : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
+        sprite = GetComponent<SpriteRenderer>();
 
         health = GetComponent<Health>();
         if (health == null) 
@@ -113,6 +119,7 @@ public abstract class EnemyBase : MonoBehaviour
         if (stunEffects.Count > 0)
         {
             recoverBeatsRemaining = 0;
+            StunVisuals();
             return;
         }
 
@@ -262,6 +269,16 @@ public abstract class EnemyBase : MonoBehaviour
     public void RemoveStunEffect(string key)
     {
         stunEffects.Remove(key);
+
+        if(stunEffects.Count <= 0)
+        {
+            sprite.material = defaultMaterial;
+        }
+    }
+
+    protected void StunVisuals()
+    {
+        sprite.material = stunnedMaterial;
     }
 
     protected virtual void HandleDeath()
