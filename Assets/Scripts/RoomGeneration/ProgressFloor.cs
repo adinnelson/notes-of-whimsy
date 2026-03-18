@@ -9,6 +9,7 @@ public class ProgressFloor : MonoBehaviour
     private Health health;
 
     public static event System.Action OnFloorProgressed;
+    public static event System.Action OnEndSceneReached;
 
     void Awake()
     {
@@ -47,6 +48,7 @@ public class ProgressFloor : MonoBehaviour
         if(floorsCompleted >= 3)
         {
             print("End Scene Reached");
+            OnEndSceneReached?.Invoke();
             //make sure the scene is in the build settings for this to work
             floorsCompleted = 0;
             SceneManager.LoadScene("EndScene");
