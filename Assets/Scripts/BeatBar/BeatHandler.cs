@@ -97,17 +97,34 @@ public class BeatHandler : MonoBehaviour
         if(unlockedBeats.Count == 0)
         {
             int spellToUnlock = Random.Range(1, BEAT_NUM + 1);
-            unlockedBeats.Add(spellToUnlock);
-            playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
-            playerActiveSpellsHandler.EquipSpell(spellToUnlock, 1);
-            spellToUnlock = Random.Range(1, BEAT_NUM + 1);
-            unlockedBeats.Add(spellToUnlock);
-            playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
-            playerActiveSpellsHandler.EquipSpell(spellToUnlock, 3);
-            spellToUnlock = Random.Range(1, BEAT_NUM + 1);
-            unlockedBeats.Add(spellToUnlock);
-            playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
-            playerActiveSpellsHandler.EquipSpell(spellToUnlock, 2);
+            for(int i = 1; i <= startingSpellCount; i++)
+            {
+                spellToUnlock = Random.Range(1, BEAT_NUM + 1);
+                while (unlockedBeats.Contains(spellToUnlock))
+                {
+                    spellToUnlock = Random.Range(1, BEAT_NUM + 1);
+                }
+                unlockedBeats.Add(spellToUnlock);
+                playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
+                // FIXME: update this if we add new amount of spells
+                int spellId = Random.Range(1, 5); // Assuming there are 4 spells to choose from
+                playerActiveSpellsHandler.EquipSpell(spellToUnlock, spellId);
+            }
+
+            // // 1
+            // unlockedBeats.Add(spellToUnlock);
+            // playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
+            // playerActiveSpellsHandler.EquipSpell(spellToUnlock, 1);
+            // spellToUnlock = Random.Range(1, BEAT_NUM + 1);
+            // // 5
+            // unlockedBeats.Add(spellToUnlock);
+            // playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
+            // playerActiveSpellsHandler.EquipSpell(spellToUnlock, 3);
+            // spellToUnlock = Random.Range(1, BEAT_NUM + 1);
+            // //6
+            // unlockedBeats.Add(spellToUnlock);
+            // playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
+            // playerActiveSpellsHandler.EquipSpell(spellToUnlock, 2);
         }
         
     }
