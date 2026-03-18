@@ -108,7 +108,6 @@ public class SpellEditBar : MonoBehaviour
             if(!playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i)) continue;
             if(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i) == null) continue;
             GameObject spellIconPrefab = playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i).SpellIcon;
-            print("there should be 4 of these");
             spellBoxes[i - 1].SetSpellIcon(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i).SpellIcon);
         }
     }

@@ -61,6 +61,7 @@ public class RoomGenerator : MonoBehaviour
     private void Awake()
     {
         RoomInfo.OnFloorOverlap += HandleFloorOverlap;
+        ProgressFloor.OnFloorProgressed += ResetGeneration;
         CreateRoomPools();
         CreateFloorLayout();
     }
@@ -77,6 +78,7 @@ public class RoomGenerator : MonoBehaviour
     private void OnDestroy()
     {
         RoomInfo.OnFloorOverlap -= HandleFloorOverlap;
+        ProgressFloor.OnFloorProgressed -= ResetGeneration;
     }
 
     // PUBLIC METHODS
@@ -116,6 +118,7 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     public void CreateFloorLayout()
     {
+
         GameObject spawnedRoom = null;
         RoomInfo currentRoomInfo = null;
         int roomSelector = 0;

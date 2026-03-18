@@ -45,7 +45,7 @@ public class PlayerAttack : MonoBehaviour
         inputActions = new InputSystem_Actions();
         CacheInitialMousePosition();
     }
-
+    
     private void OnEnable()
     {
         inputActions.Player.Enable();
@@ -77,8 +77,18 @@ public class PlayerAttack : MonoBehaviour
     private void Update()
     {
         // Continuously check to update aim based on the most recent input (Mouse and/or Controller)
+        if(mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
+        if(beathandler == null)
+        {
+            beathandler = GameObject.Find("BeatBar").GetComponent<BeatHandler>();
+        }
+
         UpdateAimSourceFromStick();
-        UpdateAimSourceFromMouseMovement();
+        UpdateAimSourceFromMouseMovement();    
+
     }
 
     private void OnBeatActionPerformed(InputAction.CallbackContext context)
@@ -132,11 +142,13 @@ public class PlayerAttack : MonoBehaviour
         {
             case "Fire":
             {
+                if(beathandler != null)
+                {
                 int beatID = beathandler.GetBeatIndex();
-
                 playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID)?.Fire();
 
                 lastFireTimeSeconds = Time.time;
+                }
                 break;
             }
             /*case "Sprint":
