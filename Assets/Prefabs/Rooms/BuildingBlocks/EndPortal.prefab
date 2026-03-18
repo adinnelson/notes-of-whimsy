@@ -142,3 +142,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af1fb03729401c348be62587ce8ae566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  loadCustomScene: 0
+  customSceneName: StartMenu
