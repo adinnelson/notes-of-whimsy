@@ -19,19 +19,19 @@ public class PickupItem : MonoBehaviour
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            Collider2D hit = Physics2D.OverlapPoint(mousePos);
+            Collider2D[] hits = Physics2D.OverlapPointAll(mousePos);
 
-            if (hit != null && hit.gameObject == gameObject)
+            foreach (Collider2D hit in hits)
             {
-                float distance = Vector2.Distance(transform.position, player.position);
-                if (distance <= pickupRange)
+                if (hit.gameObject == gameObject)
                 {
-                    SpellPickupUI.Instance.Show(this);
+                    float distance = Vector2.Distance(transform.position, player.position);
+                    if (distance <= pickupRange)
+                    {
+                        SpellPickupUI.Instance.Show(this);
+                    }
+                    break;
                 }
-            }
-            else
-            {
-                return;
             }
         }
     }
