@@ -1,19 +1,10 @@
 fileFormatVersion: 2
-guid: 19a0d1b8aff066740b1ddd793e0c2c41
+guid: 0394936dbc27bd44f84b7ea2b5f10fdb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3883726067453065187
-    second: PickUpSprites_0
-  - first:
-      213: -4432265235335808204
-    second: PickUpSprites_1
-  - first:
-      213: -222739583316544275
-    second: PickUpSprites_2
-  - first:
-      213: -1145214917058537236
-    second: PickUpSprites_3
+      213: -1408437573596956881
+    second: TitleScreen_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -55,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -109,67 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PickUpSprites_0
+      name: TitleScreen_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 320
+        height: 180
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d180980f7bb3a1ac0800000000000000
-      internalID: -3883726067453065187
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: PickUpSprites_1
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 43bfe79604e6d72c0800000000000000
-      internalID: -4432265235335808204
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: PickUpSprites_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: de4bff2778ba8ecf0800000000000000
-      internalID: -222739583316544275
+      spriteID: f27b0713d79347ce0800000000000000
+      internalID: -1408437573596956881
       vertices: []
       indices: 
       edges: []
@@ -178,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: ef8d7dd33dab80a41882451ad1732daa
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -186,13 +133,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      PickUpSprites_0: -3883726067453065187
-      PickUpSprites_1: -4432265235335808204
-      PickUpSprites_2: -222739583316544275
+      TitleScreen_0: -1408437573596956881
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
