@@ -88,8 +88,7 @@ public class LaserBeam : MonoBehaviour
             return;
         }
 
-        // TO DO: currently anchors laser object on player (change to position of bard weapon when that exists)
-        transform.position = startTransform.position;
+        
 
         // mouse world
         Vector2 mouseScreen = Mouse.current.position.ReadValue();
@@ -98,6 +97,9 @@ public class LaserBeam : MonoBehaviour
 
         Vector2 origin = (Vector2)startTransform.position;
         Vector2 dir = ((Vector2)worldMouse - origin).normalized;
+
+        // TO DO: currently anchors laser object on player (change to position of bard weapon when that exists)
+        transform.position = startTransform.position + (Vector3)dir * 1f;
 
         // Raycast in that direction and find the closest wall by tag
         RaycastHit2D[] allHits = Physics2D.RaycastAll(origin, dir, maxDistance);

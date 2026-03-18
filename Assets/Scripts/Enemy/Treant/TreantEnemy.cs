@@ -25,6 +25,7 @@ public class TreantEnemy : EnemyBase
     private bool isCharging = false;
     private bool shouldTelegraphNext = true;
     private int wallStunBeatsRemaining = 0;
+    private Vector3 telegraphBaseScale;
     private Animator animator;
 
     private EnemyFlip enemyFlip;
@@ -52,6 +53,11 @@ public class TreantEnemy : EnemyBase
 
         HideTelegraphVisual();
         SetStunVisualActive(false);
+
+        if (telegraphVisual != null)
+        {
+            telegraphBaseScale = telegraphVisual.transform.localScale;
+        }
     }
 
     // Beat cycle is fully managed in OnBeat — EnemyBase attack flow is not used
@@ -73,6 +79,7 @@ public class TreantEnemy : EnemyBase
 
         if (stunEffects.Count > 0)
         {
+            StunVisuals();
             return;
         }
 
@@ -223,6 +230,28 @@ public class TreantEnemy : EnemyBase
 
         float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
+
+        // Scale the indicator to reach exactly the wall the treant will slam into.
+        const float maxRayDist = 50.0f;
+        float chargeDistance = maxRayDist;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, maxRayDist);
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.collider.transform.IsChildOf(transform)) continue;  // ignore self
+            // Ignore walls we're already touching to prevent it from thinking we're right up against a wall and shrinking the telegraph to nothing
+            if (hit.distance < 0.6f) continue;
+            if (hit.collider.CompareTag("Walls") && hit.distance < chargeDistance)
+            {
+                chargeDistance = hit.distance;
+            }
+        }
+
+        telegraphVisual.transform.localScale = new Vector3(
+            chargeDistance,
+            telegraphBaseScale.y,
+            telegraphBaseScale.z
+        );
+
         telegraphVisual.SetActive(true);
     }
 

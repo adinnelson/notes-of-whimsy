@@ -37,7 +37,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0523522d8831d946a529c107b967c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  acceleration: 10
+  acceleration: 26.666666
 --- !u!114 &-7864820753085434846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +274,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Health
   enemyMaxHealth: 100
   healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
+  healthBarUpdater: {fileID: 0}
+  whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
+  defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  flashTime: 0.1
 --- !u!114 &3173876067419357927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,6 +300,8 @@ MonoBehaviour:
     m_Bits: 8
   lightningEffect: {fileID: 8046267622772934418, guid: 6ee47fdd172e450498f0d56812dd828c, type: 3}
   laserPrefab: {fileID: -5741139717231234517, guid: 3e9e1b16b71bbd940954b08ad1827808, type: 3}
+  explosion: {fileID: 8659360273826524317, guid: a3c244a8b81773849b6802e47ae1bd09, type: 3}
+  whirlPool: {fileID: 287630347529981786, guid: 8f663a66e6225e5438d9db062550419f, type: 3}
 --- !u!114 &1421404821173559249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,6 +314,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34da6159dc83ea34e8e224e9c1f7da4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  maxSpeed: 3
+  maxSpeed: 4
   maxHealth: 100
   maxDamage: 1

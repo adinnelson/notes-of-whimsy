@@ -140,10 +140,11 @@ public class RoomInfo : MonoBehaviour
             // Give rewards for shop room
             shopManager.GenerateShopRewards();
         }
-        else if(!hasGivenRewards && !isShop && roomType != RoomTypes.Starter && roomType != RoomTypes.End)
+        else if(!hasGivenRewards && roomType != RoomTypes.Starter && roomType != RoomTypes.End)
         {
             // TODO: maybe add odds to drop an item in general
             // Give rewards for non-shop room
+            
             foreach (GameObject location in itemSpawnLocations)
             {
                 rewardManager.SpawnReward(location.transform);

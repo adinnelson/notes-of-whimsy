@@ -19,7 +19,7 @@ public class AnimationFlip : MonoBehaviour
     void Update()
     {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        if(mousePosition.x > PlayerTransform.position.x)
+        if(mousePosition.x > PlayerTransform.position.x ^ GetComponent<SpriteRenderer>().flipX)
         {
             animator.SetBool("CharFaceLeft", true);
         }

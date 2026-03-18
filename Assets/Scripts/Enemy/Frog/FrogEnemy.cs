@@ -54,6 +54,7 @@ public class FrogEnemy : EnemyBase
 
         if (stunEffects.Count > 0)
         {
+            StunVisuals();
             return;
         }
 

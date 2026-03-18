@@ -48,6 +48,7 @@ public class PlayerInventory : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D objToPickup)
     {
+        bool actionPerfomed = false;
         //check for gold pickup
         GoldCoin gold = objToPickup.GetComponent<GoldCoin>();
         if (gold != null)
@@ -81,18 +82,20 @@ public class PlayerInventory : MonoBehaviour
                 case BoostType.Damage:
                     stats.AddDamageBonus((int)boost.Amount);
                     break;
-                default:
-                    break;
             }
-            Destroy(boost.gameObject);
-            return;
+            actionPerfomed = true;
+
         }
 
-        PickupItem pickup = objToPickup.GetComponent<PickupItem>();
 
+        PickupItem pickup = objToPickup.GetComponent<PickupItem>();
         if (pickup == null)
         {
             //Debug.LogWarning($"Not A Valid PickUp Item! Collider: {objToPickup.name}");
+            if (actionPerfomed)
+            {
+                Destroy(objToPickup.gameObject);
+            }
             return;
         }
 

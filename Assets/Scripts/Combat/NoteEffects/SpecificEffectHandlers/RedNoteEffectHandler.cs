@@ -8,7 +8,11 @@ public class RedNoteEffectHandler : NoteEffectHandler
     [Header("Fireball AOE specs")]
     [SerializeField] private float knockbackRadius = 1.0f;
     [SerializeField] private float knockbackForce = 15.0f;
-    [SerializeField] private float damage = 20.0f;
+    [SerializeField] private float damage = 60.0f;
+    
+    private GameObject explosion;
+
+    SimpleTimer explosionTImerDespawn;
 
     List<GameObject> enemiesInRange = new List<GameObject>();
 
@@ -52,7 +56,13 @@ public class RedNoteEffectHandler : NoteEffectHandler
             }
             DoDamage(enemiesInRange);
             Knockback(enemiesInRange, impactPosition, playerPosition);
+            DoAnimation(enemyComponent.transform.position);
         }
+    }
+
+    public void SetExplosion(GameObject explosion)
+    {
+        this.explosion = explosion;
     }
 
     private void Knockback(List<GameObject> targets, Vector3 impactPoint, Vector3 moveAwayFrom)
@@ -115,6 +125,17 @@ public class RedNoteEffectHandler : NoteEffectHandler
                 damageable.TakeDamage(damage);
             }
         }
+    }
+
+    private void DoAnimation(Vector3 pointOfOrigin)
+    {
+        GameObject explosionInstance = Instantiate(explosion, pointOfOrigin, Quaternion.identity);
+        explosionTImerDespawn = new SimpleTimer();
+        explosionTImerDespawn.StartTimer(0.5f, onFinish: () => 
+            {
+                Destroy(explosionInstance);
+            }
+        );
     }
 
     public override void Fire()
