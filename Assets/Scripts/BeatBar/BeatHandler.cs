@@ -135,6 +135,7 @@ public class BeatHandler : MonoBehaviour
         // needs to be x2 because we are fitting 8 beats into 4/4
         // Debug.Log(musicManager.timelineInfo.currentBeat);
         // musicBeatIndex = musicManager.timelineInfo.currentBeat;
+
         percentToNextBeat += Time.deltaTime * bpm / 60f * 2f;
         // Debug.Log(percentToNextBeat);
 
