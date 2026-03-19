@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float acceleration = 1.25f;
     //[SerializeField] private float maxSpeed = 5.0f;
+    private float scaleAccelerationWithSpeedBoost = 1.0f;
 
     private SpriteRenderer sprite;
 
@@ -13,14 +14,23 @@ public class PlayerMovement : MonoBehaviour
     private new Rigidbody2D rigidbody;
     private PlayerStats stats;
 
+
+
     private void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
+        RoomGenerator.OnDungeonComplete += OnDungeonComplete;
     }
 
     void OnDisable()
     {
         inputActions.Player.Disable();
+
+    }
+
+    void OnDestroy()
+    {
+        RoomGenerator.OnDungeonComplete -= OnDungeonComplete;        
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -42,6 +52,11 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         MovePlayer();
+    }
+
+    private void OnDungeonComplete()
+    {
+        transform.position = Vector3.zero;
     }
 
     private void MovePlayer()
@@ -66,6 +81,9 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 targetVelocity = movement * stats.Speed;
 
-        rigidbody.linearVelocity = Vector2.Lerp(rigidbody.linearVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
+        scaleAccelerationWithSpeedBoost = acceleration * (stats.Speed / stats.BaseSpeed); //scale the acceleration with a speed boost
+        //Debug.Log($"BaseSpeed: {stats.BaseSpeed}, TotalSpeed: {stats.Speed}");
+        rigidbody.linearVelocity = Vector2.Lerp(rigidbody.linearVelocity, targetVelocity, scaleAccelerationWithSpeedBoost * Time.fixedDeltaTime);
+        //rigidbody.linearVelocity = Vector2.Lerp(rigidbody.linearVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
     }
 }

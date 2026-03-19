@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(RoomInfo))]
 public class ShopManager : MonoBehaviour
@@ -16,10 +17,13 @@ public class ShopManager : MonoBehaviour
     private RewardManager rewardManager;
     private GoldManager goldManager;
 
+    private TextMeshPro insufficientFundsText;
+
     private void Awake()
     {
         roomInfo = GetComponent<RoomInfo>();
         rewardLocations = roomInfo.GetItemSpawnLocations();
+        insufficientFundsText = GetComponentInChildren<TextMeshPro>(true);
 
         GameObject gameManagerObject = GameObject.FindGameObjectWithTag("GameManager");
         if (gameManagerObject == null)
@@ -79,6 +83,7 @@ public class ShopManager : MonoBehaviour
         if (!canAfford)
         {
             Debug.Log("Not enough gold to buy this item.");
+            DisplayInsufficientFundsMessage();
             return canAfford;
         }
 
@@ -112,7 +117,7 @@ public class ShopManager : MonoBehaviour
 
     private void UpdateShopText(GameObject location, RewardType rewardType, string customText = null)
     {
-        TMPro.TextMeshPro shopText = location.GetComponentInChildren<TMPro.TextMeshPro>(true);
+        TextMeshPro shopText = location.GetComponentInChildren<TMPro.TextMeshPro>(true);
         if (shopText == null)
         {
             Debug.LogWarning($"No TextMeshProUGUI found in children of {location.name}");
@@ -120,5 +125,24 @@ public class ShopManager : MonoBehaviour
         }
 
         shopText.text = customText ?? $"{rewardManager.GetGoldCost(rewardType)} Gold";
+    }
+
+    private void DisplayInsufficientFundsMessage()
+    {
+        if (insufficientFundsText != null)        {
+            // insufficientFundsText.text = "Not enough gold!";
+            insufficientFundsText.gameObject.SetActive(true);
+            Invoke(nameof(HideInsufficientFundsMessage), 2f); // Hide after 2 seconds
+        }
+        // This method can be expanded to show a UI message or play a sound effect.
+        Debug.Log("You do not have enough gold to purchase this item.");
+    }
+
+    private void HideInsufficientFundsMessage()
+    {
+        if (insufficientFundsText != null)
+        {
+            insufficientFundsText.gameObject.SetActive(false);
+        }
     }
 }

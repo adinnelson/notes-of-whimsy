@@ -30,6 +30,14 @@ public class FrogEnemy : EnemyBase
         if (target != null)
         {
             targetRb = target.GetComponent<Rigidbody2D>();
+
+            // Frog never charges, so always let the player walk through it
+            Collider2D frogCol = GetComponent<Collider2D>();
+            Collider2D playerCol = target.GetComponent<Collider2D>();
+            if (frogCol != null && playerCol != null)
+            {
+                Physics2D.IgnoreCollision(frogCol, playerCol);
+            }
         }
     }
 

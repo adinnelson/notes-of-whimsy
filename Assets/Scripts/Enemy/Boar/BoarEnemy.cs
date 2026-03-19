@@ -23,6 +23,7 @@ public class BoarEnemy : EnemyBase
     private BoarHitbox hitbox;
     private Collider2D bodyCollider;
     private Vector2 lockedChargeDir;
+    private float lockedChargeDistance;
     private bool isCharging = false;
     private bool shouldTelegraphNext = true;
     private Vector3 telegraphBaseScale;
@@ -39,6 +40,9 @@ public class BoarEnemy : EnemyBase
         animator = GetComponent<Animator>();
         enemyFlip = GetComponent<EnemyFlip>();
         bodyCollider = GetComponent<Collider2D>();
+
+        // Prevent fast charges from tunneling through walls
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
         hitbox = GetComponentInChildren<BoarHitbox>(includeInactive: true);
         if (hitbox == null)
@@ -126,7 +130,8 @@ public class BoarEnemy : EnemyBase
         StopMovement();
 
         lockedChargeDir = CalculateJitteredDirection();
-        ShowTelegraphVisual(lockedChargeDir);
+        lockedChargeDistance = CalculateWallCappedDistance(lockedChargeDir);
+        ShowTelegraphVisual(lockedChargeDir, lockedChargeDistance);
 
         state = State.Telegraph;
     }
@@ -142,7 +147,9 @@ public class BoarEnemy : EnemyBase
         SetHitboxActive(true);
         SetPlayerCollisionEnabled(true);  // body collider on — boar carries the player
 
-        chargeTimer = chargeTime;
+        // Cap charge duration so the boar can't overshoot a nearby wall
+        float maxTime = lockedChargeDistance / chargeSpeed;
+        chargeTimer = Mathf.Min(chargeTime, maxTime);
 
         rb.linearVelocity = lockedChargeDir * chargeSpeed;
 
@@ -159,7 +166,28 @@ public class BoarEnemy : EnemyBase
         return new Vector2(Mathf.Cos(finalAngle), Mathf.Sin(finalAngle));
     }
 
-    private void ShowTelegraphVisual(Vector2 direction)
+    /// Raycasts along the charge direction and returns the distance to the nearest wall,
+    /// or the full charge distance if no wall is in the way.
+    private float CalculateWallCappedDistance(Vector2 direction)
+    {
+        float maxDistance = chargeSpeed * chargeTime;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, maxDistance);
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.collider.transform.IsChildOf(transform)) continue;
+            // Ignore walls we're already touching to prevent shrinking the telegraph to nothing
+            if (hit.distance < 0.3f) continue;
+            if (hit.collider.CompareTag("Walls") && hit.distance < maxDistance)
+            {
+                maxDistance = hit.distance;
+            }
+        }
+
+        return maxDistance;
+    }
+
+    private void ShowTelegraphVisual(Vector2 direction, float chargeDistance)
     {
         if (telegraphVisual == null)
         {
@@ -168,22 +196,6 @@ public class BoarEnemy : EnemyBase
 
         float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
-
-        // Look at removing this line since it is not being used
-        float secondsPerBeat = 60.0f / gameManager.GetBPM();
-        float chargeDistance = chargeSpeed * chargeTime;
-
-        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, chargeDistance);
-        foreach (RaycastHit2D hit in hits)
-        {
-            if (hit.collider.transform.IsChildOf(transform)) continue;
-            // Ignore walls we're already touching to prevent it from thinking we're right up against a wall and shrinking the telegraph to nothing
-            if (hit.distance < 0.3f) continue;
-            if (hit.collider.CompareTag("Walls") && hit.distance < chargeDistance)
-            {
-                chargeDistance = hit.distance;
-            }
-        }
 
         telegraphVisual.transform.localScale = new Vector3(chargeDistance, telegraphBaseScale.y, telegraphBaseScale.z);
         telegraphVisual.SetActive(true);

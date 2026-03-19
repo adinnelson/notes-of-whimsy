@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 
 public class RoomGenerator : MonoBehaviour
@@ -41,7 +43,6 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField]
     private GameObject endPrefab;
 
-
     // CONSTANTS
     private const int ROOMS_SPAWNED_RESET_THRESHOLD = 0;
 
@@ -50,6 +51,14 @@ public class RoomGenerator : MonoBehaviour
     private List<GameObject> spawnedRooms;
     private GameObject roomsParent;
     private int numberOfRooms;
+
+    [SerializeField]
+    private int maxNumberOfCombatRooms = 1;
+    private int combatRoomsSpawned = 0;
+    private bool isGenerating = false;
+    private bool hasSpawnedShop = false;
+    private bool hasSpawnedCombatRoom = false;
+    private bool needToReset = false;
 
     // EVENTS
     public static event System.Action OnDungeonComplete;
@@ -61,22 +70,28 @@ public class RoomGenerator : MonoBehaviour
     private void Awake()
     {
         RoomInfo.OnFloorOverlap += HandleFloorOverlap;
+        ProgressFloor.OnFloorProgressed += ResetGeneration;
         CreateRoomPools();
         CreateFloorLayout();
     }
 
     private void Update()
     {
-        //TODO: uncomment for testing purposes, maybe add some conditions to prevent accidental resets during gameplay
         if ((Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration) || spawnedRooms.Count < minRooms)
         {
-            ResetGeneration();
+            ResetGeneration("reset from update due to key press or room count");
+        }
+        if(needToReset){
+            // print("reset in update");
+            needToReset = false;
+            ResetGeneration("reset from update");
         }
     }
 
     private void OnDestroy()
     {
         RoomInfo.OnFloorOverlap -= HandleFloorOverlap;
+        ProgressFloor.OnFloorProgressed -= ResetGeneration;
     }
 
     // PUBLIC METHODS
@@ -88,10 +103,22 @@ public class RoomGenerator : MonoBehaviour
     {
         Destroy(roomsParent);
         roomsParent = null;
-        print("Resetting floors");
+        print("Resetting floors generally");
         numberOfRooms = 0;
         spawnedRooms.Clear();
+        combatRoomsSpawned = 0;
+        hasSpawnedShop = false;
+        hasSpawnedCombatRoom = false;
+        RemoveRoomTypeFromRoomPools(RoomTypes.Shop);
+        RemoveRoomTypeFromRoomPools(RoomTypes.Combat);
+        needToReset = false;
         CreateFloorLayout();
+    }
+
+    private void ResetGeneration(string specialString){
+        print(specialString);
+        ResetGeneration();
+
     }
 
     //get Minimap access to the generated rooms
@@ -106,8 +133,8 @@ public class RoomGenerator : MonoBehaviour
     /// <param name="overlappingFloor">The floor GameObject that overlapped</param>
     private void HandleFloorOverlap(GameObject overlappingFloor)
     {
-        ResetGeneration();
-        // Debug.LogWarning($"Floor overlap detected with {overlappingFloor.name}", overlappingFloor);
+        needToReset = true;
+        // ResetGeneration();
     }
 
     /// <summary>
@@ -116,6 +143,7 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     public void CreateFloorLayout()
     {
+
         GameObject spawnedRoom = null;
         RoomInfo currentRoomInfo = null;
         int roomSelector = 0;
@@ -135,6 +163,12 @@ public class RoomGenerator : MonoBehaviour
         // Loop through the list of spawned rooms and spawn new rooms on each available node until the desired number of rooms is reached or there are no more available nodes
         for (int i = 0; numberOfRooms < desiredRoomNumber; i++)
         {
+            if(numberOfRooms == 2)
+            {
+                AddRoomTypeToRoomPools(RoomTypes.Shop);
+                AddRoomTypeToRoomPools(RoomTypes.Combat);
+            }
+            
             currentRoom = spawnedRooms[i];
             currentRoomInfo = currentRoom.GetComponent<RoomInfo>();
             List<GameObject> nodes = currentRoomInfo.GetNodeList();
@@ -189,7 +223,6 @@ public class RoomGenerator : MonoBehaviour
         }
 
         CapOffHoles();
-
     }
     // PRIVATE METHODS
 
@@ -210,6 +243,20 @@ public class RoomGenerator : MonoBehaviour
         spawnedRoom = Instantiate(roomPool[selectedRoomNum], roomsParent.transform);
         spawnedRoomInfo = spawnedRoom.GetComponent<RoomInfo>();
 
+        if(spawnedRoomInfo.GetRoomType() == RoomTypes.Shop && !hasSpawnedShop)
+        {
+            hasSpawnedShop = true;
+            RemoveRoomTypeFromRoomPools(RoomTypes.Shop);
+        }
+        else if(spawnedRoomInfo.GetRoomType() == RoomTypes.Combat && combatRoomsSpawned < maxNumberOfCombatRooms)
+        {
+            combatRoomsSpawned++;
+        }
+        else if(spawnedRoomInfo.GetRoomType() == RoomTypes.Combat && combatRoomsSpawned >= maxNumberOfCombatRooms)
+        {
+            hasSpawnedCombatRoom = true;
+            RemoveRoomTypeFromRoomPools(RoomTypes.Combat);
+        }
         // Position the spawned room so its matching node aligns with the parent node
         spawnedRoom.transform.position = node.position - spawnedRoomInfo.GetNode(direction).transform.localPosition;
 
@@ -283,6 +330,7 @@ public class RoomGenerator : MonoBehaviour
                 numberOfRooms++;
             }
         }
+        
         GameObject endRoom = spawnedRooms[spawnedRooms.Count - 1];
         RoomInfo endRoomInfo = endRoom.GetComponent<RoomInfo>();
         endRoomInfo.SetRoomType(RoomTypes.End);
@@ -298,24 +346,116 @@ public class RoomGenerator : MonoBehaviour
             roomInfo.SetEnemyPrefabs(enemyPool);
         }
 
+        if(needToReset)
+        {
+            return;
+        }
+
         OnDungeonComplete?.Invoke();
     }
 
     private void CreateRoomPools()
     {
         // mapPool is assigned via the Inspector
+        for(int i = 0; i < mapPool.Count; i++)
+        {
+            GameObject roomToMove = mapPool[i];
+            RoomInfo roomToMoveInfo = roomToMove.GetComponent<RoomInfo>();
+            
+            RoomTypes roomType = roomToMoveInfo.GetRoomType();
+            bool isNotStarterOrShop = roomType != RoomTypes.Starter && roomType != RoomTypes.Shop && roomType != RoomTypes.Combat;
+            bool hasLeftNode = roomToMoveInfo.GetNode("left") != null;
+            bool hasRightNode = roomToMoveInfo.GetNode("right") != null;
+            bool hasTopNode = roomToMoveInfo.GetNode("top") != null;
+            bool hasBottomNode = roomToMoveInfo.GetNode("bottom") != null;
+            
+            if (roomType == RoomTypes.Starter)
+            starterRooms.Add(roomToMove);
+            
+            if (isNotStarterOrShop && hasLeftNode)
+            leftConnections.Add(roomToMove);
+            
+            if (isNotStarterOrShop && hasRightNode)
+            rightConnections.Add(roomToMove);
+            
+            if (isNotStarterOrShop && hasTopNode)
+            topConnections.Add(roomToMove);
+            
+            if (isNotStarterOrShop && hasBottomNode)
+            bottomConnections.Add(roomToMove);
+            
+            if (roomType == RoomTypes.Shop)
+            shopRooms.Add(roomToMove);
+        }
 
-        starterRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Starter).ToList();
-        leftConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("left") != null
-                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        rightConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("right") != null
-                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        topConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("top") != null
-                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        bottomConnections = mapPool.Where(room => room.GetComponent<RoomInfo>().GetNode("bottom") != null
-                                        && room.GetComponent<RoomInfo>().GetRoomType() != RoomTypes.Starter).ToList();
-        shopRooms = mapPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Shop).ToList();
+    }
 
+    private void AddRoomTypeToRoomPools(RoomTypes roomType)
+    {
+        for(int i = 0; i < mapPool.Count; i++)
+        {
+            GameObject roomToMove = mapPool[i];
+            RoomInfo roomToMoveInfo = roomToMove.GetComponent<RoomInfo>();
+
+            bool hasLeftNode = roomToMoveInfo.GetNode("left") != null;
+            bool hasRightNode = roomToMoveInfo.GetNode("right") != null;
+            bool hasTopNode = roomToMoveInfo.GetNode("top") != null;
+            bool hasBottomNode = roomToMoveInfo.GetNode("bottom") != null;
+
+            if (roomToMoveInfo.GetRoomType() == roomType)
+            {
+                if (hasBottomNode)
+                {
+                    bottomConnections.Add(roomToMove);
+                }
+                if (hasTopNode)
+                {
+                    topConnections.Add(roomToMove);
+                }
+                if (hasRightNode)
+                {
+                    rightConnections.Add(roomToMove);
+                }
+                if (hasLeftNode)
+                {
+                    leftConnections.Add(roomToMove);
+                }
+            }
+        }
+    }
+
+    private void RemoveRoomTypeFromRoomPools(RoomTypes roomType)
+    {
+        for(int i = 0; i < mapPool.Count; i++)
+        {
+            GameObject roomToMove = mapPool[i];
+            RoomInfo roomToMoveInfo = roomToMove.GetComponent<RoomInfo>();
+
+            bool hasLeftNode = roomToMoveInfo.GetNode("left") != null;
+            bool hasRightNode = roomToMoveInfo.GetNode("right") != null;
+            bool hasTopNode = roomToMoveInfo.GetNode("top") != null;
+            bool hasBottomNode = roomToMoveInfo.GetNode("bottom") != null;
+
+            if (roomToMoveInfo.GetRoomType() == roomType)
+            {
+                if (hasBottomNode)
+                {
+                    bottomConnections.Remove(roomToMove);
+                }
+                if (hasTopNode)
+                {
+                    topConnections.Remove(roomToMove);
+                }
+                if (hasRightNode)
+                {
+                    rightConnections.Remove(roomToMove);
+                }
+                if (hasLeftNode)
+                {
+                    leftConnections.Remove(roomToMove);
+                }
+            }
+        }
     }
 
     

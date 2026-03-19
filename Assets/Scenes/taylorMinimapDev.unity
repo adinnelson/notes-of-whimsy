@@ -673,6 +673,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f86e09c73e8f5f44a9b453c9d24069b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellEditBar
+--- !u!1001 &1442768564
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7159632872626190546, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_Name
+      value: Speed Increase (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
 --- !u!1001 &1460984151
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -693,6 +750,14 @@ PrefabInstance:
       propertyPath: playerActiveSpellsHandler
       value: 
       objectReference: {fileID: 1278789940}
+    - target: {fileID: 1155841396824913759, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: acceleration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1421404821173559249, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: maxSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_Name
       value: Player
@@ -884,6 +949,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4a8eb6f9e251104d8647c34999aa33d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinimapEnemy
+--- !u!1001 &1871307770
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7159632872626190546, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_Name
+      value: Speed Increase
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
 --- !u!1001 &1959339045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -946,6 +1068,63 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3216200391846743759, guid: 5e5a8db3fab436f488b86787e19aa89d, type: 3}
   m_PrefabInstance: {fileID: 7028815985210784426}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2147351625
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2245966118133953556, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7159632872626190546, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: m_Name
+      value: Speed Increase (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
 --- !u!1001 &5746277316902161804
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1276,3 +1455,6 @@ SceneRoots:
   - {fileID: 838938513}
   - {fileID: 1521210853}
   - {fileID: 7028815985210784426}
+  - {fileID: 1871307770}
+  - {fileID: 2147351625}
+  - {fileID: 1442768564}
