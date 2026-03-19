@@ -197,6 +197,7 @@ MonoBehaviour:
   firePoint: {fileID: 5189259256147739164}
   attackBeamPrefab: {fileID: 0}
   fireCooldownSeconds: 0.2
+  failedInputLockoutTime: 0.15
 --- !u!114 &1155841396824913759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0523522d8831d946a529c107b967c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  acceleration: 26.666666
+  acceleration: 26
 --- !u!114 &-7864820753085434846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,7 +299,7 @@ MonoBehaviour:
   enemyMask:
     serializedVersion: 2
     m_Bits: 8
-  lightningEffect: {fileID: 8046267622772934418, guid: 6ee47fdd172e450498f0d56812dd828c, type: 3}
+  lightningEffect: {fileID: 0}
   laserPrefab: {fileID: -5741139717231234517, guid: 3e9e1b16b71bbd940954b08ad1827808, type: 3}
   explosion: {fileID: 8659360273826524317, guid: a3c244a8b81773849b6802e47ae1bd09, type: 3}
   whirlPool: {fileID: 287630347529981786, guid: 8f663a66e6225e5438d9db062550419f, type: 3}
@@ -314,6 +315,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34da6159dc83ea34e8e224e9c1f7da4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  maxSpeed: 4
+  maxSpeed: 1
   maxHealth: 100
   maxDamage: 1
