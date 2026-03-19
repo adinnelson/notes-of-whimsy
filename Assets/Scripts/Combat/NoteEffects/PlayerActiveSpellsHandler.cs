@@ -70,6 +70,7 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
 
         if (slotSpell.noteEffectHandler != null)
         {
+            Instantiate(slotSpell.noteEffectHandler.SpellData.NoteGameObj, transform.position, transform.rotation);
             ClearSlot(slotId);
         }
 
