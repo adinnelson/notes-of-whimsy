@@ -69,6 +69,7 @@ public class BoarEnemy : EnemyBase
         }
         if (stunEffects.Count > 0)
         {
+            StunVisuals();
             return;
         }
 

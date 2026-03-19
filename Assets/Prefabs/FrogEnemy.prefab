@@ -53,6 +53,8 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: c8409ace7f7e021408dc85aa69de285e, type: 2}
   disableOnDeath: 1
   deathFadeDuration: 0.5
+  stunnedMaterial: {fileID: -876546973899608171, guid: 1ec764e42543a6e46bb597f1d9c7aeb0, type: 3}
+  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   aoePrefab: {fileID: 8302048801898426064, guid: a15ece80bac87974b8d9739835ec044f, type: 3}
   aoeRadius: 1.5
   aoeDamage: 10

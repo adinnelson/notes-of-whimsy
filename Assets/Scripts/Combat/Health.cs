@@ -68,7 +68,7 @@ public class Health : MonoBehaviour, IDamageable
 
         if (hitFlashTimer <= 0 && inHitFlash)
         {
-            sprite.material = defaultMaterial;
+            //sprite.material = defaultMaterial;
             inHitFlash = false;
         }
     }
@@ -78,7 +78,7 @@ public class Health : MonoBehaviour, IDamageable
         currentHealth -= damageAmount;
 
         hitFlashTimer = flashTime;
-        sprite.material = whiteMaterial;
+        //sprite.material = whiteMaterial;
         inHitFlash = true;
 
         if (healthBarUpdater != null)

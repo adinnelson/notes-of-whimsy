@@ -79,6 +79,7 @@ public class TreantEnemy : EnemyBase
 
         if (stunEffects.Count > 0)
         {
+            StunVisuals();
             return;
         }
 
