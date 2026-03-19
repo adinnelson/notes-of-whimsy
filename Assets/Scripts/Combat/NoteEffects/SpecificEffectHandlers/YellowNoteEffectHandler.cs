@@ -233,6 +233,8 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         LightningVisualLogic lightningChain = Instantiate(lightningEffect, Vector2.zero, Quaternion.identity);
         lightningChain.gameObject.SetActive(false);
 
+        DontDestroyOnLoad(lightningChain);
+
         return lightningChain;
     }
 
