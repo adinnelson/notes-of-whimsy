@@ -139,7 +139,6 @@ public class BeatHandler : MonoBehaviour
         percentToNextBeat += Time.deltaTime * bpm / 60f * 2f;
         // Debug.Log(percentToNextBeat);
 
-
         // fires on half beat
         if (percentToNextBeat > 0.5 && !beatIndexHasChanged)
         {
@@ -147,11 +146,8 @@ public class BeatHandler : MonoBehaviour
             {
                 gm.BeatHit = false;
             }
-
-            beatIndex = (beatIndex + 1) % BEAT_NUM;
-            // musicBeatIndex = (musicBeatIndex + 1 ) % BEAT_NUM;
-            // Debug.Log($"Current = {beatIndex}");
-            // Debug.Log($"Music = {musicBeatIndex}");
+            //musicBeatIndex is coming from the FMOD music
+            beatIndex = musicBeatIndex % BEAT_NUM;
 
             if (playerAttack != null && unlockedBeats.Contains(beatIndex))
             {
@@ -164,18 +160,14 @@ public class BeatHandler : MonoBehaviour
         // fires on beat
         if (percentToNextBeat > 1f)
         {
+            //muiscBeatIndex is coming from the FMOD music 
+            onBeatIndex = (musicBeatIndex + 1 )% BEAT_NUM;
+
             if (gm && !gm.BeatHit)
             {
-                gm.TriggerBeat(onBeatIndex + 1);
+                gm.TriggerBeat(onBeatIndex);
             }
 
-            if (unlockedBeats.Contains(onBeatIndex + 1))
-            {
-                // PlayBeatEndSound();
-                // Debug.Log($"Current = {onBeatIndex + 1}");
-            }
-
-            onBeatIndex = (onBeatIndex + 1) % BEAT_NUM;
             beatIndexHasChanged = false;
             percentToNextBeat -= 1f;
         }
