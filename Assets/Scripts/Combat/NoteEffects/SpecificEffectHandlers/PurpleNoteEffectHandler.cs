@@ -7,6 +7,14 @@ public class PurpleNoteEffectHandler : NoteEffectHandler
 
     private bool onCooldown;
 
+
+    void Update()
+    {
+        if(beatHandler == null)
+        {
+            beatHandler = FindObjectOfType<BeatHandler>();
+        }
+    }
     public void SetLaser(LaserBeam laserPrefab)
     {
         this.laserPrefab = laserPrefab;

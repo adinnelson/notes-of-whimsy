@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using FMODUnity;
 
+
 public class BeatHandler : MonoBehaviour
 {
 
@@ -45,6 +46,10 @@ public class BeatHandler : MonoBehaviour
     // this index changes on beat
     private int onBeatIndex = 0;
 
+    [SerializeField]
+    // update this to change how many spells the player starts with
+    private int startingSpellCount = 3;
+
     private bool beatIndexHasChanged = true;
 
     // lists of left and right beat items
@@ -52,8 +57,8 @@ public class BeatHandler : MonoBehaviour
     private List<GameObject> rightBeatItemGraphics = new List<GameObject>();
 
     // Unlocked beat and order variables
-    private HashSet<int> unlockedBeats = new HashSet<int>();
-
+    private static HashSet<int> unlockedBeats = new HashSet<int>();
+    public static HashSet<int> UnlockedBeats => unlockedBeats;
     // tempory until the adding and removing effects system update occurs
     // -1 is default
     private Dictionary<int, Color> beatIdToColor = new Dictionary<int, Color>
@@ -76,18 +81,51 @@ public class BeatHandler : MonoBehaviour
 
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
         playerActiveSpellsHandler = GameObject.FindWithTag("Player")?.GetComponent<PlayerActiveSpellsHandler>();
+        
+        InitializeRandomSpells();
 
-        unlockedBeats.Add(1);
-        playerActiveSpellsHandler.UnlockSlot(1);
-        playerActiveSpellsHandler.EquipSpell(1, 1);
-        unlockedBeats.Add(5);
-        playerActiveSpellsHandler.UnlockSlot(5);
-        playerActiveSpellsHandler.EquipSpell(5, 3);
-        unlockedBeats.Add(6);
-        playerActiveSpellsHandler.UnlockSlot(6);
-        playerActiveSpellsHandler.EquipSpell(6, 2);
+        playerAttack = GameObject.FindWithTag("Player")?.GetComponent<PlayerAttack>();
 
         PopulateBeatBar();
+    }
+
+    private void InitializeRandomSpells()
+    {
+        // BEAT_NUM is limit of spell slots
+        // TODO: added actual randomness logic
+        if(unlockedBeats.Count == 0)
+        {
+            int spellToUnlock = Random.Range(1, BEAT_NUM + 1);
+            for(int i = 1; i <= startingSpellCount; i++)
+            {
+                spellToUnlock = Random.Range(1, BEAT_NUM + 1);
+                while (unlockedBeats.Contains(spellToUnlock))
+                {
+                    spellToUnlock = Random.Range(1, BEAT_NUM + 1);
+                }
+                unlockedBeats.Add(spellToUnlock);
+                playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
+                // FIXME: update this if we add new amount of spells
+                int spellId = Random.Range(1, 5); // Assuming there are 4 spells to choose from
+                playerActiveSpellsHandler.EquipSpell(spellToUnlock, spellId);
+            }
+
+            // // 1
+            // unlockedBeats.Add(spellToUnlock);
+            // playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
+            // playerActiveSpellsHandler.EquipSpell(spellToUnlock, 1);
+            // spellToUnlock = Random.Range(1, BEAT_NUM + 1);
+            // // 5
+            // unlockedBeats.Add(spellToUnlock);
+            // playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
+            // playerActiveSpellsHandler.EquipSpell(spellToUnlock, 3);
+            // spellToUnlock = Random.Range(1, BEAT_NUM + 1);
+            // //6
+            // unlockedBeats.Add(spellToUnlock);
+            // playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
+            // playerActiveSpellsHandler.EquipSpell(spellToUnlock, 2);
+        }
+        
     }
 
     void FixedUpdate()
@@ -166,7 +204,7 @@ public class BeatHandler : MonoBehaviour
             curRightGraphic.transform.localPosition = new Vector3(-newOffset, 0, curRightGraphic.transform.localPosition.z);
             curRightGraphic.transform.localScale = new Vector3(-1, newSize, 1);
 
-            if (adjustedBeatIndex >= numBeatsShown || !unlockedBeats.Contains(i + 1))
+            if (adjustedBeatIndex >= numBeatsShown || (i % 2 != 0 && !unlockedBeats.Contains(i + 1)))
             {
                 curLeftSprite.color = Color.clear;
                 curRightSprite.color = Color.clear;

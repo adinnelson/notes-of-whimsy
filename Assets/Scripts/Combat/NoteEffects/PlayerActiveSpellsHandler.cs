@@ -35,6 +35,7 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
 
     private void Awake() {
         
+        ProgressFloor.OnEndSceneReached += RemoveAllSpells;
         // sets up slot spell with slot id
         for(int i = 1;i <= 8;i++)
         {
@@ -54,6 +55,9 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
         playerAttack = GetComponent<PlayerAttack>();
     }
 
+    private void OnDestroy() {
+        ProgressFloor.OnEndSceneReached -= RemoveAllSpells;
+    }
     // equipes spell
     public void EquipSpell(int slotId, int spellId)
     {
@@ -66,7 +70,6 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
 
         if (slotSpell.noteEffectHandler != null)
         {
-            GameObject s = Instantiate(slotSpell.noteEffectHandler.SpellData.NoteGameObj, transform.position, transform.rotation);
             ClearSlot(slotId);
         }
 
@@ -130,16 +133,9 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     {
         if(slotId == null)
         {
-            List<int> lockedSlots = new List<int>();
+            List<int> lockedSlots = GetLockedSpellSlots();
 
-            for(int i = 1;i < slotSpells.Count + 1;i++)
-            {
-                if(slotSpells[i].unlocked) continue;
-
-                lockedSlots.Add(i);
-            }
-
-            slotId = lockedSlots[Random.Range(0, lockedSlots.Count)];   
+            slotId = lockedSlots[Random.Range(0, lockedSlots.Count)];
         }
 
         SlotSpell slotSpell = slotSpells[(int)slotId];
@@ -148,6 +144,20 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
         slotSpells[(int)slotId] = slotSpell;
 
         return (int)slotId;
+    }
+
+    private List<int> GetLockedSpellSlots()
+    {
+        List<int> lockedSlots = new List<int>();
+
+        for (int i = 1; i < slotSpells.Count + 1; i++)
+        {
+            if (slotSpells[i].unlocked) continue;
+
+            lockedSlots.Add(i);
+        }
+
+        return lockedSlots;
     }
 
     // returns if slot is unlocked
@@ -175,5 +185,18 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
         }
 
         return slotSpells[slotId].noteEffectHandler.SpellData.spellId;
+    }
+
+    public void RemoveAllSpells()
+    {
+        for (int i = 1; i < slotSpells.Count + 1; i++)
+        {
+            ClearSlot(i);
+            SlotSpell slotSpell = slotSpells[i];
+            slotSpell.unlocked = false;
+            slotSpells[i] = slotSpell;
+
+            BeatHandler.UnlockedBeats.Remove(i);
+        }
     }
 }
