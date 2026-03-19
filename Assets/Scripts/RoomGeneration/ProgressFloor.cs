@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.SceneManagement;
 
 public class ProgressFloor : MonoBehaviour
@@ -41,7 +42,18 @@ public class ProgressFloor : MonoBehaviour
             // NOTE: Loading custom scene does not reset progress or increment floors completed
             if (loadCustomScene)
             {
-                SceneManager.LoadScene(customSceneName);
+                GameObject player = GameObject.FindWithTag("Player");
+                GameObject gm = GameObject.FindWithTag("GameManager");
+                GameObject mm = FindObjectOfType<MusicManager>()?.gameObject;
+                BeatHandler beatHandler = FindObjectOfType<BeatHandler>();
+
+                Destroy(player);
+                Destroy(gm);
+                Destroy(mm);
+
+                beatHandler.ClearUnlockedBeats();
+
+                SceneManager.LoadScene(customSceneName, LoadSceneMode.Single);
                 return;
             }
             else
