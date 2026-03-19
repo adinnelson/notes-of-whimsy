@@ -83,7 +83,7 @@ public class PlayerAttack : MonoBehaviour
         }
         if(beathandler == null)
         {
-            beathandler = GameObject.Find("BeatBar").GetComponent<BeatHandler>();
+            beathandler = GameObject.Find("BeatBar")?.GetComponent<BeatHandler>();
         }
 
         UpdateAimSourceFromStick();

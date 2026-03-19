@@ -104,7 +104,7 @@ public class Health : MonoBehaviour, IDamageable
 
     void Die()
     {
-        if (UI != null)
+        if (UI != null && !isPlayer)
         {
             Destroy(UI.gameObject);
         }
@@ -116,8 +116,12 @@ public class Health : MonoBehaviour, IDamageable
             GoldManager.Instance.ResetGold();
             PlayerStats.Instance.ResetStats();
             GetComponent<PlayerActiveSpellsHandler>()?.RemoveAllSpells();
+
             // TODO: load death scene
             SceneManager.LoadScene("Main", LoadSceneMode.Single);
+
+            currentHealth = MaxHealth;
+            UI.UpdateText();
         }
     }
 

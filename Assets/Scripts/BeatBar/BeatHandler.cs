@@ -261,6 +261,11 @@ public class BeatHandler : MonoBehaviour
         return beatIndex + 1;
     }
 
+    public void ClearUnlockedBeats()
+    {
+        unlockedBeats.Clear();
+    }
+
     //Update the Beat bar bpm to reflect the changing between rooms
     void Update()
     {

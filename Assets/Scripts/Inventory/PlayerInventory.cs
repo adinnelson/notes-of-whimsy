@@ -40,7 +40,7 @@ public class PlayerInventory : MonoBehaviour
 
         if(beatHandler == null)
         {
-            beatHandler = GameObject.Find("BeatBar").GetComponent<BeatHandler>();
+            beatHandler = GameObject.Find("BeatBar")?.GetComponent<BeatHandler>();
         }
         
     }

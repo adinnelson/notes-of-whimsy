@@ -1,8 +1,14 @@
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.SceneManagement;
 
 public class ProgressFloor : MonoBehaviour
 {
+    [SerializeField] private bool loadCustomScene = false;
+    [SerializeField] private string customSceneName = "StartMenu";
+    // NOTE: Progress is currently not kept through portals so this cannot be implemented yet
+    // [SerializeField] bool resetProgressOnDeath = true;
+
     private static int floorsCompleted = 0;
     private Scene currentScene;
 
@@ -33,14 +39,35 @@ public class ProgressFloor : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            NextScene();
+            // NOTE: Loading custom scene does not reset progress or increment floors completed
+            if (loadCustomScene)
+            {
+                GameObject player = GameObject.FindWithTag("Player");
+                GameObject gm = GameObject.FindWithTag("GameManager");
+                GameObject mm = FindObjectOfType<MusicManager>()?.gameObject;
+                BeatHandler beatHandler = FindObjectOfType<BeatHandler>();
+
+                Destroy(player);
+                Destroy(gm);
+                Destroy(mm);
+
+                beatHandler.ClearUnlockedBeats();
+
+                SceneManager.LoadScene(customSceneName, LoadSceneMode.Single);
+                return;
+            }
+            else
+            {
+                floorsCompleted++;
+                NextScene();
+            }
         }
     }
 
     /// <summary>
     /// TODO: add some kind of transition effect here, maybe a fade out or something?
-    /// currently just reloads the same scene. 
-    /// Proper functionality should be added here to load different floors  
+    /// currently just reloads the same scene.
+    /// Proper functionality should be added here to load different floors
     /// </summary>
     private void NextScene()
     {
@@ -60,7 +87,7 @@ public class ProgressFloor : MonoBehaviour
             // so until that is fixed, reloading the scene is the best option to reset everything.
             // OnFloorProgressed?.Invoke();
             SceneManager.LoadScene(currentScene.name);
-            
+
         }
     }
 
