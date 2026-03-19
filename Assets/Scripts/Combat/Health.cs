@@ -120,7 +120,7 @@ public class Health : MonoBehaviour, IDamageable
             // TODO: load death scene
             SceneManager.LoadScene("Main", LoadSceneMode.Single);
 
-            currentHealth = 100;
+            currentHealth = MaxHealth;
             UI.UpdateText();
         }
     }
