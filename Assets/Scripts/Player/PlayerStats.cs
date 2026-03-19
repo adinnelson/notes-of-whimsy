@@ -4,17 +4,41 @@ using System;
 public class PlayerStats : MonoBehaviour
 {
     [Header("Base Stats")]
-    [SerializeField] private float maxSpeed = 3.0f;
+    [SerializeField] private float maxSpeed = 1.0f;
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private int maxDamage = 1;
 
+    //note that the maxSpeedBonus does NOT affect the acceleration -> only how fast the player is able to move as an upper limit
     private float maxSpeedBonus = 0.0f;
     private int maxHealthBonus = 0;
     private int maxDamageBonus = 0;
+    private static PlayerStats _instance;
 
+    public static PlayerStats Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
     public float Speed => maxSpeed + maxSpeedBonus;
     public int MaxHealth => maxHealth + maxHealthBonus;
     public int Damage => maxDamage + maxDamageBonus;
+    public float BaseSpeed => maxSpeed; //added for PlayerMovement to scale the acceleration to the speed boostable item
+
+
+    void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+    }
 
     public event Action<int> OnMaxHealthIncreased;
 
@@ -34,5 +58,12 @@ public class PlayerStats : MonoBehaviour
     public void AddDamageBonus(int amount)
     {
         maxDamageBonus += amount;
+    }
+
+    public void ResetStats()
+    {
+        maxSpeedBonus = 0.0f;
+        maxHealthBonus = 0;
+        maxDamageBonus = 0;
     }
 }

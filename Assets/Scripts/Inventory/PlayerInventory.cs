@@ -22,6 +22,29 @@ public class PlayerInventory : MonoBehaviour
         inputActions = new InputSystem_Actions();
     }
 
+    private void Update()
+    {
+        bool spellEditBarNull = spellEditBar == null;
+        
+        if(contentsParent == null || spellEditBarNull)
+        {
+
+            if(spellEditBarNull)
+            {
+                spellEditBar = FindFirstObjectByType<SpellEditBar>(FindObjectsInactive.Include);
+
+            }
+            contentsParent = spellEditBar?.gameObject.transform;
+
+        }
+
+        if(beatHandler == null)
+        {
+            beatHandler = GameObject.Find("BeatBar")?.GetComponent<BeatHandler>();
+        }
+        
+    }
+
     private void OnEnable()
     {
         inputActions.Player.Enable();
@@ -118,7 +141,6 @@ public class PlayerInventory : MonoBehaviour
             Debug.LogWarning($"No UI Icon Prefab assigned for {spell.name}");
             return;
         }
-
         GameObject iconInstance = Instantiate(spell.UIIconPrefab, contentsParent);
         iconInstance.SetActive(true);
         activeIcon.Add(iconInstance);

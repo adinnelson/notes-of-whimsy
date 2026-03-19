@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3041875098042297340}
-  - component: {fileID: 1352282303394542806}
   - component: {fileID: 288549282542161020}
+  - component: {fileID: 1352282303394542806}
   - component: {fileID: -2696739702319837008}
   - component: {fileID: 671299949888538688}
   - component: {fileID: -3272219819361422623}
@@ -38,28 +38,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1352282303394542806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5603674919516484741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffba50fd1db900a4abb4950d82cb763d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FrogEnemy
-  config: {fileID: 11400000, guid: c8409ace7f7e021408dc85aa69de285e, type: 2}
-  disableOnDeath: 1
-  deathFadeDuration: 0.5
-  stunnedMaterial: {fileID: -876546973899608171, guid: 1ec764e42543a6e46bb597f1d9c7aeb0, type: 3}
-  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  aoePrefab: {fileID: 8302048801898426064, guid: a15ece80bac87974b8d9739835ec044f, type: 3}
-  aoeRadius: 1.5
-  aoeDamage: 10
-  predictionTime: 1
-  aoeScatterRadius: 1.5
 --- !u!50 &288549282542161020
 Rigidbody2D:
   serializedVersion: 5
@@ -87,6 +65,29 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1352282303394542806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5603674919516484741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffba50fd1db900a4abb4950d82cb763d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FrogEnemy
+  config: {fileID: 11400000, guid: c8409ace7f7e021408dc85aa69de285e, type: 2}
+  disableOnDeath: 1
+  deathFadeDuration: 0.5
+  stunnedMaterial: {fileID: -876546973899608171, guid: 1ec764e42543a6e46bb597f1d9c7aeb0, type: 3}
+  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  wallTag: Walls
+  aoePrefab: {fileID: 8302048801898426064, guid: a15ece80bac87974b8d9739835ec044f, type: 3}
+  aoeRadius: 1.5
+  aoeDamage: 10
+  predictionTime: 1
+  aoeScatterRadius: 1.5
 --- !u!212 &-2696739702319837008
 SpriteRenderer:
   serializedVersion: 2
@@ -176,7 +177,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -211,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df253cfd76d7c444bb2c365f00ac69b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  enemyMaxHealth: 80
+  enemyMaxHealth: 40
   healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
   healthBarUpdater: {fileID: 0}
   whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}

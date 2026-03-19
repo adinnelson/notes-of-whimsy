@@ -20,7 +20,7 @@ public class EnemyWaveController : MonoBehaviour
 
     private const int BASE_ENEMIES_PER_WAVE = 1;
     private const float GENERIC_WAVE_ENEMY_SCALAR = 1.5f;
-    private const float CHALLENGE_WAVE_SCALAR = 2.0f;
+    private const float CHALLENGE_WAVE_SCALAR = 1.34f;
     private const float ENEMY_SPAWN_EFFECT_DURATION = 1.0f;
 
      private void Awake()
@@ -143,6 +143,7 @@ public class EnemyWaveController : MonoBehaviour
         // Placeholder spawn effect using a sphere that scales up from zero
         // TODO: Replace with actual spawn effect
         GameObject spawnEffect = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        spawnEffect.transform.parent = transform; // Set the spawn effect as a child of the EnemyWaveController for organization
         spawnEffect.transform.position = spawnPosition;
         spawnEffect.transform.localScale = Vector3.zero;
         spawnEffect.GetComponent<Collider>().enabled = false;
