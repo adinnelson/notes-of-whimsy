@@ -43,8 +43,6 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField]
     private GameObject endPrefab;
 
-    // 
-
     // CONSTANTS
     private const int ROOMS_SPAWNED_RESET_THRESHOLD = 0;
 
@@ -54,7 +52,6 @@ public class RoomGenerator : MonoBehaviour
     private GameObject roomsParent;
     private int numberOfRooms;
 
-    //.
     [SerializeField]
     private int maxNumberOfCombatRooms = 1;
     private int combatRoomsSpawned = 0;
@@ -225,11 +222,7 @@ public class RoomGenerator : MonoBehaviour
             }
         }
 
-    CapOffHoles();
-
-
-
-
+        CapOffHoles();
     }
     // PRIVATE METHODS
 
