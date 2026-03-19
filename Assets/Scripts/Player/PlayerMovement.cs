@@ -14,14 +14,23 @@ public class PlayerMovement : MonoBehaviour
     private new Rigidbody2D rigidbody;
     private PlayerStats stats;
 
+
+
     private void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
+        RoomGenerator.OnDungeonComplete += OnDungeonComplete;
     }
 
     void OnDisable()
     {
         inputActions.Player.Disable();
+
+    }
+
+    void OnDestroy()
+    {
+        RoomGenerator.OnDungeonComplete -= OnDungeonComplete;        
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -43,6 +52,11 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         MovePlayer();
+    }
+
+    private void OnDungeonComplete()
+    {
+        transform.position = Vector3.zero;
     }
 
     private void MovePlayer()
