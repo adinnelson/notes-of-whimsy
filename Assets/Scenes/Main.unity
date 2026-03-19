@@ -733,33 +733,9 @@ PrefabInstance:
       propertyPath: contentsParent
       value: 
       objectReference: {fileID: 434211769}
-    - target: {fileID: 1155841396824913759, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: acceleration
-      value: 26
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421404821173559249, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: maxSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421404821173559249, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: maxHealth
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 3173876067419357927, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: lightningEffect
-      value: 
-      objectReference: {fileID: 7702718193461565169, guid: ebeea1f957af4c14d92910c4860b94ed, type: 3}
     - target: {fileID: 4169916575795475163, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5189259256147739164, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5189259256147739164, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5189259256147739164, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: m_LocalPosition.x
@@ -809,10 +785,6 @@ PrefabInstance:
       propertyPath: attackBeamPrefab
       value: 
       objectReference: {fileID: 3228955244108052592, guid: ab89f7ce67ec3ca498a8c605dd8f7bd2, type: 3}
-    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
-      propertyPath: fireCooldownSeconds
-      value: 0.2
-      objectReference: {fileID: 0}
     - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: failedInputLockoutTime
       value: 0.3
