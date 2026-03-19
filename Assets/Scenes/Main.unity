@@ -733,9 +733,13 @@ PrefabInstance:
       propertyPath: contentsParent
       value: 
       objectReference: {fileID: 434211769}
+    - target: {fileID: 1155841396824913759, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: acceleration
+      value: 26
+      objectReference: {fileID: 0}
     - target: {fileID: 1421404821173559249, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: maxSpeed
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1421404821173559249, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: maxHealth
@@ -921,15 +925,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0
+      value: 0.18608697
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 1
+      value: 0.9991267
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 1
+      value: 0.62608695
       objectReference: {fileID: 0}
     - target: {fileID: 8571626184657687215, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_LocalPosition.x
