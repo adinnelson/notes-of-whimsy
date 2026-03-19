@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6220488734455263442}
   - component: {fileID: -188262200637398784}
   - component: {fileID: -3021959474142553687}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RedNoteGameObj
   m_TagString: puObj
   m_Icon: {fileID: 0}
