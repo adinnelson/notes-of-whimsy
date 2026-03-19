@@ -45,7 +45,7 @@ public class PlayerAttack : MonoBehaviour
         inputActions = new InputSystem_Actions();
         CacheInitialMousePosition();
     }
-    
+
     private void OnEnable()
     {
         inputActions.Player.Enable();
@@ -77,18 +77,8 @@ public class PlayerAttack : MonoBehaviour
     private void Update()
     {
         // Continuously check to update aim based on the most recent input (Mouse and/or Controller)
-        if(mainCamera == null)
-        {
-            mainCamera = Camera.main;
-        }
-        if(beathandler == null)
-        {
-            beathandler = GameObject.Find("BeatBar")?.GetComponent<BeatHandler>();
-        }
-
         UpdateAimSourceFromStick();
-        UpdateAimSourceFromMouseMovement();    
-
+        UpdateAimSourceFromMouseMovement();
     }
 
     private void OnBeatActionPerformed(InputAction.CallbackContext context)
@@ -112,24 +102,6 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        if (context.action.name == "Sprint")
-        {
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
-            if(rb.linearVelocity.magnitude > 0)
-            {
-                rb.AddForce(rb.linearVelocity.normalized * 3000);
-            }
-            else
-            {
-                Vector3 mouseScreenPosition = Mouse.current.position.value;
-                Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-                Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
-
-                rb.AddForce(direction.normalized * 3000);   
-            }
-        }
-
         // if you fire off beat lock attacks until next beat
         if (beathandler != null && !beathandler.ValidAttackInterval)
         {
@@ -142,16 +114,15 @@ public class PlayerAttack : MonoBehaviour
         {
             case "Fire":
             {
-                if(beathandler != null)
-                {
                 int beatID = beathandler.GetBeatIndex();
+                // Debug.Log(beatID);
+
                 playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID)?.Fire();
 
                 lastFireTimeSeconds = Time.time;
-                }
                 break;
             }
-            /*case "Sprint":
+            case "Sprint":
             {
 
                 Rigidbody2D rb = GetComponent<Rigidbody2D>();
@@ -165,9 +136,9 @@ public class PlayerAttack : MonoBehaviour
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
 
-                rb.AddForce(direction.normalized * 3000);
+                rb.AddForce(direction * 3000);
                 break;
-            }*/
+            }
         }
     }
 
