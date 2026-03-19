@@ -91,8 +91,6 @@ public class BeatHandler : MonoBehaviour
 
     private void InitializeRandomSpells()
     {
-        print(unlockedBeats.Count);
-
         // BEAT_NUM is limit of spell slots
         // TODO: added actual randomness logic
         if(unlockedBeats.Count == 0)
