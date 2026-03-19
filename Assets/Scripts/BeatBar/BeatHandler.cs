@@ -199,7 +199,7 @@ public class BeatHandler : MonoBehaviour
         if (percentToNextBeat > 1f)
         {
             //muiscBeatIndex is coming from the FMOD music 
-            onBeatIndex = (musicBeatIndex + 1 )% BEAT_NUM;
+            onBeatIndex = musicBeatIndex % BEAT_NUM;
 
             if (gm && !gm.BeatHit)
             {
@@ -281,7 +281,7 @@ public class BeatHandler : MonoBehaviour
     // get whether an attack can be made based on the percentage to next beat
     public bool CheckValidAttackInterval(float percentage)
     {
-        return unlockedBeats.Contains(beatIndex + 1) && (percentage <= REQUIRED_ACCURACY || percentage >= 1f - REQUIRED_ACCURACY);
+        return unlockedBeats.Contains(onBeatIndex + 1) && (percentage <= REQUIRED_ACCURACY || percentage >= 1f - REQUIRED_ACCURACY);
 
     }
 
