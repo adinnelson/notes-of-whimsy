@@ -143,6 +143,7 @@ public class EnemyWaveController : MonoBehaviour
         // Placeholder spawn effect using a sphere that scales up from zero
         // TODO: Replace with actual spawn effect
         GameObject spawnEffect = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        spawnEffect.transform.parent = transform; // Set the spawn effect as a child of the EnemyWaveController for organization
         spawnEffect.transform.position = spawnPosition;
         spawnEffect.transform.localScale = Vector3.zero;
         spawnEffect.GetComponent<Collider>().enabled = false;
