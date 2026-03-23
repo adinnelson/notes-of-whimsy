@@ -112,7 +112,7 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        if (context.action.name == "Sprint")
+        if (beathandler != null && beathandler.ValidDashInterval && context.action.name == "Sprint")
         {
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
@@ -128,6 +128,7 @@ public class PlayerAttack : MonoBehaviour
 
                 rb.AddForce(direction.normalized * 3000);   
             }
+            return;
         }
 
         // if you fire off beat lock attacks until next beat

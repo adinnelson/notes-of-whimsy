@@ -72,6 +72,7 @@ public class BeatHandler : MonoBehaviour
 
     // enabled when a beat is within acceptable range
     public bool ValidAttackInterval = false;
+    public bool ValidDashInterval = false;
 
     void Start()
     {
@@ -176,6 +177,7 @@ public class BeatHandler : MonoBehaviour
         UpdateBeatVisuals();
 
         ValidAttackInterval = CheckValidAttackInterval(percentToNextBeat);
+        ValidDashInterval = CheckValidDashInterval(percentToNextBeat);
     }
 
     private void UpdateBeatVisuals()
@@ -242,6 +244,12 @@ public class BeatHandler : MonoBehaviour
     public bool CheckValidAttackInterval (float percentage)
     {
         return unlockedBeats.Contains(beatIndex + 1) && (percentage <= REQUIRED_ACCURACY || percentage >= 1f - REQUIRED_ACCURACY);
+
+    }
+
+    public bool CheckValidDashInterval (float percentage)
+    {
+        return percentage <= REQUIRED_ACCURACY || percentage >= 1f - REQUIRED_ACCURACY;
 
     }
 
