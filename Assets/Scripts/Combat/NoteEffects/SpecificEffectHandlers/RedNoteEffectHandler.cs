@@ -60,6 +60,37 @@ public class RedNoteEffectHandler : NoteEffectHandler
         }
     }
 
+    public void Explode(Vector3 impactPosition)
+    {
+        enemiesInRange.Clear();
+
+        Vector3 playerPosition = playerAttack.transform.position;
+
+        DebugDrawCircle(impactPosition, knockbackRadius, Color.cyan, 2.0f);
+
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(impactPosition, knockbackRadius);
+
+        foreach (Collider2D hit in hitColliders)
+        {
+            if (hit.CompareTag("Player")) continue;
+
+            // Use GetComponentInParent so we always resolve to the root enemy GameObject,
+            // preventing double-damage when an enemy has colliders on both parent and child objects.
+            IDamageable targetDamageable = hit.GetComponentInParent<IDamageable>();
+            if (targetDamageable != null)
+            {
+                GameObject root = (targetDamageable as MonoBehaviour).gameObject;
+                if (!enemiesInRange.Contains(root))
+                {
+                    enemiesInRange.Add(root);
+                }
+            }
+        }
+        DoDamage(enemiesInRange);
+        Knockback(enemiesInRange, impactPosition, playerPosition);
+        DoAnimation(impactPosition);
+    }
+
     public void SetExplosion(GameObject explosion)
     {
         this.explosion = explosion;

@@ -405,6 +405,20 @@ public class PlayerAttack : MonoBehaviour
         {
             noteEffectHandler?.HitEnemy(damageable);
         }
+
+        if(noteEffectHandler != null)
+        {
+            switch(noteEffectHandler.SpellData.spellId)
+            {
+                case 1:
+                    ((RedNoteEffectHandler)noteEffectHandler).Explode(endBeamPos);
+                    break;
+                case 4:
+                    ((BlueNoteEffectHandler)noteEffectHandler).WhirlPool(endBeamPos);
+                    break;
+            }   
+        }
+
         GameObject attackBeamInstance = SpawnAttackBeam(spawnPoint, endBeamPos, noteEffectHandler?.SpellData.spellId);
         SimpleTimer timer = new SimpleTimer();
         timer.StartTimer(0.5f, onFinish: () => Destroy(attackBeamInstance) ,gameManager: gm);
