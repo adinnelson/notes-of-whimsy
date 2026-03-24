@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class PlayerInventory : MonoBehaviour
 {
-    //now allows multiple same type spells 
     private List<SpellDataSO> activeSpells = new List<SpellDataSO>(); 
     private List<GameObject> activeIcon = new List<GameObject>();
 
@@ -69,69 +68,50 @@ public class PlayerInventory : MonoBehaviour
         spellEditBar.Open(newSpell, worldObject);
     }
 
+    //called by PickupItem on <e> for Boostable item
+    public void PickupBoost(BoostableItem boost)
+    {
+        var stats = GetComponent<PlayerStats>();
+        var health = GetComponent<Health>();
+
+        switch (boost.Type)
+        {
+            case BoostType.HealthPotion:
+                if (health != null)
+                {
+                    health.CurrentHealth += (int)boost.Amount;
+                }
+                break;
+            case BoostType.MaxHealth:
+                stats.AddHealthBonus((int)boost.Amount);
+                break;
+            case BoostType.Speed:
+                stats.AddMovementSpeed(boost.Amount);
+                break;
+            case BoostType.Damage:
+                stats.AddDamageBonus((int)boost.Amount);
+                break;
+        }
+        Destroy(boost.gameObject);
+    }
+
+    //called by PickupItem on <e> for beat bar tick unlock when beatId != 0
+    public void PickupInventorySlot(GameObject itemObject)
+    {
+        int slotId = playerActiveSpellsHandler.UnlockSlot();
+        beatHandler.BeatUnlocked(slotId);
+        Destroy(itemObject);
+    }
+
+    //gold pickups remains on collide
     private void OnTriggerEnter2D(Collider2D objToPickup)
     {
-        bool actionPerfomed = false;
-        //check for gold pickup
         GoldCoin gold = objToPickup.GetComponent<GoldCoin>();
         if (gold != null)
         {
             GoldManager.Instance.AddMoreGold(gold.Amount);
             Destroy(gold.gameObject);
-            return;
         }
-
-        //check for boostables pickup
-        BoostableItem boost = objToPickup.GetComponent<BoostableItem>();
-        if (boost != null)
-        {
-            var stats = GetComponent<PlayerStats>();
-            var health = GetComponent<Health>();
-
-            switch (boost.Type)
-            {
-                case BoostType.HealthPotion:
-                    if (health != null)
-                    {
-                        health.CurrentHealth += (int)boost.Amount;
-                    }
-                    break;
-                case BoostType.MaxHealth:
-                    stats.AddHealthBonus((int)boost.Amount);
-                    break;
-                case BoostType.Speed:
-                    stats.AddMovementSpeed(boost.Amount);
-                    break;
-                case BoostType.Damage:
-                    stats.AddDamageBonus((int)boost.Amount);
-                    break;
-            }
-            actionPerfomed = true;
-
-        }
-
-
-        PickupItem pickup = objToPickup.GetComponent<PickupItem>();
-        if (pickup == null)
-        {
-            //Debug.LogWarning($"Not A Valid PickUp Item! Collider: {objToPickup.name}");
-            if (actionPerfomed)
-            {
-                Destroy(objToPickup.gameObject);
-            }
-            return;
-        }
-
-        if (pickup.beatId == 0)
-        {
-            return;
-        }
-
-        int slotId = playerActiveSpellsHandler.UnlockSlot();
-
-        beatHandler.BeatUnlocked(slotId);
-
-        Destroy(objToPickup.gameObject);
     }
 
     private void SpawnIcon(SpellDataSO spell)

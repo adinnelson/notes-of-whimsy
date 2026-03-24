@@ -6,13 +6,38 @@ public class PickupItem : MonoBehaviour
     public SpellDataSO spell;
     public int beatId;
 
-    private float pickupRange = 2.0f;
+    [SerializeField] private float pickupRange = 2.0f;
+    public float PickupRange => pickupRange;
+
+    [SerializeField] private GameObject glowChild;
 
     private Transform player;
+    private PlayerInventory playerInventory;
+    private SpriteRenderer glowRenderer;
+    private bool inRange = false;
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+            playerInventory = playerObj.GetComponent<PlayerInventory>();
+        }
+
+        //copy the parent sprite into the glow child at runtime
+        if (glowChild != null)
+        {
+            glowRenderer = glowChild.GetComponent<SpriteRenderer>();
+            SpriteRenderer parentRenderer = GetComponent<SpriteRenderer>();
+
+            if (glowRenderer != null && parentRenderer != null)
+            {
+                glowRenderer.sprite = parentRenderer.sprite;
+            }
+
+            glowChild.SetActive(false);
+        }
     }
 
     private void Update()
@@ -23,10 +48,50 @@ public class PickupItem : MonoBehaviour
         }
 
         float distance = Vector2.Distance(transform.position, player.position);
+        bool nowInRange = distance <= pickupRange;
 
-        if (distance <= pickupRange && Keyboard.current.eKey.wasPressedThisFrame)
+        if (nowInRange != inRange)
+        {
+            inRange = nowInRange;
+            if (glowChild != null)
+            {
+                glowChild.SetActive(inRange);
+            }
+        }
+
+        if (inRange && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            //SpellPickupUI.Instance.Show(this);
+            TryPickup();
+        }
+    }
+
+    private void TryPickup()
+    {
+        if (playerInventory == null)
+        {
+            return;
+        }
+
+        //pickup a spell
+        if (spell != null)
         {
             SpellPickupUI.Instance.Show(this);
+            return;
+        }
+
+        //pickup a boostable
+        BoostableItem boost = GetComponent<BoostableItem>();
+        if (boost != null)
+        {
+            playerInventory.PickupBoost(boost);
+            return;
+        }
+
+        //pickup beat tick
+        if (beatId != 0)
+        {
+            playerInventory.PickupInventorySlot(gameObject);
         }
     }
 }

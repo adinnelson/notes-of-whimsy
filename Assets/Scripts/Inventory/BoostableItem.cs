@@ -19,4 +19,9 @@ public class BoostableItem : MonoBehaviour
     public BoostType Type => boostType;
     public float Amount => amount;
 
+    //added this for testing and debugging -- if this interferes with the actual game running we can probably delete
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 }
