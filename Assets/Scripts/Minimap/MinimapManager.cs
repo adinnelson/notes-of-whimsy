@@ -53,18 +53,30 @@ public class MinimapManager : MonoBehaviour
         {
             Debug.LogWarning("MinimapManager: itemIconPrefab is not assigned in the Inspector.");
         }
+        //RoomGenerator.OnDungeonComplete += BuildMinimapFromDungeon;
+    }
 
+    void Start()
+    {
+        if (roomGenerator != null && roomGenerator.GetSpawnedRooms().Count > 0)
+        {
+            BuildMinimapFromDungeon();
+        }
+    }
+
+    void OnEnable()
+    {
         RoomGenerator.OnDungeonComplete += BuildMinimapFromDungeon;
+    }
+
+    void OnDisable()
+    {
+        RoomGenerator.OnDungeonComplete -= BuildMinimapFromDungeon;
     }
 
     void OnDestroy()
     {
         RoomGenerator.OnDungeonComplete -= BuildMinimapFromDungeon;
-    }
-
-    void Start()
-    {
-        BuildMinimapFromDungeon();
     }
 
     public void BuildMinimapFromDungeon()
@@ -141,9 +153,6 @@ public class MinimapManager : MonoBehaviour
         rect.SetAsLastSibling();
         return rect;
     }
-
-
-
 
     public Vector2 WorldToMap(Vector2 worldPos)
     {
