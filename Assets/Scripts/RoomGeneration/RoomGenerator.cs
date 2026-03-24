@@ -59,9 +59,11 @@ public class RoomGenerator : MonoBehaviour
     private bool hasSpawnedShop = false;
     private bool hasSpawnedCombatRoom = false;
     private bool needToReset = false;
+    private bool hasCompletedDungeon = false;
 
     // EVENTS
     public static event System.Action OnDungeonComplete;
+    public static event System.Action OnDungeonReset;
 
     // DEBUG
     [SerializeField]
@@ -112,6 +114,8 @@ public class RoomGenerator : MonoBehaviour
         RemoveRoomTypeFromRoomPools(RoomTypes.Shop);
         RemoveRoomTypeFromRoomPools(RoomTypes.Combat);
         needToReset = false;
+        if(hasCompletedDungeon) OnDungeonReset?.Invoke();
+        hasCompletedDungeon = false;
         CreateFloorLayout();
     }
 
@@ -352,6 +356,7 @@ public class RoomGenerator : MonoBehaviour
         }
 
         OnDungeonComplete?.Invoke();
+        hasCompletedDungeon = true;
     }
 
     private void CreateRoomPools()
