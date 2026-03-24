@@ -61,7 +61,6 @@ public class PickupItem : MonoBehaviour
 
         if (inRange && Keyboard.current.eKey.wasPressedThisFrame)
         {
-            //SpellPickupUI.Instance.Show(this);
             TryPickup();
         }
     }
@@ -80,18 +79,18 @@ public class PickupItem : MonoBehaviour
             return;
         }
 
+        //pickup beat tick -> must be checked before the other boostables
+        if (beatId != 0)
+        {
+            playerInventory.PickupInventorySlot(gameObject);
+        }
+
         //pickup a boostable
         BoostableItem boost = GetComponent<BoostableItem>();
         if (boost != null)
         {
             playerInventory.PickupBoost(boost);
             return;
-        }
-
-        //pickup beat tick
-        if (beatId != 0)
-        {
-            playerInventory.PickupInventorySlot(gameObject);
         }
     }
 }
