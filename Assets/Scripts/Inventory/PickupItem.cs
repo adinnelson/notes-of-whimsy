@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using System.Collections.Generic;
 
 public class PickupItem : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class PickupItem : MonoBehaviour
     [Header("Item Pickup Feedback")]
     [SerializeField] private GameObject glowChild;
     [SerializeField] private TextMeshProUGUI labelChild;
+    //to manage feedback display when in range of multiple boosts
+    private static List<PickupItem> activePickups = new List<PickupItem>();
+    private string thisLabel = string.Empty;
 
     private Transform player;
     private PlayerInventory playerInventory;
@@ -79,9 +83,20 @@ public class PickupItem : MonoBehaviour
             {
                 if (inRange)
                 {
-                    string label = BuildLabel();
-                    labelChild.text = label;
-                    labelChild.gameObject.SetActive(!string.IsNullOrEmpty(label));
+                    thisLabel = BuildLabel();
+                    if (!string.IsNullOrEmpty(thisLabel) && !activePickups.Contains(this))
+                        activePickups.Add(this);
+                }
+                else
+                {
+                    activePickups.Remove(this);
+                    thisLabel = string.Empty;
+                }
+
+                if (activePickups.Count > 0)
+                {
+                    labelChild.text = string.Join("\n", activePickups.ConvertAll(p => p.thisLabel));
+                    labelChild.gameObject.SetActive(true);
                 }
                 else
                 {
@@ -158,5 +173,11 @@ public class PickupItem : MonoBehaviour
             }
         }
         return string.Empty;
+    }
+
+    //to keep text list up to date
+    private void OnDestroy()
+    {
+        activePickups.Remove(this);
     }
 }
