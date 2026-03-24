@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Tilemaps;
 
 public class MinimapManager : MonoBehaviour
 {
@@ -18,6 +19,18 @@ public class MinimapManager : MonoBehaviour
     public float worldToMapScale = 2.0f;
 
     private RoomGenerator roomGenerator;
+
+    //for debugging the overlapping room icons - it is the room boundaries themselves that are overlapping, not the room icons. 
+    private List<Bounds> debugRoomBounds = new List<Bounds>();
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        foreach (Bounds b in debugRoomBounds)
+        {
+            Gizmos.DrawWireCube(b.center, b.size); 
+        }
+    }
 
     void Awake()
     {
@@ -81,6 +94,7 @@ public class MinimapManager : MonoBehaviour
 
     public void BuildMinimapFromDungeon()
     {
+        debugRoomBounds.Clear();
         ClearRoomIcons();
 
         if (roomGenerator == null)
@@ -93,7 +107,9 @@ public class MinimapManager : MonoBehaviour
 
         foreach (GameObject room in rooms)
         {
-            CreateRoomFromWorld(room.transform.position);
+            //adding a pull from RoomInfo.cs so that the minimap rooms can accurately show the scale of actual rooms on the Minimap
+            RoomInfo roomInfo = room.GetComponent<RoomInfo>();
+            CreateRoomFromWorld(room.transform.position, roomInfo);
         }
     }
 
@@ -105,11 +121,34 @@ public class MinimapManager : MonoBehaviour
         }
     }
 
-    void CreateRoomFromWorld(Vector3 worldPosition)
+    void CreateRoomFromWorld(Vector3 worldPosition, RoomInfo roomInfo)
     {
         GameObject room = Instantiate(roomPrefab, roomsContainer);
         RectTransform rect = room.GetComponent<RectTransform>();
         rect.anchoredPosition = WorldToMap(worldPosition);
+
+        //added to size the minimap room icons to match actual room boundaries
+        if (roomInfo != null)
+        {
+            Tilemap floor = roomInfo.GetFloor();
+            if (floor != null)
+            {
+                //actual centre of tiled area, not centre of room origin
+                Vector3 worldCentre = worldPosition + floor.localBounds.center;
+
+                //this shows the boundaries of the actual rooms being generated, and how they overlap in many cases, causing the icons to also overlap
+                //debugRoomBounds.Add(new Bounds(worldCentre, floor.localBounds.size));
+
+                rect.anchoredPosition = WorldToMap(worldCentre);
+
+                Vector2 worldSize = floor.localBounds.size;
+                rect.sizeDelta = (worldSize * worldToMapScale);
+                //this line allows for space between the room icons to attempt to balance out that the actual rooms overlap, replacing the above line 
+                //rect.sizeDelta = (worldSize * worldToMapScale) * 0.85f;
+
+                return;
+            }
+        }
     }
 
     public RectTransform RegisterEnemyIcon()
