@@ -95,44 +95,5 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7159632872626190546, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -8550357691126952317}
-    - targetCorrespondingSourceObject: {fileID: 7159632872626190546, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6624630706271644778}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
---- !u!1 &3394618241391367391 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7159632872626190546, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
-  m_PrefabInstance: {fileID: 5494456846429613069}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &-8550357691126952317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3394618241391367391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29e1f3895b52c674e89503dab300d2bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MinimapItem
---- !u!114 &6624630706271644778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3394618241391367391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93f1c3280b7c4a24c8ada497ac3b4a0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PickupItem
-  spell: {fileID: 0}
-  beatId: 0
-  pickupRange: 2
-  glowChild: {fileID: 0}
