@@ -14,6 +14,8 @@ public class PickupItem : MonoBehaviour
     [Header("Item Pickup Feedback")]
     [SerializeField] private GameObject glowChild;
     [SerializeField] private TextMeshProUGUI labelChild;
+    [SerializeField] private GameObject labelContainer;
+
     //to manage feedback display when in range of multiple boosts
     private static List<PickupItem> activePickups = new List<PickupItem>();
     private string thisLabel = string.Empty;
@@ -23,8 +25,15 @@ public class PickupItem : MonoBehaviour
     private SpriteRenderer glowRenderer;
     private bool inRange = false;
 
+    public void SetLabelReferences(TextMeshProUGUI label, GameObject container)
+    {
+        labelChild = label;
+        labelContainer = container;
+    }
+
     private void Start()
     {
+        activePickups.RemoveAll(p => p == null);
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -45,20 +54,6 @@ public class PickupItem : MonoBehaviour
 
             glowChild.SetActive(false);
         }
-
-        //also find & build & assign label text for additional boostables feedback
-        if (labelChild == null)
-        {
-            GameObject labelObj = GameObject.Find("FeedbackText");
-            if (labelObj != null)
-            {
-                labelChild = labelObj.GetComponent<TextMeshProUGUI>();
-            }
-            else
-            {
-                Debug.LogWarning("PickupItem: Could not find FeedbackText (TMP) in scene");
-            }
-        }
     }
 
     private void Update()
@@ -74,9 +69,28 @@ public class PickupItem : MonoBehaviour
         if (nowInRange != inRange)
         {
             inRange = nowInRange;
+
             if (glowChild != null)
             {
                 glowChild.SetActive(inRange);
+            }
+
+            //when an object is in range, make sure the container & TMP are assigned in the inspector of the object
+            if (inRange && (labelChild == null || labelContainer == null))
+            {
+                var allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+                foreach (var go in allObjects)
+                {
+                    if (go.name == "FeedbackTextContainer")
+                    {
+                        labelContainer = go;
+                        labelChild = go.GetComponentInChildren<TextMeshProUGUI>(true);
+                        break;
+                    }
+                }
+
+                if (labelContainer == null)
+                    Debug.LogWarning("PickupItem: Could not find FeedbackTextContainer");
             }
 
             if (labelChild != null)
@@ -85,7 +99,9 @@ public class PickupItem : MonoBehaviour
                 {
                     thisLabel = BuildLabel();
                     if (!string.IsNullOrEmpty(thisLabel) && !activePickups.Contains(this))
+                    {
                         activePickups.Add(this);
+                    }
                 }
                 else
                 {
@@ -96,11 +112,18 @@ public class PickupItem : MonoBehaviour
                 if (activePickups.Count > 0)
                 {
                     labelChild.text = string.Join("\n", activePickups.ConvertAll(p => p.thisLabel));
-                    labelChild.gameObject.SetActive(true);
+
+                    if (labelContainer != null)
+                    {
+                        labelContainer.SetActive(true);
+                    }
                 }
                 else
                 {
-                    labelChild.gameObject.SetActive(false);
+                    if (labelContainer != null)
+                    {
+                        labelContainer.SetActive(false);
+                    }
                 }
             }
         }
@@ -142,9 +165,7 @@ public class PickupItem : MonoBehaviour
     }
 
     private string BuildLabel()
-    {
-        Debug.Log($"BuildLabel - spell: {spell}, beatId: {beatId}, boost: {GetComponent<BoostableItem>()}");
-        
+    {        
         if (spell != null)
         {
             return string.Empty;
@@ -175,9 +196,28 @@ public class PickupItem : MonoBehaviour
         return string.Empty;
     }
 
-    //to keep text list up to date
+    //to keep text list up to date when an item is picked up
     private void OnDestroy()
     {
         activePickups.Remove(this);
+
+        if (labelChild != null)
+        {
+            if (activePickups.Count > 0)
+            {
+                labelChild.text = string.Join("\n", activePickups.ConvertAll(p => p.thisLabel));
+                if (labelContainer != null)
+                {
+                    labelContainer.SetActive(true);
+                }
+            }
+            else
+            {
+                if (labelContainer != null)
+                {
+                    labelContainer.SetActive(false);
+                }
+            }
+        }
     }
 }

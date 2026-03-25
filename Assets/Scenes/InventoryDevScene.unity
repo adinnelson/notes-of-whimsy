@@ -127,6 +127,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 35507463983643180, guid: f87ccd90730bdae448441c50d26b31e0, type: 3}
+      propertyPath: labelChild
+      value: 
+      objectReference: {fileID: 1906310462}
+    - target: {fileID: 35507463983643180, guid: f87ccd90730bdae448441c50d26b31e0, type: 3}
+      propertyPath: labelContainer
+      value: 
+      objectReference: {fileID: 836256460}
     - target: {fileID: 1353094496553566408, guid: f87ccd90730bdae448441c50d26b31e0, type: 3}
       propertyPath: m_Name
       value: BlueNoteGameObj
@@ -228,6 +236,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PurpleNoteGameObj
       objectReference: {fileID: 0}
+    - target: {fileID: 6871415077949318443, guid: cfa86319d3f63ec4fa5b3affa0e249c1, type: 3}
+      propertyPath: labelChild
+      value: 
+      objectReference: {fileID: 1906310462}
+    - target: {fileID: 6871415077949318443, guid: cfa86319d3f63ec4fa5b3affa0e249c1, type: 3}
+      propertyPath: labelContainer
+      value: 
+      objectReference: {fileID: 836256460}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -811,6 +827,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2795149797404032734, guid: ca2c0b2a4e777a5438a7931c270de9a2, type: 3}
+      propertyPath: labelChild
+      value: 
+      objectReference: {fileID: 1906310462}
+    - target: {fileID: 2795149797404032734, guid: ca2c0b2a4e777a5438a7931c270de9a2, type: 3}
+      propertyPath: labelContainer
+      value: 
+      objectReference: {fileID: 836256460}
     - target: {fileID: 3394618241391367391, guid: ca2c0b2a4e777a5438a7931c270de9a2, type: 3}
       propertyPath: m_Name
       value: Health Potion
@@ -992,6 +1016,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4482386950409991977, guid: 40eec704274fcf24a9be35095cf47995, type: 3}
+      propertyPath: labelChild
+      value: 
+      objectReference: {fileID: 1906310462}
+    - target: {fileID: 4482386950409991977, guid: 40eec704274fcf24a9be35095cf47995, type: 3}
+      propertyPath: labelContainer
+      value: 
+      objectReference: {fileID: 836256460}
     - target: {fileID: 6233256500731044169, guid: 40eec704274fcf24a9be35095cf47995, type: 3}
       propertyPath: m_Name
       value: YellowNoteGameObj
@@ -1001,6 +1033,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40eec704274fcf24a9be35095cf47995, type: 3}
+--- !u!1 &836256460 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8784983033268513457, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+  m_PrefabInstance: {fileID: 270475832}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1145755408
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1053,6 +1090,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Speed Increase
       objectReference: {fileID: 0}
+    - target: {fileID: 7677061259398992595, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: labelChild
+      value: 
+      objectReference: {fileID: 1906310462}
+    - target: {fileID: 7677061259398992595, guid: 5b74111faaa07a046ab05ca70f67bce0, type: 3}
+      propertyPath: labelContainer
+      value: 
+      objectReference: {fileID: 836256460}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1106,6 +1151,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5054339332194757252, guid: e4fbda0bcc704144d917214bf1e4d15f, type: 3}
+      propertyPath: labelChild
+      value: 
+      objectReference: {fileID: 1906310462}
+    - target: {fileID: 5054339332194757252, guid: e4fbda0bcc704144d917214bf1e4d15f, type: 3}
+      propertyPath: labelContainer
+      value: 
+      objectReference: {fileID: 836256460}
     - target: {fileID: 5760904881652416645, guid: e4fbda0bcc704144d917214bf1e4d15f, type: 3}
       propertyPath: m_Name
       value: Health Increase
@@ -1202,6 +1255,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 847775409627178053, guid: ff3810b195d9d0843ba447df2e0aaf05, type: 3}
+      propertyPath: labelChild
+      value: 
+      objectReference: {fileID: 1906310462}
+    - target: {fileID: 847775409627178053, guid: ff3810b195d9d0843ba447df2e0aaf05, type: 3}
+      propertyPath: labelContainer
+      value: 
+      objectReference: {fileID: 836256460}
     - target: {fileID: 2268818154868069881, guid: ff3810b195d9d0843ba447df2e0aaf05, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.12
@@ -1263,6 +1324,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RedNoteGameObj (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6220488734455263442, guid: 3c144305244dabd4a8e1c9fd92ef2529, type: 3}
+      propertyPath: labelChild
+      value: 
+      objectReference: {fileID: 1906310462}
+    - target: {fileID: 6220488734455263442, guid: 3c144305244dabd4a8e1c9fd92ef2529, type: 3}
+      propertyPath: labelContainer
+      value: 
+      objectReference: {fileID: 836256460}
     - target: {fileID: 8916105519239907407, guid: 3c144305244dabd4a8e1c9fd92ef2529, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.16613
@@ -1467,6 +1536,17 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1906310462 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7919395026772143493, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+  m_PrefabInstance: {fileID: 270475832}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1988061896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1648,6 +1728,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Damage Increase
       objectReference: {fileID: 0}
+    - target: {fileID: 1753182367349419058, guid: b4eb9d51ac74cbf4bb2590f358b3eb48, type: 3}
+      propertyPath: labelChild
+      value: 
+      objectReference: {fileID: 1906310462}
+    - target: {fileID: 1753182367349419058, guid: b4eb9d51ac74cbf4bb2590f358b3eb48, type: 3}
+      propertyPath: labelContainer
+      value: 
+      objectReference: {fileID: 836256460}
     - target: {fileID: 7923431334345378549, guid: b4eb9d51ac74cbf4bb2590f358b3eb48, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.0699997
