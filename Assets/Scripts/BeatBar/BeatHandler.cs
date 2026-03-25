@@ -13,7 +13,7 @@ public class BeatHandler : MonoBehaviour
     [Header("FMOD Settings")]
     [SerializeField] private EventReference beatEndEvent;
     private MusicManager musicManager;
-    private float lastCheckedBPM = 0f;
+    private float lastCheckedBPM = 0.0f;
 
     private const float REQUIRED_ACCURACY = 0.75f;
     private const int BEAT_NUM = 8;
@@ -21,7 +21,7 @@ public class BeatHandler : MonoBehaviour
     [SerializeField] private PlayerAttack playerAttack;
 
     // beats per minute
-    [SerializeField] private float bpm = 120f;
+    [SerializeField] private float bpm = 120.0f;
 
     // spawn position
     [SerializeField] private float beatEndSpawnDistance;
@@ -38,7 +38,7 @@ public class BeatHandler : MonoBehaviour
     private PlayerActiveSpellsHandler playerActiveSpellsHandler;
 
     // how close the next beat is
-    private float percentToNextBeat = 1f;
+    private float percentToNextBeat = 1.0f;
 
     // this index changes halfway between each beat
     private int beatIndex = 0;
@@ -82,7 +82,7 @@ public class BeatHandler : MonoBehaviour
 
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
         playerActiveSpellsHandler = GameObject.FindWithTag("Player")?.GetComponent<PlayerActiveSpellsHandler>();
-        
+
         InitializeRandomSpells();
 
         playerAttack = GameObject.FindWithTag("Player")?.GetComponent<PlayerAttack>();
@@ -126,7 +126,7 @@ public class BeatHandler : MonoBehaviour
             // playerActiveSpellsHandler.UnlockSlot(spellToUnlock);
             // playerActiveSpellsHandler.EquipSpell(spellToUnlock, 2);
         }
-        
+
     }
 
     void FixedUpdate()
@@ -136,7 +136,7 @@ public class BeatHandler : MonoBehaviour
         transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
 
         // needs to be x2 because we are fitting 8 beats into 4/4
-        percentToNextBeat += Time.fixedDeltaTime * bpm / 60f * 2f;
+        percentToNextBeat += Time.fixedDeltaTime * bpm / 60.0f * 2.0f;
 
         // fires on half beat
         if (percentToNextBeat > 0.5 && !beatIndexHasChanged)
@@ -157,7 +157,7 @@ public class BeatHandler : MonoBehaviour
         }
 
         // fires on beat
-        if (percentToNextBeat > 1f)
+        if (percentToNextBeat > 1.0f)
         {
             if (gm && !gm.BeatHit)
             {
@@ -171,7 +171,7 @@ public class BeatHandler : MonoBehaviour
 
             onBeatIndex = (onBeatIndex + 1) % BEAT_NUM;
             beatIndexHasChanged = false;
-            percentToNextBeat -= 1f;
+            percentToNextBeat -= 1.0f;
         }
 
         UpdateBeatVisuals();
@@ -184,7 +184,7 @@ public class BeatHandler : MonoBehaviour
     {
         float beatSpacing = (beatStartSpawnDistance - beatEndSpawnDistance) / numBeatsShown;
 
-        float growPerc = 0.8f + Mathf.Pow(1f - Mathf.Abs(percentToNextBeat - 0.5f), 2f) * 0.2f;
+        float growPerc = 0.8f + Mathf.Pow(1.0f - Mathf.Abs(percentToNextBeat - 0.5f), 2.0f) * 0.2f;
         spriteRenderer.transform.localScale = new Vector3(0.1f * growPerc, 0.1f * growPerc, spriteRenderer.transform.localScale.z);
 
         for (int i = 0; i < BEAT_NUM; i++)
@@ -197,8 +197,8 @@ public class BeatHandler : MonoBehaviour
             SpriteRenderer curLeftSprite = curLeftGraphic.transform.Find("visual").GetComponent<SpriteRenderer>();
             SpriteRenderer curRightSprite = curRightGraphic.transform.Find("visual").GetComponent<SpriteRenderer>();
 
-            float newOffset = beatEndSpawnDistance + (adjustedBeatIndex + 1f - percentToNextBeat) * beatSpacing;
-            float newSize = 1f - (adjustedBeatIndex - percentToNextBeat + 1f) / numBeatsShown;
+            float newOffset = beatEndSpawnDistance + (adjustedBeatIndex + 1.0f - percentToNextBeat) * beatSpacing;
+            float newSize = 1.0f - (adjustedBeatIndex - percentToNextBeat + 1.0f) / numBeatsShown;
 
             curLeftGraphic.transform.localPosition = new Vector3(newOffset, 0, curLeftGraphic.transform.localPosition.z);
             curLeftGraphic.transform.localScale = new Vector3(1, newSize, 1);
@@ -243,13 +243,13 @@ public class BeatHandler : MonoBehaviour
     // get whether an attack can be made based on the percentage to next beat
     public bool CheckValidAttackInterval (float percentage)
     {
-        return unlockedBeats.Contains(beatIndex + 1) && (percentage <= REQUIRED_ACCURACY || percentage >= 1f - REQUIRED_ACCURACY);
+        return unlockedBeats.Contains(beatIndex + 1) && (percentage <= REQUIRED_ACCURACY || percentage >= 1.0f - REQUIRED_ACCURACY);
 
     }
 
     public bool CheckValidDashInterval (float percentage)
     {
-        return percentage <= REQUIRED_ACCURACY || percentage >= 1f - REQUIRED_ACCURACY;
+        return percentage <= REQUIRED_ACCURACY || percentage >= 1.0f - REQUIRED_ACCURACY;
 
     }
 
@@ -310,7 +310,7 @@ public class BeatHandler : MonoBehaviour
         bpm = newBPM;
 
         // Reset beat ID if needed
-        percentToNextBeat = 1f;
+        percentToNextBeat = 1.0f;
         beatIndex = 0;
         onBeatIndex = 0;
         beatIndexHasChanged = true;
