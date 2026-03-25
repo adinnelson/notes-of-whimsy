@@ -9,6 +9,7 @@ public class Health : MonoBehaviour, IDamageable
     [SerializeField] private float enemyMaxHealth = 100.0f;
     [SerializeField] private GameObject healthPrefab; // HealthDisplay prefab
     [SerializeField] private HealthBarUpdater healthBarUpdater;
+    [SerializeField] private HealthText healthText; // assign this in the HealthDisplay prefab
 
     [Header("Hit Flash")]
     [SerializeField] private Material whiteMaterial;
@@ -35,10 +36,19 @@ public class Health : MonoBehaviour, IDamageable
             stats.OnMaxHealthIncreased += OnMaxHealthIncreased;
         }
 
+
         currentHealth = MaxHealth;
         SpawnHealthUI();
 
         isPlayer = GetComponent<PlayerAttack>() != null;
+    }
+
+    void Start()
+    {
+        if (healthText != null)
+        {
+            healthText.UpdateHPText(currentHealth, MaxHealth);
+        }
     }
 
     void SpawnHealthUI()
@@ -84,6 +94,11 @@ public class Health : MonoBehaviour, IDamageable
         if (healthBarUpdater != null)
         {
             healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
+        }
+
+        if (healthText != null)
+        {
+            healthText.UpdateHPText(currentHealth, MaxHealth);
         }
 
         // TODO: REMOVE LOG once integrated with UI and effects so we can see health changes
@@ -141,6 +156,10 @@ public class Health : MonoBehaviour, IDamageable
         if (healthBarUpdater != null)
         {
             healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
+        }
+        if (healthText != null)
+        {
+            healthText.UpdateHPText(currentHealth, MaxHealth);
         }
     }
 
