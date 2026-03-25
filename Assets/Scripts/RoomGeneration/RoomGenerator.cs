@@ -73,13 +73,18 @@ public class RoomGenerator : MonoBehaviour
     {
         RoomInfo.OnFloorOverlap += HandleFloorOverlap;
         ProgressFloor.OnFloorProgressed += ResetGeneration;
+    }
+
+    private void Start()
+    {
+        
         CreateRoomPools();
         CreateFloorLayout();
     }
 
     private void Update()
     {
-        if ((Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration) || spawnedRooms.Count < minRooms)
+        if (Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration)
         {
             ResetGeneration("reset from update due to key press or room count");
         }
@@ -185,7 +190,6 @@ public class RoomGenerator : MonoBehaviour
                 {
                     continue;
                 }
-
                 // spawn new rooms on each free node
                 switch (nodes[j].name.ToLower())
                 {
@@ -350,12 +354,15 @@ public class RoomGenerator : MonoBehaviour
             roomInfo.SetEnemyPrefabs(enemyPool);
         }
 
+        if(spawnedRooms.Count < minRooms) needToReset = true;
+
         if(needToReset)
         {
             return;
         }
 
         OnDungeonComplete?.Invoke();
+        LoadScreenControl.TurnOffLoadScreen();
         hasCompletedDungeon = true;
     }
 

@@ -50,6 +50,7 @@ public class PauseScreenManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+        Close();
         SceneManager.LoadScene(0);
     }
 }

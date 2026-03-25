@@ -58,7 +58,7 @@ public class ProgressFloor : MonoBehaviour
             }
             else
             {
-                floorsCompleted++;
+                // floorsCompleted++;
                 NextScene();
             }
         }
