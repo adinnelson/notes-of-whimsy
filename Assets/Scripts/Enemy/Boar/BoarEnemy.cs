@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// Fodder enemy that telegraphs a short charge on beats 1 and 3, then executes it on beats 2 and 4.
 /// The damage hitbox is only active while charging, so the player can walk through the boar freely if it's not charging
@@ -19,6 +20,18 @@ public class BoarEnemy : EnemyBase
 
     [Header("Boar - Chase")]
     [SerializeField] private float chaseSpeed = 2.5f;
+
+    [Header("Boar - Spread")]
+    [Tooltip("Minimum distance between any two boar charge endpoints.")]
+    [SerializeField] private float minEndpointSeparation = 2.0f;
+    [Tooltip("How far to nudge the endpoint each attempt when it overlaps another boar.")]
+    [SerializeField] private float nudgeDistance = 1.5f;
+    [Tooltip("Max number of nudge rings to try before giving up.")]
+    [SerializeField] private int maxNudgeAttempts = 3;
+
+    // Shared across all boar instances, each boar registers its endpoint here
+    // so subsequent boars can pick a different spot
+    private static readonly List<Vector2> claimedEndpoints = new List<Vector2>();
 
     private BoarHitbox hitbox;
     private Collider2D bodyCollider;
@@ -119,7 +132,8 @@ public class BoarEnemy : EnemyBase
     }
 
     /// Beats 1 and 3. Stops the boar, locks the charge direction with a small random jitter,
-    /// and shows the telegraph visual. Jitter prevents boar packs from stacking charges.
+    /// and shows the telegraph visual. If the endpoint would overlap another boar's,
+    /// nudges it in cardinal directions until it's clear.
     private void TelegraphCharge()
     {
         isCharging = false;
@@ -131,6 +145,17 @@ public class BoarEnemy : EnemyBase
 
         lockedChargeDir = CalculateJitteredDirection();
         lockedChargeDistance = CalculateWallCappedDistance(lockedChargeDir);
+
+        Vector2 endpoint = (Vector2)transform.position + lockedChargeDir * lockedChargeDistance;
+        endpoint = NudgeEndpointIfOverlapping(endpoint);
+
+        // Recompute direction and distance from the (possibly nudged) endpoint
+        Vector2 toEndpoint = endpoint - (Vector2)transform.position;
+        lockedChargeDir = toEndpoint.normalized;
+        lockedChargeDistance = CalculateWallCappedDistance(lockedChargeDir);
+
+        claimedEndpoints.Add(endpoint);
+
         ShowTelegraphVisual(lockedChargeDir, lockedChargeDistance);
 
         state = State.Telegraph;
@@ -141,6 +166,10 @@ public class BoarEnemy : EnemyBase
     private void ExecuteCharge()
     {
         HideTelegraphVisual();
+
+        // Clear the shared list on charge beats so the next telegraph round starts fresh.
+        // Every boar calls this but Clear() on an already-empty list is harmless.
+        claimedEndpoints.Clear();
 
         isCharging = true;
         animator.SetBool("Charging", true);
@@ -154,6 +183,51 @@ public class BoarEnemy : EnemyBase
         rb.linearVelocity = lockedChargeDir * chargeSpeed;
 
         state = State.Chase;
+    }
+
+    // Cardinal nudge offsets: up, right, down, left
+    private static readonly Vector2[] nudgeDirections = new Vector2[]
+    {
+        Vector2.up, Vector2.right, Vector2.down, Vector2.left
+    };
+
+    /// Checks the endpoint against all claimed spots. If it's too close to any,
+    /// tries nudging it up/right/down/left by increasing multiples of nudgeDistance.
+    /// Returns the original endpoint if nothing is claimed or it's already clear.
+    private Vector2 NudgeEndpointIfOverlapping(Vector2 endpoint)
+    {
+        if (IsEndpointClear(endpoint))
+        {
+            return endpoint;
+        }
+
+        for (int ring = 1; ring <= maxNudgeAttempts; ring++)
+        {
+            float offset = nudgeDistance * ring;
+            foreach (Vector2 dir in nudgeDirections)
+            {
+                Vector2 nudged = endpoint + dir * offset;
+                if (IsEndpointClear(nudged))
+                {
+                    return nudged;
+                }
+            }
+        }
+
+        // Everything overlaps, just use the original
+        return endpoint;
+    }
+
+    private bool IsEndpointClear(Vector2 candidate)
+    {
+        foreach (Vector2 claimed in claimedEndpoints)
+        {
+            if (Vector2.Distance(candidate, claimed) < minEndpointSeparation)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Vector2 CalculateJitteredDirection()

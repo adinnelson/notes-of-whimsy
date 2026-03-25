@@ -168,8 +168,8 @@ public class MusicManager : MonoBehaviour
                 break;
 
             case RoomTypes.End:
-                   // You might want special boss music
-                musicLabel = "bigCombat"; // or create a new "boss" type
+                //    // You might want special boss music
+                // musicLabel = "bigCombat"; // or create a new "boss" type
                 break;
         }
 
@@ -227,8 +227,8 @@ public class MusicManager : MonoBehaviour
         // FIX: Add null check for timelineInfo
         if (timelineInfo != null)
         {
-            // GUILayout.Box($"Current Beat = {timelineInfo.currentBeat}, Last Marker = {(string)timelineInfo.lastMarker}");
-            GUILayout.Box($" Last Marker = {(string)timelineInfo.lastMarker}, Bpm = {(timelineInfo.currentBpm)}");
+            GUILayout.Box($"Current Beat = {timelineInfo.currentBeat}, Last Marker = {(string)timelineInfo.lastMarker}");
+            // GUILayout.Box($" Last Marker = {(string)timelineInfo.lastMarker}, Bpm = {(timelineInfo.currentBpm)}");
         }
         else
         {
