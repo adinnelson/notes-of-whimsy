@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c779819e6cb62043a25efdd159efef4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  beatHandler: {fileID: 0}
+  beatHandler: {fileID: 8812477297736610141, guid: 5aa22c8bb4d55ed4bacdddc46438da7c, type: 3}
   BeatHit: 0
 --- !u!114 &6217259528008205229
 MonoBehaviour:

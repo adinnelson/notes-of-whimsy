@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// Tanky enemy that slowly chases the player, telegraphs a charge on beats 1 and 3,
 /// then charges in that direction until hitting a wall on beats 2 and 4.
@@ -17,6 +18,18 @@ public class TreantEnemy : EnemyBase
     [Header("Treant - Wall Stun")]
     [SerializeField] private int wallStunBeats = 2;
     [SerializeField] private GameObject stunVisual;
+
+    [Header("Treant - Spread")]
+    [Tooltip("Minimum distance between any two treant charge endpoints.")]
+    [SerializeField] private float minEndpointSeparation = 2.0f;
+    [Tooltip("How far to nudge the endpoint each attempt when it overlaps another treant.")]
+    [SerializeField] private float nudgeDistance = 1.5f;
+    [Tooltip("Max number of nudge rings to try before giving up.")]
+    [SerializeField] private int maxNudgeAttempts = 3;
+
+    // Shared across all treant instances each treant registers its endpoint here
+    // so subsequent treants can pick a different spot
+    private static readonly List<Vector2> claimedEndpoints = new List<Vector2>();
 
     private TreantHitbox hitbox;
     private Collider2D bodyCollider;
@@ -187,7 +200,8 @@ public class TreantEnemy : EnemyBase
     }
 
     /// Beats 1 and 3. Stops the treant, locks aim direction with a small jitter,
-    /// and shows the telegraph visual.
+    /// and shows the telegraph visual. If the endpoint would overlap another treant's,
+    /// nudges it in cardinal directions until it's clear.
     private void TelegraphCharge()
     {
         isCharging = false;
@@ -198,6 +212,16 @@ public class TreantEnemy : EnemyBase
         StopMovement();
 
         lockedChargeDir = CalculateJitteredDirection();
+
+        float wallDist = RaycastWallDistance(lockedChargeDir);
+        Vector2 endpoint = (Vector2)transform.position + lockedChargeDir * wallDist;
+        endpoint = NudgeEndpointIfOverlapping(endpoint);
+
+        // Recompute direction from the (possibly nudged) endpoint
+        lockedChargeDir = (endpoint - (Vector2)transform.position).normalized;
+
+        claimedEndpoints.Add(endpoint);
+
         ShowTelegraphVisual(lockedChargeDir);
 
         state = State.Telegraph;
@@ -208,6 +232,10 @@ public class TreantEnemy : EnemyBase
     private void ExecuteCharge()
     {
         HideTelegraphVisual();
+
+        // Clear the shared list on charge beats so the next telegraph round starts fresh.
+        // Every treant calls this but Clear() on an already-empty list is harmless.
+        claimedEndpoints.Clear();
 
         isCharging = true;
         stuckFrames = 0;
@@ -238,6 +266,51 @@ public class TreantEnemy : EnemyBase
         state = State.Chase;
     }
 
+    // Cardinal nudge offsets: up, right, down, left
+    private static readonly Vector2[] nudgeDirections = new Vector2[]
+    {
+        Vector2.up, Vector2.right, Vector2.down, Vector2.left
+    };
+
+    /// Checks the endpoint against all claimed spots. If it's too close to any,
+    /// tries nudging it up/right/down/left by increasing multiples of nudgeDistance.
+    /// Returns the original endpoint if nothing is claimed or it's already clear.
+    private Vector2 NudgeEndpointIfOverlapping(Vector2 endpoint)
+    {
+        if (IsEndpointClear(endpoint))
+        {
+            return endpoint;
+        }
+
+        for (int ring = 1; ring <= maxNudgeAttempts; ring++)
+        {
+            float offset = nudgeDistance * ring;
+            foreach (Vector2 dir in nudgeDirections)
+            {
+                Vector2 nudged = endpoint + dir * offset;
+                if (IsEndpointClear(nudged))
+                {
+                    return nudged;
+                }
+            }
+        }
+
+        // if Everything overlaps then just use the original
+        return endpoint;
+    }
+
+    private bool IsEndpointClear(Vector2 candidate)
+    {
+        foreach (Vector2 claimed in claimedEndpoints)
+        {
+            if (Vector2.Distance(candidate, claimed) < minEndpointSeparation)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private Vector2 CalculateJitteredDirection()
     {
         Vector2 toTarget = ((Vector2)target.position - (Vector2)transform.position).normalized;
@@ -248,17 +321,11 @@ public class TreantEnemy : EnemyBase
         return new Vector2(Mathf.Cos(finalAngle), Mathf.Sin(finalAngle));
     }
 
-    private void ShowTelegraphVisual(Vector2 direction)
+    /// Raycasts along a direction and returns the distance to the nearest wall,
+    /// or maxRayDist if no wall is found. Used by both the spread logic and the
+    /// telegraph visual scaling.
+    private float RaycastWallDistance(Vector2 direction)
     {
-        if (telegraphVisual == null)
-        {
-            return;
-        }
-
-        float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
-
-        // Scale the indicator to reach exactly the wall the treant will slam into.
         const float maxRayDist = 50.0f;
         float chargeDistance = maxRayDist;
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, maxRayDist);
@@ -272,6 +339,21 @@ public class TreantEnemy : EnemyBase
                 chargeDistance = hit.distance;
             }
         }
+
+        return chargeDistance;
+    }
+
+    private void ShowTelegraphVisual(Vector2 direction)
+    {
+        if (telegraphVisual == null)
+        {
+            return;
+        }
+
+        float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
+
+        float chargeDistance = RaycastWallDistance(direction);
 
         telegraphVisual.transform.localScale = new Vector3(
             chargeDistance,

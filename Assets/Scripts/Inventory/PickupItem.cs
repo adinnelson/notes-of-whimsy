@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 public class PickupItem : MonoBehaviour
 {
     public SpellDataSO spell;
@@ -16,23 +17,16 @@ public class PickupItem : MonoBehaviour
 
     private void Update()
     {
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        if (player == null)
         {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            Collider2D[] hits = Physics2D.OverlapPointAll(mousePos);
+            return;
+        }
 
-            foreach (Collider2D hit in hits)
-            {
-                if (hit.gameObject == gameObject)
-                {
-                    float distance = Vector2.Distance(transform.position, player.position);
-                    if (distance <= pickupRange)
-                    {
-                        SpellPickupUI.Instance.Show(this);
-                    }
-                    break;
-                }
-            }
+        float distance = Vector2.Distance(transform.position, player.position);
+
+        if (distance <= pickupRange && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            SpellPickupUI.Instance.Show(this);
         }
     }
 }
