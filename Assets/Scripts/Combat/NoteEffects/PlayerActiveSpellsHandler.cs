@@ -198,6 +198,8 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
             slotSpells[i] = slotSpell;
 
             BeatHandler.UnlockedBeats.Remove(i);
+            BeatHandler.ClearUnlockedBeats();
+            
         }
     }
 }

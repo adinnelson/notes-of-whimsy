@@ -62,6 +62,37 @@ public class BlueNoteEffectHandler : NoteEffectHandler
         }
     }
 
+    public void WhirlPool(Vector3 impactPosition)
+    {
+        enemiesInRange.Clear();
+
+        Vector3 playerPosition = playerAttack.transform.position;
+
+        DebugDrawCircle(impactPosition, pullRadius, Color.cyan, 2.0f);
+
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(impactPosition, pullRadius);
+
+        foreach (Collider2D hit in hitColliders)
+        {
+            if (hit.CompareTag("Player")) continue;
+
+            // Use GetComponentInParent so we always resolve to the root enemy GameObject,
+            // preventing double-damage when an enemy has colliders on both parent and child objects.
+            IDamageable targetDamageable = hit.GetComponentInParent<IDamageable>();
+            if (targetDamageable != null)
+            {
+                GameObject root = (targetDamageable as MonoBehaviour).gameObject;
+                if (!enemiesInRange.Contains(root))
+                {
+                    enemiesInRange.Add(root);
+                }
+            }
+        }
+        DoDamage(enemiesInRange);
+        Pull(enemiesInRange, impactPosition, playerPosition);
+        DoAnimation(impactPosition);
+    }
+
     public void SetWhirlPool(GameObject whirlPool)
     {
         this.whirlPool = whirlPool;

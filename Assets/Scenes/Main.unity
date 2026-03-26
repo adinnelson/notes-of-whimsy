@@ -455,6 +455,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
+      propertyPath: allowRegeneration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
       propertyPath: enemyPool.Array.size
       value: 7
       objectReference: {fileID: 0}
@@ -1469,6 +1473,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 685342106361581488, guid: 5a9e67a902ca9fd43983f8e21810f457, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1842685441}
     - target: {fileID: 1915041869223752468, guid: 5a9e67a902ca9fd43983f8e21810f457, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.05122
@@ -1517,6 +1525,10 @@ PrefabInstance:
       propertyPath: beatHandler
       value: 
       objectReference: {fileID: 180675255}
+    - target: {fileID: 8149780867666254044, guid: 5a9e67a902ca9fd43983f8e21810f457, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1842685441}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1597,6 +1609,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1993095026}
   m_CullTransparentMesh: 1
+--- !u!114 &1842685441 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7775810545001407991, guid: 5a9e67a902ca9fd43983f8e21810f457, type: 3}
+  m_PrefabInstance: {fileID: 1842685438}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ddd89c5c99ecc348b188fde680ac192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
