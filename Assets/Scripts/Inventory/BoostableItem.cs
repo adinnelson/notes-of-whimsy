@@ -18,5 +18,4 @@ public class BoostableItem : MonoBehaviour
     public RewardType RewardType => rewardType;
     public BoostType Type => boostType;
     public float Amount => amount;
-
 }
