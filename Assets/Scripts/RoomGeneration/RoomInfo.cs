@@ -65,25 +65,25 @@ public class RoomInfo : MonoBehaviour
     private bool useCustomCameraBounds;
 
     [SerializeField]
-    [Range(0f, 100f)]
-    private float customMaxSqrHorizontalCameraDistance = 5f;
+    [Range(0.0f, 100.0f)]
+    private float customMaxSqrHorizontalCameraDistance = 5.0f;
 
     [SerializeField]
-    [Range(0f, 100f)]
-    private float customMaxSqrVerticalCameraDistance = 5f;
+    [Range(0.0f, 100.0f)]
+    private float customMaxSqrVerticalCameraDistance = 5.0f;
 
     [SerializeField]
     private CameraBoundsShape customCameraBoundsShape = CameraBoundsShape.Cross;
 
     [SerializeField]
-    [Range(0.1f, 10f)]
-    private float customCrossArmHalfThickness = 1f;
+    [Range(0.1f, 10.0f)]
+    private float customCrossArmHalfThickness = 1.0f;
 
     [SerializeField]
-    private float customCameraBoundsOffsetX = 0f;
+    private float customCameraBoundsOffsetX = 0.0f;
 
     [SerializeField]
-    private float customCameraBoundsOffsetY = 0f;
+    private float customCameraBoundsOffsetY = 0.0f;
 
     private ShopManager shopManager;
 
