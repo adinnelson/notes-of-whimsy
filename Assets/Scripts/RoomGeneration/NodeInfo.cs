@@ -5,7 +5,7 @@ public class NodeInfo : MonoBehaviour
 {
     private RoomInfo parentRoomInfo;
 
-    void Start()
+    void Awake()
     {
         parentRoomInfo = this.GetComponentInParent<RoomInfo>();
     }

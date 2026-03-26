@@ -14,6 +14,8 @@ public class PlayerStats : MonoBehaviour
     private int maxDamageBonus = 0;
     private static PlayerStats _instance;
 
+    private Health health;
+
     public static PlayerStats Instance
     {
         get
@@ -38,6 +40,18 @@ public class PlayerStats : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
+        health = GetComponent<Health>();
+        if (health == null)
+        {
+            Debug.LogError($"{name}: No Health component found on player.");
+        }
+
+        ProgressFloor.OnEndSceneReached += ResetStats;
+    }
+
+    void OnDestroy()
+    {
+        ProgressFloor.OnEndSceneReached -= ResetStats;
     }
 
     public event Action<int> OnMaxHealthIncreased;
@@ -65,5 +79,6 @@ public class PlayerStats : MonoBehaviour
         maxSpeedBonus = 0.0f;
         maxHealthBonus = 0;
         maxDamageBonus = 0;
+        health.CurrentHealth = MaxHealth;
     }
 }

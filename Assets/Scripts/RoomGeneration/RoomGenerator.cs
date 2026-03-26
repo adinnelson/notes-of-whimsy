@@ -59,9 +59,11 @@ public class RoomGenerator : MonoBehaviour
     private bool hasSpawnedShop = false;
     private bool hasSpawnedCombatRoom = false;
     private bool needToReset = false;
+    private bool hasCompletedDungeon = false;
 
     // EVENTS
     public static event System.Action OnDungeonComplete;
+    public static event System.Action OnDungeonReset;
 
     // DEBUG
     [SerializeField]
@@ -71,13 +73,18 @@ public class RoomGenerator : MonoBehaviour
     {
         RoomInfo.OnFloorOverlap += HandleFloorOverlap;
         ProgressFloor.OnFloorProgressed += ResetGeneration;
+    }
+
+    private void Start()
+    {
+        
         CreateRoomPools();
         CreateFloorLayout();
     }
 
     private void Update()
     {
-        if ((Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration) || spawnedRooms.Count < minRooms)
+        if (Keyboard.current.lKey.wasPressedThisFrame && allowRegeneration)
         {
             ResetGeneration("reset from update due to key press or room count");
         }
@@ -112,6 +119,8 @@ public class RoomGenerator : MonoBehaviour
         RemoveRoomTypeFromRoomPools(RoomTypes.Shop);
         RemoveRoomTypeFromRoomPools(RoomTypes.Combat);
         needToReset = false;
+        if(hasCompletedDungeon) OnDungeonReset?.Invoke();
+        hasCompletedDungeon = false;
         CreateFloorLayout();
     }
 
@@ -181,7 +190,6 @@ public class RoomGenerator : MonoBehaviour
                 {
                     continue;
                 }
-
                 // spawn new rooms on each free node
                 switch (nodes[j].name.ToLower())
                 {
@@ -346,12 +354,16 @@ public class RoomGenerator : MonoBehaviour
             roomInfo.SetEnemyPrefabs(enemyPool);
         }
 
+        if(spawnedRooms.Count < minRooms) needToReset = true;
+
         if(needToReset)
         {
             return;
         }
 
         OnDungeonComplete?.Invoke();
+        LoadScreenControl.TurnOffLoadScreen();
+        hasCompletedDungeon = true;
     }
 
     private void CreateRoomPools()
