@@ -42,26 +42,31 @@ public class ProgressFloor : MonoBehaviour
             // NOTE: Loading custom scene does not reset progress or increment floors completed
             if (loadCustomScene)
             {
-                GameObject player = GameObject.FindWithTag("Player");
-                GameObject gm = GameObject.FindWithTag("GameManager");
-                GameObject mm = FindObjectOfType<MusicManager>()?.gameObject;
-                BeatHandler beatHandler = FindObjectOfType<BeatHandler>();
+                HardReset();
 
-                Destroy(player);
-                Destroy(gm);
-                Destroy(mm);
-
-                beatHandler.ClearUnlockedBeats();
-
+                // BeatHandler.ClearUnlockedBeats();
+                OnEndSceneReached?.Invoke();
                 SceneManager.LoadScene(customSceneName, LoadSceneMode.Single);
                 return;
             }
             else
             {
-                floorsCompleted++;
+                // floorsCompleted++;
                 NextScene();
             }
         }
+    }
+
+    public static void HardReset()
+    {
+        GameObject player = GameObject.FindWithTag("Player");
+        GameObject gm = GameObject.FindWithTag("GameManager");
+        GameObject mm = FindObjectOfType<MusicManager>()?.gameObject;
+        BeatHandler beatHandler = FindObjectOfType<BeatHandler>();
+
+        Destroy(player);
+        Destroy(gm);
+        Destroy(mm);
     }
 
     /// <summary>
@@ -89,6 +94,12 @@ public class ProgressFloor : MonoBehaviour
             SceneManager.LoadScene(currentScene.name);
 
         }
+    }
+
+    public static void InvokeEndSceneReached()
+    {
+        HardReset();
+        OnEndSceneReached?.Invoke();
     }
 
     private void HandleDeath()
