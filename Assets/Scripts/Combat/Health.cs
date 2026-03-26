@@ -136,6 +136,15 @@ public class Health : MonoBehaviour, IDamageable
             SceneManager.LoadScene("Main", LoadSceneMode.Single);
 
             currentHealth = MaxHealth;
+            if (healthBarUpdater != null)
+            {
+                Debug.Log("Updating health bar on death");
+                healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
+            }
+            if (healthText != null)
+            {
+                healthText.UpdateHPText(currentHealth, MaxHealth);
+            }
             UI.UpdateText();
         }
     }
