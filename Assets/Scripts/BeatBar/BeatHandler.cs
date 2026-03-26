@@ -182,7 +182,7 @@ public class BeatHandler : MonoBehaviour
                 gm.BeatHit = false;
             }
             //musicBeatIndex is coming from the FMOD music
-            beatIndex = musicBeatIndex % BEAT_NUM - 1;
+            beatIndex = musicBeatIndex - 1; //% BEAT_NUM - 1;
 
             if (playerAttack != null && unlockedBeats.Contains(beatIndex))
             {
