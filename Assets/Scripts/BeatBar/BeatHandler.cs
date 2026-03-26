@@ -165,7 +165,8 @@ public class BeatHandler : MonoBehaviour
                 gm.TriggerBeat(onBeatIndex + 1);
             }
 
-            if (unlockedBeats.Contains(onBeatIndex + 1))
+            // Play percussion only if there is an equipped note in the slot
+            if (playerActiveSpellsHandler != null && playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(onBeatIndex + 1) != null)
             {
                 PlayBeatEndSound();
             }
