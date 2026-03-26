@@ -17,9 +17,11 @@ public class PlayerAttack : MonoBehaviour
     private const float MIN_AIM_DEADZONE_SQR = 0.0001f;
     private const float MIN_STICK_DEADZONE_SQR = 0.09f;
     private const float MOUSE_MOVE_DETECT_SQR = 0.1f;
+    private float maxDistance = 50.0f;
     private InputSystem_Actions inputActions;
     private Camera mainCamera;
     private GameManager gm;
+    private string wallTag = "Walls";
 
     private float lastFireTimeSeconds;
 
@@ -112,7 +114,7 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        if (context.action.name == "Sprint")
+        if (beathandler != null && beathandler.ValidDashInterval && context.action.name == "Sprint")
         {
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
@@ -128,6 +130,7 @@ public class PlayerAttack : MonoBehaviour
 
                 rb.AddForce(direction.normalized * 3000);   
             }
+            return;
         }
 
         // if you fire off beat lock attacks until next beat
@@ -369,27 +372,53 @@ public class PlayerAttack : MonoBehaviour
         //Fire raycast if we hit anything call noteEffectHandler hit
         // probalbly can draw a line as well
 
-        Vector3 spawnPoint = projectileSpawnPosition + (Vector3)finalDirection;
+        Vector2 spawnPoint = (Vector2)projectileSpawnPosition + finalDirection;
 
         RaycastHit2D hit = Physics2D.Raycast(spawnPoint, finalDirection, 100, ~ignoredLayersMask);
 
-        Vector3 endBeamPos;
+        Vector3 endBeamPos = spawnPoint + finalDirection * 10;
 
         IDamageable damageable = hit.collider?.gameObject?.GetComponent<IDamageable>();
 
         if(hit.collider?.gameObject != null)
         {
             endBeamPos = hit.collider.gameObject.transform.position;
+
+            print(hit.collider.gameObject.name);
         }
         else
         {
-            endBeamPos = spawnPoint + 10 * (Vector3)finalDirection;
+            RaycastHit2D[] allHits = Physics2D.RaycastAll(spawnPoint, finalDirection, maxDistance);
+            Vector2 endpoint = spawnPoint + finalDirection * maxDistance;
+            float closestDist = maxDistance;
+            foreach (var wallhit in allHits)
+            {
+                if (wallhit.collider != null && wallhit.collider.CompareTag(wallTag) && wallhit.distance < closestDist)
+                {
+                    closestDist = wallhit.distance;
+                    endBeamPos = wallhit.point;
+                }
+            }
         }
 
         if(damageable != null)
         {
             noteEffectHandler?.HitEnemy(damageable);
         }
+
+        if(noteEffectHandler != null)
+        {
+            switch(noteEffectHandler.SpellData.spellId)
+            {
+                case 1:
+                    ((RedNoteEffectHandler)noteEffectHandler).Explode(endBeamPos);
+                    break;
+                case 4:
+                    ((BlueNoteEffectHandler)noteEffectHandler).WhirlPool(endBeamPos);
+                    break;
+            }   
+        }
+
         GameObject attackBeamInstance = SpawnAttackBeam(spawnPoint, endBeamPos, noteEffectHandler?.SpellData.spellId);
         SimpleTimer timer = new SimpleTimer();
         timer.StartTimer(0.5f, onFinish: () => Destroy(attackBeamInstance) ,gameManager: gm);
