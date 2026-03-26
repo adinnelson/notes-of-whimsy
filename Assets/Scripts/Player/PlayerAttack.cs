@@ -51,7 +51,7 @@ public class PlayerAttack : MonoBehaviour
         CacheInitialMousePosition();
         animator = GetComponent<Animator>();
     }
-    
+
     private void OnEnable()
     {
         inputActions.Player.Enable();
@@ -93,7 +93,7 @@ public class PlayerAttack : MonoBehaviour
         }
 
         UpdateAimSourceFromStick();
-        UpdateAimSourceFromMouseMovement();    
+        UpdateAimSourceFromMouseMovement();
 
     }
 
@@ -118,13 +118,13 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        if (beathandler != null && beathandler.ValidDashInterval && context.action.name == "Sprint")
+        if (beathandler != null && beathandler.CheckValidDashInterval() && context.action.name == "Sprint")
         {
             animator.SetTrigger("Dash");
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             if(rb.linearVelocity.magnitude > 0)
             {
-                
+
                 rb.AddForce(rb.linearVelocity.normalized * 3000);
             }
             else
@@ -132,8 +132,8 @@ public class PlayerAttack : MonoBehaviour
                 Vector3 mouseScreenPosition = Mouse.current.position.value;
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
-                rb.AddForce(direction.normalized * 3000);   
-               
+                rb.AddForce(direction.normalized * 3000);
+
             }
             return;
         }
@@ -421,7 +421,7 @@ public class PlayerAttack : MonoBehaviour
                 case 4:
                     ((BlueNoteEffectHandler)noteEffectHandler).WhirlPool(endBeamPos);
                     break;
-            }   
+            }
         }
 
         GameObject attackBeamInstance = SpawnAttackBeam(spawnPoint, endBeamPos, noteEffectHandler?.SpellData.spellId);
