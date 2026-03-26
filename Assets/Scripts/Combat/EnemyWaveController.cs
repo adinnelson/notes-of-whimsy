@@ -19,8 +19,8 @@ public class EnemyWaveController : MonoBehaviour
     private RoomInfo roomInfo;
 
     private const int BASE_ENEMIES_PER_WAVE = 1;
-    private const float GENERIC_WAVE_ENEMY_SCALAR = 1.5f;
-    private const float CHALLENGE_WAVE_SCALAR = 1.34f;
+    private const float GENERIC_WAVE_ENEMY_SCALAR = 1.3f;
+    private const float CHALLENGE_WAVE_SCALAR = 1.3f;
     private const float ENEMY_SPAWN_EFFECT_DURATION = 1.0f;
 
     // Max rectangular offset from center of room that enemies can spawn
