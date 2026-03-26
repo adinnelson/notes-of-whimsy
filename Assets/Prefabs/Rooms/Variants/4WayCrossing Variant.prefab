@@ -12,25 +12,29 @@ PrefabInstance:
       propertyPath: roomType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1167656958354785006, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: customMaxSqrHorizontalCameraDistance
+      value: 18.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2791336798263055279, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Name
       value: 4WayCrossing Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Size.x
-      value: 23.93286
+      value: 23.687634
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Size.y
-      value: 13.95174
+      value: 13.765047
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Offset.x
-      value: -0.0073518753
+      value: -0.03473854
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Offset.y
-      value: 0.010756493
+      value: -0.0012805462
       objectReference: {fileID: 0}
     - target: {fileID: 4737589745518292538, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.size

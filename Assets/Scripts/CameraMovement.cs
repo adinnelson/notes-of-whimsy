@@ -12,55 +12,57 @@ public class CameraMovement : MonoBehaviour
     private Transform currentRoomTransform;
 
     [SerializeField]
-    private float sqrDistanceFromPlayerToRoomCenter = 0f;
+    private float sqrDistanceFromPlayerToRoomCenter = 0.0f;
 
     [SerializeField]
-    [Range(0f, 100f)]
-    private float sqrDistanceFromCameraToStartFollowing = 25f;
+    [Range(0.0f, 100.0f)]
+    private float sqrDistanceFromCameraToStartFollowing = 25.0f;
 
     [SerializeField]
-    [Range(0f,100f)]
-    private float defaultMaxSqrHorizontalDistanceFromCameraToRoomCenter = 5f;
+    [Range(0.0f,100.0f)]
+    private float defaultMaxSqrHorizontalDistanceFromCameraToRoomCenter = 5.0f;
 
     [SerializeField]
-    [Range(0f,100f)]
-    private float defaultMaxSqrVerticalDistanceFromCameraToRoomCenter = 5f;
+    [Range(0.0f,100.0f)]
+    private float defaultMaxSqrVerticalDistanceFromCameraToRoomCenter = 5.0f;
 
     [SerializeField]
-    [Range(0.1f, 10f)]
-    private float defaultCrossArmHalfThickness = 1f;
+    [Range(0.1f, 10.0f)]
+    private float defaultCrossArmHalfThickness = 1.0f;
 
     [SerializeField]
     private CameraBoundsShape defaultCameraBoundsShape = CameraBoundsShape.Cross;
 
     [SerializeField]
-    private float currentSqrDistanceFromCameraToRoomCenter = 0f;
+    private float currentSqrDistanceFromCameraToRoomCenter = 0.0f;
 
 
 
     [Header("Smoothing")]
     [Tooltip("How long camera smoothing takes for both follow and recenter. Lower = snappier, higher = smoother.")]
-    [Range(0.01f, 2f)]
+    [Range(0.01f, 2.0f)]
     public float smoothTime = 0.2f;
 
     [Header("Inside Bounds Follow")]
     [Tooltip("How strongly the camera follows the player while inside bounds. 0 = room center, 1 = player position.")]
-    [Range(0f, 1f)]
+    [Range(0.0f, 1.0f)]
     [SerializeField]
     private float insideBoundsFollowAmount = 0.85f;
 
     [Tooltip("Multiplier applied to smoothTime while inside bounds. Lower values feel more locked-on.")]
-    [Range(0.1f, 1f)]
+    [Range(0.1f, 1.0f)]
     [SerializeField]
     private float insideBoundsSmoothTimeMultiplier = 0.6f;
 
-    private const float CAMERA_Z_OFFSET = -10f;
+    private const float CAMERA_Z_OFFSET = -10.0f;
     private Vector3 currentVelocity;
 
     private float activeMaxSqrHorizontalDistanceFromCameraToRoomCenter;
     private float activeMaxSqrVerticalDistanceFromCameraToRoomCenter;
     private float activeCrossArmHalfThickness;
     private CameraBoundsShape activeCameraBoundsShape;
+    private float activeCameraBoundsOffsetX;
+    private float activeCameraBoundsOffsetY;
 
 
 
@@ -94,6 +96,8 @@ public class CameraMovement : MonoBehaviour
         float gizmoMaxSqrVertical = defaultMaxSqrVerticalDistanceFromCameraToRoomCenter;
         float gizmoArmHalfThickness = defaultCrossArmHalfThickness;
         CameraBoundsShape gizmoShape = defaultCameraBoundsShape;
+        float gizmoOffsetX = 0.0f;
+        float gizmoOffsetY = 0.0f;
 
         RoomInfo roomInfo = currentRoomTransform.GetComponent<RoomInfo>();
         if (roomInfo != null && roomInfo.UseCustomCameraBounds())
@@ -102,11 +106,13 @@ public class CameraMovement : MonoBehaviour
             gizmoMaxSqrVertical = roomInfo.GetCustomMaxSqrVerticalCameraDistance();
             gizmoArmHalfThickness = roomInfo.GetCustomCrossArmHalfThickness();
             gizmoShape = roomInfo.GetCustomCameraBoundsShape();
+            gizmoOffsetX = roomInfo.GetCustomCameraBoundsOffsetX();
+            gizmoOffsetY = roomInfo.GetCustomCameraBoundsOffsetY();
         }
 
         float horizontalArmHalfLength = Mathf.Sqrt(gizmoMaxSqrHorizontal);
         float verticalArmHalfLength = Mathf.Sqrt(gizmoMaxSqrVertical);
-        Vector3 center = currentRoomTransform.position;
+        Vector3 center = currentRoomTransform.position + new Vector3(gizmoOffsetX, gizmoOffsetY, 0f);
 
         if (gizmoShape == CameraBoundsShape.Box)
         {
@@ -156,6 +162,8 @@ public class CameraMovement : MonoBehaviour
             activeMaxSqrVerticalDistanceFromCameraToRoomCenter = roomInfo.GetCustomMaxSqrVerticalCameraDistance();
             activeCrossArmHalfThickness = roomInfo.GetCustomCrossArmHalfThickness();
             activeCameraBoundsShape = roomInfo.GetCustomCameraBoundsShape();
+            activeCameraBoundsOffsetX = roomInfo.GetCustomCameraBoundsOffsetX();
+            activeCameraBoundsOffsetY = roomInfo.GetCustomCameraBoundsOffsetY();
             return;
         }
 
@@ -163,6 +171,8 @@ public class CameraMovement : MonoBehaviour
         activeMaxSqrVerticalDistanceFromCameraToRoomCenter = defaultMaxSqrVerticalDistanceFromCameraToRoomCenter;
         activeCrossArmHalfThickness = defaultCrossArmHalfThickness;
         activeCameraBoundsShape = defaultCameraBoundsShape;
+        activeCameraBoundsOffsetX = 0.0f;
+        activeCameraBoundsOffsetY = 0.0f;
     }
 
     private void GetSqrDistanceToPlayer()
@@ -191,9 +201,12 @@ public class CameraMovement : MonoBehaviour
         Vector3 playerPosition = playerTransform.position;
         playerPosition.z = CAMERA_Z_OFFSET;
 
+        // Apply bounds offset to get the center of the camera bounds region
+        Vector3 boundsCenterOffset = roomCenter + new Vector3(activeCameraBoundsOffsetX, activeCameraBoundsOffsetY, 0f);
+
         Vector2 playerOffsetFromRoomCenter = new Vector2(
-            playerPosition.x - roomCenter.x,
-            playerPosition.y - roomCenter.y
+            playerPosition.x - boundsCenterOffset.x,
+            playerPosition.y - boundsCenterOffset.y
         );
         float horizontalArmHalfLength = Mathf.Sqrt(activeMaxSqrHorizontalDistanceFromCameraToRoomCenter);
         float verticalArmHalfLength = Mathf.Sqrt(activeMaxSqrVerticalDistanceFromCameraToRoomCenter);
@@ -208,11 +221,11 @@ public class CameraMovement : MonoBehaviour
         Vector3 desiredCameraPosition;
         if (isPlayerInsideRoomCameraBounds)
         {
-            desiredCameraPosition = Vector3.Lerp(roomCenter, playerPosition, insideBoundsFollowAmount);
+            desiredCameraPosition = Vector3.Lerp(boundsCenterOffset, playerPosition, insideBoundsFollowAmount);
 
             Vector2 desiredOffsetFromRoomCenter = new Vector2(
-                desiredCameraPosition.x - roomCenter.x,
-                desiredCameraPosition.y - roomCenter.y
+                desiredCameraPosition.x - boundsCenterOffset.x,
+                desiredCameraPosition.y - boundsCenterOffset.y
             );
             Vector2 clampedOffset = ClampOffsetToCameraBounds(
                 desiredOffsetFromRoomCenter,
@@ -221,7 +234,7 @@ public class CameraMovement : MonoBehaviour
                 activeCrossArmHalfThickness,
                 activeCameraBoundsShape
             );
-            desiredCameraPosition = new Vector3(roomCenter.x + clampedOffset.x, roomCenter.y + clampedOffset.y, CAMERA_Z_OFFSET);
+            desiredCameraPosition = new Vector3(boundsCenterOffset.x + clampedOffset.x, boundsCenterOffset.y + clampedOffset.y, CAMERA_Z_OFFSET);
         }
         else
         {
@@ -237,8 +250,8 @@ public class CameraMovement : MonoBehaviour
             }
 
             Vector2 desiredOffsetFromRoomCenter = new Vector2(
-                desiredCameraPosition.x - roomCenter.x,
-                desiredCameraPosition.y - roomCenter.y
+                desiredCameraPosition.x - boundsCenterOffset.x,
+                desiredCameraPosition.y - boundsCenterOffset.y
             );
             Vector2 clampedOffset = ClampOffsetToCameraBounds(
                 desiredOffsetFromRoomCenter,
@@ -247,14 +260,14 @@ public class CameraMovement : MonoBehaviour
                 activeCrossArmHalfThickness,
                 activeCameraBoundsShape
             );
-            desiredCameraPosition = new Vector3(roomCenter.x + clampedOffset.x, roomCenter.y + clampedOffset.y, CAMERA_Z_OFFSET);
+            desiredCameraPosition = new Vector3(boundsCenterOffset.x + clampedOffset.x, boundsCenterOffset.y + clampedOffset.y, CAMERA_Z_OFFSET);
         }
 
         float appliedSmoothTime = isPlayerInsideRoomCameraBounds
             ? smoothTime * insideBoundsSmoothTimeMultiplier
             : smoothTime;
 
-        currentSqrDistanceFromCameraToRoomCenter = (desiredCameraPosition - roomCenter).sqrMagnitude;
+        currentSqrDistanceFromCameraToRoomCenter = (desiredCameraPosition - boundsCenterOffset).sqrMagnitude;
         transform.position = Vector3.SmoothDamp(
             cameraPosition,
             desiredCameraPosition,
