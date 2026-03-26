@@ -32,6 +32,9 @@ public class PlayerAttack : MonoBehaviour
 
     private float lockoutTimer = 0f;
 
+    //Animator
+    private Animator animator;
+
     // hashset of attack locks
     private HashSet<string> attackLocks = new HashSet<string>();
 
@@ -46,6 +49,7 @@ public class PlayerAttack : MonoBehaviour
         mainCamera = Camera.main;
         inputActions = new InputSystem_Actions();
         CacheInitialMousePosition();
+        animator = GetComponent<Animator>();
     }
     
     private void OnEnable()
@@ -116,10 +120,11 @@ public class PlayerAttack : MonoBehaviour
 
         if (beathandler != null && beathandler.ValidDashInterval && context.action.name == "Sprint")
         {
+            animator.SetTrigger("Dash");
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
             if(rb.linearVelocity.magnitude > 0)
             {
+                
                 rb.AddForce(rb.linearVelocity.normalized * 3000);
             }
             else
@@ -127,8 +132,8 @@ public class PlayerAttack : MonoBehaviour
                 Vector3 mouseScreenPosition = Mouse.current.position.value;
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
-
                 rb.AddForce(direction.normalized * 3000);   
+               
             }
             return;
         }
