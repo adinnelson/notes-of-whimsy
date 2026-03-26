@@ -23,6 +23,9 @@ public class EnemyWaveController : MonoBehaviour
     private const float CHALLENGE_WAVE_SCALAR = 1.34f;
     private const float ENEMY_SPAWN_EFFECT_DURATION = 1.0f;
 
+    // Max rectangular offset from center of room that enemies can spawn
+    private const float SPAWN_OFFSET_MAX = 3.0f;
+
      private void Awake()
     {
         roomInfo = GetComponentInParent<RoomInfo>();
@@ -108,7 +111,7 @@ public class EnemyWaveController : MonoBehaviour
         for (int i = 0; i < enemyCount; i++)
         {
             // TODO: Replace with actual floor bounds (with padding) instead of random range
-            Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), 0);
+            Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-SPAWN_OFFSET_MAX, SPAWN_OFFSET_MAX), Random.Range(-SPAWN_OFFSET_MAX, SPAWN_OFFSET_MAX), 0);
             SpawnRandomEnemy(spawnPosition);
         }
     }
