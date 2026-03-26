@@ -16,6 +16,8 @@ public class BeatHandler : MonoBehaviour
     private float lastCheckedBPM = 0f;
 
     private const float REQUIRED_ACCURACY = 0.75f;
+    private const float DASH_REQUIRED_ACCURACY = 0.4f;
+
     private const int BEAT_NUM = 8;
 
     [SerializeField] private PlayerAttack playerAttack;
@@ -249,8 +251,8 @@ public class BeatHandler : MonoBehaviour
     {
         // Odd beats are 1, 3, 5, 7 (1-indexed)
         int currentBeat = beatIndex + 1;
-        bool isOddBeat = currentBeat % 2 == 1;
-        return isOddBeat && (percentToNextBeat <= REQUIRED_ACCURACY || percentToNextBeat >= 1f - REQUIRED_ACCURACY);
+        // bool isOddBeat = currentBeat % 2 == 1;
+        return percentToNextBeat <= DASH_REQUIRED_ACCURACY || percentToNextBeat >= 1f - DASH_REQUIRED_ACCURACY;
     }
 
     // adds tick id to hashset
