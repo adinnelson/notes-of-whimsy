@@ -118,7 +118,7 @@ public class Health : MonoBehaviour, IDamageable
             GetComponent<PlayerActiveSpellsHandler>()?.RemoveAllSpells();
 
             // TODO: load death scene
-            SceneManager.LoadScene("Main", LoadSceneMode.Single);
+            SceneManager.LoadScene("DeathScreen", LoadSceneMode.Single);
 
             currentHealth = MaxHealth;
             UI.UpdateText();
