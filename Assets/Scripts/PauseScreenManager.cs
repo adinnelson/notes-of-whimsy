@@ -51,6 +51,7 @@ public class PauseScreenManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         Close();
+        ProgressFloor.InvokeEndSceneReached();
         SceneManager.LoadScene(0);
     }
 }

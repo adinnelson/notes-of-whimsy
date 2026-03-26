@@ -301,7 +301,7 @@ public class BeatHandler : MonoBehaviour
         return beatIndex + 1;
     }
 
-    public void ClearUnlockedBeats()
+    public static void ClearUnlockedBeats()
     {
         unlockedBeats.Clear();
     }
