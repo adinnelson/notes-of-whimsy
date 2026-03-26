@@ -172,7 +172,7 @@ public class BeatHandler : MonoBehaviour
         transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
 
         // needs to be x2 because we are fitting 8 beats into 4/4
-        percentToNextBeat += Time.fixedDeltaTime * bpm / 60.0f * 2.0f;
+        percentToNextBeat += Time.deltaTime * bpm / 60.0f * 2.0f;
 
         // fires on half beat
         if (percentToNextBeat > 0.5 && !beatIndexHasChanged)
