@@ -79,6 +79,12 @@ public class RoomInfo : MonoBehaviour
     [Range(0.1f, 10f)]
     private float customCrossArmHalfThickness = 1f;
 
+    [SerializeField]
+    private float customCameraBoundsOffsetX = 0f;
+
+    [SerializeField]
+    private float customCameraBoundsOffsetY = 0f;
+
     private ShopManager shopManager;
 
     private RewardManager rewardManager;
@@ -358,6 +364,16 @@ public class RoomInfo : MonoBehaviour
     public float GetCustomCrossArmHalfThickness()
     {
         return customCrossArmHalfThickness;
+    }
+
+    public float GetCustomCameraBoundsOffsetX()
+    {
+        return customCameraBoundsOffsetX;
+    }
+
+    public float GetCustomCameraBoundsOffsetY()
+    {
+        return customCameraBoundsOffsetY;
     }
 
     public bool IsCompleted()

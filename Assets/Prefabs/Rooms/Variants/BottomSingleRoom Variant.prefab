@@ -3052,6 +3052,22 @@ PrefabInstance:
       propertyPath: 'nodeList.Array.data[3]'
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1167656958354785006, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: customCameraBoundsShape
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167656958354785006, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: customCameraBoundsOffsetY
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167656958354785006, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: customMaxSqrVerticalCameraDistance
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167656958354785006, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: customMaxSqrHorizontalCameraDistance
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1964486195779292610, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Size.x
       value: 9
@@ -3078,7 +3094,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Size.y
-      value: 9.34861
+      value: 12.520793
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Offset.x
@@ -3086,7 +3102,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Offset.y
-      value: 0.043241262
+      value: -1.54285
       objectReference: {fileID: 0}
     - target: {fileID: 4737589745518292538, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.size

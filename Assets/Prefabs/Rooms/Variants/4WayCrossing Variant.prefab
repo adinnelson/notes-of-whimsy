@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: roomType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1167656958354785006, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: customMaxSqrHorizontalCameraDistance
+      value: 18.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2791336798263055279, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Name
       value: 4WayCrossing Variant
