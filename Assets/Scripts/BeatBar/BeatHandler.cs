@@ -215,8 +215,21 @@ public class BeatHandler : MonoBehaviour
 
             else
             {
-                curLeftSprite.color = beatIdToColor[playerActiveSpellsHandler.GetSpellIdFromSlotId(i + 1)];
-                curRightSprite.color = beatIdToColor[playerActiveSpellsHandler.GetSpellIdFromSlotId(i + 1)];
+                int spellId = playerActiveSpellsHandler.GetSpellIdFromSlotId(i + 1);
+                Color baseColor = beatIdToColor.ContainsKey(spellId) ? beatIdToColor[spellId] : Color.white;
+
+                float lockedDim = 0.6f;
+                if (spellId == -1)
+                {
+                    Color dimColor = new Color(baseColor.r * lockedDim, baseColor.g * lockedDim, baseColor.b * lockedDim, baseColor.a);
+                    curLeftSprite.color = dimColor;
+                    curRightSprite.color = dimColor;
+                }
+                else
+                {
+                    curLeftSprite.color = baseColor;
+                    curRightSprite.color = baseColor;
+                }
             }
         }
     }
