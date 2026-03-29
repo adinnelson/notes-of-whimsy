@@ -100,6 +100,10 @@ public class BoarEnemy : EnemyBase
         }
 
         shouldTelegraphNext = !shouldTelegraphNext;
+
+        int zSub = (int)(gameObject.transform.position.y / GameManager.Z_RANGE);
+
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.y - GameManager.Z_RANGE * zSub);
     }
 
     private void FixedUpdate()

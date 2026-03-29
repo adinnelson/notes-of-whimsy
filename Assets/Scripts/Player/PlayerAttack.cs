@@ -406,6 +406,8 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
+        endBeamPos = new Vector3(endBeamPos.x, endBeamPos.y, -GameManager.Z_RANGE);
+
         if(damageable != null)
         {
             noteEffectHandler?.HitEnemy(damageable);
