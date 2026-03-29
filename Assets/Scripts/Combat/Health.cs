@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using System.Xml.Schema;
 
 public class Health : MonoBehaviour, IDamageable
 {
@@ -19,6 +20,7 @@ public class Health : MonoBehaviour, IDamageable
     private float currentHealth;
     private HealthUI UI;
     private bool isPlayer = false;
+    private bool invincible = false;
     private PlayerStats stats;
 
     private float hitFlashTimer;
@@ -85,6 +87,7 @@ public class Health : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damageAmount)
     {
+        if (invincible) return;
         currentHealth -= damageAmount;
 
         hitFlashTimer = flashTime;
@@ -114,6 +117,15 @@ public class Health : MonoBehaviour, IDamageable
             // TODO: REMOVE LOG once integrated with UI and effects so we can see health changes
             Debug.Log($"{name} died!");
             Die();
+            return;
+        }
+
+        if(isPlayer)
+        {
+            invincible = true;
+
+            SimpleTimer timer = new SimpleTimer();
+            timer.StartTimer(0.25f, onFinish: () => invincible = false);
         }
     }
 
