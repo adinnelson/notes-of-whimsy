@@ -213,8 +213,10 @@ public class BeatHandler : MonoBehaviour
         ValidDashInterval = CheckValidDashInterval(percentToNextBeat);
     }
 
-
-
+    public void SetBPM(float newBPM)
+    {
+        bpm = newBPM;
+    }
 
     private void UpdateBeatVisuals()
     {
