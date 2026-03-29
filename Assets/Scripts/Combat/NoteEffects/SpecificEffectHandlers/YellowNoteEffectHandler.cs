@@ -141,9 +141,6 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     {
         if(storedEnemies.Contains(enemy))
         {
-            stunnedEnemies[enemy] += stunTime;
-            //enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
-            enemy.AddStunEffect(STUN_KEY);
             return;
         }
 
