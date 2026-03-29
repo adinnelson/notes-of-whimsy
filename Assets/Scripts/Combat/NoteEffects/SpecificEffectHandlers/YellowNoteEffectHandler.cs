@@ -6,13 +6,14 @@ using UnityEngine.Pool;
 
 public class YellowNoteEffectHandler : NoteEffectHandler
 {
+    public const string STUN_KEY = "yellow";
+
     // Set values used for calculations
     private float detectionRadius = 3.5f;
     private float damage = 25.0f;
     private float cooldown = 5.0f;
     private float timeBetweenTargets = 0.1f;
     private float stunTime = 5.0f;
-    private string stunKey = "yellow";
 
     // flags and tracking variables
     private float timeElapsed = 0.0f;
@@ -142,14 +143,14 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         {
             stunnedEnemies[enemy] += stunTime;
             //enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
-            enemy.AddStunEffect(stunKey);
+            enemy.AddStunEffect(STUN_KEY);
             return;
         }
 
         stunnedEnemies.Add(enemy, stunTime);
         storedEnemies.Add(enemy);
         //enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
-        enemy.AddStunEffect(stunKey);
+        enemy.AddStunEffect(STUN_KEY);
     }
 
     // updates cooldown
@@ -178,7 +179,7 @@ public class YellowNoteEffectHandler : NoteEffectHandler
 
             if(stunnedEnemies[enemy] <= 0)
             {
-                enemy.RemoveStunEffect(stunKey);
+                enemy.RemoveStunEffect(STUN_KEY);
                 enemy.gameObject.transform.localScale = new Vector3(1, 1, 1);
             }
         }

@@ -278,6 +278,8 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected void StunVisuals()
     {
+        if (!stunEffects.Contains(YellowNoteEffectHandler.STUN_KEY)) return;
+
         sprite.material = stunnedMaterial;
     }
 
