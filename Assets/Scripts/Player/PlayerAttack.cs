@@ -102,10 +102,10 @@ public class PlayerAttack : MonoBehaviour
         // whichever device (Mouse or Controller) that fired gets to be the active aim source for this shot.
         SetAimSourceFromFireDevice(context);
 
-        //if(attackLocks.Count > 0)
-        //{
-        //    return;
-        //}
+        if(attackLocks.Count > 0)
+        {
+          return;
+        }
 
         if (lockoutTimer > 0)
         {
