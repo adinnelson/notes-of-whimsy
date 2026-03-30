@@ -41,7 +41,7 @@ public class BeatDebugUI : MonoBehaviour
     void Start()
     {
         if (beatHandler == null)
-            beatHandler = FindObjectOfType<BeatHandler>();
+            beatHandler = FindFirstObjectByType<BeatHandler>();
         if (musicManager == null)
             musicManager = MusicManager.instance;
     }
