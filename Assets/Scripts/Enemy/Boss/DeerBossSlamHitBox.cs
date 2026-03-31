@@ -1,13 +1,8 @@
 using UnityEngine;
 
-/// <summary>
 /// Child hitbox for the DeerBoss slam attack (end of CHARGE sequence).
 /// Positioned in front of the boss facing the player on the telegraph beat,
 /// then enabled on the slam beat and disabled after.
-///
-/// Setup: child GameObject under DeerBoss with a trigger BoxCollider2D
-/// and a SpriteRenderer for the warning/impact visual.
-/// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class DeerBossSlamHitBox : MonoBehaviour
 {
@@ -39,18 +34,14 @@ public class DeerBossSlamHitBox : MonoBehaviour
         if (sprite != null) sprite.enabled = false;
     }
 
-    /// <summary>
     /// Sets slam damage.
-    /// </summary>
     public void Initialize(float configDamage)
     {
         damage = configDamage;
     }
 
-    /// <summary>
     /// Show the slam warning visual and position the hitbox.
     /// Called on the telegraph beat. Does not enable the collider yet.
-    /// </summary>
     public void Telegraph(Vector2 direction, Vector2 size, float offsetDistance)
     {
         // Position in front of boss (local space)
@@ -74,9 +65,7 @@ public class DeerBossSlamHitBox : MonoBehaviour
         triggerCollider.enabled = false;
     }
 
-    /// <summary>
     /// Activate the slam damage. Called on the slam beat.
-    /// </summary>
     public void Activate(Transform playerTarget = null)
     {
         hasDealtDamage = false;
@@ -92,9 +81,7 @@ public class DeerBossSlamHitBox : MonoBehaviour
         ApplyDamageToOverlaps();
     }
 
-    /// <summary>
     /// Disable everything. Called after the slam or on cleanup.
-    /// </summary>
     public void Deactivate()
     {
         triggerCollider.enabled = false;

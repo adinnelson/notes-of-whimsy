@@ -1,27 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
 /// Deer boss controller. Subscribes to OnOddBeatTriggered and runs a beat sequencer
 /// that steps through 8-beat attack sequences. All timing is beat-driven — increasing
 /// BPM between phases automatically speeds up every attack.
-///
-/// Does NOT extend EnemyBase; the base class state machine is too simple for
-/// multi-beat boss sequences.
-///
-/// Required components on this GameObject:
-///   - Rigidbody2D (Continuous collision detection recommended)
-///   - Health
-///   - Collider2D
-///   - SpriteRenderer
-///
-/// Required children:
-///   - TelegraphVisual: child with sprite pointing RIGHT (+X), disabled by default
-///   - ChargeHitbox: child with trigger Collider2D + DeerBossChargeHitbox
-///   - SlamHitbox: child with trigger BoxCollider2D + DeerBossSlamHitbox + SpriteRenderer
-///   - BeamOrigin: empty child Transform positioned between the deer's horns
-///   - BeamChargeVisual (optional): particle/glow child at horn position, disabled by default
-/// </summary>
+
 public class DeerBoss : MonoBehaviour
 {
     private enum BossAttack { Charge, Beam, Shockwave }

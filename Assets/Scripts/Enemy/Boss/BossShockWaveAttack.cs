@@ -53,9 +53,7 @@ public class BossShockWaveAttack : MonoBehaviour
         ConfigureRingVisual();
     }
 
-    /// <summary>
     /// Called by DeerBoss immediately after instantiation.
-    /// </summary>
     public void Initialize(float dmg, GameManager gm)
     {
         damage = dmg;

@@ -1,13 +1,9 @@
 using UnityEngine;
 
-/// <summary>
 /// Child hitbox for the DeerBoss charge attacks. Same pattern as BoarHitbox —
 /// the parent script toggles SetEnabled(true/false) around charge beats.
 /// Deals one hit per charge activation to prevent repeated damage while
 /// the boss carries the player.
-///
-/// Setup: child GameObject under DeerBoss with a trigger Collider2D.
-/// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class DeerBossChargeHitBox : MonoBehaviour
 {
