@@ -84,7 +84,10 @@ public class BossBeamAttack : MonoBehaviour
 
     private void Update()
     {
-        if (!active || origin == null) return;
+        if (!active || origin == null)
+        {
+            return;
+        }
 
         lifeTimer -= Time.deltaTime;
         if (lifeTimer <= 0.0f)
@@ -99,7 +102,9 @@ public class BossBeamAttack : MonoBehaviour
         foreach (var hit in Physics2D.RaycastAll(start, fireDirection, maxDistance))
         {
             if (hit.collider != null && hit.collider.CompareTag(wallTag) && hit.distance < closestDist)
+            {
                 closestDist = hit.distance;
+            }
         }
 
         Vector2 endpoint = start + fireDirection * closestDist;
@@ -109,13 +114,16 @@ public class BossBeamAttack : MonoBehaviour
             transform.position = (Vector2)origin.position + fireDirection * 1.0f;
             beam.SetVector(transform.InverseTransformPoint(endpoint));
         }
-        else if (beamSprite != null)
+        else
         {
-            float   length = closestDist;
-            float   angle  = Mathf.Atan2(fireDirection.y, fireDirection.x) * Mathf.Rad2Deg;
-            transform.position    = new Vector3(start.x, start.y, 0.0f);
-            transform.rotation    = Quaternion.Euler(0.0f, 0.0f, angle);
-            transform.localScale  = new Vector3(length, 0.2f, 1.0f);
+            if (beamSprite != null)
+            {
+                float   length = closestDist;
+                float   angle  = Mathf.Atan2(fireDirection.y, fireDirection.x) * Mathf.Rad2Deg;
+                transform.position    = new Vector3(start.x, start.y, 0.0f);
+                transform.rotation    = Quaternion.Euler(0.0f, 0.0f, angle);
+                transform.localScale  = new Vector3(length, 0.2f, 1.0f);
+            }
         }
 
         Debug.DrawLine(start, endpoint, Color.red);
@@ -132,10 +140,13 @@ public class BossBeamAttack : MonoBehaviour
             beam.EndBeam();
             beam.DestroyBeam();
         }
-        else if (beamSprite != null)
+        else
         {
-            beamSprite.enabled = false;
-            Destroy(gameObject, 0.05f);
+            if (beamSprite != null)
+            {
+                beamSprite.enabled = false;
+                Destroy(gameObject, 0.05f);
+            }
         }
     }
 
@@ -143,15 +154,25 @@ public class BossBeamAttack : MonoBehaviour
     {
         Vector2 dir  = end - start;
         float   dist = dir.magnitude;
-        if (dist <= 0.001f) return;
+        if (dist <= 0.001f)
+        {
+            return;
+        }
         dir /= dist;
 
         float dmg = damagePerSecond * Time.deltaTime;
 
         foreach (var hit in Physics2D.CircleCastAll(start, hitRadius, dir, dist, playerMask))
         {
-            if (hit.collider == null) continue;
-            if (!hit.collider.CompareTag("Player")) continue;
+            if (hit.collider == null)
+            {
+                continue;
+            }
+
+            if (!hit.collider.CompareTag("Player"))
+            {
+                continue;
+            }
 
             IDamageable damageable = hit.collider.GetComponent<IDamageable>();
             damageable?.TakeDamage(dmg);

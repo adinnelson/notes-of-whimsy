@@ -96,9 +96,12 @@ public class BossShockWaveAttack : MonoBehaviour
             scaleVelocity = Mathf.MoveTowards(scaleVelocity, 0.0f, expansionDrag * Time.deltaTime);
             ApplyCurrentRadius();
         }
-        else if (isFinishing)
+        else
         {
-            Destroy(gameObject);
+            if (isFinishing)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 

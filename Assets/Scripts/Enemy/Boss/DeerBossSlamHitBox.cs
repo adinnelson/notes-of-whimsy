@@ -31,7 +31,10 @@ public class DeerBossSlamHitBox : MonoBehaviour
         }
 
         triggerCollider.enabled = false;
-        if (sprite != null) sprite.enabled = false;
+        if (sprite != null)
+        {
+            sprite.enabled = false;
+        }
     }
 
     /// Sets slam damage.
@@ -85,7 +88,10 @@ public class DeerBossSlamHitBox : MonoBehaviour
     public void Deactivate()
     {
         triggerCollider.enabled = false;
-        if (sprite != null) sprite.enabled = false;
+        if (sprite != null)
+        {
+            sprite.enabled = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -124,12 +130,21 @@ public class DeerBossSlamHitBox : MonoBehaviour
 
     private void TryDamage(Collider2D other)
     {
-        if (hasDealtDamage || other == null) return;
+        if (hasDealtDamage || other == null)
+        {
+            return;
+        }
 
         // Only hit the player.
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Player"))
+        {
+            return;
+        }
 
-        if ((damageableLayers.value & (1 << other.gameObject.layer)) == 0) return;
+        if ((damageableLayers.value & (1 << other.gameObject.layer)) == 0)
+        {
+            return;
+        }
 
         IDamageable damageable = other.GetComponentInParent<IDamageable>();
         if (damageable != null)

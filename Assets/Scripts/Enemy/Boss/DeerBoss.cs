@@ -158,9 +158,13 @@ public class DeerBoss : MonoBehaviour
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
+        {
             target = player.transform;
+        }
         else
+        {
             Debug.LogError($"{name}: No Player found in scene.");
+        }
 
         health.OnDeath += HandleDeath;
 
@@ -180,18 +184,21 @@ public class DeerBoss : MonoBehaviour
         SetPlayerCollisionEnabled(false);
     }
 
-    /// <summary>
     /// Toggles whether the boss body physically blocks the player.
     /// Enabled during charges so the boss carries the player; disabled otherwise.
     /// Same pattern as BoarEnemy.SetPlayerCollisionEnabled.
-    /// </summary>
     private void SetPlayerCollisionEnabled(bool enabled)
     {
-        if (target == null || col == null) return;
+        if (target == null || col == null)
+        {
+            return;
+        }
 
         Collider2D playerCol = target.GetComponent<Collider2D>();
         if (playerCol != null)
+        {
             Physics2D.IgnoreCollision(col, playerCol, !enabled);
+        }
     }
 
     private void Start()
@@ -204,7 +211,10 @@ public class DeerBoss : MonoBehaviour
         // Force the boss into a clean idle visual state so the first chosen
         // attack does not inherit any prefab-active telegraphs or warning sprites.
         HideTelegraph();
-        if (slamHitbox != null) slamHitbox.Deactivate();
+        if (slamHitbox != null)
+        {
+            slamHitbox.Deactivate();
+        }
         SetBeamChargeVisualActive(false);
 
         if (beamChargeVisual != null && !beamChargeVisual.scene.IsValid())
@@ -250,7 +260,10 @@ public class DeerBoss : MonoBehaviour
             {
                 isCharging = false;
                 rb.linearVelocity = Vector2.zero;
-                if (chargeHitbox != null) chargeHitbox.SetEnabled(false);
+                if (chargeHitbox != null) 
+                {
+                    chargeHitbox.SetEnabled(false);
+                }
                 SetPlayerCollisionEnabled(false);
             }
         }
@@ -295,7 +308,6 @@ public class DeerBoss : MonoBehaviour
                 return true;
             }
         }
-
         return false;
     }
 
@@ -303,7 +315,10 @@ public class DeerBoss : MonoBehaviour
 
     private void OnBeat()
     {
-        if (isDead || target == null || inPhaseTransition) return;
+        if (isDead || target == null || inPhaseTransition)
+        {
+            return;
+        }
 
         if (activeShockwave == null || activeShockwave.IsFinished)
         {
@@ -311,7 +326,10 @@ public class DeerBoss : MonoBehaviour
         }
 
         // Check for phase transition before executing the beat
-        if (CheckPhaseTransition()) return;
+        if (CheckPhaseTransition()) 
+        {
+            return;
+        }
 
         switch (currentAttack)
         {
@@ -357,7 +375,9 @@ public class DeerBoss : MonoBehaviour
         };
 
         if (picked != BossAttack.Charge)
+        {
             mustCharge = true;
+        }
 
         return picked;
     }
@@ -400,7 +420,10 @@ public class DeerBoss : MonoBehaviour
                 DoSlam();
                 break;
             case 6:
-                if (slamHitbox != null) slamHitbox.Deactivate();
+                if (slamHitbox != null)
+                {
+                     slamHitbox.Deactivate();
+                }
                 rb.linearVelocity = Vector2.zero;
                 break;
             case 7:
@@ -413,7 +436,10 @@ public class DeerBoss : MonoBehaviour
     {
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
-        if (chargeHitbox != null) chargeHitbox.SetEnabled(false);
+        if (chargeHitbox != null)
+        {
+            chargeHitbox.SetEnabled(false);
+        }
         SetPlayerCollisionEnabled(false);
 
         // Lock direction toward player + jitter
@@ -449,21 +475,29 @@ public class DeerBoss : MonoBehaviour
         rb.linearVelocity = lockedChargeDir * chargeSpeed;
 
         SetPlayerCollisionEnabled(true);
-        if (chargeHitbox != null) chargeHitbox.SetEnabled(true);
+        if (chargeHitbox != null)
+        {
+            chargeHitbox.SetEnabled(true);
+        }
     }
 
     private void TelegraphSlam()
     {
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
-        if (chargeHitbox != null) chargeHitbox.SetEnabled(false);
+        if (chargeHitbox != null)
+        {
+            chargeHitbox.SetEnabled(false);
+        }
         SetPlayerCollisionEnabled(false);
 
         slamDirection = ((Vector2)target.position - (Vector2)transform.position).normalized;
 
         // Position and show the slam warning visual (collider stays off until DoSlam)
         if (slamHitbox != null)
+        {
             slamHitbox.Telegraph(slamDirection, slamSize, slamOffset);
+        }
     }
 
     private void DoSlam()
@@ -472,11 +506,16 @@ public class DeerBoss : MonoBehaviour
         isCharging = false;
         chargeTimer = 0.0f;
         SetPlayerCollisionEnabled(false);
-        if (chargeHitbox != null) chargeHitbox.SetEnabled(false);
+        if (chargeHitbox != null)
+        {
+            chargeHitbox.SetEnabled(false);
+        }
         HideTelegraph();
 
         if (slamHitbox != null)
+        {
             slamHitbox.Activate(target);
+        }
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -612,7 +651,10 @@ public class DeerBoss : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
 
-        if (arenaCenter == null) return;
+        if (arenaCenter == null)
+        {
+            return;
+        }
 
         Vector2 toCenter = ((Vector2)arenaCenter.position - (Vector2)transform.position).normalized;
         ShowTelegraph(toCenter);
@@ -622,7 +664,10 @@ public class DeerBoss : MonoBehaviour
     {
         HideTelegraph();
 
-        if (arenaCenter == null) return;
+        if (arenaCenter == null)
+        {
+            return;
+        }
 
         Vector2 toCenter = (Vector2)arenaCenter.position - (Vector2)transform.position;
         float dist = toCenter.magnitude;
@@ -647,7 +692,10 @@ public class DeerBoss : MonoBehaviour
         SetPlayerCollisionEnabled(false);
         HideTelegraph();
 
-        if (shockwavePrefab == null) return;
+        if (shockwavePrefab == null)
+        {
+            return;
+        }
 
         Vector3 spawnPosition = transform.position;
         if (arenaCenter != null)
@@ -701,11 +749,20 @@ public class DeerBoss : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
         HideTelegraph();
-        if (chargeHitbox != null) chargeHitbox.SetEnabled(false);
-        if (slamHitbox != null) slamHitbox.Deactivate();
+        if (chargeHitbox != null)
+        {
+            chargeHitbox.SetEnabled(false);
+        }
+        if (slamHitbox != null)
+        {
+            slamHitbox.Deactivate();
+        }
         SetBeamChargeVisualActive(false);
         SetBeamChargeFireCue(false);
-        if (activeShockwave != null) Destroy(activeShockwave.gameObject);
+        if (activeShockwave != null)
+        {
+            Destroy(activeShockwave.gameObject);
+        }
         activeShockwave = null;
 
         // Pause game
@@ -735,7 +792,10 @@ public class DeerBoss : MonoBehaviour
 
     private void ShowTelegraph(Vector2 direction)
     {
-        if (telegraphVisual == null) return;
+        if (telegraphVisual == null)
+        {
+            return;
+        }
 
         float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
@@ -745,7 +805,9 @@ public class DeerBoss : MonoBehaviour
     private void HideTelegraph()
     {
         if (telegraphVisual != null)
+        {
             telegraphVisual.SetActive(false);
+        }
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -754,7 +816,10 @@ public class DeerBoss : MonoBehaviour
 
     private void HandleDeath()
     {
-        if (isDead) return;
+        if (isDead)
+        {
+            return;
+        }
         isDead = true;
 
         CancelInvoke();
@@ -762,11 +827,20 @@ public class DeerBoss : MonoBehaviour
 
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
-        if (col != null) col.enabled = false;
+        if (col != null)
+        {
+            col.enabled = false;
+        }
 
         HideTelegraph();
-        if (chargeHitbox != null) chargeHitbox.SetEnabled(false);
-        if (slamHitbox != null) slamHitbox.Deactivate();
+        if (chargeHitbox != null)
+        {
+            chargeHitbox.SetEnabled(false);
+        }
+        if (slamHitbox != null)
+        {
+            slamHitbox.Deactivate();
+        }
         SetBeamChargeVisualActive(false);
         SetBeamChargeFireCue(false);
 
@@ -803,8 +877,14 @@ public class DeerBoss : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (health != null) health.OnDeath -= HandleDeath;
-        if (gameManager != null) gameManager.OnOddBeatTriggered -= OnBeat;
+        if (health != null)
+        {
+            health.OnDeath -= HandleDeath;
+        }
+        if (gameManager != null)
+        {
+            gameManager.OnOddBeatTriggered -= OnBeat;
+        }
 
         if (fallbackBeamChargeSprite != null)
         {
