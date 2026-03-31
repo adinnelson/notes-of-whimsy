@@ -101,9 +101,6 @@ public class Health : MonoBehaviour, IDamageable
             healthText.UpdateHPText(currentHealth, MaxHealth);
         }
 
-        // TODO: REMOVE LOG once integrated with UI and effects so we can see health changes
-        Debug.Log($"{name} took {damageAmount} damage. HP now: {currentHealth}");
-
         if (UI != null )
         {
             UI.UpdateText();
@@ -111,8 +108,6 @@ public class Health : MonoBehaviour, IDamageable
 
         if (currentHealth <= 0)
         {
-            // TODO: REMOVE LOG once integrated with UI and effects so we can see health changes
-            Debug.Log($"{name} died!");
             Die();
         }
     }
@@ -138,7 +133,6 @@ public class Health : MonoBehaviour, IDamageable
             currentHealth = MaxHealth;
             if (healthBarUpdater != null)
             {
-                Debug.Log("Updating health bar on death");
                 healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
             }
             if (healthText != null)

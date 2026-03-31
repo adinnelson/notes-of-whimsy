@@ -51,6 +51,10 @@ public class DeerBossChargeHitBox : MonoBehaviour
     {
         if (hasDealtDamageThisCharge) return;
 
+        // Only ever damage the player — guards against the boss hurting other enemies
+        // even if damageableLayers is misconfigured in the Inspector.
+        if (!other.CompareTag("Player")) return;
+
         if ((damageableLayers.value & (1 << other.gameObject.layer)) == 0) return;
 
         IDamageable damageable = other.GetComponentInParent<IDamageable>();
