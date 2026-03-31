@@ -16,8 +16,9 @@ public class PickupItem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI labelChild;
     [SerializeField] private GameObject labelContainer;
 
-    //to manage feedback display when in range of multiple boosts
     private static List<PickupItem> activePickups = new List<PickupItem>();
+    private static PickupItem currentActive;
+
     private string thisLabel = string.Empty;
 
     private Transform player;
@@ -34,6 +35,7 @@ public class PickupItem : MonoBehaviour
     private void Start()
     {
         activePickups.RemoveAll(p => p == null);
+
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -41,7 +43,6 @@ public class PickupItem : MonoBehaviour
             playerInventory = playerObj.GetComponent<PlayerInventory>();
         }
 
-        //copy the parent sprite into the glow child at runtime
         if (glowChild != null)
         {
             glowRenderer = glowChild.GetComponent<SpriteRenderer>();
@@ -70,12 +71,7 @@ public class PickupItem : MonoBehaviour
         {
             inRange = nowInRange;
 
-            if (glowChild != null)
-            {
-                glowChild.SetActive(inRange);
-            }
-
-            //when an object is in range, make sure the container & TMP are assigned in the inspector of the object
+            //find refs if needed
             if (inRange && (labelChild == null || labelContainer == null))
             {
                 var allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
@@ -88,49 +84,112 @@ public class PickupItem : MonoBehaviour
                         break;
                     }
                 }
-
-                if (labelContainer == null)
-                    Debug.LogWarning("PickupItem: Could not find FeedbackTextContainer");
             }
 
-            if (labelChild != null)
+            if (inRange)
             {
-                if (inRange)
-                {
-                    thisLabel = BuildLabel();
-                    if (!string.IsNullOrEmpty(thisLabel) && !activePickups.Contains(this))
-                    {
-                        activePickups.Add(this);
-                    }
-                }
-                else
-                {
-                    activePickups.Remove(this);
-                    thisLabel = string.Empty;
-                }
+                thisLabel = BuildLabel();
 
-                if (activePickups.Count > 0)
+                if (!string.IsNullOrEmpty(thisLabel) && !activePickups.Contains(this))
                 {
-                    labelChild.text = string.Join("\n", activePickups.ConvertAll(p => p.thisLabel));
-
-                    if (labelContainer != null)
-                    {
-                        labelContainer.SetActive(true);
-                    }
-                }
-                else
-                {
-                    if (labelContainer != null)
-                    {
-                        labelContainer.SetActive(false);
-                    }
+                    activePickups.Add(this);
                 }
             }
+            else
+            {
+                activePickups.Remove(this);
+
+                if (currentActive == this)
+                {
+                    SetVisual(false);
+                    currentActive = null;
+                }
+            }
+
+            UpdateActivePickup();
         }
 
         if (inRange && Keyboard.current.eKey.wasPressedThisFrame)
         {
             TryPickup();
+        }
+    }
+
+    private static void UpdateActivePickup()
+    {
+        //cleanup nulls
+        activePickups.RemoveAll(p => p == null);
+
+        if (activePickups.Count == 0)
+        {
+            if (currentActive != null)
+            {
+                currentActive.SetVisual(false);
+                currentActive = null;
+            }
+            return;
+        }
+
+        Transform player = null;
+        foreach (var item in activePickups)
+        {
+            if (item != null && item.player != null)
+            {
+                player = item.player;
+                break;
+            }
+        }
+
+        if (player == null) return;
+
+        PickupItem closest = null;
+        float minDist = Mathf.Infinity;
+
+        foreach (var item in activePickups)
+        {
+            if (item == null) continue;
+
+            float dist = Vector2.Distance(player.position, item.transform.position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = item;
+            }
+        }
+
+        if (closest != currentActive)
+        {
+            if (currentActive != null)
+                currentActive.SetVisual(false);
+
+            currentActive = closest;
+
+            if (currentActive != null)
+                currentActive.SetVisual(true);
+        }
+    }
+
+    public void SetVisual(bool state)
+    {
+        if (glowChild != null)
+            glowChild.SetActive(state);
+
+        if (labelChild != null && labelContainer != null)
+        {
+            if (state)
+            {
+                labelChild.text = thisLabel;
+                labelContainer.SetActive(true);
+            }
+            else
+            {
+                //hide if this item was previously the active one
+                if (currentActive == this || currentActive == null)
+                {
+                    labelContainer.SetActive(false);
+                    labelChild.text = "";
+                }
+            }
         }
     }
 
@@ -141,21 +200,18 @@ public class PickupItem : MonoBehaviour
             return;
         }
 
-        //pickup a spell
         if (spell != null)
         {
             SpellPickupUI.Instance.Show(this);
             return;
         }
 
-        //pickup beat tick slot unlock -> must be checked before the other boostables
         if (beatId != 0)
         {
             playerInventory.PickupInventorySlot(gameObject);
             return;
         }
 
-        //pickup a boostable
         BoostableItem boost = GetComponent<BoostableItem>();
         if (boost != null)
         {
@@ -165,59 +221,62 @@ public class PickupItem : MonoBehaviour
     }
 
     private string BuildLabel()
-    {        
+    {
         if (spell != null)
         {
-            return string.Empty;
+            return GetSpellLabel();
         }
 
-        //beat tick item
         if (beatId != 0)
         {
-            return ("Unlock a Beat Slot!");
+            return "Unlock a Beat Slot!";
         }
 
-        //boostable item: health potion, max health, damage, speed
         BoostableItem boost = GetComponent<BoostableItem>();
         if (boost != null)
         {
             switch (boost.Type)
-            { 
+            {
                 case BoostType.HealthPotion:
-                    return $"+{(int)boost.Amount} Health Potion";
+                    return $"Press <e> to apply +{(int)boost.Amount} Health Potion";
                 case BoostType.MaxHealth:
-                    return $"+{(int)boost.Amount} Max Health";
+                    return $"Press <e> to apply +{(int)boost.Amount} to your Max Health";
                 case BoostType.Speed:
-                    return $"+{boost.Amount:F1} Speed";
+                    return $"Press <e> to apply +{boost.Amount:F1} Speed";
                 case BoostType.Damage:
-                    return $"+{(int)boost.Amount} Damage";
+                    return $"Press <e> to apply +{(int)boost.Amount} Damage";
             }
         }
+
         return string.Empty;
     }
 
-    //to keep text list up to date when an item is picked up
+    //used to set the spell label
+    private string GetSpellLabel()
+    {
+        switch (spell.SpellType)
+        {
+            case ItemType.Purple:
+                return "Press <e> to pick up Laserbeam Spell";
+            case ItemType.Blue:
+                return "Press <e> to pick up Whirlpool Spell";
+            case ItemType.Yellow:
+                return "Press <e> to pick up Stun Spell";
+            case ItemType.Pink:
+                return "Press <e> to pick up Fireball Spell";
+        }
+        return "Press <e> to pick up Spell";
+    }
+
     private void OnDestroy()
     {
         activePickups.Remove(this);
 
-        if (labelChild != null)
+        if (currentActive == this)
         {
-            if (activePickups.Count > 0)
-            {
-                labelChild.text = string.Join("\n", activePickups.ConvertAll(p => p.thisLabel));
-                if (labelContainer != null)
-                {
-                    labelContainer.SetActive(true);
-                }
-            }
-            else
-            {
-                if (labelContainer != null)
-                {
-                    labelContainer.SetActive(false);
-                }
-            }
+            currentActive = null;
         }
+
+        UpdateActivePickup();
     }
 }

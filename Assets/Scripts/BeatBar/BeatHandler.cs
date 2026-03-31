@@ -15,12 +15,11 @@ public class BeatHandler : MonoBehaviour
     private MusicManager musicManager;
     private float lastCheckedBPM = 0.0f;
 
-
-    //FMOD music is now 8 beats divided 
+    //FMOD music is now 8 beats divided
     int musicBeatIndex;
     int prevMusicIndex = 0;
 
-    private const float REQUIRED_ACCURACY = 0.75f;
+    private const float REQUIRED_ACCURACY = 0.35f; // 25% of the beat duration on either side
     private const int BEAT_NUM = 8;
 
     [SerializeField] private PlayerAttack playerAttack;
@@ -44,12 +43,6 @@ public class BeatHandler : MonoBehaviour
 
     // how close the next beat is
     private float percentToNextBeat = 1.0f;
-
-    // this index changes halfway between each beat
-    private int beatIndex = 0;
-
-    // this index changes on beat
-    private int onBeatIndex = 0;
 
     [SerializeField]
     // update this to change how many spells the player starts with
@@ -79,8 +72,6 @@ public class BeatHandler : MonoBehaviour
     public bool ValidAttackInterval = false;
     public bool ValidDashInterval = false;
 
-
-
     void Awake()
     {
 
@@ -97,10 +88,174 @@ public class BeatHandler : MonoBehaviour
         PopulateBeatBar();
     }
 
+    //using Update to sync music and sound effect
+    void Update()
+    {
+        //getting information about the current beat from music
+        musicBeatIndex = musicManager.timelineInfo.currentBeat;
+
+        //Fire percussion sound on tempo if beat is unlocked
+        HandleFMODBeatChange();
+
+        // Check for BPM changes to update the Beat bar according to music switch
+        SyncBPMFromMusic();
+
+        // place beatbar at mouse
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
+
+        // needs to be x2 because we are fitting 8 beats into 4/4
+        percentToNextBeat += Time.deltaTime * bpm / 60.0f * 2.0f;
+
+        // fires on half beat
+        UpdateBeatIndexAtHalfBeat();
+
+        // fires on beat
+        ClampTimerIfAhead();
+        UpdateBeatVisuals();
+
+        ValidAttackInterval = CheckValidAttackInterval(percentToNextBeat);
+        ValidDashInterval = CheckValidDashInterval(percentToNextBeat);
+
+        // Fires when FMOD reports a new beat. Syncs timing and triggers beat events.
+        void HandleFMODBeatChange()
+        {
+            if (prevMusicIndex == musicBeatIndex) return;
+
+            // Sync to FMOD's authoritative timing
+            percentToNextBeat = 0.0f;
+            beatIndexHasChanged = false;
+            prevMusicIndex = musicBeatIndex;
+
+            // Trigger game events
+            if (gm && !gm.BeatHit)
+            {
+                gm.TriggerBeat(musicBeatIndex);
+            }
+
+            // Play percussion on unlocked beats
+            if (unlockedBeats.Contains(musicBeatIndex))
+            {
+                PlayBeatEndSound();
+            }
+        }
+
+        // Syncs BPM when music changes (e.g. room transitions)
+        void SyncBPMFromMusic()
+        {
+            if (musicManager == null) return;
+
+            float currentMusicBPM = musicManager.GetCurrentBPM();
+            if (currentMusicBPM > 0.0f && Mathf.Abs(lastCheckedBPM - currentMusicBPM) > 0.01f)
+            {
+                lastCheckedBPM = currentMusicBPM;
+                ChangeBPM(currentMusicBPM);
+            }
+        }
+
+        // Updates beatIndex at 50% through beat (for attack lock removal)
+        void UpdateBeatIndexAtHalfBeat()
+        {
+            if (percentToNextBeat > 0.5f && !beatIndexHasChanged)
+            {
+                if (gm)
+                {
+                    gm.BeatHit = false;
+                }
+                int beatIndex = musicBeatIndex - 1;
+
+                if (playerAttack != null && unlockedBeats.Contains(beatIndex))
+                {
+                    playerAttack.RemoveAttackLock(PlayerAttack.MISSED_ATTACK_LOCK_KEY);
+                }
+
+                beatIndexHasChanged = true;
+            }
+        }
+
+        // Clamp timer if local accumulation outruns FMOD (prevents overshoot)
+        void ClampTimerIfAhead()
+        {
+            if (percentToNextBeat > 1.0f)
+            {
+                percentToNextBeat = 1.0f;
+            }
+        }
+    }
+
+    public int GetMusicBeatIndex() => musicBeatIndex;
+    public int GetPrevMusicIndex() => prevMusicIndex;
+    public bool GetBeatIndexHasChanged() => beatIndexHasChanged;
+
+    public float GetPercentToNextBeat()
+    {
+        return percentToNextBeat;
+    }
+
+    // get whether an attack can be made based on the percentage to next beat
+    public bool CheckValidAttackInterval(float percentage)
+    {
+        bool inWindow = percentage <= REQUIRED_ACCURACY || percentage >= 1 - REQUIRED_ACCURACY;
+        if (!inWindow) return false;
+
+        // Early hit: check the upcoming beat's slot
+        if (percentage >= 0.75f)
+        {
+            int nextBeat = (musicBeatIndex % BEAT_NUM) + 1;
+            return unlockedBeats.Contains(nextBeat);
+        }
+        // Late hit: check the current beat's slot
+        else
+        {
+            return unlockedBeats.Contains(musicBeatIndex);
+        }
+    }
+
+    public bool CheckValidDashInterval(float percentage)
+    {
+        return percentage <= REQUIRED_ACCURACY || percentage >= 1 - REQUIRED_ACCURACY;
+    }
+
+    // adds tick id to hashset
+    public void BeatUnlocked(int beatId)
+    {
+        unlockedBeats.Add(beatId);
+    }
+
+    public float GetBPM()
+    {
+        return bpm;
+    }
+
+    public int GetBeatIndex()
+    {
+        // Early hit: return upcoming beat's slot
+        if (percentToNextBeat >= 0.75f)
+        {
+            return (musicBeatIndex % BEAT_NUM) + 1;
+        }
+        // Late hit: return current beat's slot
+        return musicBeatIndex;
+    }
+
+    public static void ClearUnlockedBeats()
+    {
+        unlockedBeats.Clear();
+    }
+
+    // method to reset the Beat bar to a new bpm
+    public void ChangeBPM(float newBPM)
+    {
+        bpm = newBPM;
+
+        // Reset beat ID if needed
+        percentToNextBeat = 1.0f;
+        beatIndexHasChanged = true;
+    }
+
     private void InitializeRandomSpells()
     {
         // BEAT_NUM is limit of spell slots
-        // TODO: added actual randomness logic
         if(unlockedBeats.Count == 0)
         {
             int spellToUnlock = Random.Range(1, BEAT_NUM + 1);
@@ -136,88 +291,10 @@ public class BeatHandler : MonoBehaviour
 
     }
 
-
-    //using Update to sync music and sound effect
-    void Update()
-    {
-        //getting information about the current beat from music 
-        musicBeatIndex = musicManager.timelineInfo.currentBeat;
-
-        //Fire percussion sound on tempo if beat is unlocked 
-        if (prevMusicIndex != musicBeatIndex)
-        {
-            prevMusicIndex = musicBeatIndex;
-            // Debug.Log($"Music = {prevMusicIndex}");
-            if (unlockedBeats.Contains(prevMusicIndex))
-            {
-                PlayBeatEndSound();
-                // Debug.Log($"Music = {prevMusicIndex}");
-            }
-        }
-
-        // Check for BPM changes to update the Beat bar according to music switch
-        if (musicManager != null)
-        {
-            float currentMusicBPM = musicManager.GetCurrentBPM();
-            if (currentMusicBPM > 0 && Mathf.Abs(lastCheckedBPM - currentMusicBPM) > 0.01f)
-            {
-                // Debug.Log(currentMusicBPM);
-                lastCheckedBPM = currentMusicBPM;
-                ChangeBPM(currentMusicBPM);
-            }
-        }
-
-        // place beatbar at mouse
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
-
-        // needs to be x2 because we are fitting 8 beats into 4/4
-        percentToNextBeat += Time.deltaTime * bpm / 60.0f * 2.0f;
-
-        // fires on half beat
-        if (percentToNextBeat > 0.5 && !beatIndexHasChanged)
-        {
-            if (gm)
-            {
-                gm.BeatHit = false;
-            }
-            //musicBeatIndex is coming from the FMOD music
-            beatIndex = musicBeatIndex - 1; //% BEAT_NUM - 1;
-
-            if (playerAttack != null && unlockedBeats.Contains(beatIndex))
-            {
-                playerAttack.RemoveAttackLock(PlayerAttack.MISSED_ATTACK_LOCK_KEY);
-            }
-
-            beatIndexHasChanged = true;
-        }
-
-        // fires on beat
-        if (percentToNextBeat > 1.0f)
-        {
-            //muiscBeatIndex is coming from the FMOD music 
-            onBeatIndex = musicBeatIndex % BEAT_NUM;
-
-            if (gm && !gm.BeatHit)
-            {
-                gm.TriggerBeat(onBeatIndex);
-            }
-
-            beatIndexHasChanged = false;
-            percentToNextBeat -= 1.0f;
-        }
-
-        UpdateBeatVisuals();
-
-        ValidAttackInterval = CheckValidAttackInterval(percentToNextBeat);
-        ValidDashInterval = CheckValidDashInterval(percentToNextBeat);
-    }
-
     public void SetBPM(float newBPM)
     {
         bpm = newBPM;
     }
-
     private void UpdateBeatVisuals()
     {
         float beatSpacing = (beatStartSpawnDistance - beatEndSpawnDistance) / numBeatsShown;
@@ -228,7 +305,7 @@ public class BeatHandler : MonoBehaviour
         for (int i = 0; i < BEAT_NUM; i++)
         {
             // gets the index of the beat item from left to right based on the current beat index
-            int adjustedBeatIndex = (((i - onBeatIndex) % BEAT_NUM) + BEAT_NUM) % BEAT_NUM;
+            int adjustedBeatIndex = (((i - musicBeatIndex)) + BEAT_NUM) % BEAT_NUM;
 
             GameObject curLeftGraphic = leftBeatItemGraphics[i];
             GameObject curRightGraphic = rightBeatItemGraphics[i];
@@ -273,60 +350,6 @@ public class BeatHandler : MonoBehaviour
         }
     }
 
-    public float GetPercentToNextBeat()
-    {
-        return percentToNextBeat;
-    }
-
-    // get whether an attack can be made based on the percentage to next beat
-    public bool CheckValidAttackInterval(float percentage)
-    {
-        return unlockedBeats.Contains(beatIndex + 1) && (percentage <= REQUIRED_ACCURACY || percentage >= 1.0f - REQUIRED_ACCURACY);
-
-    }
-
-    public bool CheckValidDashInterval (float percentage)
-    {
-        return percentage <= REQUIRED_ACCURACY || percentage >= 1.0f - REQUIRED_ACCURACY;
-
-    }
-
-    // adds tick id to hashset
-    public void BeatUnlocked(int beatId)
-    {
-        unlockedBeats.Add(beatId);
-    }
-
-    public float GetBPM()
-    {
-        return bpm;
-    }
-
-    public int GetBeatIndex()
-    {
-        return beatIndex + 1;
-    }
-
-    public static void ClearUnlockedBeats()
-    {
-        unlockedBeats.Clear();
-    }
-
-    //Update the Beat bar bpm to reflect the changing between rooms
-
-
-    // method to reset the Beat bar to a new bpm
-    public void ChangeBPM(float newBPM)
-    {
-        bpm = newBPM;
-
-        // Reset beat ID if needed
-        percentToNextBeat = 1.0f;
-        beatIndex = 0;
-        onBeatIndex = 0;
-        beatIndexHasChanged = true;
-    }
-
     private void PlayBeatEndSound()
     {
         if (!beatEndEvent.IsNull)
@@ -335,21 +358,3 @@ public class BeatHandler : MonoBehaviour
         }
     }
 }
-
-
-
-    //Old code used for testing. 
-    // void Update()
-    // {
-    //     // //For testing:
-    //     // var keyboard = Keyboard.current;
-    //     // if (keyboard == null) return; // No keyboard connected
-    //     // if (keyboard.bKey.wasPressedThisFrame)
-    //     // {
-    //     //     ChangeBPM(100f);
-    //     // }
-    //     // if (keyboard.nKey.wasPressedThisFrame)
-    //     // {
-    //     //     ChangeBPM(120f);
-    //     // }
-    // }
