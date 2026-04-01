@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
+    public const float Z_RANGE = 5.0f;
+
     [SerializeField] private BeatHandler beatHandler;
 
     private List<SimpleTimer> timers = new List<SimpleTimer>();
