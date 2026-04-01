@@ -143,7 +143,7 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         {
             if (stunnedEnemies[enemy] <= 0)
             {
-                stunnedEnemies[enemy] += stunTime;
+                stunnedEnemies[enemy] = stunTime;
                 enemy.AddStunEffect(STUN_KEY);   
             }
             return;
