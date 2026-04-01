@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
-using System.Xml.Schema;
 
 public class Health : MonoBehaviour, IDamageable
 {
