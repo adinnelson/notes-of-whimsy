@@ -5,7 +5,7 @@ using System.Collections;
 /// that steps through 8-beat attack sequences. All timing is beat-driven — increasing
 /// BPM between phases automatically speeds up every attack.
 
-public class DeerBoss : MonoBehaviour
+public class DeerBoss : EnemyBase
 {
     private enum BossAttack { Charge, Beam, Shockwave }
     private enum BossPhase { First, Second, Third }
@@ -97,22 +97,12 @@ public class DeerBoss : MonoBehaviour
     [Tooltip("How strong each beat-driven outward burst feels.")]
     [SerializeField] private float shockwaveBeatImpulse = 3.6f;
 
-    [Header("Death")]
-    // Death fade time.
-    [SerializeField] private float deathFadeDuration = 1.0f;
-
     [Header("Wall Containment")]
     // Wall correction speed.
     [SerializeField] private float wallCorrectionSpeed = 50.0f;
 
     // ───────── Runtime state ─────────
 
-    private Transform target;
-    private Rigidbody2D rb;
-    private Health health;
-    private Collider2D col;
-    private SpriteRenderer sprite;
-    private GameManager gameManager;
     private BeatHandler beatHandler;
 
     private BossAttack currentAttack;
@@ -146,27 +136,17 @@ public class DeerBoss : MonoBehaviour
 
     // ───────── Lifecycle ─────────
 
-    private void Awake()
+    protected override bool CanStartAttack()
     {
-        rb = GetComponent<Rigidbody2D>();
-        col = GetComponent<Collider2D>();
-        sprite = GetComponent<SpriteRenderer>();
-        health = GetComponent<Health>();
+        return false;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
 
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         lastSafePosition = rb.position;
-
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            target = player.transform;
-        }
-        else
-        {
-            Debug.LogError($"{name}: No Player found in scene.");
-        }
-
-        health.OnDeath += HandleDeath;
 
         // Initialize child hitboxes
         if (chargeHitbox != null)
@@ -201,10 +181,18 @@ public class DeerBoss : MonoBehaviour
         }
     }
 
-    private void Start()
+    protected override void Start()
     {
-        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        gameManager = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
         beatHandler = GameObject.Find("BeatBar")?.GetComponent<BeatHandler>();
+
+        if (gameManager == null)
+        {
+            Debug.LogError($"{name}: No GameObject with tag 'GameManager' found in scene.");
+            return;
+        }
+
+        gameManager.OnOddBeatTriggered += OnBeat;
 
         EnsureFallbackBeamChargeVisual();
 
@@ -239,8 +227,6 @@ public class DeerBoss : MonoBehaviour
                 "[DeerBoss] arenaCenter is not assigned. Shockwave will not reliably start from the middle of the room.",
                 this);
         }
-
-        gameManager.OnOddBeatTriggered += OnBeat;
 
         beatHandler.SetBPM(phase1BPM);
 
@@ -313,10 +299,16 @@ public class DeerBoss : MonoBehaviour
 
     // ───────── Beat sequencer ─────────
 
-    private void OnBeat()
+    protected override void OnBeat()
     {
         if (isDead || target == null || inPhaseTransition)
         {
+            return;
+        }
+
+        if (stunEffects.Count > 0)
+        {
+            StunVisuals();
             return;
         }
 
@@ -814,13 +806,14 @@ public class DeerBoss : MonoBehaviour
     //  DEATH
     // ═══════════════════════════════════════════════════════════════
 
-    private void HandleDeath()
+    protected override void HandleDeath()
     {
         if (isDead)
         {
             return;
         }
         isDead = true;
+        state = State.Dead;
 
         CancelInvoke();
         StopAllCoroutines();
@@ -875,16 +868,9 @@ public class DeerBoss : MonoBehaviour
     //  CLEANUP
     // ═══════════════════════════════════════════════════════════════
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
-        if (health != null)
-        {
-            health.OnDeath -= HandleDeath;
-        }
-        if (gameManager != null)
-        {
-            gameManager.OnOddBeatTriggered -= OnBeat;
-        }
+        base.OnDestroy();
 
         if (fallbackBeamChargeSprite != null)
         {

@@ -204,6 +204,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 637240ccde7b0bb449de1599700c9fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeerBoss
+  config: {fileID: 0}
+  disableOnDeath: 1
+  deathFadeDuration: 1
+  stunnedMaterial: {fileID: -876546973899608171, guid: 1ec764e42543a6e46bb597f1d9c7aeb0, type: 3}
+  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   phase1BPM: 90
   phase2BPM: 100
   phase3BPM: 120
@@ -232,10 +237,6 @@ MonoBehaviour:
   shockwaveDamage: 12
   shockwavePulseCount: 8
   shockwaveBeatImpulse: 3.6
-  deathFadeDuration: 1
-  wallLayers:
-    serializedVersion: 2
-    m_Bits: 0
   wallCorrectionSpeed: 50
 --- !u!1 &1601358773786652688
 GameObject:
