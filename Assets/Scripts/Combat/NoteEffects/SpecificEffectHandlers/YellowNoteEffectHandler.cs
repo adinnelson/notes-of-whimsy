@@ -22,7 +22,10 @@ public class YellowNoteEffectHandler : NoteEffectHandler
 
     // For tracking stunned enemies
     private Dictionary<EnemyBase, float> stunnedEnemies = new Dictionary<EnemyBase, float>();
+    private Dictionary<EnemyBase, GameObject> stunnedOverlays = new Dictionary<EnemyBase, GameObject>();
     private HashSet<EnemyBase> storedEnemies = new HashSet<EnemyBase>();
+
+    private GameObject stunOverlay;
     
     // For lightning chain order
     private List<EnemyBase> enemies = new List<EnemyBase>();
@@ -66,10 +69,11 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         timeElapsed +=  Time.fixedDeltaTime;
     }
 
-    public void CustomYellowInit(LightningVisualLogic lightningEffect, LayerMask enemyMask)
+    public void CustomYellowInit(LightningVisualLogic lightningEffect, LayerMask enemyMask, GameObject stunOverlay)
     {
         this.lightningEffect = lightningEffect;
         this.enemyMask = enemyMask;
+        this.stunOverlay = stunOverlay;
 
         lightningChainPool = new ObjectPool<LightningVisualLogic>(
             createFunc: CreateItem,
@@ -144,10 +148,17 @@ public class YellowNoteEffectHandler : NoteEffectHandler
             if (stunnedEnemies[enemy] <= 0)
             {
                 stunnedEnemies[enemy] = stunTime;
+                stunnedOverlays[enemy].SetActive(true);
                 enemy.AddStunEffect(STUN_KEY);   
             }
             return;
         }
+
+        GameObject overlay = Instantiate(stunOverlay, enemy.transform.position - Vector3.forward, enemy.transform.rotation);
+        overlay.transform.SetParent(enemy.transform);
+
+        stunnedOverlays.Add(enemy, overlay);
+
 
         stunnedEnemies.Add(enemy, stunTime);
         storedEnemies.Add(enemy);
@@ -182,7 +193,9 @@ public class YellowNoteEffectHandler : NoteEffectHandler
             if(stunnedEnemies[enemy] <= 0)
             {
                 enemy.RemoveStunEffect(STUN_KEY);
-                enemy.gameObject.transform.localScale = new Vector3(1, 1, 1);
+                stunnedOverlays[enemy].SetActive(false);
+
+                //enemy.gameObject.transform.localScale = new Vector3(1, 1, 1);
             }
         }
     }
