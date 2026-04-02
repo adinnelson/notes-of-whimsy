@@ -102,10 +102,10 @@ public class PlayerAttack : MonoBehaviour
         // whichever device (Mouse or Controller) that fired gets to be the active aim source for this shot.
         SetAimSourceFromFireDevice(context);
 
-        //if(attackLocks.Count > 0)
-        //{
-        //    return;
-        //}
+        if(attackLocks.Count > 0)
+        {
+          return;
+        }
 
         if (lockoutTimer > 0)
         {
@@ -377,7 +377,7 @@ public class PlayerAttack : MonoBehaviour
         //Fire raycast if we hit anything call noteEffectHandler hit
         // probalbly can draw a line as well
 
-        Vector2 spawnPoint = (Vector2)projectileSpawnPosition + finalDirection;
+        Vector2 spawnPoint = (Vector2)projectileSpawnPosition + 0.25f * finalDirection;
 
         RaycastHit2D hit = Physics2D.Raycast(spawnPoint, finalDirection, 100, ~ignoredLayersMask);
 
@@ -405,6 +405,8 @@ public class PlayerAttack : MonoBehaviour
                 }
             }
         }
+
+        endBeamPos = new Vector3(endBeamPos.x, endBeamPos.y, -GameManager.Z_RANGE);
 
         if(damageable != null)
         {

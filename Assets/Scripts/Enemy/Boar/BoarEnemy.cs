@@ -100,6 +100,10 @@ public class BoarEnemy : EnemyBase
         }
 
         shouldTelegraphNext = !shouldTelegraphNext;
+
+        int zSub = (int)(gameObject.transform.position.y / GameManager.Z_RANGE);
+
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.y - GameManager.Z_RANGE * zSub);
     }
 
     private void FixedUpdate()
@@ -328,14 +332,18 @@ public class BoarEnemy : EnemyBase
 
         // Stun briefly so FixedUpdate doesn't overwrite the knockback velocity
         // with MoveTowardsTarget on the very next physics frame
-        StartCoroutine(KnockbackStunRoutine());
+        //KnockbackStunRoutine();
     }
 
-    private IEnumerator KnockbackStunRoutine()
-    {
-        const string knockbackStunKey = "knockback";
-        AddStunEffect(knockbackStunKey);
-        yield return new WaitForSeconds(0.3f);
-        RemoveStunEffect(knockbackStunKey);
-    }
+    // This doesn't seem to be required and I believe is causing the boars to disapper
+    //private void KnockbackStunRoutine()
+    //{
+       // const string knockbackStunKey = "knockback";
+        //AddStunEffect(knockbackStunKey);
+        
+       // SimpleTimer timer = new SimpleTimer();
+
+        //timer.StartTimer(0.35f, onFinish: () => RemoveStunEffect(knockbackStunKey));
+        //RemoveStunEffect(knockbackStunKey);
+   // }
 }
