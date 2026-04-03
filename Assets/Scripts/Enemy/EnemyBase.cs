@@ -13,9 +13,6 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] private bool disableOnDeath = true;
     [SerializeField] protected float deathFadeDuration = 0.5f;
 
-    [Header("Stunned")]
-    [SerializeField] protected Material stunnedMaterial;
-    [SerializeField] protected Material defaultMaterial;
     protected SpriteRenderer sprite;
 
     protected Transform target;
@@ -272,7 +269,7 @@ public abstract class EnemyBase : MonoBehaviour
 
         if(stunEffects.Count <= 0)
         {
-            sprite.material = defaultMaterial;
+            sprite.color = Color.white;
         }
     }
 
@@ -280,7 +277,8 @@ public abstract class EnemyBase : MonoBehaviour
     {
         if (!stunEffects.Contains(YellowNoteEffectHandler.STUN_KEY)) return;
 
-        sprite.material = stunnedMaterial;
+        sprite.color = Color.darkGray;
+
     }
 
     protected virtual void HandleDeath()
