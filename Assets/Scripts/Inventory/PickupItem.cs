@@ -202,7 +202,8 @@ public class PickupItem : MonoBehaviour
 
         if (spell != null)
         {
-            SpellPickupUI.Instance.Show(this);
+            //SpellPickupUI.Instance.Show(this);
+            playerInventory.TryToPickup(spell, gameObject);
             return;
         }
 
