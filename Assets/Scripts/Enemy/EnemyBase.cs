@@ -11,7 +11,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     [Header("Death Behavior")]
     [SerializeField] private bool disableOnDeath = true;
-    [SerializeField] private float deathFadeDuration = 0.5f;
+    [SerializeField] protected float deathFadeDuration = 0.5f;
 
     [Header("Stunned")]
     [SerializeField] protected Material stunnedMaterial;
@@ -25,8 +25,8 @@ public abstract class EnemyBase : MonoBehaviour
     protected GameManager gameManager;
     private int recoverBeatsRemaining = 0;
 
-    private Health health;
-    private Collider2D col;
+    protected Health health;
+    protected Collider2D col;
 
     protected HashSet<string> stunEffects = new HashSet<string>();
 
