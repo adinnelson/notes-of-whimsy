@@ -109,6 +109,12 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     {
         enemies.Clear();
         Health enemyHealth = (Health)damageable;
+        
+        if(enemyHealth.GetComponent<DeerBoss>() != null)
+        {
+            enemyHealth.TakeDamage(damage);
+            return;          
+        }
 
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(enemyHealth.transform.position, detectionRadius, enemyMask);
 
