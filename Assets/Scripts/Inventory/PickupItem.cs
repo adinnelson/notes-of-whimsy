@@ -202,7 +202,6 @@ public class PickupItem : MonoBehaviour
 
         if (spell != null)
         {
-            //SpellPickupUI.Instance.Show(this);
             playerInventory.TryToPickup(spell, gameObject);
             return;
         }
@@ -275,6 +274,7 @@ public class PickupItem : MonoBehaviour
 
         if (currentActive == this)
         {
+            SetVisual(false);
             currentActive = null;
         }
 

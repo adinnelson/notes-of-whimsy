@@ -636,6 +636,7 @@ GameObject:
   - component: {fileID: 238092169037449750}
   - component: {fileID: 5299132339896392293}
   - component: {fileID: 7823848229624075325}
+  - component: {fileID: 6276266068745576744}
   m_Layer: 5
   m_Name: HPBar
   m_TagString: Untagged
@@ -730,6 +731,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthBarUpdater
   slider: {fileID: 5299132339896392293}
   healthText: {fileID: 2157841930071343266}
+--- !u!114 &6276266068745576744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4913228852162669263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 692c7ff61333ea34cb7297ecb9afcb01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HPBarLargeInUI
+  healthBarUpdater: {fileID: 7823848229624075325}
+  healthText: {fileID: 4886696489252571294}
 --- !u!1 &7236311454781888389
 GameObject:
   m_ObjectHideFlags: 0

@@ -38,7 +38,6 @@ public class Health : MonoBehaviour, IDamageable
             stats.OnMaxHealthIncreased += OnMaxHealthIncreased;
         }
 
-
         currentHealth = MaxHealth;
         SpawnHealthUI();
 
@@ -47,10 +46,60 @@ public class Health : MonoBehaviour, IDamageable
 
     void Start()
     {
+        if (isPlayer)
+        {
+            ReconnectLargeUIHPBar();
+        }
+        /*
+        if (healthBarUpdater == null || healthText == null)
+        {
+            HPBarLargeInUI ui = FindObjectOfType<HPBarLargeInUI>(true);
+            if (ui != null)
+            {
+                healthBarUpdater = ui.healthBarUpdater;
+                healthText = ui.healthText;
+            }
+        }
+
+        if (healthBarUpdater != null)
+        {
+            healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
+        }
+
+        if (healthText != null)
+        {
+            healthText.UpdateHPText(currentHealth, MaxHealth);
+        }*/
+    }
+
+    public void ReconnectLargeUIHPBar()
+    {
+        if (!isPlayer)
+        {
+            return;
+        }
+
+        HPBarLargeInUI ui = FindObjectOfType<HPBarLargeInUI>(true);
+        if (ui != null)
+        {
+            healthBarUpdater = ui.healthBarUpdater;
+            healthText = ui.healthText;
+        }
+
+        if (healthBarUpdater != null)
+        {
+            healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
+        }
+
         if (healthText != null)
         {
             healthText.UpdateHPText(currentHealth, MaxHealth);
         }
+    }
+
+    public bool HasLargeUIBarReference()
+    {
+        return healthBarUpdater != null && healthText != null;
     }
 
     void SpawnHealthUI()
@@ -80,7 +129,6 @@ public class Health : MonoBehaviour, IDamageable
 
         if (hitFlashTimer <= 0 && inHitFlash)
         {
-            //sprite.material = defaultMaterial;
             inHitFlash = false;
         }
     }
@@ -91,7 +139,6 @@ public class Health : MonoBehaviour, IDamageable
         currentHealth -= damageAmount;
 
         hitFlashTimer = flashTime;
-        //sprite.material = whiteMaterial;
         inHitFlash = true;
 
         floatingHealthBar?.UpdateHealthBar(currentHealth, MaxHealth);
@@ -114,7 +161,6 @@ public class Health : MonoBehaviour, IDamageable
         if(isPlayer)
         {
             invincible = true;
-
             SimpleTimer timer = new SimpleTimer();
             timer.StartTimer(0.25f, onFinish: () => invincible = false);
         }
@@ -163,6 +209,7 @@ public class Health : MonoBehaviour, IDamageable
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, MaxHealth);
         floatingHealthBar?.UpdateHealthBar(currentHealth, MaxHealth);
+
         if (healthBarUpdater != null)
         {
             healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
@@ -184,7 +231,10 @@ public class Health : MonoBehaviour, IDamageable
             {
                 healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
             }
-
+            if (healthText != null)
+            {
+                healthText.UpdateHPText(currentHealth, MaxHealth);
+            }
         }
     }
 }
