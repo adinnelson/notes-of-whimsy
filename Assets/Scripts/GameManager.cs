@@ -33,7 +33,17 @@ public class GameManager : MonoBehaviour
             beatHandler = GameObject.Find("BeatBar")?.GetComponent<BeatHandler>();
         }
 
-        for(int i = 0;i < timers.Count;i++)
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            Health health = playerObj.GetComponent<Health>();
+            if (health != null && !health.HasLargeUIBarReference())
+            {
+                health.ReconnectLargeUIHPBar();
+            }
+        }
+
+        for (int i = 0;i < timers.Count;i++)
         {
             // Debug.Log("Timer Updated");
             timers[i].UpdateTimer(Time.fixedDeltaTime);

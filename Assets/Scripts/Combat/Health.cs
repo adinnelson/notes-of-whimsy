@@ -8,8 +8,9 @@ public class Health : MonoBehaviour, IDamageable
 
     [SerializeField] private float enemyMaxHealth = 100.0f;
     [SerializeField] private GameObject healthPrefab; // HealthDisplay prefab
-    [SerializeField] private HealthBarUpdater healthBarUpdater;
+    [SerializeField] private HealthBarUpdater healthBarUpdater; // for the player health bar, fixed in UI
     [SerializeField] private HealthText healthText; // assign this in the HealthDisplay prefab
+    [SerializeField] private float healthBarVerticalOffset = 1.0f; //how far above player/enemies should a health bar be
 
     [Header("Hit Flash")]
     [SerializeField] private Material whiteMaterial;
@@ -17,7 +18,7 @@ public class Health : MonoBehaviour, IDamageable
     [SerializeField] private float flashTime = 0.1f;
 
     private float currentHealth;
-    private HealthUI UI;
+    private HealthBarUpdater floatingHealthBar;
     private bool isPlayer = false;
     private bool invincible = false;
     private PlayerStats stats;
@@ -37,7 +38,6 @@ public class Health : MonoBehaviour, IDamageable
             stats.OnMaxHealthIncreased += OnMaxHealthIncreased;
         }
 
-
         currentHealth = MaxHealth;
         SpawnHealthUI();
 
@@ -46,10 +46,60 @@ public class Health : MonoBehaviour, IDamageable
 
     void Start()
     {
+        if (isPlayer)
+        {
+            ReconnectLargeUIHPBar();
+        }
+        /*
+        if (healthBarUpdater == null || healthText == null)
+        {
+            HPBarLargeInUI ui = FindObjectOfType<HPBarLargeInUI>(true);
+            if (ui != null)
+            {
+                healthBarUpdater = ui.healthBarUpdater;
+                healthText = ui.healthText;
+            }
+        }
+
+        if (healthBarUpdater != null)
+        {
+            healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
+        }
+
+        if (healthText != null)
+        {
+            healthText.UpdateHPText(currentHealth, MaxHealth);
+        }*/
+    }
+
+    public void ReconnectLargeUIHPBar()
+    {
+        if (!isPlayer)
+        {
+            return;
+        }
+
+        HPBarLargeInUI ui = FindObjectOfType<HPBarLargeInUI>(true);
+        if (ui != null)
+        {
+            healthBarUpdater = ui.healthBarUpdater;
+            healthText = ui.healthText;
+        }
+
+        if (healthBarUpdater != null)
+        {
+            healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
+        }
+
         if (healthText != null)
         {
             healthText.UpdateHPText(currentHealth, MaxHealth);
         }
+    }
+
+    public bool HasLargeUIBarReference()
+    {
+        return healthBarUpdater != null && healthText != null;
     }
 
     void SpawnHealthUI()
@@ -57,13 +107,13 @@ public class Health : MonoBehaviour, IDamageable
         if (healthPrefab != null)
         {
             GameObject objectToDisplayHealth = Instantiate(healthPrefab, transform);
-            objectToDisplayHealth.transform.localPosition = new Vector3(0, 1.0f, 0);
+            objectToDisplayHealth.transform.localPosition = new Vector3(0, healthBarVerticalOffset, 0);
 
-            UI = objectToDisplayHealth.GetComponent<HealthUI>();
+            floatingHealthBar = objectToDisplayHealth.GetComponentInChildren<HealthBarUpdater>();
 
-            if (UI != null)
+            if (floatingHealthBar != null)
             {
-                UI.Initialize(this);
+                floatingHealthBar.UpdateHealthBar(currentHealth, MaxHealth);
             }
         }
     }
@@ -79,7 +129,6 @@ public class Health : MonoBehaviour, IDamageable
 
         if (hitFlashTimer <= 0 && inHitFlash)
         {
-            //sprite.material = defaultMaterial;
             inHitFlash = false;
         }
     }
@@ -90,9 +139,9 @@ public class Health : MonoBehaviour, IDamageable
         currentHealth -= damageAmount;
 
         hitFlashTimer = flashTime;
-        //sprite.material = whiteMaterial;
         inHitFlash = true;
 
+        floatingHealthBar?.UpdateHealthBar(currentHealth, MaxHealth);
         if (healthBarUpdater != null)
         {
             healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
@@ -101,11 +150,6 @@ public class Health : MonoBehaviour, IDamageable
         if (healthText != null)
         {
             healthText.UpdateHPText(currentHealth, MaxHealth);
-        }
-
-        if (UI != null )
-        {
-            UI.UpdateText();
         }
 
         if (currentHealth <= 0)
@@ -117,7 +161,6 @@ public class Health : MonoBehaviour, IDamageable
         if(isPlayer)
         {
             invincible = true;
-
             SimpleTimer timer = new SimpleTimer();
             timer.StartTimer(0.25f, onFinish: () => invincible = false);
         }
@@ -125,9 +168,9 @@ public class Health : MonoBehaviour, IDamageable
 
     void Die()
     {
-        if (UI != null && !isPlayer)
+        if (floatingHealthBar != null && !isPlayer)
         {
-            Destroy(UI.gameObject);
+            Destroy(floatingHealthBar.transform.parent.gameObject);
         }
 
         OnDeath?.Invoke();
@@ -150,7 +193,6 @@ public class Health : MonoBehaviour, IDamageable
             {
                 healthText.UpdateHPText(currentHealth, MaxHealth);
             }
-            UI.UpdateText();
         }
     }
 
@@ -166,7 +208,8 @@ public class Health : MonoBehaviour, IDamageable
     {
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, MaxHealth);
-        UI?.UpdateText();
+        floatingHealthBar?.UpdateHealthBar(currentHealth, MaxHealth);
+
         if (healthBarUpdater != null)
         {
             healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
@@ -183,12 +226,15 @@ public class Health : MonoBehaviour, IDamageable
         set
         {
             currentHealth = Mathf.Clamp(value, 0.0f, MaxHealth);
-            UI?.UpdateText();
+            floatingHealthBar?.UpdateHealthBar(currentHealth, MaxHealth);
             if (healthBarUpdater != null)
             {
                 healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);
             }
-
+            if (healthText != null)
+            {
+                healthText.UpdateHPText(currentHealth, MaxHealth);
+            }
         }
     }
 }
