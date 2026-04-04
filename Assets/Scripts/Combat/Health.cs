@@ -18,7 +18,6 @@ public class Health : MonoBehaviour, IDamageable
     [SerializeField] private float flashTime = 0.1f;
 
     private float currentHealth;
-    //private HealthUI UI;
     private HealthBarUpdater floatingHealthBar;
     private bool isPlayer = false;
     private bool invincible = false;
@@ -67,11 +66,6 @@ public class Health : MonoBehaviour, IDamageable
             {
                 floatingHealthBar.UpdateHealthBar(currentHealth, MaxHealth);
             }
-            /*UI = objectToDisplayHealth.GetComponent<HealthUI>();
-            if (UI != null)
-            {
-                UI.Initialize(this);
-            }*/
         }
     }
 
@@ -111,11 +105,6 @@ public class Health : MonoBehaviour, IDamageable
             healthText.UpdateHPText(currentHealth, MaxHealth);
         }
 
-        /*if (UI != null )
-        {
-            UI.UpdateText();
-        }*/
-
         if (currentHealth <= 0)
         {
             Die();
@@ -133,10 +122,6 @@ public class Health : MonoBehaviour, IDamageable
 
     void Die()
     {
-        /*if (UI != null && !isPlayer)
-        {
-            Destroy(UI.gameObject);
-        }*/
         if (floatingHealthBar != null && !isPlayer)
         {
             Destroy(floatingHealthBar.transform.parent.gameObject);
@@ -162,7 +147,6 @@ public class Health : MonoBehaviour, IDamageable
             {
                 healthText.UpdateHPText(currentHealth, MaxHealth);
             }
-            //UI.UpdateText();
         }
     }
 
@@ -178,7 +162,6 @@ public class Health : MonoBehaviour, IDamageable
     {
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, MaxHealth);
-        //UI?.UpdateText();
         floatingHealthBar?.UpdateHealthBar(currentHealth, MaxHealth);
         if (healthBarUpdater != null)
         {
@@ -197,7 +180,6 @@ public class Health : MonoBehaviour, IDamageable
         {
             currentHealth = Mathf.Clamp(value, 0.0f, MaxHealth);
             floatingHealthBar?.UpdateHealthBar(currentHealth, MaxHealth);
-            //UI?.UpdateText();
             if (healthBarUpdater != null)
             {
                 healthBarUpdater.UpdateHealthBar(currentHealth, MaxHealth);

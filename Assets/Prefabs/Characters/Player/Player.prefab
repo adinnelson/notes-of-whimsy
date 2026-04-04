@@ -195,9 +195,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   beathandler: {fileID: 0}
   firePoint: {fileID: 5189259256147739164}
-  attackBeamPrefab: {fileID: 0}
+  attackBeamPrefab: {fileID: 3228955244108052592, guid: ab89f7ce67ec3ca498a8c605dd8f7bd2, type: 3}
   fireCooldownSeconds: 0.2
-  failedInputLockoutTime: 0.15
+  failedInputLockoutTime: 0.3
+  dashInvulnerabilityDuration: 0.2
 --- !u!114 &1155841396824913759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,8 +275,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   enemyMaxHealth: 100
-  healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
+  healthPrefab: {fileID: 8085078092535345474, guid: 59df34ffd7f21d448abc2c2c6469964d, type: 3}
   healthBarUpdater: {fileID: 0}
+  healthText: {fileID: 0}
+  healthBarVerticalOffset: 1
   whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
   defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   flashTime: 0.1
