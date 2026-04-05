@@ -569,6 +569,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 326566665961250878, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 24.328
+      objectReference: {fileID: 0}
+    - target: {fileID: 326566665961250878, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -332.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 326566665961250878, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 118.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611734167811017745, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 62.5755
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611734167811017745, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 62.5755
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611734167811017745, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -332.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611734167811017745, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 127.04
+      objectReference: {fileID: 0}
     - target: {fileID: 2899716476014781224, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
       propertyPath: m_Name
       value: PickupUIManager
@@ -620,6 +648,10 @@ PrefabInstance:
     - target: {fileID: 6327309138378196849, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6677723215922088217, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
