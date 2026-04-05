@@ -9,6 +9,8 @@ public class SpellEditBar : MonoBehaviour
 
     [SerializeField] private GameObject lockedOverlayPrefab;
 
+    [SerializeField] private GameObject backgroundColourDamperPrefab;
+    private GameObject backgroundColourDamper;
     private List<SpellBox> spellBoxes = new List<SpellBox>();
     private List<GameObject> lockedOverlays = new List<GameObject>();
 
@@ -63,7 +65,9 @@ public class SpellEditBar : MonoBehaviour
         playerInventory = FindObjectOfType<PlayerInventory>();
         playerAttack = FindObjectOfType<PlayerAttack>();
 
-        print(transform.childCount);
+        backgroundColourDamper = Instantiate(backgroundColourDamperPrefab, transform.position, transform.rotation);
+        backgroundColourDamper.transform.SetParent(gameObject.transform);
+        backgroundColourDamper.SetActive(false);
 
         // save spell boxes references
         for (int i = 0; i < transform.childCount; i++)
@@ -95,6 +99,7 @@ public class SpellEditBar : MonoBehaviour
     public void Open(SpellDataSO newSpell = null, GameObject pickupable = null, bool isCinematic = false)
     {
         gameObject.SetActive(true);
+        backgroundColourDamper.SetActive(true);
 
         if(beatHandler == null)
         {
@@ -133,6 +138,7 @@ public class SpellEditBar : MonoBehaviour
     public void Close()
     {
         gameObject.SetActive(false);
+        backgroundColourDamper.SetActive(false);
         beatHandler.gameObject.SetActive(true);
         spellToBePlaced = null;
         associatedSpellPickup = null;
