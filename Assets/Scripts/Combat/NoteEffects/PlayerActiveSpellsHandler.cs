@@ -12,6 +12,7 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     // Yellow Note needed prefabs
     [SerializeField] private LayerMask enemyMask;
     [SerializeField] private LightningVisualLogic lightningEffect;
+    [SerializeField] private GameObject stunOverlay;
 
     [SerializeField] private LaserBeam laserPrefab;
 
@@ -93,7 +94,7 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
                 break;
             case 2:
                 YellowNoteEffectHandler yellowNoteEffectHandler = this.gameObject.AddComponent<YellowNoteEffectHandler>();
-                yellowNoteEffectHandler.CustomYellowInit(lightningEffect, enemyMask);
+                yellowNoteEffectHandler.CustomYellowInit(lightningEffect, enemyMask, stunOverlay);
                 slotSpell.colour = Color.yellow;
                 slotSpell.noteEffectHandler = yellowNoteEffectHandler;
 

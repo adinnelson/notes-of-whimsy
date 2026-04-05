@@ -7,7 +7,12 @@ public class SpellEditBar : MonoBehaviour
 {
     public const string SPELL_BAR_ATTACK_LOCK_KEY = "spellbar";
 
+    [SerializeField] private GameObject lockedOverlayPrefab;
+
     private List<SpellBox> spellBoxes = new List<SpellBox>();
+    private List<GameObject> lockedOverlays = new List<GameObject>();
+
+
     private PlayerActiveSpellsHandler playerActiveSpellsHandler;
     private PlayerInventory playerInventory;
     private PlayerAttack playerAttack;
@@ -58,6 +63,8 @@ public class SpellEditBar : MonoBehaviour
         playerInventory = FindObjectOfType<PlayerInventory>();
         playerAttack = FindObjectOfType<PlayerAttack>();
 
+        print(transform.childCount);
+
         // save spell boxes references
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -70,6 +77,13 @@ public class SpellEditBar : MonoBehaviour
             {
                 spellBox.Init(i + 1);
                 spellBoxes.Add(spellBox);
+
+                GameObject lockOverlay = Instantiate(lockedOverlayPrefab, spellBox.transform.position - Vector3.forward, spellBox.transform.rotation);
+                lockedOverlays.Add(lockOverlay);
+                lockOverlay.SetActive(false);
+
+                lockOverlay.transform.SetParent(spellBox.transform);
+
             }
         }
 
@@ -132,8 +146,8 @@ public class SpellEditBar : MonoBehaviour
     {
         for(int i = 1;i <= PlayerActiveSpellsHandler.SPELL_SLOT_NUM;i++)
         {
-            int childCount = spellBoxes[i - 1].transform.childCount;
-            if(childCount > 0) Destroy(spellBoxes[i - 1].transform.GetChild(0).gameObject);
+            //int childCount = spellBoxes[i - 1].transform.childCount;
+            //if(childCount > 0) Destroy(spellBoxes[i - 1].transform.GetChild(0).gameObject);
             if(!playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i)) continue;
             if(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i) == null) continue;
             GameObject spellIconPrefab = playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i).SpellIcon;
@@ -148,10 +162,12 @@ public class SpellEditBar : MonoBehaviour
             if(playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i))
             {
                 spellBoxes[i-1].SetColour(Color.darkGray);   
+                lockedOverlays[i-1].SetActive(false);
             } 
             else
             {
                 spellBoxes[i-1].SetColour(Color.grey);
+                lockedOverlays[i-1].SetActive(true);
             }
         }
     }

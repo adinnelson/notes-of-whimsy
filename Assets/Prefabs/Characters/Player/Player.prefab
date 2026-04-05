@@ -303,6 +303,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   lightningEffect: {fileID: 7702718193461565169, guid: ebeea1f957af4c14d92910c4860b94ed, type: 3}
+  stunOverlay: {fileID: 2058985564057712222, guid: b3d75d07909eeb047b76d5e7c1c45e76, type: 3}
   laserPrefab: {fileID: -5741139717231234517, guid: 3e9e1b16b71bbd940954b08ad1827808, type: 3}
   explosion: {fileID: 8659360273826524317, guid: a3c244a8b81773849b6802e47ae1bd09, type: 3}
   whirlPool: {fileID: 287630347529981786, guid: 8f663a66e6225e5438d9db062550419f, type: 3}

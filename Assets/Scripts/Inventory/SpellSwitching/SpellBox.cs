@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 public class SpellBox : MonoBehaviour, IPointerClickHandler
 {
     private SpellEditBar spellEditBar;
-    [SerializeField]
     private GameObject spellIcon = null;
     
     private int slotId;
