@@ -26,8 +26,12 @@ public class PlayerStats : MonoBehaviour
     public float Speed => maxSpeed + maxSpeedBonus;
     public int MaxHealth => maxHealth + maxHealthBonus;
     public int Damage => maxDamage + maxDamageBonus;
-    public float BaseSpeed => maxSpeed; //added for PlayerMovement to scale the acceleration to the speed boostable item
+    public float BaseSpeed => maxSpeed; //added for PlayerMovement to scale the acceleration to the speed boostable item -> CURRENT: not using a scaling acceleration
 
+    public event Action<int> OnMaxHealthIncreased;
+    public event Action<float> OnSpeedChanged;
+    public event Action<int> OnDamageChanged;
+    public event Action OnStatsReset;
 
     void Awake()
     {
@@ -40,6 +44,7 @@ public class PlayerStats : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
+
         health = GetComponent<Health>();
         if (health == null)
         {
@@ -54,11 +59,10 @@ public class PlayerStats : MonoBehaviour
         ProgressFloor.OnEndSceneReached -= ResetStats;
     }
 
-    public event Action<int> OnMaxHealthIncreased;
-
     public void AddMovementSpeed(float amount)
     {
         maxSpeedBonus += amount;
+        OnSpeedChanged?.Invoke(Speed);
     }
 
     public void AddHealthBonus(int amount)
@@ -72,6 +76,7 @@ public class PlayerStats : MonoBehaviour
     public void AddDamageBonus(int amount)
     {
         maxDamageBonus += amount;
+        OnDamageChanged?.Invoke(Damage);
     }
 
     public void ResetStats()
@@ -80,5 +85,9 @@ public class PlayerStats : MonoBehaviour
         maxHealthBonus = 0;
         maxDamageBonus = 0;
         health.CurrentHealth = MaxHealth;
+
+        OnSpeedChanged?.Invoke(Speed);
+        OnDamageChanged?. Invoke(Damage);
+        OnStatsReset?.Invoke();
     }
 }

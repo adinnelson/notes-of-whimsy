@@ -202,7 +202,7 @@ public class PickupItem : MonoBehaviour
 
         if (spell != null)
         {
-            SpellPickupUI.Instance.Show(this);
+            playerInventory.TryToPickup(spell, gameObject);
             return;
         }
 
@@ -229,7 +229,7 @@ public class PickupItem : MonoBehaviour
 
         if (beatId != 0)
         {
-            return "Unlock a Beat Slot!";
+            return "Press <e> to unlock a Beat Slot! \n\nPress <noparse><i></noparse> to open inventory";
         }
 
         BoostableItem boost = GetComponent<BoostableItem>();
@@ -257,15 +257,15 @@ public class PickupItem : MonoBehaviour
         switch (spell.SpellType)
         {
             case ItemType.Purple:
-                return "Press <e> to pick up Laserbeam Spell";
+                return "Press <e> to pickup Laserbeam \n\nPress <noparse><i></noparse> to close inventory";
             case ItemType.Blue:
-                return "Press <e> to pick up Whirlpool Spell";
+                return "Press <e> to pickup Whirlpool \n\nPress <noparse><i></noparse> to close inventory";
             case ItemType.Yellow:
-                return "Press <e> to pick up Stun Spell";
+                return "Press <e> to pickup Stun \n\nPress <noparse><i></noparse> to close inventory";
             case ItemType.Pink:
-                return "Press <e> to pick up Fireball Spell";
+                return "Press <e> to pickup Fireball \n\nPress <noparse><i></noparse> to close inventory";
         }
-        return "Press <e> to pick up Spell";
+        return "Press <e> to pickup Spell";
     }
 
     private void OnDestroy()
@@ -274,6 +274,7 @@ public class PickupItem : MonoBehaviour
 
         if (currentActive == this)
         {
+            SetVisual(false);
             currentActive = null;
         }
 
