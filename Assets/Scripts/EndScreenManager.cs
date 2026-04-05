@@ -20,6 +20,7 @@ public class EndScreenManager : MonoBehaviour
     {
         // change this to load the actual main menu scene when it is created
         // the scene must be added to the build settings for this to work
+        GoldManager.Instance.ResetGold();
         SceneManager.LoadScene("StartMenu");
     }
 }

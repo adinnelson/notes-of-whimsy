@@ -5,12 +5,13 @@ using System.Collections.Generic;
 
 public class SpellEditBar : MonoBehaviour
 {
+    public const string SPELL_BAR_ATTACK_LOCK_KEY = "spellbar";
+
     private List<SpellBox> spellBoxes = new List<SpellBox>();
     private PlayerActiveSpellsHandler playerActiveSpellsHandler;
     private PlayerInventory playerInventory;
+    private PlayerAttack playerAttack;
     private InputSystem_Actions inputActions;
-
-
 
     enum Setting
     {
@@ -49,6 +50,7 @@ public class SpellEditBar : MonoBehaviour
 
         playerActiveSpellsHandler = FindObjectOfType<PlayerActiveSpellsHandler>();
         playerInventory = FindObjectOfType<PlayerInventory>();
+        playerAttack = FindObjectOfType<PlayerAttack>();
 
         // save spell boxes references
         for (int i = 0; i < transform.childCount; i++)
@@ -87,6 +89,8 @@ public class SpellEditBar : MonoBehaviour
 
         UpdateIcons();
         UpdateSpellBox();
+
+        playerAttack.AddAttackLock(SPELL_BAR_ATTACK_LOCK_KEY);
     }
 
     // close
@@ -96,6 +100,8 @@ public class SpellEditBar : MonoBehaviour
         spellToBePlaced = null;
         associatedSpellPickup = null;
         initialSlotId = null;
+
+        playerAttack.RemoveAttackLock(SPELL_BAR_ATTACK_LOCK_KEY);
     }
 
     // reloads icons

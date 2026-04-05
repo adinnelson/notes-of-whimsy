@@ -39,6 +39,10 @@ public class FrogEnemy : EnemyBase
                 Physics2D.IgnoreCollision(frogCol, playerCol);
             }
         }
+
+        int zSub = (int)(gameObject.transform.position.y / GameManager.Z_RANGE);
+
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.y - GameManager.Z_RANGE * zSub);
     }
 
     // Allows the frog enemy to attack whenever its beat logic triggers.
