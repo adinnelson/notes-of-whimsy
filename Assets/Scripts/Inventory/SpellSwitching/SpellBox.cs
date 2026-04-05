@@ -17,6 +17,8 @@ public class SpellBox : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if(spellEditBar.InCinematic) return;
+
         spellEditBar.SpellBoxClicked(slotId);
     }
 
