@@ -244,6 +244,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
+      propertyPath: mapPool.Array.size
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
+      propertyPath: 'mapPool.Array.data[12]'
+      value: 
+      objectReference: {fileID: 4018733220149947901, guid: fe9255af43aea0c4593bab6b7de9d8c6, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -678,6 +686,14 @@ PrefabInstance:
     - target: {fileID: 5786938354391600605, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
       propertyPath: m_Name
       value: SpellPickupUIManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327309138378196849, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6327309138378196849, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6389477975202821523, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
       propertyPath: m_LocalPosition.x
