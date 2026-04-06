@@ -105,6 +105,8 @@ public class DeerBoss : EnemyBase
 
     private BeatHandler beatHandler;
 
+    private SpellEditBar spellEditBar;
+
     private BossAttack currentAttack;
     private BossPhase currentPhase = BossPhase.First;
     private int sequenceBeat = 0;     // 0-7 across two 4-beat bars
@@ -185,6 +187,7 @@ public class DeerBoss : EnemyBase
     {
         gameManager = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
         beatHandler = GameObject.Find("BeatBar")?.GetComponent<BeatHandler>();
+        spellEditBar = FindObjectOfType<SpellEditBar>(true);
 
         if (gameManager == null)
         {
@@ -718,21 +721,21 @@ public class DeerBoss : EnemyBase
         if (!phase2Triggered && ratio <= 0.66f)
         {
             phase2Triggered = true;
-            StartCoroutine(PhaseTransitionRoutine(BossPhase.Second, phase2BPM));
+            PhaseTransitionRoutine(BossPhase.Second, phase2BPM);
             return true;
         }
 
         if (!phase3Triggered && ratio <= 0.33f)
         {
             phase3Triggered = true;
-            StartCoroutine(PhaseTransitionRoutine(BossPhase.Third, phase3BPM));
+            PhaseTransitionRoutine(BossPhase.Third, phase3BPM);
             return true;
         }
 
         return false;
     }
 
-    private IEnumerator PhaseTransitionRoutine(BossPhase newPhase, float newBPM)
+    private void PhaseTransitionRoutine(BossPhase newPhase, float newBPM)
     {
         inPhaseTransition = true;
         currentPhase = newPhase;
@@ -763,10 +766,9 @@ public class DeerBoss : EnemyBase
         // TODO: Hook inventory UI here 
         // Show inventory, randomize unlocked beat / spell order multiple times
         // over a few seconds, pause on final combo, then close inventory.
-        yield return new WaitForSecondsRealtime(3.0f);
+        //yield return new WaitForSecondsRealtime(3.0f);
+        spellEditBar.Open(isCinematic: true);
 
-        // Resume game
-        Time.timeScale = 1.0f;
 
         // Apply new BPM — all beat-driven logic automatically speeds up
         beatHandler.SetBPM(newBPM);

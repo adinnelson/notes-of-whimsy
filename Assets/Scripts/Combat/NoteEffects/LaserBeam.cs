@@ -56,6 +56,11 @@ public class LaserBeam : MonoBehaviour
 
     private void Update()
     {
+        if(Time.timeScale == 0)
+        {
+            return;
+        }
+
         if (startTransform == null || cam == null || Mouse.current == null)
         {
             if (!loggedMissingRefs)
