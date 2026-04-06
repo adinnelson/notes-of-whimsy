@@ -65,18 +65,18 @@ public class RoomInfo : MonoBehaviour
     private bool useCustomCameraBounds;
 
     [SerializeField]
-    [Range(0.0f, 100.0f)]
+    [Range(0.0f, 500.0f)]
     private float customMaxSqrHorizontalCameraDistance = 5.0f;
 
     [SerializeField]
-    [Range(0.0f, 100.0f)]
+    [Range(0.0f, 500.0f)]
     private float customMaxSqrVerticalCameraDistance = 5.0f;
 
     [SerializeField]
     private CameraBoundsShape customCameraBoundsShape = CameraBoundsShape.Cross;
 
     [SerializeField]
-    [Range(0.1f, 10.0f)]
+    [Range(0.1f, 100.0f)]
     private float customCrossArmHalfThickness = 1.0f;
 
     [SerializeField]
@@ -84,6 +84,18 @@ public class RoomInfo : MonoBehaviour
 
     [SerializeField]
     private float customCameraBoundsOffsetY = 0.0f;
+
+    [SerializeField]
+    private float customHorizontalArmOffsetX = 0.0f;
+
+    [SerializeField]
+    private float customHorizontalArmOffsetY = 0.0f;
+
+    [SerializeField]
+    private float customVerticalArmOffsetX = 0.0f;
+
+    [SerializeField]
+    private float customVerticalArmOffsetY = 0.0f;
 
     private ShopManager shopManager;
 
@@ -376,6 +388,26 @@ public class RoomInfo : MonoBehaviour
         return customCameraBoundsOffsetY;
     }
 
+    public float GetCustomHorizontalArmOffsetX()
+    {
+        return customHorizontalArmOffsetX;
+    }
+
+    public float GetCustomHorizontalArmOffsetY()
+    {
+        return customHorizontalArmOffsetY;
+    }
+
+    public float GetCustomVerticalArmOffsetX()
+    {
+        return customVerticalArmOffsetX;
+    }
+
+    public float GetCustomVerticalArmOffsetY()
+    {
+        return customVerticalArmOffsetY;
+    }
+
     public bool IsCompleted()
     {
         return isCompleted;
@@ -501,18 +533,21 @@ public class RoomInfo : MonoBehaviour
 
         float horizontalHalfLength = Mathf.Sqrt(customMaxSqrHorizontalCameraDistance);
         float verticalHalfLength = Mathf.Sqrt(customMaxSqrVerticalCameraDistance);
-        Vector3 center = transform.position;
+        Vector3 baseCenter = transform.position + new Vector3(customCameraBoundsOffsetX, customCameraBoundsOffsetY, 0f);
 
         Gizmos.color = Color.cyan;
 
         if (customCameraBoundsShape == CameraBoundsShape.Box)
         {
-            Gizmos.DrawWireCube(center, new Vector3(horizontalHalfLength * 2f, verticalHalfLength * 2f, 0f));
+            Gizmos.DrawWireCube(baseCenter, new Vector3(horizontalHalfLength * 2f, verticalHalfLength * 2f, 0f));
             return;
         }
 
-        Gizmos.DrawWireCube(center, new Vector3(horizontalHalfLength * 2f, customCrossArmHalfThickness * 2f, 0f));
-        Gizmos.DrawWireCube(center, new Vector3(customCrossArmHalfThickness * 2f, verticalHalfLength * 2f, 0f));
+        Vector3 horizontalCenter = baseCenter + new Vector3(customHorizontalArmOffsetX, customHorizontalArmOffsetY, 0f);
+        Vector3 verticalCenter = baseCenter + new Vector3(customVerticalArmOffsetX, customVerticalArmOffsetY, 0f);
+
+        Gizmos.DrawWireCube(horizontalCenter, new Vector3(horizontalHalfLength * 2f, customCrossArmHalfThickness * 2f, 0f));
+        Gizmos.DrawWireCube(verticalCenter, new Vector3(customCrossArmHalfThickness * 2f, verticalHalfLength * 2f, 0f));
     }
 
     private void CullRoomLockObjects()
