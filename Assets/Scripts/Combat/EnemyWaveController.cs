@@ -7,21 +7,22 @@ public class EnemyWaveController : MonoBehaviour
     // Has the player entered the room before?
     private bool hasEntered = false;
     private bool wavesComplete = false;
-    private int numberOfWaves;
     private bool isCombatRoom;
     private bool spawningEnemies = false;
     private int currentWave = 0;
     private int pendingSpawns = 0;
+    // Used for wave difficulty scaling with progression
+    private int roomsCleared = 0;
 
     private List<GameObject> spawnedEnemies = new List<GameObject>();
     private List<GameObject> enemyPrefabs = new List<GameObject>();
 
     private RoomInfo roomInfo;
 
-    private const int BASE_ENEMIES_PER_WAVE = 1;
-    private const float GENERIC_WAVE_ENEMY_SCALAR = 1.5f;
-    private const float CHALLENGE_WAVE_SCALAR = 1.34f;
+    private const int BASE_ENEMIES = 1;
     private const float ENEMY_SPAWN_EFFECT_DURATION = 1.0f;
+    // Hard cap, likely never reached due to wave specific caps
+    private const int MAX_ENEMY_SPAWNS = 8;
 
      private void Awake()
     {
@@ -32,7 +33,6 @@ public class EnemyWaveController : MonoBehaviour
     void Start()
     {
         enemyPrefabs = roomInfo.GetEnemyPrefabs();
-        numberOfWaves = roomInfo.GetNumberOfWaves();
         isCombatRoom = roomInfo.GetRoomType() == RoomTypes.Combat;
     }
 
@@ -41,6 +41,8 @@ public class EnemyWaveController : MonoBehaviour
     {
         if (!hasEntered || roomInfo.GetSafety() || spawningEnemies)
             return;
+
+        int numberOfWaves = CalculateWaveCount();
 
         // Check if all enemies in the current wave have been defeated
         if (currentWave >= 1 && spawnedEnemies.Count == 0)
@@ -51,10 +53,12 @@ public class EnemyWaveController : MonoBehaviour
             }
         }
 
+        // If all waves have been spawned and all enemies defeated, unlock the room
         if (currentWave >= numberOfWaves && spawnedEnemies.Count == 0 && !wavesComplete && !spawningEnemies)
         {
             wavesComplete = true;
             roomInfo.UnlockRoom();
+            roomsCleared += 1;
         }
     }
 
@@ -73,12 +77,27 @@ public class EnemyWaveController : MonoBehaviour
     }
 
     /// <summary>
+    /// Calculate the number of waves as current floor (one-indexed).
+    /// Adds one extra wave for combat rooms.
+    /// </summary>
+    /// <returns></returns>
+    public int CalculateWaveCount()
+    {
+        int numberOfWaves = ProgressFloor.GetFloorsCompleted() + 1;
+        if (isCombatRoom)
+        {
+            numberOfWaves++;
+        }
+        return numberOfWaves;
+    }
+
+    /// <summary>
     /// When the player enters the room for the first time, lock the room and start spawning enemy waves. If the room is already safe or has been entered before, do nothing.
     /// </summary>
     /// <param name="collision"></param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (hasEntered || roomInfo.GetSafety() || numberOfWaves <= 0)
+        if (hasEntered || roomInfo.GetSafety() || CalculateWaveCount() <= 0)
         {
             hasEntered = true;
             return;
@@ -97,20 +116,32 @@ public class EnemyWaveController : MonoBehaviour
     /// </summary>
     private void SpawnEnemyWave()
     {
-        currentWave++;
         spawningEnemies = true;
 
-        float waveMultiplier = isCombatRoom ? CHALLENGE_WAVE_SCALAR : GENERIC_WAVE_ENEMY_SCALAR;
-        int enemyCount = BASE_ENEMIES_PER_WAVE +
-                        (int)(currentWave * waveMultiplier);
+        int enemiesToSpawn = CalculateEnemiesToSpawn();
 
-        pendingSpawns = enemyCount;
-        for (int i = 0; i < enemyCount; i++)
+        pendingSpawns = enemiesToSpawn;
+        for (int i = 0; i < enemiesToSpawn; i++)
         {
             // TODO: Replace with actual floor bounds (with padding) instead of random range
             Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), 0);
             SpawnRandomEnemy(spawnPosition);
         }
+
+        // Calculate number of enemies to spawn
+        int CalculateEnemiesToSpawn()
+        {
+            int roomProgression = roomsCleared / 10;
+            int floorProgression = ProgressFloor.GetFloorsCompleted();
+            int waveProgression = currentWave;
+            int totalEnemies = BASE_ENEMIES + roomProgression + floorProgression + waveProgression;
+            int maxEnemies = Mathf.Min(CalculateWaveCount() * 2, MAX_ENEMY_SPAWNS);
+
+            totalEnemies = Mathf.Min(totalEnemies, maxEnemies);
+            return totalEnemies;
+        }
+
+        currentWave++;
     }
 
     /// <summary>

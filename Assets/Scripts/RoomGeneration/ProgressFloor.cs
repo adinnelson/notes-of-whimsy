@@ -31,10 +31,12 @@ public class ProgressFloor : MonoBehaviour
     {
         health.OnDeath -= HandleDeath;
     }
+
     private void Start()
     {
         currentScene = SceneManager.GetActiveScene();
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -57,16 +59,36 @@ public class ProgressFloor : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Hard reset the game by destroying the player, game manager, music manager, and beat handler.
+    /// </summary>
     public static void HardReset()
     {
         GameObject player = GameObject.FindWithTag("Player");
         GameObject gm = GameObject.FindWithTag("GameManager");
-        GameObject mm = FindObjectOfType<MusicManager>()?.gameObject;
-        BeatHandler beatHandler = FindObjectOfType<BeatHandler>();
+        GameObject mm = FindFirstObjectByType<MusicManager>()?.gameObject;
+        BeatHandler beatHandler = FindFirstObjectByType<BeatHandler>();
 
         Destroy(player);
         Destroy(gm);
         Destroy(mm);
+    }
+
+    /// <summary>
+    /// Invoked on demo end screen, calls HardReset to reset progress.
+    /// </summary>
+    public static void InvokeEndSceneReached()
+    {
+        HardReset();
+        OnEndSceneReached?.Invoke();
+    }
+
+    /// <summary>
+    /// Returns the number of portals the player has passed through.
+    /// </summary>
+    public static int GetFloorsCompleted()
+    {
+        return floorsCompleted;
     }
 
     /// <summary>
@@ -87,19 +109,13 @@ public class ProgressFloor : MonoBehaviour
         }
         else
         {
-            
+
             // better option is to have the event pop but some elements do not get destroyed when the parent enemy spawns them since they are not children of the enemy
             // so until that is fixed, reloading the scene is the best option to reset everything.
             // OnFloorProgressed?.Invoke();
             SceneManager.LoadScene(currentScene.name);
 
         }
-    }
-
-    public static void InvokeEndSceneReached()
-    {
-        HardReset();
-        OnEndSceneReached?.Invoke();
     }
 
     private void HandleDeath()
