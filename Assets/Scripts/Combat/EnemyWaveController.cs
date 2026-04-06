@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.Tilemaps;
 
 public class EnemyWaveController : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class EnemyWaveController : MonoBehaviour
 
     private List<GameObject> spawnedEnemies = new List<GameObject>();
     private List<GameObject> enemyPrefabs = new List<GameObject>();
+    private BoxCollider2D roomSpawnableBoundsCollider;
 
     private RoomInfo roomInfo;
 
@@ -34,6 +36,7 @@ public class EnemyWaveController : MonoBehaviour
     {
         enemyPrefabs = roomInfo.GetEnemyPrefabs();
         isCombatRoom = roomInfo.GetRoomType() == RoomTypes.Combat;
+        roomSpawnableBoundsCollider = GetComponent<BoxCollider2D>();
     }
 
     // Update is called once per frame
@@ -123,10 +126,10 @@ public class EnemyWaveController : MonoBehaviour
         pendingSpawns = enemiesToSpawn;
         for (int i = 0; i < enemiesToSpawn; i++)
         {
-            // TODO: Replace with actual floor bounds (with padding) instead of random range
-            Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), 0);
+            Vector3 spawnPosition = GetRandomSpawnPosition();
             SpawnRandomEnemy(spawnPosition);
         }
+        currentWave++;
 
         // Calculate number of enemies to spawn
         int CalculateEnemiesToSpawn()
@@ -141,7 +144,15 @@ public class EnemyWaveController : MonoBehaviour
             return totalEnemies;
         }
 
-        currentWave++;
+        // Get a random position within the bounds of the room's BoxCollider2D
+        Vector3 GetRandomSpawnPosition()
+        {
+            Bounds bounds = roomSpawnableBoundsCollider.bounds;
+            float x = Random.Range(bounds.min.x, bounds.max.x);
+            float y = Random.Range(bounds.min.y, bounds.max.y);
+            Vector3 spawnPosition = new Vector3(x, y, 0);
+            return spawnPosition;
+        }
     }
 
     /// <summary>
