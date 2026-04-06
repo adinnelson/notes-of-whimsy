@@ -138,7 +138,7 @@ public class EnemyWaveController : MonoBehaviour
             int floorProgression = ProgressFloor.GetFloorsCompleted();
             int waveProgression = currentWave;
             int totalEnemies = BASE_ENEMIES + roomProgression + floorProgression + waveProgression;
-            int maxEnemies = Mathf.Min(CalculateWaveCount() * 2, MAX_ENEMY_SPAWNS);
+            int maxEnemies = Mathf.Min((CalculateWaveCount() - 1) * 2, MAX_ENEMY_SPAWNS);
 
             totalEnemies = Mathf.Min(totalEnemies, maxEnemies);
             return totalEnemies;
