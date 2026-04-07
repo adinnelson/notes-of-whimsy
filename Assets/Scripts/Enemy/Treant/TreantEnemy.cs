@@ -12,7 +12,7 @@ public class TreantEnemy : EnemyBase
     [Header("Treant - Charge")]
     [SerializeField] private float chargeSpeed = 16.0f;
     [SerializeField] private float telegraphJitterDegrees = 10.0f;
-    [SerializeField] private GameObject telegraphVisual;
+    [SerializeField] private ChargeIndicator telegraphVisual;
     [SerializeField] private string wallTag = "Walls";
 
     [Header("Treant - Wall Stun")]
@@ -354,18 +354,11 @@ public class TreantEnemy : EnemyBase
             return;
         }
 
-        float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
-
         float chargeDistance = RaycastWallDistance(direction);
 
-        telegraphVisual.transform.localScale = new Vector3(
-            chargeDistance,
-            telegraphBaseScale.y,
-            telegraphBaseScale.z
-        );
+        telegraphVisual.Init((Vector2)transform.position - 0.25f * Vector2.up, (Vector2)transform.position + direction * chargeDistance);
 
-        telegraphVisual.SetActive(true);
+        telegraphVisual.gameObject.SetActive(true);
     }
 
     private void HideTelegraphVisual()
@@ -375,7 +368,9 @@ public class TreantEnemy : EnemyBase
             return;
         }
 
-        telegraphVisual.SetActive(false);
+        telegraphVisual.ReleaseIndicator();
+
+        telegraphVisual.gameObject.SetActive(false);
     }
 
     private void SetHitboxActive(bool active)

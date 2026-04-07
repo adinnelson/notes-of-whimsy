@@ -15,7 +15,6 @@ public class ChargeIndicator : MonoBehaviour
         );
 
     [SerializeField] private List<Sprite> sprites = new List<Sprite>();
-    [SerializeField] private GameObject indicatorSectionPrefab;
     private const float indicatorScale = 0.5f;
 
 
