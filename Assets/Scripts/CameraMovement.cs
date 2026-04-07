@@ -63,6 +63,10 @@ public class CameraMovement : MonoBehaviour
     private CameraBoundsShape activeCameraBoundsShape;
     private float activeCameraBoundsOffsetX;
     private float activeCameraBoundsOffsetY;
+    private float activeHorizontalArmOffsetX;
+    private float activeHorizontalArmOffsetY;
+    private float activeVerticalArmOffsetX;
+    private float activeVerticalArmOffsetY;
 
 
 
@@ -98,6 +102,10 @@ public class CameraMovement : MonoBehaviour
         CameraBoundsShape gizmoShape = defaultCameraBoundsShape;
         float gizmoOffsetX = 0.0f;
         float gizmoOffsetY = 0.0f;
+        float gizmoHorizontalArmOffsetX = 0.0f;
+        float gizmoHorizontalArmOffsetY = 0.0f;
+        float gizmoVerticalArmOffsetX = 0.0f;
+        float gizmoVerticalArmOffsetY = 0.0f;
 
         RoomInfo roomInfo = currentRoomTransform.GetComponent<RoomInfo>();
         if (roomInfo != null && roomInfo.UseCustomCameraBounds())
@@ -108,20 +116,27 @@ public class CameraMovement : MonoBehaviour
             gizmoShape = roomInfo.GetCustomCameraBoundsShape();
             gizmoOffsetX = roomInfo.GetCustomCameraBoundsOffsetX();
             gizmoOffsetY = roomInfo.GetCustomCameraBoundsOffsetY();
+            gizmoHorizontalArmOffsetX = roomInfo.GetCustomHorizontalArmOffsetX();
+            gizmoHorizontalArmOffsetY = roomInfo.GetCustomHorizontalArmOffsetY();
+            gizmoVerticalArmOffsetX = roomInfo.GetCustomVerticalArmOffsetX();
+            gizmoVerticalArmOffsetY = roomInfo.GetCustomVerticalArmOffsetY();
         }
 
         float horizontalArmHalfLength = Mathf.Sqrt(gizmoMaxSqrHorizontal);
         float verticalArmHalfLength = Mathf.Sqrt(gizmoMaxSqrVertical);
-        Vector3 center = currentRoomTransform.position + new Vector3(gizmoOffsetX, gizmoOffsetY, 0f);
+        Vector3 baseCenter = currentRoomTransform.position + new Vector3(gizmoOffsetX, gizmoOffsetY, 0f);
 
         if (gizmoShape == CameraBoundsShape.Box)
         {
-            Gizmos.DrawWireCube(center, new Vector3(horizontalArmHalfLength * 2f, verticalArmHalfLength * 2f, 0f));
+            Gizmos.DrawWireCube(baseCenter, new Vector3(horizontalArmHalfLength * 2f, verticalArmHalfLength * 2f, 0f));
             return;
         }
 
-        Gizmos.DrawWireCube(center, new Vector3(horizontalArmHalfLength * 2f, gizmoArmHalfThickness * 2f, 0f));
-        Gizmos.DrawWireCube(center, new Vector3(gizmoArmHalfThickness * 2f, verticalArmHalfLength * 2f, 0f));
+        Vector3 horizontalCenter = baseCenter + new Vector3(gizmoHorizontalArmOffsetX, gizmoHorizontalArmOffsetY, 0f);
+        Vector3 verticalCenter = baseCenter + new Vector3(gizmoVerticalArmOffsetX, gizmoVerticalArmOffsetY, 0f);
+
+        Gizmos.DrawWireCube(horizontalCenter, new Vector3(horizontalArmHalfLength * 2f, gizmoArmHalfThickness * 2f, 0f));
+        Gizmos.DrawWireCube(verticalCenter, new Vector3(gizmoArmHalfThickness * 2f, verticalArmHalfLength * 2f, 0f));
 
     }
 #endif
@@ -164,6 +179,10 @@ public class CameraMovement : MonoBehaviour
             activeCameraBoundsShape = roomInfo.GetCustomCameraBoundsShape();
             activeCameraBoundsOffsetX = roomInfo.GetCustomCameraBoundsOffsetX();
             activeCameraBoundsOffsetY = roomInfo.GetCustomCameraBoundsOffsetY();
+            activeHorizontalArmOffsetX = roomInfo.GetCustomHorizontalArmOffsetX();
+            activeHorizontalArmOffsetY = roomInfo.GetCustomHorizontalArmOffsetY();
+            activeVerticalArmOffsetX = roomInfo.GetCustomVerticalArmOffsetX();
+            activeVerticalArmOffsetY = roomInfo.GetCustomVerticalArmOffsetY();
             return;
         }
 
@@ -173,6 +192,10 @@ public class CameraMovement : MonoBehaviour
         activeCameraBoundsShape = defaultCameraBoundsShape;
         activeCameraBoundsOffsetX = 0.0f;
         activeCameraBoundsOffsetY = 0.0f;
+        activeHorizontalArmOffsetX = 0.0f;
+        activeHorizontalArmOffsetY = 0.0f;
+        activeVerticalArmOffsetX = 0.0f;
+        activeVerticalArmOffsetY = 0.0f;
     }
 
     private void GetSqrDistanceToPlayer()
@@ -201,17 +224,19 @@ public class CameraMovement : MonoBehaviour
         Vector3 playerPosition = playerTransform.position;
         playerPosition.z = CAMERA_Z_OFFSET;
 
-        // Apply bounds offset to get the center of the camera bounds region
         Vector3 boundsCenterOffset = roomCenter + new Vector3(activeCameraBoundsOffsetX, activeCameraBoundsOffsetY, 0f);
+        Vector2 playerPosition2D = new Vector2(playerPosition.x, playerPosition.y);
+        Vector2 boxCenter = new Vector2(boundsCenterOffset.x, boundsCenterOffset.y);
+        Vector2 horizontalArmCenter = boxCenter + new Vector2(activeHorizontalArmOffsetX, activeHorizontalArmOffsetY);
+        Vector2 verticalArmCenter = boxCenter + new Vector2(activeVerticalArmOffsetX, activeVerticalArmOffsetY);
 
-        Vector2 playerOffsetFromRoomCenter = new Vector2(
-            playerPosition.x - boundsCenterOffset.x,
-            playerPosition.y - boundsCenterOffset.y
-        );
         float horizontalArmHalfLength = Mathf.Sqrt(activeMaxSqrHorizontalDistanceFromCameraToRoomCenter);
         float verticalArmHalfLength = Mathf.Sqrt(activeMaxSqrVerticalDistanceFromCameraToRoomCenter);
         bool isPlayerInsideRoomCameraBounds = IsInsideCameraBounds(
-            playerOffsetFromRoomCenter,
+            playerPosition2D,
+            boxCenter,
+            horizontalArmCenter,
+            verticalArmCenter,
             horizontalArmHalfLength,
             verticalArmHalfLength,
             activeCrossArmHalfThickness,
@@ -221,20 +246,26 @@ public class CameraMovement : MonoBehaviour
         Vector3 desiredCameraPosition;
         if (isPlayerInsideRoomCameraBounds)
         {
-            desiredCameraPosition = Vector3.Lerp(boundsCenterOffset, playerPosition, insideBoundsFollowAmount);
+            Vector2 followAnchor = activeCameraBoundsShape == CameraBoundsShape.Box
+                ? boxCenter
+                : GetCrossFollowAnchor(playerPosition2D, horizontalArmCenter, verticalArmCenter, horizontalArmHalfLength, verticalArmHalfLength, activeCrossArmHalfThickness);
 
-            Vector2 desiredOffsetFromRoomCenter = new Vector2(
-                desiredCameraPosition.x - boundsCenterOffset.x,
-                desiredCameraPosition.y - boundsCenterOffset.y
+            Vector2 desiredPosition2D = Vector2.Lerp(
+                followAnchor,
+                playerPosition2D,
+                insideBoundsFollowAmount
             );
-            Vector2 clampedOffset = ClampOffsetToCameraBounds(
-                desiredOffsetFromRoomCenter,
+            Vector2 clampedPosition = ClampPositionToCameraBounds(
+                desiredPosition2D,
+                boxCenter,
+                horizontalArmCenter,
+                verticalArmCenter,
                 horizontalArmHalfLength,
                 verticalArmHalfLength,
                 activeCrossArmHalfThickness,
                 activeCameraBoundsShape
             );
-            desiredCameraPosition = new Vector3(boundsCenterOffset.x + clampedOffset.x, boundsCenterOffset.y + clampedOffset.y, CAMERA_Z_OFFSET);
+            desiredCameraPosition = new Vector3(clampedPosition.x, clampedPosition.y, CAMERA_Z_OFFSET);
         }
         else
         {
@@ -249,18 +280,21 @@ public class CameraMovement : MonoBehaviour
                 desiredCameraPosition = playerPosition - directionToPlayer * followRadius;
             }
 
-            Vector2 desiredOffsetFromRoomCenter = new Vector2(
-                desiredCameraPosition.x - boundsCenterOffset.x,
-                desiredCameraPosition.y - boundsCenterOffset.y
+            Vector2 desiredPosition2D = new Vector2(
+                desiredCameraPosition.x,
+                desiredCameraPosition.y
             );
-            Vector2 clampedOffset = ClampOffsetToCameraBounds(
-                desiredOffsetFromRoomCenter,
+            Vector2 clampedPosition = ClampPositionToCameraBounds(
+                desiredPosition2D,
+                boxCenter,
+                horizontalArmCenter,
+                verticalArmCenter,
                 horizontalArmHalfLength,
                 verticalArmHalfLength,
                 activeCrossArmHalfThickness,
                 activeCameraBoundsShape
             );
-            desiredCameraPosition = new Vector3(boundsCenterOffset.x + clampedOffset.x, boundsCenterOffset.y + clampedOffset.y, CAMERA_Z_OFFSET);
+            desiredCameraPosition = new Vector3(clampedPosition.x, clampedPosition.y, CAMERA_Z_OFFSET);
         }
 
         float appliedSmoothTime = isPlayerInsideRoomCameraBounds
@@ -277,51 +311,129 @@ public class CameraMovement : MonoBehaviour
         transform.position = new Vector3(transform.position.x, transform.position.y, CAMERA_Z_OFFSET);
     }
 
-    private bool IsInsideCameraBounds(Vector2 offset, float horizontalArmHalfLength, float verticalArmHalfLength, float armHalfThickness, CameraBoundsShape boundsShape)
+    private bool IsInsideCameraBounds(
+        Vector2 position,
+        Vector2 boxCenter,
+        Vector2 horizontalArmCenter,
+        Vector2 verticalArmCenter,
+        float horizontalArmHalfLength,
+        float verticalArmHalfLength,
+        float armHalfThickness,
+        CameraBoundsShape boundsShape
+    )
     {
         if (boundsShape == CameraBoundsShape.Box)
         {
-            return Mathf.Abs(offset.x) <= horizontalArmHalfLength && Mathf.Abs(offset.y) <= verticalArmHalfLength;
+            return Mathf.Abs(position.x - boxCenter.x) <= horizontalArmHalfLength
+                && Mathf.Abs(position.y - boxCenter.y) <= verticalArmHalfLength;
         }
 
-        return IsInsideCrossBounds(offset, horizontalArmHalfLength, verticalArmHalfLength, armHalfThickness);
+        return IsInsideCrossBounds(position, horizontalArmCenter, verticalArmCenter, horizontalArmHalfLength, verticalArmHalfLength, armHalfThickness);
     }
 
-    private Vector2 ClampOffsetToCameraBounds(Vector2 offset, float horizontalArmHalfLength, float verticalArmHalfLength, float armHalfThickness, CameraBoundsShape boundsShape)
+    private Vector2 ClampPositionToCameraBounds(
+        Vector2 position,
+        Vector2 boxCenter,
+        Vector2 horizontalArmCenter,
+        Vector2 verticalArmCenter,
+        float horizontalArmHalfLength,
+        float verticalArmHalfLength,
+        float armHalfThickness,
+        CameraBoundsShape boundsShape
+    )
     {
         if (boundsShape == CameraBoundsShape.Box)
         {
             return new Vector2(
-                Mathf.Clamp(offset.x, -horizontalArmHalfLength, horizontalArmHalfLength),
-                Mathf.Clamp(offset.y, -verticalArmHalfLength, verticalArmHalfLength)
+                Mathf.Clamp(position.x, boxCenter.x - horizontalArmHalfLength, boxCenter.x + horizontalArmHalfLength),
+                Mathf.Clamp(position.y, boxCenter.y - verticalArmHalfLength, boxCenter.y + verticalArmHalfLength)
             );
         }
 
-        return ClampOffsetToCrossBounds(offset, horizontalArmHalfLength, verticalArmHalfLength, armHalfThickness);
+        return ClampPositionToCrossBounds(position, horizontalArmCenter, verticalArmCenter, horizontalArmHalfLength, verticalArmHalfLength, armHalfThickness);
     }
 
-    private bool IsInsideCrossBounds(Vector2 offset, float horizontalArmHalfLength, float verticalArmHalfLength, float armHalfThickness)
+    private bool IsInsideCrossBounds(
+        Vector2 position,
+        Vector2 horizontalArmCenter,
+        Vector2 verticalArmCenter,
+        float horizontalArmHalfLength,
+        float verticalArmHalfLength,
+        float armHalfThickness
+    )
     {
-        bool insideHorizontalArm = Mathf.Abs(offset.x) <= horizontalArmHalfLength && Mathf.Abs(offset.y) <= armHalfThickness;
-        bool insideVerticalArm = Mathf.Abs(offset.x) <= armHalfThickness && Mathf.Abs(offset.y) <= verticalArmHalfLength;
+        bool insideHorizontalArm = IsInsideHorizontalArm(position, horizontalArmCenter, horizontalArmHalfLength, armHalfThickness);
+        bool insideVerticalArm = IsInsideVerticalArm(position, verticalArmCenter, verticalArmHalfLength, armHalfThickness);
         return insideHorizontalArm || insideVerticalArm;
     }
 
-    private Vector2 ClampOffsetToCrossBounds(Vector2 offset, float horizontalArmHalfLength, float verticalArmHalfLength, float armHalfThickness)
+    private Vector2 ClampPositionToCrossBounds(
+        Vector2 position,
+        Vector2 horizontalArmCenter,
+        Vector2 verticalArmCenter,
+        float horizontalArmHalfLength,
+        float verticalArmHalfLength,
+        float armHalfThickness
+    )
     {
-        Vector2 clampedToHorizontal = new Vector2(
-            Mathf.Clamp(offset.x, -horizontalArmHalfLength, horizontalArmHalfLength),
-            Mathf.Clamp(offset.y, -armHalfThickness, armHalfThickness)
-        );
+        Vector2 clampedToHorizontal = ClampPositionToRect(position, horizontalArmCenter, horizontalArmHalfLength, armHalfThickness);
+        Vector2 clampedToVertical = ClampPositionToRect(position, verticalArmCenter, armHalfThickness, verticalArmHalfLength);
 
-        Vector2 clampedToVertical = new Vector2(
-            Mathf.Clamp(offset.x, -armHalfThickness, armHalfThickness),
-            Mathf.Clamp(offset.y, -verticalArmHalfLength, verticalArmHalfLength)
-        );
-
-        float horizontalDistance = (offset - clampedToHorizontal).sqrMagnitude;
-        float verticalDistance = (offset - clampedToVertical).sqrMagnitude;
+        float horizontalDistance = (position - clampedToHorizontal).sqrMagnitude;
+        float verticalDistance = (position - clampedToVertical).sqrMagnitude;
         return horizontalDistance <= verticalDistance ? clampedToHorizontal : clampedToVertical;
+    }
+
+    private Vector2 GetCrossFollowAnchor(
+        Vector2 playerPosition,
+        Vector2 horizontalArmCenter,
+        Vector2 verticalArmCenter,
+        float horizontalArmHalfLength,
+        float verticalArmHalfLength,
+        float armHalfThickness
+    )
+    {
+        bool insideHorizontalArm = IsInsideHorizontalArm(playerPosition, horizontalArmCenter, horizontalArmHalfLength, armHalfThickness);
+        bool insideVerticalArm = IsInsideVerticalArm(playerPosition, verticalArmCenter, verticalArmHalfLength, armHalfThickness);
+
+        if (insideHorizontalArm && insideVerticalArm)
+        {
+            float horizontalCenterDistance = (playerPosition - horizontalArmCenter).sqrMagnitude;
+            float verticalCenterDistance = (playerPosition - verticalArmCenter).sqrMagnitude;
+            return horizontalCenterDistance <= verticalCenterDistance ? horizontalArmCenter : verticalArmCenter;
+        }
+
+        if (insideHorizontalArm)
+        {
+            return horizontalArmCenter;
+        }
+
+        if (insideVerticalArm)
+        {
+            return verticalArmCenter;
+        }
+
+        return (horizontalArmCenter + verticalArmCenter) * 0.5f;
+    }
+
+    private bool IsInsideHorizontalArm(Vector2 position, Vector2 horizontalArmCenter, float horizontalArmHalfLength, float armHalfThickness)
+    {
+        return Mathf.Abs(position.x - horizontalArmCenter.x) <= horizontalArmHalfLength
+            && Mathf.Abs(position.y - horizontalArmCenter.y) <= armHalfThickness;
+    }
+
+    private bool IsInsideVerticalArm(Vector2 position, Vector2 verticalArmCenter, float verticalArmHalfLength, float armHalfThickness)
+    {
+        return Mathf.Abs(position.x - verticalArmCenter.x) <= armHalfThickness
+            && Mathf.Abs(position.y - verticalArmCenter.y) <= verticalArmHalfLength;
+    }
+
+    private Vector2 ClampPositionToRect(Vector2 position, Vector2 rectCenter, float halfWidth, float halfHeight)
+    {
+        return new Vector2(
+            Mathf.Clamp(position.x, rectCenter.x - halfWidth, rectCenter.x + halfWidth),
+            Mathf.Clamp(position.y, rectCenter.y - halfHeight, rectCenter.y + halfHeight)
+        );
     }
 
     private void OnDestroy()
