@@ -12,7 +12,7 @@ public class BoarEnemy : EnemyBase
     [SerializeField] private float telegraphJitterDegrees = 20.0f;
 
     [Tooltip("Child GameObject shown during the telegraph beat pointing in the charge direction. " + "The sprite must point RIGHT (+X) by default.")]
-    [SerializeField] private GameObject telegraphVisual;
+    [SerializeField] private ChargeIndicator telegraphVisual;
 
     [Header("Boar - Charge")]
     [SerializeField] private float chargeSpeed = 30.0f;
@@ -271,12 +271,13 @@ public class BoarEnemy : EnemyBase
         {
             return;
         }
+        //float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        //telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
 
-        float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
+        //telegraphVisual.transform.localScale = new Vector3(chargeDistance, telegraphBaseScale.y, telegraphBaseScale.z);
+        telegraphVisual.Init((Vector2)transform.position - 0.25f * Vector2.up, (Vector2)transform.position + direction * chargeDistance);
 
-        telegraphVisual.transform.localScale = new Vector3(chargeDistance, telegraphBaseScale.y, telegraphBaseScale.z);
-        telegraphVisual.SetActive(true);
+        telegraphVisual.gameObject.SetActive(true);
     }
 
     private void HideTelegraphVisual()
@@ -286,7 +287,9 @@ public class BoarEnemy : EnemyBase
             return;
         }
 
-        telegraphVisual.SetActive(false);
+        telegraphVisual.ReleaseIndicator();
+
+        telegraphVisual.gameObject.SetActive(false);
     }
 
     private void SetHitboxActive(bool active)
