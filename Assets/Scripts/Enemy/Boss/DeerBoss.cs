@@ -235,6 +235,7 @@ public class DeerBoss : EnemyBase
 
         currentAttack = PickNextAttack();
         sequenceBeat = 0;
+        health.ReconnectBossUIHPBar(); //connects & activates the boss to its UI HP Bar
     }
 
     private void FixedUpdate()
