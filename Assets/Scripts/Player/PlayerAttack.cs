@@ -89,6 +89,13 @@ public class PlayerAttack : MonoBehaviour
         inputActions.Player.Sprint.performed -= OnBeatActionPerformed;
         inputActions.Player.Fire.performed -= OnBeatActionPerformed;
         inputActions.Player.Disable();
+
+        GenericBeam[] beamSections = Object.FindObjectsOfType<GenericBeam>(true);
+
+        for(int i = 0;i < beamSections.Length;i++)
+        {
+            Destroy(beamSections[i].gameObject);
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -345,7 +352,9 @@ public class PlayerAttack : MonoBehaviour
     {
         Vector2 pos = start;//(start + end) / 2f;
 
-        GenericBeam attackBeam = Instantiate(attackBeamPrefab, pos, Quaternion.identity).GetComponent<GenericBeam>();
+        GenericBeam attackBeam = beamSectionPool.Get();
+        attackBeam.transform.position = pos;
+        attackBeam.transform.rotation = Quaternion.identity;
 
         Vector2 d = end - start;
 
@@ -537,6 +546,8 @@ public class PlayerAttack : MonoBehaviour
     {
         GenericBeam genericBeam = Instantiate(attackBeamPrefab, transform.position, Quaternion.identity).GetComponent<GenericBeam>();
         genericBeam.gameObject.SetActive(false);
+        DontDestroyOnLoad(genericBeam);
+
         return genericBeam;
     }
 
