@@ -113,6 +113,7 @@ public class DeerBoss : EnemyBase
     private BeatHandler beatHandler;
 
     private SpellEditBar spellEditBar;
+    private EnemyFlip enemyFlip;
 
     private BossAttack currentAttack;
     private BossPhase currentPhase = BossPhase.First;
@@ -155,6 +156,7 @@ public class DeerBoss : EnemyBase
     {
         base.Awake();
         animator = GetComponent<Animator>();
+        enemyFlip = GetComponent<EnemyFlip>();
 
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         lastSafePosition = rb.position;
@@ -441,6 +443,7 @@ public class DeerBoss : EnemyBase
 
     private void TelegraphCharge()
     {
+        FacePlayer();
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
         if (chargeHitbox != null)
@@ -467,6 +470,7 @@ public class DeerBoss : EnemyBase
     /// </summary>
     private void PrepareNextCharge()
     {
+        FacePlayer();
         Vector2 toTarget = ((Vector2)target.position - (Vector2)transform.position).normalized;
         float baseAngle = Mathf.Atan2(toTarget.y, toTarget.x);
         float jitter = Random.Range(-chargeJitterDegrees, chargeJitterDegrees) * Mathf.Deg2Rad;
@@ -493,6 +497,7 @@ public class DeerBoss : EnemyBase
 
     private void TelegraphSlam()
     {
+        FacePlayer();
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
         if (chargeHitbox != null)
@@ -549,6 +554,7 @@ public class DeerBoss : EnemyBase
         switch (sequenceBeat)
         {
             case 0:
+                FacePlayer();
                 rb.linearVelocity = Vector2.zero;
                 SetBeamChargeVisualActive(true);
                 SetBeamChargeFireCue(false);
@@ -558,10 +564,12 @@ public class DeerBoss : EnemyBase
             case 1:
             case 2:
                 // Charge-up continues — visual already active
+                FacePlayer();
                 TriggerAnimation(TRIGGER_CHARGE_LASER);
                 break;
 
             case 3:
+                FacePlayer();
                 SetBeamChargeFireCue(true);
                 TriggerAnimation(TRIGGER_CHARGE_LASER);
                 break;
@@ -580,6 +588,7 @@ public class DeerBoss : EnemyBase
 
     private void FireBeam()
     {
+        FacePlayer();
         SetBeamChargeVisualActive(false);
         SetBeamChargeFireCue(false);
         TriggerAnimation(TRIGGER_IDLE);
@@ -668,6 +677,7 @@ public class DeerBoss : EnemyBase
 
     private void TelegraphCenterCharge()
     {
+        FacePlayer();
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
 
@@ -828,6 +838,14 @@ public class DeerBoss : EnemyBase
         if (telegraphVisual != null)
         {
             telegraphVisual.SetActive(false);
+        }
+    }
+
+    private void FacePlayer()
+    {
+        if (enemyFlip != null)
+        {
+            enemyFlip.FlipEnemy();
         }
     }
 
