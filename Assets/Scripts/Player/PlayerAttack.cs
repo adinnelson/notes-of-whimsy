@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Pool;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -13,6 +14,14 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private GameObject attackBeamPrefab;
     [SerializeField] private float fireCooldownSeconds = 0.2f;
     [SerializeField] private float failedInputLockoutTime = 0.15f;
+
+    [SerializeField] Sprite redSpellBeam0;
+    [SerializeField] Sprite redSpellBeam1;
+    [SerializeField] Sprite blueSpellBeam0;
+    [SerializeField] Sprite blueSpellBeam1;
+    [SerializeField] Sprite yellowSpellBeam0;
+    [SerializeField] Sprite yellowSpellBeam1;
+
     private LayerMask ignoredLayersMask;
     private const float MIN_AIM_DEADZONE_SQR = 0.0001f;
     private const float MIN_STICK_DEADZONE_SQR = 0.09f;
@@ -48,12 +57,24 @@ public class PlayerAttack : MonoBehaviour
 
     public bool IsDashInvulnerable => Time.time <= dashInvulnerableUntil;
 
+    private ObjectPool<GenericBeam> beamSectionPool;
+
     private void Awake()
     {
         mainCamera = Camera.main;
         inputActions = new InputSystem_Actions();
         CacheInitialMousePosition();
         animator = GetComponent<Animator>();
+
+        beamSectionPool = new ObjectPool<GenericBeam>(
+            createFunc: CreateItem,
+            actionOnGet: OnGet,
+            actionOnRelease: OnRelease,
+            actionOnDestroy: OnDestroyItem,
+            collectionCheck: true,   // helps catch double-release mistakes
+            defaultCapacity: 10,
+            maxSize: 50
+        );
     }
     
     private void OnEnable()
@@ -322,44 +343,103 @@ public class PlayerAttack : MonoBehaviour
 
     private GameObject SpawnAttackBeam(Vector2 start, Vector2 end, int? spellId)
     {
-        Vector2 pos = (start + end) / 2f;
+        Vector2 pos = start;//(start + end) / 2f;
 
-        GameObject attackBeam = Instantiate(attackBeamPrefab, pos, Quaternion.identity);
+        GenericBeam attackBeam = Instantiate(attackBeamPrefab, pos, Quaternion.identity).GetComponent<GenericBeam>();
 
         Vector2 d = end - start;
+
+        SetSpriteOfBeamSection(attackBeam, spellId, false);
+
+        GenericBeam prevBeamSection = attackBeam;
+        
+        for (int i = 1; i < d.magnitude * 2; i++)
+        {
+            // Calculate interpolation factor (0.0 to 1.0)
+            float t = (float)i / (d.magnitude - 1);
+            
+            Vector3 spawnPos = (Vector3)start + new Vector3(0.49f * i, 0, 0);
+
+            GenericBeam currentBeamSection = beamSectionPool.Get();
+            currentBeamSection.transform.position = spawnPos;
+            currentBeamSection.transform.rotation = Quaternion.identity;
+
+            SetSpriteOfBeamSection(currentBeamSection, spellId, i % 2 != 0);
+
+            currentBeamSection.transform.SetParent(prevBeamSection.transform);
+
+            prevBeamSection = currentBeamSection;
+        }
 
         float angle = Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg;
         attackBeam.transform.rotation = Quaternion.Euler(0, 0, angle);
 
-        attackBeam.transform.localScale = new Vector3(d.magnitude, 0.2f, 1f);
-        SpriteRenderer spriteRenderer = attackBeam.GetComponent<SpriteRenderer>();
+        return attackBeam.gameObject;
+    }
 
+    private void SetSpriteOfBeamSection(GenericBeam attackBeam, int? spellId, bool alternate)
+    {
+        SpriteRenderer spriteRenderer = attackBeam.GetComponent<SpriteRenderer>();
 
         switch(spellId)
         {
             case 1:
             {
-                spriteRenderer.color = Color.red;
+                if (alternate)
+                {
+                    attackBeam.Init(redSpellBeam1, redSpellBeam0);
+                    break;
+                }
+                
+                attackBeam.Init(redSpellBeam0, redSpellBeam1);
                 break;
             }
             case 2:
             {
-                spriteRenderer.color = Color.yellow;
+                if (alternate)
+                {
+                    attackBeam.Init(yellowSpellBeam1, yellowSpellBeam0);
+                    break;
+                }
+                
+                attackBeam.Init(yellowSpellBeam0, yellowSpellBeam1);
+                break;
                 break;
             }
-            case 3:
+            case 3: 
             {
                 spriteRenderer.color = Color.purple;
                 break;
             }
             case 4:
             {
-                spriteRenderer.color = Color.blue;
+                if (alternate)
+                {
+                    attackBeam.Init(blueSpellBeam1, blueSpellBeam0);
+                    break;
+                }
+                
+                attackBeam.Init(blueSpellBeam0, blueSpellBeam1);
                 break;
             }
         }
+    }
 
-        return attackBeam;
+    private void ReleaseBeam(GameObject startBeam)
+    {
+        Transform[] transforms = startBeam.transform.GetComponentsInChildren<Transform>();
+
+        foreach (Transform child in transforms)
+        {
+            if (child == startBeam.transform) continue; 
+
+            child.SetParent(null);
+        }
+
+        foreach (Transform child in transforms)
+        {
+            beamSectionPool.Release(child.gameObject.GetComponent<GenericBeam>());
+        }
     }
 
     public void FireProjectile(Projectile projectilePrefab, NoteEffectHandler noteEffectHandler = null, GameObject owner = null)
@@ -436,7 +516,7 @@ public class PlayerAttack : MonoBehaviour
 
         GameObject attackBeamInstance = SpawnAttackBeam(spawnPoint, endBeamPos, noteEffectHandler?.SpellData.spellId);
         SimpleTimer timer = new SimpleTimer();
-        timer.StartTimer(0.5f, onFinish: () => Destroy(attackBeamInstance) ,gameManager: gm);
+        timer.StartTimer(0.35f, onFinish: () => ReleaseBeam(attackBeamInstance) ,gameManager: gm);
     }
 
 
@@ -450,5 +530,33 @@ public class PlayerAttack : MonoBehaviour
     public void RemoveAttackLock(string key)
     {
         attackLocks.Remove(key);
+    }
+
+    // Creates a new pooled GameObject the first time (and whenever the pool needs more).
+    private GenericBeam CreateItem()
+    {
+        GenericBeam genericBeam = Instantiate(attackBeamPrefab, transform.position, Quaternion.identity).GetComponent<GenericBeam>();
+        genericBeam.gameObject.SetActive(false);
+        return genericBeam;
+    }
+
+    // Called when an item is taken from the pool.
+    private void OnGet(GenericBeam genericBeam)
+    {
+        genericBeam.gameObject.SetActive(true);
+    }
+
+    // Called when an item is returned to the pool.
+    private void OnRelease(GenericBeam genericBeam)
+    {
+        genericBeam.Disable();
+        genericBeam.transform.SetParent(null);
+        genericBeam.gameObject.SetActive(false);
+    }
+
+    // Called when the pool decides to destroy an item (e.g., above max size).
+    private void OnDestroyItem(GenericBeam genericBeam)
+    {
+        Destroy(genericBeam);
     }
 }

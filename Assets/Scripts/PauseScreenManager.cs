@@ -25,6 +25,7 @@ public class PauseScreenManager : MonoBehaviour
     {
         if(Keyboard.current.escapeKey.wasPressedThisFrame)
         {
+
             if(pauseScreen.activeSelf)
             {
                 Close();
