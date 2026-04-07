@@ -1,2 +1,12 @@
 fileFormatVersion: 2
 guid: 126d85948a0b9a844ac82a48445100c4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - spawnEffectSprite: {fileID: 21300000, guid: 1e2d71e607867454a9af492d67e2cdb3, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

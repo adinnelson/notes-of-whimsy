@@ -56,6 +56,10 @@ public class RoomInfo : MonoBehaviour
     [Header("Shop Attributes")]
     [SerializeField]
     private bool isShop;
+
+    [Header("Spawn Sprite")]
+    [SerializeField]
+    private Sprite spawnSprite;
     
     [SerializeField]
     private List<GameObject> itemSpawnLocations;
@@ -133,6 +137,14 @@ public class RoomInfo : MonoBehaviour
 
         enemyWaveController = GetComponentInChildren<EnemyWaveController>();
         UnlockRoom();
+    }
+
+    private void Start()
+    {
+        if (enemyWaveController != null)
+        {
+            enemyWaveController.SetSpawnEffectSprite(spawnSprite);
+        }
     }
 
     private void Update()
