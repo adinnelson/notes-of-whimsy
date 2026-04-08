@@ -43,10 +43,11 @@ public class DeerBoss : EnemyBase
     [SerializeField] private float chargeDamage = 10.0f;
     // Charge warning visual.
     [Tooltip("Child GameObject shown during telegraph. Sprite must point RIGHT (+X).")]
-    [SerializeField] private GameObject telegraphVisual;
+    [SerializeField] private ChargeIndicator telegraphVisual;
     // Charge hitbox child.
     [Tooltip("Child hitbox toggled on during charge bursts (same pattern as BoarHitbox).")]
     [SerializeField] private DeerBossChargeHitBox chargeHitbox;
+    private Vector2 lastChargeTarget; 
 
     [Header("Slam (end of Charge)")]
     // Slam hitbox child.
@@ -460,7 +461,9 @@ public class DeerBoss : EnemyBase
         float finalAngle = baseAngle + jitter;
         lockedChargeDir = new Vector2(Mathf.Cos(finalAngle), Mathf.Sin(finalAngle));
 
-        ShowTelegraph(lockedChargeDir);
+        lastChargeTarget = chargeDuration * chargeSpeed * lockedChargeDir + (Vector2)transform.position;
+
+        ShowTelegraph(lockedChargeDir, (Vector2)transform.position);
         TriggerAnimation(TRIGGER_CHARGE);
     }
 
@@ -476,7 +479,11 @@ public class DeerBoss : EnemyBase
         float baseAngle = Mathf.Atan2(toTarget.y, toTarget.x);
         float jitter = Random.Range(-chargeJitterDegrees, chargeJitterDegrees) * Mathf.Deg2Rad;
         lockedChargeDir = new Vector2(Mathf.Cos(baseAngle + jitter), Mathf.Sin(baseAngle + jitter));
-        ShowTelegraph(lockedChargeDir);
+
+        ShowTelegraph(lockedChargeDir, lastChargeTarget);
+
+        lastChargeTarget += chargeDuration * chargeSpeed * lockedChargeDir;
+
         TriggerAnimation(TRIGGER_CHARGE);
     }
 
@@ -688,7 +695,7 @@ public class DeerBoss : EnemyBase
         }
 
         Vector2 toCenter = ((Vector2)arenaCenter.position - (Vector2)transform.position).normalized;
-        ShowTelegraph(toCenter);
+        ShowTelegraph(toCenter, (Vector2)transform.position);
     }
 
     private void ExecuteCenterCharge()
@@ -822,23 +829,26 @@ public class DeerBoss : EnemyBase
     //  TELEGRAPH VISUAL HELPERS
     // ═══════════════════════════════════════════════════════════════
 
-    private void ShowTelegraph(Vector2 direction)
+    private void ShowTelegraph(Vector2 direction, Vector2 position)
     {
         if (telegraphVisual == null)
         {
             return;
         }
 
-        float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
-        telegraphVisual.SetActive(true);
+        //float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        //telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
+        telegraphVisual.Init(position - 0.25f * Vector2.up, position + 2.0f * direction);
+
+        telegraphVisual.gameObject.SetActive(true);
     }
 
     private void HideTelegraph()
     {
         if (telegraphVisual != null)
         {
-            telegraphVisual.SetActive(false);
+            telegraphVisual.gameObject.SetActive(false);
+            telegraphVisual.ReleaseIndicator();
         }
     }
 
