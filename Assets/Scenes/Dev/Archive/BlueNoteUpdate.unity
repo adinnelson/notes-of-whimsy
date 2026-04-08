@@ -1054,6 +1054,26 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3228955244108052592, guid: ab89f7ce67ec3ca498a8c605dd8f7bd2, type: 3}
     - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Path
+      value: event:/SpellSoundEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data1
+      value: 568239451
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data2
+      value: 1158461736
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data3
+      value: -857814874
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data4
+      value: -106313446
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: playerActiveSpellsHandler
       value: 
       objectReference: {fileID: 1278789940}

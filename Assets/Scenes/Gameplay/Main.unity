@@ -1262,6 +1262,26 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3228955244108052592, guid: ab89f7ce67ec3ca498a8c605dd8f7bd2, type: 3}
     - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Path
+      value: event:/SpellSoundEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data1
+      value: 568239451
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data2
+      value: 1158461736
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data3
+      value: -857814874
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data4
+      value: -106313446
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: failedInputLockoutTime
       value: 0.3
       objectReference: {fileID: 0}
@@ -1534,6 +1554,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a9e67a902ca9fd43983f8e21810f457, type: 3}
+--- !u!114 &1842685441 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7775810545001407991, guid: 5a9e67a902ca9fd43983f8e21810f457, type: 3}
+  m_PrefabInstance: {fileID: 1842685438}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ddd89c5c99ecc348b188fde680ac192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1993095026
 GameObject:
   m_ObjectHideFlags: 0
@@ -1609,17 +1640,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1993095026}
   m_CullTransparentMesh: 1
---- !u!114 &1842685441 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7775810545001407991, guid: 5a9e67a902ca9fd43983f8e21810f457, type: 3}
-  m_PrefabInstance: {fileID: 1842685438}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ddd89c5c99ecc348b188fde680ac192, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

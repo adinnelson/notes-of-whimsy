@@ -2,9 +2,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
+using FMODUnity;
+
 
 public class PlayerAttack : MonoBehaviour
 {
+
+
+
+    // Reference your event in the Unity Inspector
+    public EventReference attackEvent;
     public const string MISSED_ATTACK_LOCK_KEY = "MISSED_ATTACK";
 
     [SerializeField] private BeatHandler beathandler;
@@ -51,7 +58,7 @@ public class PlayerAttack : MonoBehaviour
         CacheInitialMousePosition();
         animator = GetComponent<Animator>();
     }
-    
+
     private void OnEnable()
     {
         inputActions.Player.Enable();
@@ -83,17 +90,17 @@ public class PlayerAttack : MonoBehaviour
     private void Update()
     {
         // Continuously check to update aim based on the most recent input (Mouse and/or Controller)
-        if(mainCamera == null)
+        if (mainCamera == null)
         {
             mainCamera = Camera.main;
         }
-        if(beathandler == null)
+        if (beathandler == null)
         {
             beathandler = GameObject.Find("BeatBar")?.GetComponent<BeatHandler>();
         }
 
         UpdateAimSourceFromStick();
-        UpdateAimSourceFromMouseMovement();    
+        UpdateAimSourceFromMouseMovement();
 
     }
 
@@ -102,9 +109,9 @@ public class PlayerAttack : MonoBehaviour
         // whichever device (Mouse or Controller) that fired gets to be the active aim source for this shot.
         SetAimSourceFromFireDevice(context);
 
-        if(attackLocks.Count > 0)
+        if (attackLocks.Count > 0)
         {
-          return;
+            return;
         }
 
         if (lockoutTimer > 0)
@@ -122,9 +129,9 @@ public class PlayerAttack : MonoBehaviour
         {
             animator.SetTrigger("Dash");
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
-            if(rb.linearVelocity.magnitude > 0)
+            if (rb.linearVelocity.magnitude > 0)
             {
-                
+
                 rb.AddForce(rb.linearVelocity.normalized * 3000);
             }
             else
@@ -132,8 +139,8 @@ public class PlayerAttack : MonoBehaviour
                 Vector3 mouseScreenPosition = Mouse.current.position.value;
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
-                rb.AddForce(direction.normalized * 3000);   
-               
+                rb.AddForce(direction.normalized * 3000);
+
             }
             return;
         }
@@ -146,36 +153,68 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        switch(context.action.name)
+        switch (context.action.name)
         {
             case "Fire":
-            {
-                if(beathandler != null)
                 {
-                int beatID = beathandler.GetBeatIndex();
-                playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID)?.Fire();
+                    if (beathandler != null)
+                    {
+                        int beatID = beathandler.GetBeatIndex();
+                        playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID)?.Fire();
 
-                lastFireTimeSeconds = Time.time;
-                }
-                break;
-            }
-            /*case "Sprint":
-            {
+                        //Debuging
+                        var spellHandler = playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID);
+                        // Debug.Log($"Spell Handler: {spellHandler?.GetType().Name}, Spell ID: {spellHandler?.SpellData.spellId}");
 
-                Rigidbody2D rb = GetComponent<Rigidbody2D>();
+                        if (spellHandler != null)
+                        {
+                            string spellLabel = GetSpellLabel(spellHandler.SpellData.spellId); // Id will match FMOD naming convention 
+                            if (!string.IsNullOrEmpty(spellLabel))
+                            {
+                                //create 
+                                var instance = RuntimeManager.CreateInstance(attackEvent);
+                                instance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+                                //matching the spell name as a parameter in fmod and fire it one time 
+                                instance.setParameterByNameWithLabel("spell", spellLabel);
+                                instance.start();
+                                instance.release();
+                            }
+                        }
 
-                if(rb.linearVelocity.magnitude > 0)
-                {
-                    rb.AddForce(rb.linearVelocity.normalized * 3000);
+                        lastFireTimeSeconds = Time.time;
+                    }
                     break;
                 }
-                Vector3 mouseScreenPosition = Mouse.current.position.value;
-                Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-                Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
+                /*case "Sprint":
+                {
 
-                rb.AddForce(direction.normalized * 3000);
-                break;
-            }*/
+                    Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+                    if(rb.linearVelocity.magnitude > 0)
+                    {
+                        rb.AddForce(rb.linearVelocity.normalized * 3000);
+                        break;
+                    }
+                    Vector3 mouseScreenPosition = Mouse.current.position.value;
+                    Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
+                    Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
+
+                    rb.AddForce(direction.normalized * 3000);
+                    break;
+                }*/
+        }
+    }
+
+    //fMOD labels naming to match cases with the attack fired 
+    private string GetSpellLabel(int spellId)
+    {
+        switch (spellId)
+        {
+            case 1: return "explosion";
+            case 2: return "lightning";
+            case 3: return "laser";
+            case 4: return "whirlpool";
+            default: return null;
         }
     }
 
@@ -327,28 +366,28 @@ public class PlayerAttack : MonoBehaviour
         SpriteRenderer spriteRenderer = attackBeam.GetComponent<SpriteRenderer>();
 
 
-        switch(spellId)
+        switch (spellId)
         {
             case 1:
-            {
-                spriteRenderer.color = Color.red;
-                break;
-            }
+                {
+                    spriteRenderer.color = Color.red;
+                    break;
+                }
             case 2:
-            {
-                spriteRenderer.color = Color.yellow;
-                break;
-            }
+                {
+                    spriteRenderer.color = Color.yellow;
+                    break;
+                }
             case 3:
-            {
-                spriteRenderer.color = Color.purple;
-                break;
-            }
+                {
+                    spriteRenderer.color = Color.purple;
+                    break;
+                }
             case 4:
-            {
-                spriteRenderer.color = Color.blue;
-                break;
-            }
+                {
+                    spriteRenderer.color = Color.blue;
+                    break;
+                }
         }
 
         return attackBeam;
@@ -385,7 +424,7 @@ public class PlayerAttack : MonoBehaviour
 
         IDamageable damageable = hit.collider?.gameObject?.GetComponent<IDamageable>();
 
-        if(hit.collider?.gameObject != null)
+        if (hit.collider?.gameObject != null)
         {
             endBeamPos = hit.collider.gameObject.transform.position;
 
@@ -408,14 +447,14 @@ public class PlayerAttack : MonoBehaviour
 
         endBeamPos = new Vector3(endBeamPos.x, endBeamPos.y, -GameManager.Z_RANGE);
 
-        if(damageable != null)
+        if (damageable != null)
         {
             noteEffectHandler?.HitEnemy(damageable);
         }
 
-        if(noteEffectHandler != null)
+        if (noteEffectHandler != null)
         {
-            switch(noteEffectHandler.SpellData.spellId)
+            switch (noteEffectHandler.SpellData.spellId)
             {
                 case 1:
                     ((RedNoteEffectHandler)noteEffectHandler).Explode(endBeamPos);
@@ -423,12 +462,12 @@ public class PlayerAttack : MonoBehaviour
                 case 4:
                     ((BlueNoteEffectHandler)noteEffectHandler).WhirlPool(endBeamPos);
                     break;
-            }   
+            }
         }
 
         GameObject attackBeamInstance = SpawnAttackBeam(spawnPoint, endBeamPos, noteEffectHandler?.SpellData.spellId);
         SimpleTimer timer = new SimpleTimer();
-        timer.StartTimer(0.5f, onFinish: () => Destroy(attackBeamInstance) ,gameManager: gm);
+        timer.StartTimer(0.5f, onFinish: () => Destroy(attackBeamInstance), gameManager: gm);
     }
 
 
