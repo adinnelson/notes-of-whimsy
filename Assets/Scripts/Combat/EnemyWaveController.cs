@@ -91,6 +91,13 @@ public class EnemyWaveController : MonoBehaviour
         {
             numberOfWaves++;
         }
+
+        if (numberOfWaves <= 0)
+        {
+            Debug.LogWarning("EnemyWaveController.CalculateWaveCount: Calculated wave count is zero.");
+            numberOfWaves = 1;
+        }
+
         return numberOfWaves;
     }
 
@@ -120,6 +127,7 @@ public class EnemyWaveController : MonoBehaviour
     private void SpawnEnemyWave()
     {
         spawningEnemies = true;
+        currentWave++;
 
         int enemiesToSpawn = CalculateEnemiesToSpawn();
 
@@ -129,16 +137,20 @@ public class EnemyWaveController : MonoBehaviour
             Vector3 spawnPosition = GetRandomSpawnPosition();
             SpawnRandomEnemy(spawnPosition);
         }
-        currentWave++;
 
         // Calculate number of enemies to spawn
         int CalculateEnemiesToSpawn()
         {
             int roomProgression = roomsCleared / 10;
             int floorProgression = ProgressFloor.GetFloorsCompleted();
-            int waveProgression = currentWave;
+            int waveProgression = currentWave - 1; // Start with 0 additional enemies
             int totalEnemies = BASE_ENEMIES + roomProgression + floorProgression + waveProgression;
-            int maxEnemies = Mathf.Min((CalculateWaveCount() - 1) * 2, MAX_ENEMY_SPAWNS);
+            int maxEnemies = Mathf.Min(currentWave * 2, MAX_ENEMY_SPAWNS);
+
+            if (isCombatRoom)
+            {
+                maxEnemies += 1;
+            }
 
             totalEnemies = Mathf.Min(totalEnemies, maxEnemies);
             return totalEnemies;
