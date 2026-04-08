@@ -82,7 +82,6 @@ MonoBehaviour:
   deathFadeDuration: 0.5
   stunnedMaterial: {fileID: -876546973899608171, guid: 1ec764e42543a6e46bb597f1d9c7aeb0, type: 3}
   defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  wallTag: Walls
   aoePrefab: {fileID: 8302048801898426064, guid: a15ece80bac87974b8d9739835ec044f, type: 3}
   aoeRadius: 1.5
   aoeDamage: 10
@@ -213,8 +212,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   enemyMaxHealth: 40
-  healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
+  healthPrefab: {fileID: 8085078092535345474, guid: 59df34ffd7f21d448abc2c2c6469964d, type: 3}
   healthBarUpdater: {fileID: 0}
+  healthText: {fileID: 0}
+  healthBarVerticalOffset: 0.1
   whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
   defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   flashTime: 0.1

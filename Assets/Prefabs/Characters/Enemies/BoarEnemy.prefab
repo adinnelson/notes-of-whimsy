@@ -81,8 +81,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   enemyMaxHealth: 30
-  healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
+  healthPrefab: {fileID: 8085078092535345474, guid: 59df34ffd7f21d448abc2c2c6469964d, type: 3}
   healthBarUpdater: {fileID: 0}
+  healthText: {fileID: 0}
+  healthBarVerticalOffset: 0.05
   whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
   defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   flashTime: 0.1
@@ -108,6 +110,9 @@ MonoBehaviour:
   chargeSpeed: 35
   chargeTime: 0.1
   chaseSpeed: 2.5
+  minEndpointSeparation: 2
+  nudgeDistance: 1.5
+  maxNudgeAttempts: 3
 --- !u!212 &907784824050106942
 SpriteRenderer:
   serializedVersion: 2
@@ -392,7 +397,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8509544298852323261}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.9025598, w: 0.43056452}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 20, y: 0.15, z: 1}
   m_ConstrainProportionsScale: 0

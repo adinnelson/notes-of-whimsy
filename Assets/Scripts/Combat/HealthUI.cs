@@ -18,7 +18,6 @@ public class HealthUI : MonoBehaviour
     {
         if (target != null)
         {
-            //healthText.text = $"{target.name} {target.CurrentHealth}/{target.MaxHealth}";
             healthText.text = $"{(int)target.CurrentHealth}/{(int)target.MaxHealth}";
         }
     }

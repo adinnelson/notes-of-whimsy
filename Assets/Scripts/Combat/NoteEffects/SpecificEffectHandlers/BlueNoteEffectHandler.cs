@@ -31,6 +31,15 @@ public class BlueNoteEffectHandler : NoteEffectHandler
         enemiesInRange.Clear();
         MonoBehaviour enemyComponent = damageable as MonoBehaviour;
 
+        Health enemyHealth = (Health)damageable;
+        
+        if(enemyHealth.GetComponent<DeerBoss>() != null)
+        {
+            enemyHealth.TakeDamage(damage);
+            return;          
+        }
+
+
         if (enemyComponent != null)
         {
             Vector3 pullOrigin = enemyComponent.transform.position;
