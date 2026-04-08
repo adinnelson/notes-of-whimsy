@@ -37,7 +37,9 @@ public class PlayerAttack : MonoBehaviour
     private Vector2 lastAimDirection = Vector2.right;
     private Vector2 lastMousePos;
 
-    private float lockoutTimer = 0f;
+    private float lockoutTimer = 0.0f;
+    [SerializeField] private float dashInvulnerabilityDuration = 0.2f;
+    private float dashInvulnerableUntil = 0.0f;
 
     //Animator
     private Animator animator;
@@ -50,6 +52,8 @@ public class PlayerAttack : MonoBehaviour
         Mouse,
         Gamepad
     }
+
+    public bool IsDashInvulnerable => Time.time <= dashInvulnerableUntil;
 
     private void Awake()
     {
@@ -128,8 +132,16 @@ public class PlayerAttack : MonoBehaviour
         if (beathandler != null && beathandler.ValidDashInterval && context.action.name == "Sprint")
         {
             animator.SetTrigger("Dash");
+            dashInvulnerableUntil = Time.time + dashInvulnerabilityDuration;
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
+<<<<<<< HEAD
             if (rb.linearVelocity.magnitude > 0)
+=======
+
+            animator.SetTrigger("Dash");
+
+            if(rb.linearVelocity.magnitude > 0)
+>>>>>>> main
             {
 
                 rb.AddForce(rb.linearVelocity.normalized * 3000);
@@ -139,8 +151,13 @@ public class PlayerAttack : MonoBehaviour
                 Vector3 mouseScreenPosition = Mouse.current.position.value;
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
+<<<<<<< HEAD
                 rb.AddForce(direction.normalized * 3000);
 
+=======
+
+                rb.AddForce(direction.normalized * 3000);   
+>>>>>>> main
             }
             return;
         }

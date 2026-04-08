@@ -291,6 +291,10 @@ public class BeatHandler : MonoBehaviour
 
     }
 
+    public void SetBPM(float newBPM)
+    {
+        bpm = newBPM;
+    }
     private void UpdateBeatVisuals()
     {
         float beatSpacing = (beatStartSpawnDistance - beatEndSpawnDistance) / numBeatsShown;
