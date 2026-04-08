@@ -9,6 +9,8 @@ public class SpellEditBar : MonoBehaviour
 
     [SerializeField] private GameObject lockedOverlayPrefab;
 
+    [SerializeField] private GameObject backgroundColourDamperPrefab;
+    private GameObject backgroundColourDamper;
     private List<SpellBox> spellBoxes = new List<SpellBox>();
     private List<GameObject> lockedOverlays = new List<GameObject>();
 
@@ -16,15 +18,21 @@ public class SpellEditBar : MonoBehaviour
     private PlayerActiveSpellsHandler playerActiveSpellsHandler;
     private PlayerInventory playerInventory;
     private PlayerAttack playerAttack;
+    private BeatHandler beatHandler;
     private InputSystem_Actions inputActions;
 
     enum Setting
     {
         Swap,
-        Equip
+        Equip, 
+        Cinematic
     }
 
     private Setting setting = Setting.Equip;
+    public bool InCinematic
+    {
+        get { return setting == Setting.Cinematic; }
+    }
 
     private SpellDataSO spellToBePlaced = null;
     private GameObject associatedSpellPickup = null;
@@ -57,7 +65,9 @@ public class SpellEditBar : MonoBehaviour
         playerInventory = FindObjectOfType<PlayerInventory>();
         playerAttack = FindObjectOfType<PlayerAttack>();
 
-        print(transform.childCount);
+        backgroundColourDamper = Instantiate(backgroundColourDamperPrefab, transform.position, transform.rotation);
+        backgroundColourDamper.transform.SetParent(gameObject.transform);
+        backgroundColourDamper.SetActive(false);
 
         // save spell boxes references
         for (int i = 0; i < transform.childCount; i++)
@@ -86,19 +96,36 @@ public class SpellEditBar : MonoBehaviour
     // Opens spell bar
     // if a spell is passed in setting is equip
     // if not passed in in swap state
-    public void Open(SpellDataSO newSpell = null, GameObject pickupable = null)
+    public void Open(SpellDataSO newSpell = null, GameObject pickupable = null, bool isCinematic = false)
     {
         gameObject.SetActive(true);
+        backgroundColourDamper.SetActive(true);
 
-        if(newSpell != null)
+        if(beatHandler == null)
         {
-            setting = Setting.Equip;
-            spellToBePlaced = newSpell;
-            associatedSpellPickup = pickupable;
+            beatHandler = FindObjectOfType<BeatHandler>();
+        }
+
+        beatHandler.gameObject.SetActive(false);
+
+        if(!isCinematic)
+        {
+            if(newSpell != null)
+            {
+                setting = Setting.Equip;
+                spellToBePlaced = newSpell;
+                associatedSpellPickup = pickupable;
+            }
+            else
+            {
+                setting = Setting.Swap;
+            }   
         }
         else
         {
-            setting = Setting.Swap;
+            setting = Setting.Cinematic;
+            Time.timeScale = 0f;
+            StartCoroutine(BossSpellBarCinematic());
         }
 
         UpdateIcons();
@@ -111,6 +138,8 @@ public class SpellEditBar : MonoBehaviour
     public void Close()
     {
         gameObject.SetActive(false);
+        backgroundColourDamper.SetActive(false);
+        beatHandler.gameObject.SetActive(true);
         spellToBePlaced = null;
         associatedSpellPickup = null;
         initialSlotId = null;
@@ -208,7 +237,39 @@ public class SpellEditBar : MonoBehaviour
 
     private void OnMinimizeInventory(InputAction.CallbackContext context)
     {
+        if(InCinematic) return;
+
         if(gameObject.activeSelf)
+        Close();
+    }
+
+    private IEnumerator BossSpellBarCinematic()
+    {
+        // get all spells equipped
+        List<int> spellsEquipped = playerActiveSpellsHandler.GetSpells();
+
+        // get number of unlocked slots
+        int slotsUnlocked = playerActiveSpellsHandler.GetNumberOfUnlockedSlots();
+
+        // looping randomize
+        for(int i = 0;i < 5;i++)
+        {
+            playerActiveSpellsHandler.RemoveAllSpells();
+
+            playerActiveSpellsHandler.RandomizeSpells(playerActiveSpellsHandler.UnlockRandomSlots(slotsUnlocked), new List<int>(spellsEquipped));
+
+            UpdateIcons();
+
+            UpdateSpellBox();
+
+            // play sound for click like slots
+
+            yield return new WaitForSecondsRealtime(0.5f);
+        }
+
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        Time.timeScale = 1f;
         Close();
     }
 }

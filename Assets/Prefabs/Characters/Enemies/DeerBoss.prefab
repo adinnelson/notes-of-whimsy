@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 1184992770284889686}
   - component: {fileID: 8013334492189212857}
   - component: {fileID: 4519917403022096249}
+  - component: {fileID: 1819872311159718260}
+  - component: {fileID: 5479530115689356444}
   m_Layer: 3
   m_Name: DeerBoss
   m_TagString: Untagged
@@ -126,7 +128,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 4, y: 4}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -183,8 +185,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -31147526, guid: 7e1e42ca854f50347bf269fe60e2503f, type: 3}
-  m_Color: {r: 0.9811321, g: 0.19813733, b: 0, a: 1}
+  m_Sprite: {fileID: 7161209093309611107, guid: ab91d1e925627094fbda8bb779e6a0bf, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -208,8 +210,6 @@ MonoBehaviour:
   config: {fileID: 0}
   disableOnDeath: 1
   deathFadeDuration: 1
-  stunnedMaterial: {fileID: -876546973899608171, guid: 1ec764e42543a6e46bb597f1d9c7aeb0, type: 3}
-  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   phase1BPM: 90
   phase2BPM: 100
   phase3BPM: 120
@@ -239,6 +239,40 @@ MonoBehaviour:
   shockwavePulseCount: 8
   shockwaveBeatImpulse: 3.6
   wallCorrectionSpeed: 50
+--- !u!95 &1819872311159718260
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163472863192674373}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 73fe108b046d7f84aa87f6bb698cef81, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5479530115689356444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163472863192674373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 163cc5be27063014b888f23df76eae09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyFlip
 --- !u!1 &1601358773786652688
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,7 +605,7 @@ Transform:
   m_GameObject: {fileID: 2031430307812544820}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.35, y: 1.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

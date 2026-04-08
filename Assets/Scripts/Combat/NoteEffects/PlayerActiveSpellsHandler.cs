@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PlayerActiveSpellsHandler : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     [SerializeField] private GameObject whirlPool;
 
     private PlayerAttack playerAttack;
+
+    private BeatHandler beatHandler;
 
     private struct SlotSpell
     {
@@ -54,6 +57,11 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
         }
 
         playerAttack = GetComponent<PlayerAttack>();
+    }
+
+    void Start()
+    {
+        beatHandler = FindObjectOfType<BeatHandler>();
     }
 
     private void OnDestroy() {
@@ -131,7 +139,7 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     }
 
     // unlock slot
-    public int  UnlockSlot(int? slotId = null)
+    public int UnlockSlot(int? slotId = null)
     {
         if(slotId == null)
         {
@@ -144,6 +152,12 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
         slotSpell.unlocked = true;
 
         slotSpells[(int)slotId] = slotSpell;
+
+        if(beatHandler == null)
+        {
+            beatHandler = FindObjectOfType<BeatHandler>();
+        }
+        beatHandler.BeatUnlocked((int)slotId); 
 
         return (int)slotId;
     }
@@ -160,6 +174,20 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
         }
 
         return lockedSlots;
+    }
+
+    public List<int> GetUnlockedSpellSlots()
+    {
+        List<int> unlockedSlots = new List<int>();
+
+        for (int i = 1; i < slotSpells.Count + 1; i++)
+        {
+            if (!slotSpells[i].unlocked) continue;
+
+            unlockedSlots.Add(i);
+        }
+
+        return unlockedSlots;
     }
 
     // returns if slot is unlocked
@@ -189,6 +217,36 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
         return slotSpells[slotId].noteEffectHandler.SpellData.spellId;
     }
 
+    public int GetNumberOfUnlockedSlots()
+    {
+        int count = 0;
+
+        for (int i = 1; i < slotSpells.Count + 1; i++)
+        {
+            if (!slotSpells[i].unlocked) continue;
+
+            count++;
+        }
+
+        return count;
+    }
+
+    // returns list of spellIds correlating to each spell equipped
+    public List<int> GetSpells()
+    {
+        List<int> spellIds = new List<int>();
+
+        for (int i = 1; i < slotSpells.Count + 1; i++)
+        {
+            if (!slotSpells[i].unlocked) continue;
+            if (slotSpells[i].noteEffectHandler?.SpellData == null) continue;
+
+            spellIds.Add(slotSpells[i].noteEffectHandler.SpellData.spellId);
+        }
+
+        return spellIds;
+    }
+
     public void RemoveAllSpells()
     {
         for (int i = 1; i < slotSpells.Count + 1; i++)
@@ -201,6 +259,34 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
             BeatHandler.UnlockedBeats.Remove(i);
             BeatHandler.ClearUnlockedBeats();
             
+        }
+    }
+
+    public List<int> UnlockRandomSlots(int num)
+    { 
+        List<int> slotsToUnlock = Enumerable.Range(1, 8)
+                       .OrderBy(x => UnityEngine.Random.value)
+                       .Take(num)
+                       .ToList();
+
+        foreach (int slotId in slotsToUnlock)
+        {
+            UnlockSlot(slotId);
+        }
+
+        return slotsToUnlock;
+    }
+
+    public void RandomizeSpells(List<int> unlockSlots, List<int> spells)
+    {
+        foreach(int slotId in unlockSlots)
+        {
+            if(spells.Count == 0) break;
+
+            int spellIndex = UnityEngine.Random.Range(0, spells.Count);
+            EquipSpell(slotId, spells[spellIndex]);
+
+            spells.RemoveAt(spellIndex);
         }
     }
 }

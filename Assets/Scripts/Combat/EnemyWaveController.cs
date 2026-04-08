@@ -18,6 +18,7 @@ public class EnemyWaveController : MonoBehaviour
     private List<GameObject> spawnedEnemies = new List<GameObject>();
     private List<GameObject> enemyPrefabs = new List<GameObject>();
     private BoxCollider2D roomSpawnableBoundsCollider;
+    private Sprite spawnEffectSprite;
 
     private RoomInfo roomInfo;
 
@@ -194,13 +195,32 @@ public class EnemyWaveController : MonoBehaviour
     /// <param name="effectDuration"></param>
     private IEnumerator SpawnEnemyWithEffect(Vector3 spawnPosition, GameObject enemyPrefab, float effectDuration)
     {
-        // Placeholder spawn effect using a sphere that scales up from zero
-        // TODO: Replace with actual spawn effect
-        GameObject spawnEffect = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        spawnEffect.transform.parent = transform; // Set the spawn effect as a child of the EnemyWaveController for organization
-        spawnEffect.transform.position = spawnPosition;
-        spawnEffect.transform.localScale = Vector3.zero;
-        spawnEffect.GetComponent<Collider>().enabled = false;
+        GameObject spawnEffect;
+
+        if (spawnEffectSprite != null)
+        {
+            spawnEffect = new GameObject("SpawnEffect");
+            spawnEffect.transform.SetParent(transform);
+            spawnEffect.transform.position = spawnPosition;
+            spawnEffect.transform.localScale = Vector3.zero;
+
+            SpriteRenderer spawnEffectRenderer = spawnEffect.AddComponent<SpriteRenderer>();
+            spawnEffectRenderer.sprite = spawnEffectSprite;
+        }
+        else
+        {
+            // Fallback keeps existing behavior when no sprite was provided by RoomInfo.
+            spawnEffect = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            spawnEffect.transform.SetParent(transform);
+            spawnEffect.transform.position = spawnPosition;
+            spawnEffect.transform.localScale = Vector3.zero;
+
+            Collider collider = spawnEffect.GetComponent<Collider>();
+            if (collider != null)
+            {
+                collider.enabled = false;
+            }
+        }
 
         // Scale up the spawn effect over time
         float elapsedTime = 0.0f;
@@ -225,5 +245,10 @@ public class EnemyWaveController : MonoBehaviour
         pendingSpawns--;
         if (pendingSpawns <= 0)
             spawningEnemies = false;
+    }
+
+    public void SetSpawnEffectSprite(Sprite sprite)
+    {
+        spawnEffectSprite = sprite;
     }
 }

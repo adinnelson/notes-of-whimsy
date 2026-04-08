@@ -50,14 +50,23 @@ public class Health : MonoBehaviour, IDamageable
         {
             ReconnectLargeUIHPBar();
         }
-        /*
-        if (healthBarUpdater == null || healthText == null)
+    }
+
+    public void ReconnectLargeUIHPBar()
+    {
+        if (!isPlayer)
         {
-            HPBarLargeInUI ui = FindObjectOfType<HPBarLargeInUI>(true);
-            if (ui != null)
+            return;
+        }
+
+        HPBarLargeInUI[] bars = FindObjectsOfType<HPBarLargeInUI>(true);
+        foreach (var bar in bars)
+        {
+            if (!bar.isBossBar)
             {
-                healthBarUpdater = ui.healthBarUpdater;
-                healthText = ui.healthText;
+                healthBarUpdater = bar.healthBarUpdater;
+                healthText = bar.healthText;
+                break;
             }
         }
 
@@ -69,21 +78,21 @@ public class Health : MonoBehaviour, IDamageable
         if (healthText != null)
         {
             healthText.UpdateHPText(currentHealth, MaxHealth);
-        }*/
+        }
     }
 
-    public void ReconnectLargeUIHPBar()
+    public void ReconnectBossUIHPBar()
     {
-        if (!isPlayer)
+        HPBarLargeInUI[] bars = FindObjectsOfType<HPBarLargeInUI>(true);
+        foreach (var bar in bars)
         {
-            return;
-        }
-
-        HPBarLargeInUI ui = FindObjectOfType<HPBarLargeInUI>(true);
-        if (ui != null)
-        {
-            healthBarUpdater = ui.healthBarUpdater;
-            healthText = ui.healthText;
+            if (bar.isBossBar)
+            {
+                healthBarUpdater = bar.healthBarUpdater;
+                healthText = bar.healthText;
+                bar.gameObject.SetActive(true);
+                break;
+            }
         }
 
         if (healthBarUpdater != null)

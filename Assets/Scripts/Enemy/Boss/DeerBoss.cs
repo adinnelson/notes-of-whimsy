@@ -10,6 +10,13 @@ public class DeerBoss : EnemyBase
     private enum BossAttack { Charge, Beam, Shockwave }
     private enum BossPhase { First, Second, Third }
 
+    private const string ANIM_IDLE = "BossIdle";
+    private const string ANIM_SLAM_TELEGRAPH = "SlamTelegraph";
+    private const string ANIM_SLAM = "BossSlam";
+    private const string TRIGGER_IDLE = "Idle";
+    private const string TRIGGER_CHARGE = "Charge";
+    private const string TRIGGER_CHARGE_LASER = "ChargeLaser";
+
     private const string WALL_TAG = "Walls";
     private const int WALL_OVERLAP_BUFFER_SIZE = 8;
     private const int FALLBACK_BEAM_TEXTURE_SIZE = 64;
@@ -105,6 +112,9 @@ public class DeerBoss : EnemyBase
 
     private BeatHandler beatHandler;
 
+    private SpellEditBar spellEditBar;
+    private EnemyFlip enemyFlip;
+
     private BossAttack currentAttack;
     private BossPhase currentPhase = BossPhase.First;
     private int sequenceBeat = 0;     // 0-7 across two 4-beat bars
@@ -133,6 +143,7 @@ public class DeerBoss : EnemyBase
     private bool beamFireCueActive = false;
     private Vector2 lastSafePosition;
     private readonly Collider2D[] wallOverlapResults = new Collider2D[WALL_OVERLAP_BUFFER_SIZE];
+    private Animator animator;
 
     // ───────── Lifecycle ─────────
 
@@ -144,6 +155,8 @@ public class DeerBoss : EnemyBase
     protected override void Awake()
     {
         base.Awake();
+        animator = GetComponent<Animator>();
+        enemyFlip = GetComponent<EnemyFlip>();
 
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         lastSafePosition = rb.position;
@@ -185,6 +198,7 @@ public class DeerBoss : EnemyBase
     {
         gameManager = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
         beatHandler = GameObject.Find("BeatBar")?.GetComponent<BeatHandler>();
+        spellEditBar = FindObjectOfType<SpellEditBar>(true);
 
         if (gameManager == null)
         {
@@ -198,6 +212,7 @@ public class DeerBoss : EnemyBase
 
         // Force the boss into a clean idle visual state so the first chosen
         // attack does not inherit any prefab-active telegraphs or warning sprites.
+        PlayAnimation(ANIM_IDLE);
         HideTelegraph();
         if (slamHitbox != null)
         {
@@ -232,6 +247,7 @@ public class DeerBoss : EnemyBase
 
         currentAttack = PickNextAttack();
         sequenceBeat = 0;
+        health.ReconnectBossUIHPBar(); //connects & activates the boss to its UI HP Bar
     }
 
     private void FixedUpdate()
@@ -417,15 +433,18 @@ public class DeerBoss : EnemyBase
                      slamHitbox.Deactivate();
                 }
                 rb.linearVelocity = Vector2.zero;
+                PlayAnimation(ANIM_IDLE);
                 break;
             case 7:
                 rb.linearVelocity = Vector2.zero;
+                PlayAnimation(ANIM_IDLE);
                 break;
         }
     }
 
     private void TelegraphCharge()
     {
+        FacePlayer();
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
         if (chargeHitbox != null)
@@ -442,6 +461,7 @@ public class DeerBoss : EnemyBase
         lockedChargeDir = new Vector2(Mathf.Cos(finalAngle), Mathf.Sin(finalAngle));
 
         ShowTelegraph(lockedChargeDir);
+        TriggerAnimation(TRIGGER_CHARGE);
     }
 
     /// <summary>
@@ -451,16 +471,19 @@ public class DeerBoss : EnemyBase
     /// </summary>
     private void PrepareNextCharge()
     {
+        FacePlayer();
         Vector2 toTarget = ((Vector2)target.position - (Vector2)transform.position).normalized;
         float baseAngle = Mathf.Atan2(toTarget.y, toTarget.x);
         float jitter = Random.Range(-chargeJitterDegrees, chargeJitterDegrees) * Mathf.Deg2Rad;
         lockedChargeDir = new Vector2(Mathf.Cos(baseAngle + jitter), Mathf.Sin(baseAngle + jitter));
         ShowTelegraph(lockedChargeDir);
+        TriggerAnimation(TRIGGER_CHARGE);
     }
 
     private void DoCharge()
     {
         HideTelegraph();
+        TriggerAnimation(TRIGGER_CHARGE);
 
         isCharging = true;
         chargeTimer = chargeDuration;
@@ -475,6 +498,7 @@ public class DeerBoss : EnemyBase
 
     private void TelegraphSlam()
     {
+        FacePlayer();
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
         if (chargeHitbox != null)
@@ -490,6 +514,8 @@ public class DeerBoss : EnemyBase
         {
             slamHitbox.Telegraph(slamDirection, slamSize, slamOffset);
         }
+
+        PlayAnimation(ANIM_SLAM_TELEGRAPH);
     }
 
     private void DoSlam()
@@ -508,6 +534,8 @@ public class DeerBoss : EnemyBase
         {
             slamHitbox.Activate(target);
         }
+
+        PlayAnimation(ANIM_SLAM);
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -527,18 +555,24 @@ public class DeerBoss : EnemyBase
         switch (sequenceBeat)
         {
             case 0:
+                FacePlayer();
                 rb.linearVelocity = Vector2.zero;
                 SetBeamChargeVisualActive(true);
                 SetBeamChargeFireCue(false);
+                TriggerAnimation(TRIGGER_CHARGE_LASER);
                 break;
 
             case 1:
             case 2:
                 // Charge-up continues — visual already active
+                FacePlayer();
+                TriggerAnimation(TRIGGER_CHARGE_LASER);
                 break;
 
             case 3:
+                FacePlayer();
                 SetBeamChargeFireCue(true);
+                TriggerAnimation(TRIGGER_CHARGE_LASER);
                 break;
 
             case 4:
@@ -555,8 +589,10 @@ public class DeerBoss : EnemyBase
 
     private void FireBeam()
     {
+        FacePlayer();
         SetBeamChargeVisualActive(false);
         SetBeamChargeFireCue(false);
+        TriggerAnimation(TRIGGER_IDLE);
 
         if (beamPrefab == null)
         {
@@ -620,10 +656,12 @@ public class DeerBoss : EnemyBase
                 {
                     transform.position = arenaCenter.position;
                 }
+                PlayAnimation(ANIM_IDLE);
                 break;
 
             case 3:
                 rb.linearVelocity = Vector2.zero;
+                PlayAnimation(ANIM_SLAM_TELEGRAPH);
                 break;
 
             case 4:
@@ -640,6 +678,7 @@ public class DeerBoss : EnemyBase
 
     private void TelegraphCenterCharge()
     {
+        FacePlayer();
         rb.linearVelocity = Vector2.zero;
         isCharging = false;
 
@@ -683,6 +722,7 @@ public class DeerBoss : EnemyBase
         isCharging = false;
         SetPlayerCollisionEnabled(false);
         HideTelegraph();
+        PlayAnimation(ANIM_SLAM);
 
         if (shockwavePrefab == null)
         {
@@ -718,21 +758,21 @@ public class DeerBoss : EnemyBase
         if (!phase2Triggered && ratio <= 0.66f)
         {
             phase2Triggered = true;
-            StartCoroutine(PhaseTransitionRoutine(BossPhase.Second, phase2BPM));
+            PhaseTransitionRoutine(BossPhase.Second, phase2BPM);
             return true;
         }
 
         if (!phase3Triggered && ratio <= 0.33f)
         {
             phase3Triggered = true;
-            StartCoroutine(PhaseTransitionRoutine(BossPhase.Third, phase3BPM));
+            PhaseTransitionRoutine(BossPhase.Third, phase3BPM);
             return true;
         }
 
         return false;
     }
 
-    private IEnumerator PhaseTransitionRoutine(BossPhase newPhase, float newBPM)
+    private void PhaseTransitionRoutine(BossPhase newPhase, float newBPM)
     {
         inPhaseTransition = true;
         currentPhase = newPhase;
@@ -756,6 +796,7 @@ public class DeerBoss : EnemyBase
             Destroy(activeShockwave.gameObject);
         }
         activeShockwave = null;
+        PlayAnimation(ANIM_IDLE);
 
         // Pause game
         Time.timeScale = 0.0f;
@@ -763,10 +804,9 @@ public class DeerBoss : EnemyBase
         // TODO: Hook inventory UI here 
         // Show inventory, randomize unlocked beat / spell order multiple times
         // over a few seconds, pause on final combo, then close inventory.
-        yield return new WaitForSecondsRealtime(3.0f);
+        //yield return new WaitForSecondsRealtime(3.0f);
+        spellEditBar.Open(isCinematic: true);
 
-        // Resume game
-        Time.timeScale = 1.0f;
 
         // Apply new BPM — all beat-driven logic automatically speeds up
         beatHandler.SetBPM(newBPM);
@@ -800,6 +840,38 @@ public class DeerBoss : EnemyBase
         {
             telegraphVisual.SetActive(false);
         }
+    }
+
+    private void FacePlayer()
+    {
+        if (enemyFlip != null)
+        {
+            enemyFlip.FlipEnemy();
+        }
+    }
+
+    private void PlayAnimation(string stateName)
+    {
+        if (animator == null)
+        {
+            return;
+        }
+
+        animator.ResetTrigger(TRIGGER_IDLE);
+        animator.ResetTrigger(TRIGGER_CHARGE);
+        animator.ResetTrigger(TRIGGER_CHARGE_LASER);
+        animator.Play(stateName, 0, 0.0f);
+    }
+
+    private void TriggerAnimation(string triggerName)
+    {
+        if (animator == null)
+        {
+            return;
+        }
+
+        animator.ResetTrigger(triggerName);
+        animator.SetTrigger(triggerName);
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -836,6 +908,7 @@ public class DeerBoss : EnemyBase
         }
         SetBeamChargeVisualActive(false);
         SetBeamChargeFireCue(false);
+        PlayAnimation(ANIM_IDLE);
 
         StartCoroutine(FadeOutAndDisable());
     }
