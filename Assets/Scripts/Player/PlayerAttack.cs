@@ -3,15 +3,16 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 using FMODUnity;
+using UnityEngine.UIElements;
 
 
 public class PlayerAttack : MonoBehaviour
 {
 
-
-
-    // Reference your event in the Unity Inspector
+    // Reference to FMOD Events (attack and dashing)
     public EventReference attackEvent;
+    public EventReference dashEvent;
+    
     public const string MISSED_ATTACK_LOCK_KEY = "MISSED_ATTACK";
 
     [SerializeField] private BeatHandler beathandler;
@@ -137,6 +138,14 @@ public class PlayerAttack : MonoBehaviour
 
             animator.SetTrigger("Dash");
 
+            //Dashing sound effect instance 
+            var dashingInstance = RuntimeManager.CreateInstance(dashEvent);
+
+            dashingInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            dashingInstance.start();
+            dashingInstance.release();
+            
+
             if(rb.linearVelocity.magnitude > 0)
             {
 
@@ -179,13 +188,17 @@ public class PlayerAttack : MonoBehaviour
                             string spellLabel = GetSpellLabel(spellHandler.SpellData.spellId); // Id will match FMOD naming convention 
                             if (!string.IsNullOrEmpty(spellLabel))
                             {
-                                //create 
-                                var instance = RuntimeManager.CreateInstance(attackEvent);
-                                instance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
-                                //matching the spell name as a parameter in fmod and fire it one time 
-                                instance.setParameterByNameWithLabel("spell", spellLabel);
-                                instance.start();
-                                instance.release();
+                                Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                                mouseWorldPosition.z = 0;
+                                //created to get the Event of the sound effect 
+                                //Sound effect is dependend on the projectile position 
+                                var spellInstance = RuntimeManager.CreateInstance(attackEvent);
+                                spellInstance.set3DAttributes(RuntimeUtils.To3DAttributes(mouseWorldPosition));
+                                //matching the spell name as a parameter in fmod
+                                // fire it one time! 
+                                spellInstance.setParameterByNameWithLabel("spell", spellLabel);
+                                spellInstance.start();
+                                spellInstance.release();
                             }
                         }
 
@@ -213,7 +226,7 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    //fMOD labels naming to match cases with the attack fired 
+    //FMOD labels naming to match cases with the attack fired 
     private string GetSpellLabel(int spellId)
     {
         switch (spellId)

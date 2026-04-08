@@ -310,7 +310,7 @@ MonoBehaviour:
   sourceProjectPath: 
   sourceBankPath: Assets/StreamingAssets/FMOD/Desktop
   sourceBankPathUnformatted: 
-  BankRefreshCooldown: 5
+  BankRefreshCooldown: 1
   ShowBankRefreshWindow: 1
   AutomaticEventLoading: 1
   BankLoadType: 0
@@ -334,9 +334,9 @@ MonoBehaviour:
   - Master
   Banks:
   - BeatAttack
+  - Dashing
   - MainMenu
   - SpellSound
-  - SpellSoundEffect
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

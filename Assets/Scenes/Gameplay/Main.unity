@@ -496,6 +496,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a06cf0089aa00de408d434c20b3ebdc1, type: 3}
+--- !u!1 &1234779705 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2899716476014781224, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+  m_PrefabInstance: {fileID: 1429416696}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1286488057
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -569,6 +574,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 173525887963722662, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
+      propertyPath: panel
+      value: 
+      objectReference: {fileID: 1234779705}
     - target: {fileID: 326566665961250878, guid: 46f188c42ccc6164bbcb811772502389, type: 3}
       propertyPath: m_SizeDelta.y
       value: 24.328
@@ -951,19 +960,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0.00045475215
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0.0883473
+      value: 0.191453
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.9986357
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.8225438
+      value: 0.61538464
       objectReference: {fileID: 0}
     - target: {fileID: 8571626184657687215, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_LocalPosition.x

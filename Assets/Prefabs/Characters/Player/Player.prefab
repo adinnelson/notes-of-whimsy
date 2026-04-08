@@ -200,6 +200,13 @@ MonoBehaviour:
       Data3: -857814874
       Data4: -106313446
     Path: event:/SpellSoundEffect
+  dashEvent:
+    Guid:
+      Data1: -1024962143
+      Data2: 1273082375
+      Data3: -1676126579
+      Data4: 1963078230
+    Path: event:/Dashing
   beathandler: {fileID: 0}
   firePoint: {fileID: 5189259256147739164}
   attackBeamPrefab: {fileID: 3228955244108052592, guid: ab89f7ce67ec3ca498a8c605dd8f7bd2, type: 3}
