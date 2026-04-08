@@ -134,10 +134,14 @@ public class PlayerAttack : MonoBehaviour
             animator.SetTrigger("Dash");
             dashInvulnerableUntil = Time.time + dashInvulnerabilityDuration;
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
+<<<<<<< HEAD
+            if (rb.linearVelocity.magnitude > 0)
+=======
 
             animator.SetTrigger("Dash");
 
             if(rb.linearVelocity.magnitude > 0)
+>>>>>>> main
             {
 
                 rb.AddForce(rb.linearVelocity.normalized * 3000);
@@ -147,8 +151,13 @@ public class PlayerAttack : MonoBehaviour
                 Vector3 mouseScreenPosition = Mouse.current.position.value;
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
+<<<<<<< HEAD
+                rb.AddForce(direction.normalized * 3000);
+
+=======
 
                 rb.AddForce(direction.normalized * 3000);   
+>>>>>>> main
             }
             return;
         }
