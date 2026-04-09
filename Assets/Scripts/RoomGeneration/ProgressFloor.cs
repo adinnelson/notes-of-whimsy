@@ -64,6 +64,8 @@ public class ProgressFloor : MonoBehaviour
         GameObject mm = FindObjectOfType<MusicManager>()?.gameObject;
         BeatHandler beatHandler = FindObjectOfType<BeatHandler>();
 
+        PlayerAttack.ClearGenericBeams();
+
         Destroy(player);
         Destroy(gm);
         Destroy(mm);
