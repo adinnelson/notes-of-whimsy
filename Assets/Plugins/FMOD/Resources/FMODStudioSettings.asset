@@ -334,6 +334,9 @@ MonoBehaviour:
   - Master
   Banks:
   - BeatAttack
+  - Dashing
+  - MainMenu
+  - SpellSound
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
@@ -349,18 +352,18 @@ MonoBehaviour:
   HideSetupWizard: 1
   LastEventReferenceScanVersion: 131858
   Platforms:
+  - {fileID: -9099529784665027662}
+  - {fileID: -8340594034605013279}
+  - {fileID: -5952708143290095518}
+  - {fileID: -4743588054967686771}
+  - {fileID: 249045786574496496}
+  - {fileID: 553411592401962942}
   - {fileID: 1319684772912048760}
   - {fileID: 2960617608483193450}
   - {fileID: 3562846877799072906}
-  - {fileID: -4743588054967686771}
-  - {fileID: 249045786574496496}
-  - {fileID: 8946714402869288174}
-  - {fileID: -5952708143290095518}
-  - {fileID: -8340594034605013279}
-  - {fileID: -9099529784665027662}
   - {fileID: 4075393260902364885}
-  - {fileID: 553411592401962942}
   - {fileID: 6805221515459062294}
+  - {fileID: 8946714402869288174}
   MigratedPlatforms: 120000000b0000000800000009000000060000000a0000000000000015000000050000000c0000000200000001000000
 --- !u!114 &249045786574496496
 MonoBehaviour:
@@ -651,16 +654,16 @@ MonoBehaviour:
     HasValue: 0
   displaySortOrder: 0
   childIdentifiers:
-  - 2fea114e74ecf3c4f920e1d5cc1c4c40
+  - 52eb9df5db46521439908db3a29a1bbb
+  - c88d16e5272a4e241b0ef0ac2e53b73d
+  - b7716510a1f36934c87976f3a81dbf3d
   - fd7c55dab0fce234b8c25f6ffca523c1
   - 46fbfdf3fc43db0458918377fd40293e
-  - de700ef3f37a49b58a57ae3addf01ad9
-  - b7716510a1f36934c87976f3a81dbf3d
-  - c88d16e5272a4e241b0ef0ac2e53b73d
-  - 52eb9df5db46521439908db3a29a1bbb
-  - 2c5177b11d81d824dbb064f9ac8527da
   - 0f8eb3f400726694eb47beb1a9f94ce8
+  - 2fea114e74ecf3c4f920e1d5cc1c4c40
+  - 2c5177b11d81d824dbb064f9ac8527da
   - e7a046c753c3c3d4aacc91f6597f310d
+  - de700ef3f37a49b58a57ae3addf01ad9
   codecChannels:
     Value: []
     HasValue: 0

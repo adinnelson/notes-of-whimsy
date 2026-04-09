@@ -4792,12 +4792,52 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 180675255}
     - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: dashEvent.Path
+      value: event:/Dashing
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: attackBeamPrefab
       value: 
       objectReference: {fileID: 3228955244108052592, guid: ab89f7ce67ec3ca498a8c605dd8f7bd2, type: 3}
     - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Path
+      value: event:/SpellSoundEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: fireCooldownSeconds
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: dashEvent.Guid.Data1
+      value: -1024962143
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: dashEvent.Guid.Data2
+      value: 1273082375
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: dashEvent.Guid.Data3
+      value: -1676126579
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: dashEvent.Guid.Data4
+      value: 1963078230
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data1
+      value: 568239451
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data2
+      value: 1158461736
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data3
+      value: -857814874
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
+      propertyPath: attackEvent.Guid.Data4
+      value: -106313446
       objectReference: {fileID: 0}
     - target: {fileID: 5369474722563365308, guid: bec57f59524fe754998c561bb9f1c507, type: 3}
       propertyPath: failedInputLockoutTime
@@ -4994,15 +5034,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0
+      value: 0.14115308
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 1
+      value: 0.9992554
       objectReference: {fileID: 0}
     - target: {fileID: 3314921149183790115, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 1
+      value: 0.71570575
       objectReference: {fileID: 0}
     - target: {fileID: 8571626184657687215, guid: 6502670e553bf7141a4bff9717fa45cd, type: 3}
       propertyPath: m_LocalPosition.x
