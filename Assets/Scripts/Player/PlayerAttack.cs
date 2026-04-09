@@ -37,7 +37,9 @@ public class PlayerAttack : MonoBehaviour
     private Vector2 lastAimDirection = Vector2.right;
     private Vector2 lastMousePos;
 
-    private float lockoutTimer = 0f;
+    private float lockoutTimer = 0.0f;
+    [SerializeField] private float dashInvulnerabilityDuration = 0.2f;
+    private float dashInvulnerableUntil = 0.0f;
 
     //Animator
     private Animator animator;
@@ -50,6 +52,8 @@ public class PlayerAttack : MonoBehaviour
         Mouse,
         Gamepad
     }
+
+    public bool IsDashInvulnerable => Time.time <= dashInvulnerableUntil;
 
     private void Awake()
     {
@@ -109,10 +113,10 @@ public class PlayerAttack : MonoBehaviour
         // whichever device (Mouse or Controller) that fired gets to be the active aim source for this shot.
         SetAimSourceFromFireDevice(context);
 
-        //if(attackLocks.Count > 0)
-        //{
-        //    return;
-        //}
+        if(attackLocks.Count > 0)
+        {
+          return;
+        }
 
         if (lockoutTimer > 0)
         {
@@ -128,12 +132,12 @@ public class PlayerAttack : MonoBehaviour
         if (beathandler != null && beathandler.ValidDashInterval && context.action.name == "Sprint")
         {
             animator.SetTrigger("Dash");
+            dashInvulnerableUntil = Time.time + dashInvulnerabilityDuration;
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
-            //Apply Dashing sound effect! 
-            ApplyDashingSoundEffect();
+            animator.SetTrigger("Dash");
 
-            if (rb.linearVelocity.magnitude > 0)
+            if(rb.linearVelocity.magnitude > 0)
             {
 
                 rb.AddForce(rb.linearVelocity.normalized * 3000);
@@ -143,8 +147,8 @@ public class PlayerAttack : MonoBehaviour
                 Vector3 mouseScreenPosition = Mouse.current.position.value;
                 Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
                 Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
-                rb.AddForce(direction.normalized * 3000);
 
+                rb.AddForce(direction.normalized * 3000);   
             }
             return;
         }
@@ -441,7 +445,7 @@ public class PlayerAttack : MonoBehaviour
         //Fire raycast if we hit anything call noteEffectHandler hit
         // probalbly can draw a line as well
 
-        Vector2 spawnPoint = (Vector2)projectileSpawnPosition + finalDirection;
+        Vector2 spawnPoint = (Vector2)projectileSpawnPosition + 0.25f * finalDirection;
 
         RaycastHit2D hit = Physics2D.Raycast(spawnPoint, finalDirection, 100, ~ignoredLayersMask);
 
@@ -470,7 +474,9 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        if (damageable != null)
+        endBeamPos = new Vector3(endBeamPos.x, endBeamPos.y, -GameManager.Z_RANGE);
+
+        if(damageable != null)
         {
             noteEffectHandler?.HitEnemy(damageable);
         }

@@ -209,9 +209,10 @@ MonoBehaviour:
     Path: event:/Dashing
   beathandler: {fileID: 0}
   firePoint: {fileID: 5189259256147739164}
-  attackBeamPrefab: {fileID: 0}
+  attackBeamPrefab: {fileID: 3228955244108052592, guid: ab89f7ce67ec3ca498a8c605dd8f7bd2, type: 3}
   fireCooldownSeconds: 0.2
-  failedInputLockoutTime: 0.15
+  failedInputLockoutTime: 0.3
+  dashInvulnerabilityDuration: 0.2
 --- !u!114 &1155841396824913759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,9 +289,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   enemyMaxHealth: 100
-  healthPrefab: {fileID: 4296676540866056889, guid: 854312ed6de448b40ad7c0fcb480903a, type: 3}
+  healthPrefab: {fileID: 8085078092535345474, guid: 59df34ffd7f21d448abc2c2c6469964d, type: 3}
   healthBarUpdater: {fileID: 0}
   healthText: {fileID: 0}
+  healthBarVerticalOffset: 0.1
   whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
   defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   flashTime: 0.1
@@ -315,6 +317,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   lightningEffect: {fileID: 7702718193461565169, guid: ebeea1f957af4c14d92910c4860b94ed, type: 3}
+  stunOverlay: {fileID: 2058985564057712222, guid: b3d75d07909eeb047b76d5e7c1c45e76, type: 3}
   laserPrefab: {fileID: -5741139717231234517, guid: 3e9e1b16b71bbd940954b08ad1827808, type: 3}
   explosion: {fileID: 8659360273826524317, guid: a3c244a8b81773849b6802e47ae1bd09, type: 3}
   whirlPool: {fileID: 287630347529981786, guid: 8f663a66e6225e5438d9db062550419f, type: 3}

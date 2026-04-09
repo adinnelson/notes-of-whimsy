@@ -6,13 +6,14 @@ using UnityEngine.Pool;
 
 public class YellowNoteEffectHandler : NoteEffectHandler
 {
+    public const string STUN_KEY = "yellow";
+
     // Set values used for calculations
     private float detectionRadius = 3.5f;
     private float damage = 25.0f;
     private float cooldown = 5.0f;
     private float timeBetweenTargets = 0.1f;
     private float stunTime = 5.0f;
-    private string stunKey = "yellow";
 
     // flags and tracking variables
     private float timeElapsed = 0.0f;
@@ -21,7 +22,10 @@ public class YellowNoteEffectHandler : NoteEffectHandler
 
     // For tracking stunned enemies
     private Dictionary<EnemyBase, float> stunnedEnemies = new Dictionary<EnemyBase, float>();
+    private Dictionary<EnemyBase, GameObject> stunnedOverlays = new Dictionary<EnemyBase, GameObject>();
     private HashSet<EnemyBase> storedEnemies = new HashSet<EnemyBase>();
+
+    private GameObject stunOverlay;
     
     // For lightning chain order
     private List<EnemyBase> enemies = new List<EnemyBase>();
@@ -65,10 +69,11 @@ public class YellowNoteEffectHandler : NoteEffectHandler
         timeElapsed +=  Time.fixedDeltaTime;
     }
 
-    public void CustomYellowInit(LightningVisualLogic lightningEffect, LayerMask enemyMask)
+    public void CustomYellowInit(LightningVisualLogic lightningEffect, LayerMask enemyMask, GameObject stunOverlay)
     {
         this.lightningEffect = lightningEffect;
         this.enemyMask = enemyMask;
+        this.stunOverlay = stunOverlay;
 
         lightningChainPool = new ObjectPool<LightningVisualLogic>(
             createFunc: CreateItem,
@@ -104,6 +109,12 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     {
         enemies.Clear();
         Health enemyHealth = (Health)damageable;
+        
+        if(enemyHealth.GetComponent<DeerBoss>() != null)
+        {
+            enemyHealth.TakeDamage(damage);
+            return;          
+        }
 
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(enemyHealth.transform.position, detectionRadius, enemyMask);
 
@@ -140,16 +151,25 @@ public class YellowNoteEffectHandler : NoteEffectHandler
     {
         if(storedEnemies.Contains(enemy))
         {
-            stunnedEnemies[enemy] += stunTime;
-            //enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
-            enemy.AddStunEffect(stunKey);
+            if (stunnedEnemies[enemy] <= 0)
+            {
+                stunnedEnemies[enemy] = stunTime;
+                stunnedOverlays[enemy].SetActive(true);
+                enemy.AddStunEffect(STUN_KEY);   
+            }
             return;
         }
+
+        GameObject overlay = Instantiate(stunOverlay, enemy.transform.position - Vector3.forward, enemy.transform.rotation);
+        overlay.transform.SetParent(enemy.transform);
+
+        stunnedOverlays.Add(enemy, overlay);
+
 
         stunnedEnemies.Add(enemy, stunTime);
         storedEnemies.Add(enemy);
         //enemy.gameObject.transform.localScale = new Vector3(2, 2, 2);
-        enemy.AddStunEffect(stunKey);
+        enemy.AddStunEffect(STUN_KEY);
     }
 
     // updates cooldown
@@ -178,8 +198,10 @@ public class YellowNoteEffectHandler : NoteEffectHandler
 
             if(stunnedEnemies[enemy] <= 0)
             {
-                enemy.RemoveStunEffect(stunKey);
-                enemy.gameObject.transform.localScale = new Vector3(1, 1, 1);
+                enemy.RemoveStunEffect(STUN_KEY);
+                stunnedOverlays[enemy].SetActive(false);
+
+                //enemy.gameObject.transform.localScale = new Vector3(1, 1, 1);
             }
         }
     }

@@ -17,6 +17,8 @@ public class FrogEnemy : EnemyBase
 
     private FrogAOE pendingAoe = null;
     private bool shouldExplodeNext = false;
+    private int explodeBeatCounter = 0;
+    private const int BEAT_TO_EXPLODE_AFTER_TELEGRAPH = 2;
 
     private Animator animator;
 
@@ -39,6 +41,10 @@ public class FrogEnemy : EnemyBase
                 Physics2D.IgnoreCollision(frogCol, playerCol);
             }
         }
+
+        int zSub = (int)(gameObject.transform.position.y / GameManager.Z_RANGE);
+
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.y - GameManager.Z_RANGE * zSub);
     }
 
     // Allows the frog enemy to attack whenever its beat logic triggers.
@@ -66,16 +72,22 @@ public class FrogEnemy : EnemyBase
             return;
         }
 
-        if (shouldExplodeNext)
+        switch(explodeBeatCounter)
         {
-            ExplodePending();
-        }
-        else
-        {
-            SpawnTelegraph();
+            case 0:
+                SpawnTelegraph();
+                break;
+            case BEAT_TO_EXPLODE_AFTER_TELEGRAPH:
+                ExplodePending();
+                break;
         }
 
-        shouldExplodeNext = !shouldExplodeNext;
+        explodeBeatCounter++;
+        if(explodeBeatCounter > BEAT_TO_EXPLODE_AFTER_TELEGRAPH)
+        {
+            explodeBeatCounter = 0;
+        }
+
     }
 
     // Spawns the AoE telegraph aimed slightly ahead of the player's movement.

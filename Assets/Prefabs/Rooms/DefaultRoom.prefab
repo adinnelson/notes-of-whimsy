@@ -2481,6 +2481,7 @@ MonoBehaviour:
   isSafe: 0
   roomType: 1
   isShop: 0
+  spawnSprite: {fileID: 21300000, guid: 1e2d71e607867454a9af492d67e2cdb3, type: 3}
   itemSpawnLocations:
   - {fileID: 3435326922334342358}
   useCustomCameraBounds: 1
@@ -2488,6 +2489,8 @@ MonoBehaviour:
   customMaxSqrVerticalCameraDistance: 4
   customCameraBoundsShape: 0
   customCrossArmHalfThickness: 1.23
+  customCameraBoundsOffsetX: 0
+  customCameraBoundsOffsetY: 0
 --- !u!61 &3843382522913789850
 BoxCollider2D:
   m_ObjectHideFlags: 0

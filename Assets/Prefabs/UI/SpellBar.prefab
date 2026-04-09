@@ -518,6 +518,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f86e09c73e8f5f44a9b453c9d24069b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellEditBar
+  lockedOverlayPrefab: {fileID: 966109705437021478, guid: 28af6c774c4c40a43b1fc38547131a24, type: 3}
+  backgroundColourDamperPrefab: {fileID: 1868642184601855951, guid: c98a7f83511eb9b45aeb082b316c4914, type: 3}
 --- !u!1 &5185505809248994498
 GameObject:
   m_ObjectHideFlags: 0

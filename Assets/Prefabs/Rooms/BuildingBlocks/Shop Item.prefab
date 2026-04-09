@@ -81,8 +81,8 @@ SpriteRenderer:
   m_SortingLayer: -2
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 74baa04eef6ca684786a56ed43a8496e, type: 3}
-  m_Color: {r: 0.8773585, g: 0.8526993, b: 0.34349412, a: 1}
+  m_Sprite: {fileID: -8353890027499722304, guid: 450f221e73cb26c4bac5003352a953f9, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -523,5 +523,5 @@ MonoBehaviour:
   player: {fileID: 0}
   interactionDistance: 1.5
   shopManager: {fileID: 0}
-  canInteractColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  canInteractColor: {r: 1, g: 0.9203187, b: 0, a: 1}
   cannotInteractColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

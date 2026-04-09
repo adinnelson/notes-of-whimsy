@@ -5,20 +5,34 @@ using System.Collections.Generic;
 
 public class SpellEditBar : MonoBehaviour
 {
+    public const string SPELL_BAR_ATTACK_LOCK_KEY = "spellbar";
+
+    [SerializeField] private GameObject lockedOverlayPrefab;
+
+    [SerializeField] private GameObject backgroundColourDamperPrefab;
+    private GameObject backgroundColourDamper;
     private List<SpellBox> spellBoxes = new List<SpellBox>();
+    private List<GameObject> lockedOverlays = new List<GameObject>();
+
+
     private PlayerActiveSpellsHandler playerActiveSpellsHandler;
     private PlayerInventory playerInventory;
+    private PlayerAttack playerAttack;
+    private BeatHandler beatHandler;
     private InputSystem_Actions inputActions;
-
-
 
     enum Setting
     {
         Swap,
-        Equip
+        Equip, 
+        Cinematic
     }
 
     private Setting setting = Setting.Equip;
+    public bool InCinematic
+    {
+        get { return setting == Setting.Cinematic; }
+    }
 
     private SpellDataSO spellToBePlaced = null;
     private GameObject associatedSpellPickup = null;
@@ -49,6 +63,11 @@ public class SpellEditBar : MonoBehaviour
 
         playerActiveSpellsHandler = FindObjectOfType<PlayerActiveSpellsHandler>();
         playerInventory = FindObjectOfType<PlayerInventory>();
+        playerAttack = FindObjectOfType<PlayerAttack>();
+
+        backgroundColourDamper = Instantiate(backgroundColourDamperPrefab, transform.position, transform.rotation);
+        backgroundColourDamper.transform.SetParent(gameObject.transform);
+        backgroundColourDamper.SetActive(false);
 
         // save spell boxes references
         for (int i = 0; i < transform.childCount; i++)
@@ -62,6 +81,13 @@ public class SpellEditBar : MonoBehaviour
             {
                 spellBox.Init(i + 1);
                 spellBoxes.Add(spellBox);
+
+                GameObject lockOverlay = Instantiate(lockedOverlayPrefab, spellBox.transform.position - Vector3.forward, spellBox.transform.rotation);
+                lockedOverlays.Add(lockOverlay);
+                lockOverlay.SetActive(false);
+
+                lockOverlay.transform.SetParent(spellBox.transform);
+
             }
         }
 
@@ -70,32 +96,55 @@ public class SpellEditBar : MonoBehaviour
     // Opens spell bar
     // if a spell is passed in setting is equip
     // if not passed in in swap state
-    public void Open(SpellDataSO newSpell = null, GameObject pickupable = null)
+    public void Open(SpellDataSO newSpell = null, GameObject pickupable = null, bool isCinematic = false)
     {
         gameObject.SetActive(true);
+        backgroundColourDamper.SetActive(true);
 
-        if(newSpell != null)
+        if(beatHandler == null)
         {
-            setting = Setting.Equip;
-            spellToBePlaced = newSpell;
-            associatedSpellPickup = pickupable;
+            beatHandler = FindObjectOfType<BeatHandler>();
+        }
+
+        beatHandler.gameObject.SetActive(false);
+
+        if(!isCinematic)
+        {
+            if(newSpell != null)
+            {
+                setting = Setting.Equip;
+                spellToBePlaced = newSpell;
+                associatedSpellPickup = pickupable;
+            }
+            else
+            {
+                setting = Setting.Swap;
+            }   
         }
         else
         {
-            setting = Setting.Swap;
+            setting = Setting.Cinematic;
+            Time.timeScale = 0f;
+            StartCoroutine(BossSpellBarCinematic());
         }
 
         UpdateIcons();
         UpdateSpellBox();
+
+        playerAttack.AddAttackLock(SPELL_BAR_ATTACK_LOCK_KEY);
     }
 
     // close
     public void Close()
     {
         gameObject.SetActive(false);
+        backgroundColourDamper.SetActive(false);
+        beatHandler.gameObject.SetActive(true);
         spellToBePlaced = null;
         associatedSpellPickup = null;
         initialSlotId = null;
+
+        playerAttack.RemoveAttackLock(SPELL_BAR_ATTACK_LOCK_KEY);
     }
 
     // reloads icons
@@ -103,8 +152,8 @@ public class SpellEditBar : MonoBehaviour
     {
         for(int i = 1;i <= PlayerActiveSpellsHandler.SPELL_SLOT_NUM;i++)
         {
-            int childCount = spellBoxes[i - 1].transform.childCount;
-            if(childCount > 0) Destroy(spellBoxes[i - 1].transform.GetChild(0).gameObject);
+            //int childCount = spellBoxes[i - 1].transform.childCount;
+            //if(childCount > 0) Destroy(spellBoxes[i - 1].transform.GetChild(0).gameObject);
             if(!playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i)) continue;
             if(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i) == null) continue;
             GameObject spellIconPrefab = playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i).SpellIcon;
@@ -119,10 +168,12 @@ public class SpellEditBar : MonoBehaviour
             if(playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i))
             {
                 spellBoxes[i-1].SetColour(Color.darkGray);   
+                lockedOverlays[i-1].SetActive(false);
             } 
             else
             {
                 spellBoxes[i-1].SetColour(Color.grey);
+                lockedOverlays[i-1].SetActive(true);
             }
         }
     }
@@ -186,7 +237,39 @@ public class SpellEditBar : MonoBehaviour
 
     private void OnMinimizeInventory(InputAction.CallbackContext context)
     {
+        if(InCinematic) return;
+
         if(gameObject.activeSelf)
+        Close();
+    }
+
+    private IEnumerator BossSpellBarCinematic()
+    {
+        // get all spells equipped
+        List<int> spellsEquipped = playerActiveSpellsHandler.GetSpells();
+
+        // get number of unlocked slots
+        int slotsUnlocked = playerActiveSpellsHandler.GetNumberOfUnlockedSlots();
+
+        // looping randomize
+        for(int i = 0;i < 5;i++)
+        {
+            playerActiveSpellsHandler.RemoveAllSpells();
+
+            playerActiveSpellsHandler.RandomizeSpells(playerActiveSpellsHandler.UnlockRandomSlots(slotsUnlocked), new List<int>(spellsEquipped));
+
+            UpdateIcons();
+
+            UpdateSpellBox();
+
+            // play sound for click like slots
+
+            yield return new WaitForSecondsRealtime(0.5f);
+        }
+
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        Time.timeScale = 1f;
         Close();
     }
 }

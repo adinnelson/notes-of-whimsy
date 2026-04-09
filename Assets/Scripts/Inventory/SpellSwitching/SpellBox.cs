@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 public class SpellBox : MonoBehaviour, IPointerClickHandler
 {
     private SpellEditBar spellEditBar;
-    [SerializeField]
     private GameObject spellIcon = null;
     
     private int slotId;
@@ -17,6 +16,8 @@ public class SpellBox : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if(spellEditBar.InCinematic) return;
+
         spellEditBar.SpellBoxClicked(slotId);
     }
 
