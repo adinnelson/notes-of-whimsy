@@ -152,8 +152,16 @@ public class SpellEditBar : MonoBehaviour
     {
         for(int i = 1;i <= PlayerActiveSpellsHandler.SPELL_SLOT_NUM;i++)
         {
-            //int childCount = spellBoxes[i - 1].transform.childCount;
-            //if(childCount > 0) Destroy(spellBoxes[i - 1].transform.GetChild(0).gameObject);
+            int childCount = spellBoxes[i - 1].transform.childCount;
+            if(childCount > 1) 
+            {
+                for(int j = 0;j < childCount;j++)
+                {
+                    if(spellBoxes[i - 1].transform.GetChild(j).gameObject.tag == "LockedSlotIcon") continue;
+
+                    Destroy(spellBoxes[i - 1].transform.GetChild(j).gameObject);
+                }
+            }
             if(!playerActiveSpellsHandler.GetSpellUnlockedFromSlotId(i)) continue;
             if(playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i) == null) continue;
             GameObject spellIconPrefab = playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(i).SpellIcon;

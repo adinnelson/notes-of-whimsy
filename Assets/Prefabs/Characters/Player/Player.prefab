@@ -198,6 +198,12 @@ MonoBehaviour:
   attackBeamPrefab: {fileID: 3228955244108052592, guid: ab89f7ce67ec3ca498a8c605dd8f7bd2, type: 3}
   fireCooldownSeconds: 0.2
   failedInputLockoutTime: 0.3
+  redSpellBeam0: {fileID: -3328800455002120691, guid: 0cbfdfe54f68893458acd76582da6e78, type: 3}
+  redSpellBeam1: {fileID: 29194520180222950, guid: 0cbfdfe54f68893458acd76582da6e78, type: 3}
+  blueSpellBeam0: {fileID: -971624178524994815, guid: 7287374f99e3abb4c8db30df16f04310, type: 3}
+  blueSpellBeam1: {fileID: 6242496140140361008, guid: 7287374f99e3abb4c8db30df16f04310, type: 3}
+  yellowSpellBeam0: {fileID: -2983090718515566234, guid: 0fc1ace4be8a95a4fb5ef69d38b55352, type: 3}
+  yellowSpellBeam1: {fileID: 658949857, guid: 0fc1ace4be8a95a4fb5ef69d38b55352, type: 3}
   dashInvulnerabilityDuration: 0.2
 --- !u!114 &1155841396824913759
 MonoBehaviour:
