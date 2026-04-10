@@ -81,11 +81,14 @@ public class BeatHandler : MonoBehaviour
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
         playerActiveSpellsHandler = GameObject.FindWithTag("Player")?.GetComponent<PlayerActiveSpellsHandler>();
 
-        InitializeRandomSpells();
-
         playerAttack = GameObject.FindWithTag("Player")?.GetComponent<PlayerAttack>();
 
         PopulateBeatBar();
+    }
+
+    void Start()
+    {
+        InitializeRandomSpells();
     }
 
     //using Update to sync music and sound effect
