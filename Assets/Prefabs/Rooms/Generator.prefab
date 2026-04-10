@@ -264,7 +264,7 @@ MonoBehaviour:
   - {fileID: 5690374572714891280, guid: 598795d092b29f64cbabb0c6adeb8572, type: 3}
   - {fileID: 5603674919516484741, guid: 268f4a5934c000c4e83145e0bd8ccd74, type: 3}
   desiredRoomNumber: 10
-  minRooms: 4
+  minRooms: 5
   minEnemies: 2
   maxEnemies: 5
   mapPool:
@@ -280,6 +280,11 @@ MonoBehaviour:
   - {fileID: 2935493060984338722, guid: 72a7c94c6533d964da2be52f44beea52, type: 3}
   - {fileID: 1041415166973672473, guid: d9a603176219d55459d52c7c841e7eac, type: 3}
   - {fileID: 4569931688597079672, guid: 1ceea9d8325779c4cbcfaa873bdc718a, type: 3}
+  - {fileID: 2593366772205908007, guid: 3a93c619c782eab4bac266265c7ac896, type: 3}
+  - {fileID: 3552019989129615132, guid: 215d6c4374ddd5e4cbcc25c5b322341e, type: 3}
+  - {fileID: 3835132701521220041, guid: 218c5f9842e852946a5e764d5fd369ee, type: 3}
+  - {fileID: 743307724260754607, guid: 1c280daf497da2c4bb1e5e2adda0691a, type: 3}
+  - {fileID: 6309157112508883362, guid: d25f9dc57d06581409296d4d0ba9540e, type: 3}
   starterRooms: []
   leftConnections: []
   rightConnections: []
@@ -289,6 +294,9 @@ MonoBehaviour:
   endPrefab: {fileID: 4981396245671621754, guid: afe4996a98a8f1e4da109e11a33f2b23, type: 3}
   spawnedRooms: []
   maxNumberOfCombatRooms: 1
+  shopRoomWeight: 50
+  combatRoomWeight: 20
+  numberOfRoomsBeforeSpecial: 2
   allowRegeneration: 1
 --- !u!156049354 &2145482322479185504
 Grid:
@@ -417,3 +425,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0826966302cf2c042996c474867a6dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  loadScreenWaitTime: 3

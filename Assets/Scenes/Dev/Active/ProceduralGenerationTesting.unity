@@ -244,30 +244,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
-      propertyPath: mapPool.Array.size
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
-      propertyPath: 'mapPool.Array.data[12]'
-      value: 
-      objectReference: {fileID: 2593366772205908007, guid: 3a93c619c782eab4bac266265c7ac896, type: 3}
-    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
-      propertyPath: 'mapPool.Array.data[13]'
-      value: 
-      objectReference: {fileID: 3552019989129615132, guid: 215d6c4374ddd5e4cbcc25c5b322341e, type: 3}
-    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
-      propertyPath: 'mapPool.Array.data[14]'
-      value: 
-      objectReference: {fileID: 3835132701521220041, guid: 218c5f9842e852946a5e764d5fd369ee, type: 3}
-    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
-      propertyPath: 'mapPool.Array.data[15]'
-      value: 
-      objectReference: {fileID: 743307724260754607, guid: 1c280daf497da2c4bb1e5e2adda0691a, type: 3}
-    - target: {fileID: 7064005530636982605, guid: 77282a2364f6c214c877d3716acdf4fa, type: 3}
-      propertyPath: 'mapPool.Array.data[16]'
-      value: 
-      objectReference: {fileID: 6309157112508883362, guid: d25f9dc57d06581409296d4d0ba9540e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
