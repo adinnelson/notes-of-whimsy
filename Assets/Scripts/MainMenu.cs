@@ -5,7 +5,7 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        GoldManager.Instance.ResetGold();
+        GoldManager.Instance?.ResetGold();
         SceneManager.LoadScene("Main", LoadSceneMode.Single);
     }
 
