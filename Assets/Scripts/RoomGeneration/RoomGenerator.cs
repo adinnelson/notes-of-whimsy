@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using NUnit.Framework.Internal;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class RoomGenerator : MonoBehaviour
 {
@@ -60,6 +63,14 @@ public class RoomGenerator : MonoBehaviour
     private bool hasSpawnedCombatRoom = false;
     private bool needToReset = false;
     private bool hasCompletedDungeon = false;
+
+    [Header("Special Room Weighting Controls")]
+    [SerializeField]
+    private int shopRoomWeight = 20;
+    [SerializeField]
+    private int combatRoomWeight = 20;
+    [SerializeField]
+    private int numberOfRoomsBeforeSpecial = 2;
 
     // EVENTS
     public static event System.Action OnDungeonComplete;
@@ -172,11 +183,11 @@ public class RoomGenerator : MonoBehaviour
         // Loop through the list of spawned rooms and spawn new rooms on each available node until the desired number of rooms is reached or there are no more available nodes
         for (int i = 0; numberOfRooms < desiredRoomNumber; i++)
         {
-            if(numberOfRooms == 2)
-            {
-                AddRoomTypeToRoomPools(RoomTypes.Shop);
-                AddRoomTypeToRoomPools(RoomTypes.Combat);
-            }
+            // if(numberOfRooms == numberOfRoomsBeforeSpecial)
+            // {
+            //     AddRoomTypeToRoomPools(RoomTypes.Shop);
+            //     AddRoomTypeToRoomPools(RoomTypes.Combat);
+            // }
             
             currentRoom = spawnedRooms[i];
             currentRoomInfo = currentRoom.GetComponent<RoomInfo>();
@@ -247,8 +258,26 @@ public class RoomGenerator : MonoBehaviour
         RoomInfo spawnedRoomInfo = null;
         // TODO: update logic to check for special rooms and maybe add some weighted randomness to the room selection
         // room selection logic
-        int selectedRoomNum = Random.Range(0, roomPool.Count);
-        spawnedRoom = Instantiate(roomPool[selectedRoomNum], roomsParent.transform);
+        List<GameObject> filteredRoomPool = null;
+        if(Random.Range(0, 100) < shopRoomWeight && !hasSpawnedShop && shopRooms.Count > 0 && numberOfRooms >= numberOfRoomsBeforeSpecial)
+        {
+            AddRoomTypeToRoomPools(RoomTypes.Shop);
+            filteredRoomPool = roomPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Shop).ToList();
+            print("trying to spawn shop room");
+        }
+        else if(Random.Range(0, 100) < combatRoomWeight && !hasSpawnedCombatRoom && combatRoomsSpawned < maxNumberOfCombatRooms && numberOfRooms >= numberOfRoomsBeforeSpecial)
+        {
+            AddRoomTypeToRoomPools(RoomTypes.Combat);
+            filteredRoomPool = roomPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Combat).ToList();
+            print("trying to spawn combat room");
+        }
+
+        if(filteredRoomPool == null || filteredRoomPool.Count == 0)
+        {
+            filteredRoomPool = roomPool;
+        }
+        int selectedRoomNum = Random.Range(0, filteredRoomPool.Count);
+        spawnedRoom = Instantiate(filteredRoomPool[selectedRoomNum], roomsParent.transform);
         spawnedRoomInfo = spawnedRoom.GetComponent<RoomInfo>();
 
         if(spawnedRoomInfo.GetRoomType() == RoomTypes.Shop && !hasSpawnedShop)
@@ -260,7 +289,7 @@ public class RoomGenerator : MonoBehaviour
         {
             combatRoomsSpawned++;
         }
-        else if(spawnedRoomInfo.GetRoomType() == RoomTypes.Combat && combatRoomsSpawned >= maxNumberOfCombatRooms)
+        else if(spawnedRoomInfo.GetRoomType() == RoomTypes.Combat && combatRoomsSpawned == maxNumberOfCombatRooms)
         {
             hasSpawnedCombatRoom = true;
             RemoveRoomTypeFromRoomPools(RoomTypes.Combat);
@@ -275,6 +304,16 @@ public class RoomGenerator : MonoBehaviour
         spawnedRoomInfo.SetSpawnedNode(spawnedRoomInfo.GetNode(direction).transform);
 
         return spawnedRoom;
+    }
+
+    void PrintRoomPools(List<GameObject> roomPool)
+    {
+        string poolContents = "Room Pool Contents: ";
+        for (int i = 0; i < roomPool.Count; i++)
+        {
+            poolContents += roomPool[i].name + ", ";
+        }
+        print(poolContents);
     }
 
     /// <summary>
