@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
-        GoldManager.Instance.ResetGold();
+        GoldManager.Instance?.ResetGold();
         ProgressFloor.HardReset();
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
