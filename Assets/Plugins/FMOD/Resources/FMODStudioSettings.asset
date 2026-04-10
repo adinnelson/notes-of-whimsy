@@ -335,8 +335,10 @@ MonoBehaviour:
   Banks:
   - BeatAttack
   - Dashing
+  - Enemies
   - MainMenu
   - SpellSound
+  - TakingDamage
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

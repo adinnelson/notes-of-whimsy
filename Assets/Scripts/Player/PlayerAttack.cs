@@ -162,7 +162,7 @@ public class PlayerAttack : MonoBehaviour
             animator.SetTrigger("Dash");
             dashInvulnerableUntil = Time.time + dashInvulnerabilityDuration;
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
+            ApplyDashingSoundEffect();
             animator.SetTrigger("Dash");
 
             if(rb.linearVelocity.magnitude > 0)

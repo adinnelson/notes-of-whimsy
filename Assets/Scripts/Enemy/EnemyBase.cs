@@ -27,6 +27,9 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected HashSet<string> stunEffects = new HashSet<string>();
 
+    [SerializeField] protected FMODUnity.EventReference attackSound;
+
+
     // Get Player location based on tag. If no player found, log an error.
     protected virtual void Awake()
     {
@@ -366,4 +369,6 @@ public abstract class EnemyBase : MonoBehaviour
     // one-shot hooks for other states
     protected virtual void OnChase() { }
     protected virtual void OnAttack() { }
+
+    protected virtual void attackSoundEffect() { }
 }

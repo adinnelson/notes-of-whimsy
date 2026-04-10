@@ -1,4 +1,5 @@
 using UnityEngine;
+using FMODUnity;
 
 public class FrogEnemy : EnemyBase
 {
@@ -137,6 +138,7 @@ public class FrogEnemy : EnemyBase
         
         pendingAoe.ExplodeNow(aoeDamage);
         animator.SetTrigger("Pop");
+        attackSoundEffect(); 
         pendingAoe = null;
     }
 
@@ -150,5 +152,18 @@ public class FrogEnemy : EnemyBase
         }
 
         base.HandleDeath();
+    }
+
+    protected override void attackSoundEffect()
+    {
+        if (!attackSound.IsNull)
+        {
+            //Apply attack sound for the frog
+            var dashingInstance = RuntimeManager.CreateInstance(attackSound);
+
+            dashingInstance.set3DAttributes(RuntimeUtils.To3DAttributes(target.position));
+            dashingInstance.start();
+            dashingInstance.release();
+        }
     }
 }
