@@ -82,6 +82,16 @@ public class PlayerAttack : MonoBehaviour
         inputActions.Player.Enable();
         inputActions.Player.Fire.performed += OnBeatActionPerformed;
         inputActions.Player.Sprint.performed += OnBeatActionPerformed;
+
+        beamSectionPool = new ObjectPool<GenericBeam>(
+            createFunc: CreateItem,
+            actionOnGet: OnGet,
+            actionOnRelease: OnRelease,
+            actionOnDestroy: OnDestroyItem,
+            collectionCheck: true,   // helps catch double-release mistakes
+            defaultCapacity: 10,
+            maxSize: 50
+        );
     }
 
     private void OnDisable()
@@ -89,13 +99,6 @@ public class PlayerAttack : MonoBehaviour
         inputActions.Player.Sprint.performed -= OnBeatActionPerformed;
         inputActions.Player.Fire.performed -= OnBeatActionPerformed;
         inputActions.Player.Disable();
-
-        GenericBeam[] beamSections = Object.FindObjectsOfType<GenericBeam>(true);
-
-        for(int i = 0;i < beamSections.Length;i++)
-        {
-            Destroy(beamSections[i].gameObject);
-        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -539,6 +542,16 @@ public class PlayerAttack : MonoBehaviour
     public void RemoveAttackLock(string key)
     {
         attackLocks.Remove(key);
+    }
+
+    public static void ClearGenericBeams()
+    {
+        GenericBeam[] beamSections = Object.FindObjectsOfType<GenericBeam>(true);
+
+        for(int i = 0;i < beamSections.Length;i++)
+        {
+            Destroy(beamSections[i].gameObject);
+        }
     }
 
     // Creates a new pooled GameObject the first time (and whenever the pool needs more).

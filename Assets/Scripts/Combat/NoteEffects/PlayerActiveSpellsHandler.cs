@@ -40,6 +40,23 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
     private void Awake() {
         
         ProgressFloor.OnEndSceneReached += RemoveAllSpells;
+
+        SetUpSlotSpells();
+
+        playerAttack = GetComponent<PlayerAttack>();
+    }
+
+    void Start()
+    {
+        beatHandler = FindObjectOfType<BeatHandler>();
+    }
+
+    private void OnDestroy() {
+        ProgressFloor.OnEndSceneReached -= RemoveAllSpells;
+    }
+
+    public void SetUpSlotSpells()
+    {
         // sets up slot spell with slot id
         for(int i = 1;i <= 8;i++)
         {
@@ -55,18 +72,8 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
         {
             idToSpellData.Add(i + 1, spellData[i]);    
         }
-
-        playerAttack = GetComponent<PlayerAttack>();
     }
 
-    void Start()
-    {
-        beatHandler = FindObjectOfType<BeatHandler>();
-    }
-
-    private void OnDestroy() {
-        ProgressFloor.OnEndSceneReached -= RemoveAllSpells;
-    }
     // equipes spell
     public void EquipSpell(int slotId, int spellId)
     {
