@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menus/DeathScreen.unity
     guid: a8d01473d2530c644b3f9530d1cc5bbb
+  - enabled: 1
+    path: Assets/Scenes/Gameplay/Boss.unity
+    guid: 382da7ecc04364243935ed5581526067
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
