@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using NUnit.Framework.Internal;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class RoomGenerator : MonoBehaviour
 {
@@ -61,6 +64,14 @@ public class RoomGenerator : MonoBehaviour
     private bool needToReset = false;
     private bool hasCompletedDungeon = false;
 
+    [Header("Special Room Weighting Controls")]
+    [SerializeField]
+    private int shopRoomWeight = 20;
+    [SerializeField]
+    private int combatRoomWeight = 20;
+    [SerializeField]
+    private int numberOfRoomsBeforeSpecial = 2;
+
     // EVENTS
     public static event System.Action OnDungeonComplete;
     public static event System.Action OnDungeonReset;
@@ -89,7 +100,6 @@ public class RoomGenerator : MonoBehaviour
             ResetGeneration("reset from update due to key press or room count");
         }
         if(needToReset){
-            // print("reset in update");
             needToReset = false;
             ResetGeneration("reset from update");
         }
@@ -171,13 +181,7 @@ public class RoomGenerator : MonoBehaviour
 
         // Loop through the list of spawned rooms and spawn new rooms on each available node until the desired number of rooms is reached or there are no more available nodes
         for (int i = 0; numberOfRooms < desiredRoomNumber; i++)
-        {
-            if(numberOfRooms == 2)
-            {
-                AddRoomTypeToRoomPools(RoomTypes.Shop);
-                AddRoomTypeToRoomPools(RoomTypes.Combat);
-            }
-            
+        {            
             currentRoom = spawnedRooms[i];
             currentRoomInfo = currentRoom.GetComponent<RoomInfo>();
             List<GameObject> nodes = currentRoomInfo.GetNodeList();
@@ -247,8 +251,24 @@ public class RoomGenerator : MonoBehaviour
         RoomInfo spawnedRoomInfo = null;
         // TODO: update logic to check for special rooms and maybe add some weighted randomness to the room selection
         // room selection logic
-        int selectedRoomNum = Random.Range(0, roomPool.Count);
-        spawnedRoom = Instantiate(roomPool[selectedRoomNum], roomsParent.transform);
+        List<GameObject> filteredRoomPool = null;
+        if(Random.Range(0, 100) < shopRoomWeight && !hasSpawnedShop && shopRooms.Count > 0 && numberOfRooms >= numberOfRoomsBeforeSpecial)
+        {
+            AddRoomTypeToRoomPools(RoomTypes.Shop);
+            filteredRoomPool = roomPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Shop).ToList();
+        }
+        else if(Random.Range(0, 100) < combatRoomWeight && !hasSpawnedCombatRoom && combatRoomsSpawned < maxNumberOfCombatRooms && numberOfRooms >= numberOfRoomsBeforeSpecial)
+        {
+            AddRoomTypeToRoomPools(RoomTypes.Combat);
+            filteredRoomPool = roomPool.Where(room => room.GetComponent<RoomInfo>().GetRoomType() == RoomTypes.Combat).ToList();
+        }
+
+        if(filteredRoomPool == null || filteredRoomPool.Count == 0)
+        {
+            filteredRoomPool = roomPool;
+        }
+        int selectedRoomNum = Random.Range(0, filteredRoomPool.Count);
+        spawnedRoom = Instantiate(filteredRoomPool[selectedRoomNum], roomsParent.transform);
         spawnedRoomInfo = spawnedRoom.GetComponent<RoomInfo>();
 
         if(spawnedRoomInfo.GetRoomType() == RoomTypes.Shop && !hasSpawnedShop)
@@ -260,7 +280,7 @@ public class RoomGenerator : MonoBehaviour
         {
             combatRoomsSpawned++;
         }
-        else if(spawnedRoomInfo.GetRoomType() == RoomTypes.Combat && combatRoomsSpawned >= maxNumberOfCombatRooms)
+        else if(spawnedRoomInfo.GetRoomType() == RoomTypes.Combat && combatRoomsSpawned == maxNumberOfCombatRooms)
         {
             hasSpawnedCombatRoom = true;
             RemoveRoomTypeFromRoomPools(RoomTypes.Combat);
