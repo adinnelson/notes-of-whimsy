@@ -112,6 +112,7 @@ public class ProgressFloor : MonoBehaviour
             print("End Scene Reached");
             floorsCompleted = 0;
             OnEndSceneReached?.Invoke();
+            SceneManager.LoadScene("EndScene");
             
         }
         else
