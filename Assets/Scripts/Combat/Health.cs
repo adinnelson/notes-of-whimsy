@@ -138,6 +138,7 @@ public class Health : MonoBehaviour, IDamageable
 
         if (hitFlashTimer <= 0 && inHitFlash)
         {
+            sprite.material = defaultMaterial;
             inHitFlash = false;
         }
     }
@@ -149,6 +150,7 @@ public class Health : MonoBehaviour, IDamageable
 
         hitFlashTimer = flashTime;
         inHitFlash = true;
+        sprite.material = whiteMaterial;
 
         floatingHealthBar?.UpdateHealthBar(currentHealth, MaxHealth);
         if (healthBarUpdater != null)
