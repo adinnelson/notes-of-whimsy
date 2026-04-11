@@ -10,6 +10,7 @@ public class ProgressFloor : MonoBehaviour
     // [SerializeField] bool resetProgressOnDeath = true;
 
     private static int floorsCompleted = 0;
+    private readonly int floorsToBoss = 3;
     private Scene currentScene;
 
     private Health health;
@@ -101,12 +102,12 @@ public class ProgressFloor : MonoBehaviour
     private void NextScene()
     {
         floorsCompleted++;
-        if(floorsCompleted >= 3)
+        if(floorsCompleted >= floorsToBoss)
         {
             //make sure the scene is in the build settings for this to work
             SceneManager.LoadScene("Boss");
         }
-        else if(floorsCompleted > 4)
+        else if(floorsCompleted >= floorsToBoss + 1)
         {
 
             print("End Scene Reached");
