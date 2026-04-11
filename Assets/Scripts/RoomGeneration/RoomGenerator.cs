@@ -1,14 +1,8 @@
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using NUnit.Framework.Internal;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
-using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
+
 
 public class RoomGenerator : MonoBehaviour
 {
@@ -167,6 +161,12 @@ public class RoomGenerator : MonoBehaviour
         RoomInfo currentRoomInfo = null;
         int roomSelector = 0;
 
+        if(mapPool == null || mapPool.Count == 0)
+        {
+            OnDungeonComplete?.Invoke();
+            LoadScreenControl.TurnOffLoadScreen();
+            return;
+        }
         if (roomsParent == null)
         {
             roomsParent = new GameObject("Floor Layout");
