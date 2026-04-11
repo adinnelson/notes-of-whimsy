@@ -104,6 +104,10 @@ public class ProgressFloor : MonoBehaviour
         floorsCompleted++;
         if(floorsCompleted >= floorsToBoss)
         {
+            GameObject player = GameObject.FindWithTag("Player");
+
+            player.transform.position = Vector3.zero;
+
             //make sure the scene is in the build settings for this to work
             SceneManager.LoadScene("Boss");
         }
