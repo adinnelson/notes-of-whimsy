@@ -80,8 +80,13 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: c8409ace7f7e021408dc85aa69de285e, type: 2}
   disableOnDeath: 1
   deathFadeDuration: 0.5
-  stunnedMaterial: {fileID: -876546973899608171, guid: 1ec764e42543a6e46bb597f1d9c7aeb0, type: 3}
-  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  attackSound:
+    Guid:
+      Data1: -608149463
+      Data2: 1108429123
+      Data3: -1268769890
+      Data4: -1288780562
+    Path: event:/FrogAttack
   aoePrefab: {fileID: 8302048801898426064, guid: a15ece80bac87974b8d9739835ec044f, type: 3}
   aoeRadius: 1.5
   aoeDamage: 10
@@ -219,6 +224,13 @@ MonoBehaviour:
   whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
   defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   flashTime: 0.1
+  damageSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!95 &1978793699212541612
 Animator:
   serializedVersion: 7

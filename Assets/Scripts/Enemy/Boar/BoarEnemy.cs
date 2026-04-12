@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using FMODUnity;
 /// Fodder enemy that telegraphs a short charge on beats 1 and 3, then executes it on beats 2 and 4.
 /// The damage hitbox is only active while charging, so the player can walk through the boar freely if it's not charging
 
@@ -177,6 +177,7 @@ public class BoarEnemy : EnemyBase
 
         isCharging = true;
         animator.SetBool("Charging", true);
+        attackSoundEffect();
         SetHitboxActive(true);
         SetPlayerCollisionEnabled(true);  // body collider on — boar carries the player
 
@@ -336,6 +337,19 @@ public class BoarEnemy : EnemyBase
         // Stun briefly so FixedUpdate doesn't overwrite the knockback velocity
         // with MoveTowardsTarget on the very next physics frame
         //KnockbackStunRoutine();
+    }
+
+    protected override void attackSoundEffect()
+    {
+        if (!attackSound.IsNull)
+        {
+            //Apply attack sound for the boar
+            var dashingInstance = RuntimeManager.CreateInstance(attackSound);
+
+            dashingInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            dashingInstance.start();
+            dashingInstance.release();
+        }
     }
 
     // This doesn't seem to be required and I believe is causing the boars to disapper

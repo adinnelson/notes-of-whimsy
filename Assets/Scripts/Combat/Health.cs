@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using FMODUnity;
 
 public class Health : MonoBehaviour, IDamageable
 {
@@ -28,6 +29,10 @@ public class Health : MonoBehaviour, IDamageable
     private SpriteRenderer sprite;
 
     public float MaxHealth => stats != null ? stats.MaxHealth : enemyMaxHealth;
+
+
+    [SerializeField] private EventReference damageSound;
+
 
     void Awake()
     {
@@ -147,6 +152,9 @@ public class Health : MonoBehaviour, IDamageable
         if (invincible) return;
         currentHealth -= damageAmount;
 
+        //Play taking damage sound effect
+        DamageSoundEffect();
+
         hitFlashTimer = flashTime;
         inHitFlash = true;
 
@@ -167,7 +175,7 @@ public class Health : MonoBehaviour, IDamageable
             return;
         }
 
-        if(isPlayer)
+        if (isPlayer)
         {
             invincible = true;
             SimpleTimer timer = new SimpleTimer();
@@ -184,7 +192,7 @@ public class Health : MonoBehaviour, IDamageable
 
         OnDeath?.Invoke();
 
-        if(isPlayer)
+        if (isPlayer)
         {
             GoldManager.Instance.ResetGold();
             PlayerStats.Instance.ResetStats();
@@ -244,6 +252,16 @@ public class Health : MonoBehaviour, IDamageable
             {
                 healthText.UpdateHPText(currentHealth, MaxHealth);
             }
+        }
+    }
+
+
+
+    private void DamageSoundEffect()
+    {
+        if (!damageSound.IsNull)
+        {
+            RuntimeManager.PlayOneShot(damageSound);
         }
     }
 }
