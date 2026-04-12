@@ -106,6 +106,16 @@ public class SpellEditBar : MonoBehaviour
             beatHandler = FindObjectOfType<BeatHandler>();
         }
 
+        if(playerActiveSpellsHandler == null)
+        {
+            playerActiveSpellsHandler = FindObjectOfType<PlayerActiveSpellsHandler>();
+        }
+
+        if(playerInventory == null)
+        {
+            playerInventory = FindObjectOfType<PlayerInventory>();
+        }
+
         if(!isCinematic)
         {
             if(newSpell != null)
