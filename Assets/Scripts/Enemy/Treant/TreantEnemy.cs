@@ -256,6 +256,7 @@ public class TreantEnemy : EnemyBase
     private void EnterWallStun()
     {
         isCharging = false;
+        animator.SetBool("Charging", false);
         SetHitboxActive(false);
         SetPlayerCollisionEnabled(false);
         StopMovement();
