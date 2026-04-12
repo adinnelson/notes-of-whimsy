@@ -102,7 +102,7 @@ public class ProgressFloor : MonoBehaviour
     private void NextScene()
     {
         floorsCompleted++;
-        if(floorsCompleted >= floorsToBoss)
+        if(floorsCompleted == floorsToBoss)
         {
             GameObject player = GameObject.FindWithTag("Player");
 
@@ -111,7 +111,7 @@ public class ProgressFloor : MonoBehaviour
             //make sure the scene is in the build settings for this to work
             SceneManager.LoadScene("Boss");
         }
-        else if(floorsCompleted >= floorsToBoss + 1)
+        else if(floorsCompleted > floorsToBoss)
         {
 
             print("End Scene Reached");
