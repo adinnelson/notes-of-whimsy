@@ -162,7 +162,7 @@ public class PlayerActiveSpellsHandler : MonoBehaviour
 
         if(beatHandler == null)
         {
-            beatHandler = FindObjectOfType<BeatHandler>();
+            beatHandler = FindObjectOfType<BeatHandler>(true);
         }
         beatHandler.BeatUnlocked((int)slotId); 
 
