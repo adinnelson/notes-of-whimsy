@@ -5,10 +5,21 @@ using System.Collections;
 /// that steps through 8-beat attack sequences. All timing is beat-driven — increasing
 /// BPM between phases automatically speeds up every attack.
 
+//Need to be public so BossMusicManager can use it and used for onPhaseChanged
+public enum BossPhase
+{
+    First,
+    Second,
+    Third
+}
+
 public class DeerBoss : EnemyBase
 {
     private enum BossAttack { Charge, Beam, Shockwave }
-    private enum BossPhase { First, Second, Third }
+
+    //used in in the BossMusicManager to update the phase change
+    internal delegate void PhaseChangedDelegate(BossPhase newPhase);
+    internal event PhaseChangedDelegate OnPhaseChanged;
 
     private const string ANIM_IDLE = "BossIdle";
     private const string ANIM_SLAM_TELEGRAPH = "SlamTelegraph";
@@ -783,6 +794,9 @@ public class DeerBoss : EnemyBase
     {
         inPhaseTransition = true;
         currentPhase = newPhase;
+
+        //invoke if there is a change to the next phase of the boss fight
+        OnPhaseChanged?.Invoke(currentPhase);
 
         // Stop boss mid-action
         rb.linearVelocity = Vector2.zero;

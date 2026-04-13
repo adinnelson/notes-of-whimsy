@@ -334,6 +334,7 @@ MonoBehaviour:
   - Master
   Banks:
   - BeatAttack
+  - BossMusic
   - Dashing
   - Enemies
   - MainMenu

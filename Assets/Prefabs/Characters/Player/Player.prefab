@@ -302,6 +302,13 @@ MonoBehaviour:
   whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
   defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   flashTime: 0.1
+  damageSound:
+    Guid:
+      Data1: 1508575996
+      Data2: 1090854337
+      Data3: -1662265670
+      Data4: -608174673
+    Path: event:/TakingDamage
 --- !u!114 &3173876067419357927
 MonoBehaviour:
   m_ObjectHideFlags: 0
