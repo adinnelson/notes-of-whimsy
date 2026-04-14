@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using FMODUnity;
 /// Tanky enemy that slowly chases the player, telegraphs a charge on beats 1 and 3,
 /// then charges in that direction until hitting a wall on beats 2 and 4.
 /// Becomes stunned on wall impact. Only takes damage from player spells.
@@ -245,6 +245,7 @@ public class TreantEnemy : EnemyBase
         stuckFrames = 0;
         lastChargePosition = rb.position;
         animator.SetBool("Charging", true);
+        attackSoundEffect();
         SetHitboxActive(true);
         SetPlayerCollisionEnabled(true);
         rb.linearVelocity = lockedChargeDir * chargeSpeed;
@@ -255,6 +256,7 @@ public class TreantEnemy : EnemyBase
     private void EnterWallStun()
     {
         isCharging = false;
+        animator.SetBool("Charging", false);
         SetHitboxActive(false);
         SetPlayerCollisionEnabled(false);
         StopMovement();
@@ -405,5 +407,18 @@ public class TreantEnemy : EnemyBase
         }
 
         stunVisual.SetActive(active);
+    }
+
+    protected override void attackSoundEffect()
+    {
+        if (!attackSound.IsNull)
+        {
+            //Apply attack sound for the treant
+            var dashingInstance = RuntimeManager.CreateInstance(attackSound);
+
+            dashingInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            dashingInstance.start();
+            dashingInstance.release();
+        }
     }
 }

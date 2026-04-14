@@ -2,10 +2,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
+using FMODUnity;
 using UnityEngine.Pool;
 
 public class PlayerAttack : MonoBehaviour
 {
+
+
+    // Reference to FMOD Events (attack and dashing)
+    public EventReference attackEvent;
+    public EventReference dashEvent;
+
     public const string MISSED_ATTACK_LOCK_KEY = "MISSED_ATTACK";
 
     [SerializeField] private BeatHandler beathandler;
@@ -76,7 +83,7 @@ public class PlayerAttack : MonoBehaviour
             maxSize: 50
         );
     }
-    
+
     private void OnEnable()
     {
         inputActions.Player.Enable();
@@ -118,17 +125,17 @@ public class PlayerAttack : MonoBehaviour
     private void Update()
     {
         // Continuously check to update aim based on the most recent input (Mouse and/or Controller)
-        if(mainCamera == null)
+        if (mainCamera == null)
         {
             mainCamera = Camera.main;
         }
-        if(beathandler == null)
+        if (beathandler == null)
         {
             beathandler = GameObject.Find("BeatBar")?.GetComponent<BeatHandler>();
         }
 
         UpdateAimSourceFromStick();
-        UpdateAimSourceFromMouseMovement();    
+        UpdateAimSourceFromMouseMovement();
 
     }
 
@@ -158,12 +165,12 @@ public class PlayerAttack : MonoBehaviour
             animator.SetTrigger("Dash");
             dashInvulnerableUntil = Time.time + dashInvulnerabilityDuration;
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
+            ApplyDashingSoundEffect();
             animator.SetTrigger("Dash");
 
             if(rb.linearVelocity.magnitude > 0)
             {
-                
+
                 rb.AddForce(rb.linearVelocity.normalized * 3000);
             }
             else
@@ -185,38 +192,91 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        switch(context.action.name)
+        switch (context.action.name)
         {
             case "Fire":
-            {
-                if(beathandler != null)
                 {
-                int beatID = beathandler.GetBeatIndex();
-                playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID)?.Fire();
+                    if (beathandler != null)
+                    {
+                        int beatID = beathandler.GetBeatIndex();
+                        playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID)?.Fire();
+                        //apply sound effect to the spell that been used 
+                        ApplySpellSoundEffect(beatID);
 
-                lastFireTimeSeconds = Time.time;
-                }
-                break;
-            }
-            /*case "Sprint":
-            {
-
-                Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
-                if(rb.linearVelocity.magnitude > 0)
-                {
-                    rb.AddForce(rb.linearVelocity.normalized * 3000);
+                        lastFireTimeSeconds = Time.time;
+                    }
                     break;
                 }
-                Vector3 mouseScreenPosition = Mouse.current.position.value;
-                Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-                Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
+                /*case "Sprint":
+                {
 
-                rb.AddForce(direction.normalized * 3000);
-                break;
-            }*/
+                    Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+                    if(rb.linearVelocity.magnitude > 0)
+                    {
+                        rb.AddForce(rb.linearVelocity.normalized * 3000);
+                        break;
+                    }
+                    Vector3 mouseScreenPosition = Mouse.current.position.value;
+                    Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
+                    Vector2 direction = new Vector2(mouseWorldPosition.x - transform.position.x, mouseWorldPosition.y - transform.position.y);
+
+                    rb.AddForce(direction.normalized * 3000);
+                    break;
+                }*/
         }
     }
+
+    //Method to apply the dashing sound effect 
+    private void ApplyDashingSoundEffect()
+    {
+            //Dashing sound effect instance 
+            var dashingInstance = RuntimeManager.CreateInstance(dashEvent);
+
+            dashingInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            dashingInstance.start();
+            dashingInstance.release();
+    }
+
+    //Method to apply sound effect reflecting the spell in a beat in use
+    private void ApplySpellSoundEffect(int beatID)
+    {
+        var spellHandler = playerActiveSpellsHandler.GetSpellEffectHandlerFromSlotId(beatID);
+        // Debug.Log($"Spell Handler: {spellHandler?.GetType().Name}, Spell ID: {spellHandler?.SpellData.spellId}");
+
+        if (spellHandler != null)
+        {
+            string spellLabel = GetSpellLabel(spellHandler.SpellData.spellId); // Id will match FMOD naming convention 
+            if (!string.IsNullOrEmpty(spellLabel))
+            {
+                Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                mouseWorldPosition.z = 0;
+                //created to get the Event of the sound effect 
+                //Sound effect is dependend on the projectile position 
+                var spellInstance = RuntimeManager.CreateInstance(attackEvent);
+                spellInstance.set3DAttributes(RuntimeUtils.To3DAttributes(mouseWorldPosition));
+                //matching the spell name as a parameter in fmod
+                // fire it one time! 
+                spellInstance.setParameterByNameWithLabel("spell", spellLabel);
+                spellInstance.start();
+                spellInstance.release();
+            }
+        }
+
+    }
+    //Helper to match the cases of spells with sound effect name in FMOD
+    private string GetSpellLabel(int spellId)
+    {
+        switch (spellId)
+        {
+            case 1: return "explosion";
+            case 2: return "lightning";
+            case 3: return "laser";
+            case 4: return "whirlpool";
+            default: return null;
+        }
+    }
+
 
     private bool IsOffCooldown()
     {
@@ -393,7 +453,7 @@ public class PlayerAttack : MonoBehaviour
     {
         SpriteRenderer spriteRenderer = attackBeam.GetComponent<SpriteRenderer>();
 
-        switch(spellId)
+        switch (spellId)
         {
             case 1:
             {
@@ -485,7 +545,7 @@ public class PlayerAttack : MonoBehaviour
 
         IDamageable damageable = hit.collider?.gameObject?.GetComponent<IDamageable>();
 
-        if(hit.collider?.gameObject != null)
+        if (hit.collider?.gameObject != null)
         {
             endBeamPos = hit.collider.gameObject.transform.position;
 
@@ -513,9 +573,9 @@ public class PlayerAttack : MonoBehaviour
             noteEffectHandler?.HitEnemy(damageable);
         }
 
-        if(noteEffectHandler != null)
+        if (noteEffectHandler != null)
         {
-            switch(noteEffectHandler.SpellData.spellId)
+            switch (noteEffectHandler.SpellData.spellId)
             {
                 case 1:
                     ((RedNoteEffectHandler)noteEffectHandler).Explode(endBeamPos);
@@ -523,7 +583,7 @@ public class PlayerAttack : MonoBehaviour
                 case 4:
                     ((BlueNoteEffectHandler)noteEffectHandler).WhirlPool(endBeamPos);
                     break;
-            }   
+            }
         }
 
         GameObject attackBeamInstance = SpawnAttackBeam(spawnPoint, endBeamPos, noteEffectHandler?.SpellData.spellId);
