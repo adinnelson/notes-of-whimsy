@@ -68,7 +68,7 @@ Material:
     - _Rotation2: 0
     - _WidthAnimation: 1
     - _XScale: 4
-    - _YScale: 2
+    - _YScale: 1.5
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
