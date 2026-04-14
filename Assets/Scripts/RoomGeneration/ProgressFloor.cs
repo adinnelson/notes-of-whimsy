@@ -10,6 +10,7 @@ public class ProgressFloor : MonoBehaviour
     // [SerializeField] bool resetProgressOnDeath = true;
 
     private static int floorsCompleted = 0;
+    private readonly int floorsToBoss = 3;
     private Scene currentScene;
 
     private Health health;
@@ -64,13 +65,13 @@ public class ProgressFloor : MonoBehaviour
     /// </summary>
     public static void HardReset()
     {
+        floorsCompleted = 0;
         GameObject player = GameObject.FindWithTag("Player");
         GameObject gm = GameObject.FindWithTag("GameManager");
         GameObject mm = FindFirstObjectByType<MusicManager>()?.gameObject;
         BeatHandler beatHandler = FindFirstObjectByType<BeatHandler>();
 
         PlayerAttack.ClearGenericBeams();
-
         Destroy(player);
         Destroy(gm);
         Destroy(mm);
@@ -101,13 +102,23 @@ public class ProgressFloor : MonoBehaviour
     private void NextScene()
     {
         floorsCompleted++;
-        if(floorsCompleted >= 3)
+        if(floorsCompleted == floorsToBoss)
         {
-            print("End Scene Reached");
-            OnEndSceneReached?.Invoke();
+            GameObject player = GameObject.FindWithTag("Player");
+
+            player.transform.position = Vector3.zero;
+
             //make sure the scene is in the build settings for this to work
+            SceneManager.LoadScene("Boss");
+        }
+        else if(floorsCompleted > floorsToBoss)
+        {
+
+            print("End Scene Reached");
             floorsCompleted = 0;
+            OnEndSceneReached?.Invoke();
             SceneManager.LoadScene("EndScene");
+            
         }
         else
         {
