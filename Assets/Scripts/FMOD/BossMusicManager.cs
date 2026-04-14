@@ -94,7 +94,7 @@ private void Awake()
             
             musicInstance.start();
             musicPlaying = true;
-            Debug.Log("[BossMusicManager] Boss music initialized - Starting PhaseOne");
+            // Debug.Log("[BossMusicManager] Boss music initialized - Starting PhaseOne");
         }
         else
         {
@@ -142,7 +142,7 @@ private void Awake()
         else
         {
             //keep trying to find the boss
-            Debug.LogWarning("[BossMusicManager] DeerBoss not found in scene, will retry");
+            // Debug.LogWarning("[BossMusicManager] DeerBoss not found in scene, will retry");
             Invoke(nameof(FindAndSubscribeToBoss), 1.0f);
         }
     }
@@ -161,7 +161,7 @@ private void Awake()
         SetParameterWithLabel(phaseParameterName, label);
         
         string phaseName = phase.ToString();
-        Debug.Log($"[BossMusicManager] Phase transition: {phaseName} → Setting FMOD parameter '{phaseParameterName}' to label '{label}'");
+        // Debug.Log($"[BossMusicManager] Phase transition: {phaseName} → Setting FMOD parameter '{phaseParameterName}' to label '{label}'");
     }
     
 
@@ -217,7 +217,7 @@ private void Awake()
         if (musicInstance.isValid())
         {
             musicInstance.setParameterByNameWithLabel(parameterName, labelName);
-            Debug.Log($"[BossMusicManager] FMOD Set Parameter: {parameterName} = {labelName}");
+            // Debug.Log($"[BossMusicManager] FMOD Set Parameter: {parameterName} = {labelName}");
         }
         else
         {

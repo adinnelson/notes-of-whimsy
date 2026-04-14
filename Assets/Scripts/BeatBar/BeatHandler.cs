@@ -160,7 +160,7 @@ public class BeatHandler : MonoBehaviour
                 musicBeatIndex = bossMusicManager.timelineInfo.currentBeat;
                 if (musicBeatIndex != prevMusicIndex) 
                 {
-                    Debug.Log("[BeatHandler] Getting beat from BossMusicManager: " + musicBeatIndex);
+                    // Debug.Log("[BeatHandler] Getting beat from BossMusicManager: " + musicBeatIndex);
                 }
             }
             else if (musicManager != null)
