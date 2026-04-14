@@ -36,6 +36,8 @@ public class beam_logic : MonoBehaviour
         musicNoteParticlesShape = musicNoteParticles.shape;
         musicNoteParticlesEmission = musicNoteParticles.emission;
 
+        beamVisualSprite.material.SetFloat("_YScale", yScale);
+
         UpdateBeam();
     }
 
