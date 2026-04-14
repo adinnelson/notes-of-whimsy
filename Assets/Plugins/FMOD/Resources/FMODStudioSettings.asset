@@ -336,6 +336,7 @@ MonoBehaviour:
   - BeatAttack
   - BossMusic
   - Dashing
+  - DeerAttacks
   - Enemies
   - MainMenu
   - SpellSound

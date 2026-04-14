@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using FMODUnity;
 /// Deer boss controller. Subscribes to OnOddBeatTriggered and runs a beat sequencer
 /// that steps through 8-beat attack sequences. All timing is beat-driven — increasing
 /// BPM between phases automatically speeds up every attack.
@@ -15,6 +15,7 @@ public enum BossPhase
 
 public class DeerBoss : EnemyBase
 {
+    
     private enum BossAttack { Charge, Beam, Shockwave }
 
     //used in in the BossMusicManager to update the phase change
@@ -548,6 +549,8 @@ public class DeerBoss : EnemyBase
         }
         HideTelegraph();
 
+        DeerSoundEffect("DeerCharge");
+
         if (slamHitbox != null)
         {
             slamHitbox.Activate(target);
@@ -611,6 +614,8 @@ public class DeerBoss : EnemyBase
         SetBeamChargeVisualActive(false);
         SetBeamChargeFireCue(false);
         TriggerAnimation(TRIGGER_IDLE);
+
+        DeerSoundEffect("DeerBeam");
 
         if (beamPrefab == null)
         {
@@ -741,6 +746,8 @@ public class DeerBoss : EnemyBase
         SetPlayerCollisionEnabled(false);
         HideTelegraph();
         PlayAnimation(ANIM_SLAM);
+
+        DeerSoundEffect("DeerWave");
 
         if (shockwavePrefab == null)
         {
@@ -1113,5 +1120,19 @@ public class DeerBoss : EnemyBase
 
         texture.Apply();
         return texture;
+    }
+
+    //Sound effect depending on which being performed 
+    private void DeerSoundEffect(string attackName)
+    {
+        if (!attackSound.IsNull)
+        {
+            //Apply attack sound for the Deer 
+            var attackingInstance = RuntimeManager.CreateInstance(attackSound);
+            attackingInstance.setParameterByNameWithLabel("DeerAttacks", attackName);
+            // attackingInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            attackingInstance.start();
+            attackingInstance.release();
+        }
     }
 }
