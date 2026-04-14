@@ -27,10 +27,10 @@ public class SpellPickupUI : MonoBehaviour
                 Debug.LogError("SpellPickupUI: Could not find 'PickupPop/Panel' as a child!");
             }
         }
-        if (panel != null)
-        {
-            panel.SetActive(false);
-        }
+        //if (panel != null)
+        //{
+            //panel.SetActive(false);
+        //}
         
         playerInventory = FindObjectOfType<PlayerInventory>();
     }

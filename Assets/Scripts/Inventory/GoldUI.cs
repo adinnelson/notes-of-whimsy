@@ -15,13 +15,19 @@ public class GoldUI : MonoBehaviour
     private void Start()
     {
         //goldText.spriteAsset = goldSprite;
-        GoldManager.Instance.OnGoldChanged += UpdateGold;
-        UpdateGold(GoldManager.Instance.CurrentGold);
+        if (GoldManager.Instance != null)
+        {
+            GoldManager.Instance.OnGoldChanged += UpdateGold;
+            UpdateGold(GoldManager.Instance.CurrentGold);
+        }
     }
 
     private void OnDisable()
     {
-        GoldManager.Instance.OnGoldChanged -= UpdateGold;
+        if (GoldManager.Instance != null)
+        {
+            GoldManager.Instance.OnGoldChanged -= UpdateGold;   
+        }
     }
 
     private void UpdateGold(int newGoldAmount)
