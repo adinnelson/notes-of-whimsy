@@ -1,6 +1,8 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class MinimapManager : MonoBehaviour
 {
@@ -18,6 +20,9 @@ public class MinimapManager : MonoBehaviour
     [Header("Map Scale")]
     public float worldToMapScale = 2.0f;
 
+    [Header("Scene Settings")]
+    [SerializeField] private string bossSceneKeyword = "Boss";
+
     private RoomGenerator roomGenerator;
 
     //for debugging the overlapping room icons - it is the room boundaries themselves that are overlapping, not the room icons. 
@@ -28,7 +33,7 @@ public class MinimapManager : MonoBehaviour
         Gizmos.color = Color.cyan;
         foreach (Bounds b in debugRoomBounds)
         {
-            Gizmos.DrawWireCube(b.center, b.size); 
+            Gizmos.DrawWireCube(b.center, b.size);
         }
     }
 
@@ -57,7 +62,7 @@ public class MinimapManager : MonoBehaviour
             Debug.LogError("MinimapManager: iconContainer is not assigned in the Inspector.");
         }
 
-        if (enemyIconPrefab == null)
+        /*if (enemyIconPrefab == null)
         {
             Debug.LogWarning("MinimapManager: enemyIconPrefab is not assigned in the Inspector.");
         }
@@ -65,15 +70,24 @@ public class MinimapManager : MonoBehaviour
         if (itemIconPrefab == null)
         {
             Debug.LogWarning("MinimapManager: itemIconPrefab is not assigned in the Inspector.");
-        }
-        //RoomGenerator.OnDungeonComplete += BuildMinimapFromDungeon;
+        }*/
     }
 
     void Start()
     {
-        if (roomGenerator != null && roomGenerator.GetSpawnedRooms().Count > 0)
+        string currentScene = SceneManager.GetActiveScene().name;
+        Debug.Log("MinimapManager Start | Scene: " + currentScene);
+
+        if (currentScene.Contains(bossSceneKeyword))
         {
-            BuildMinimapFromDungeon();
+            StartCoroutine(BuildBossMinimapDelayed());
+        }
+        else if (roomGenerator != null) //if the dungeon is already generated
+        {
+            if (roomGenerator.GetSpawnedRooms().Count > 0)
+            {
+                BuildMinimapFromDungeon();
+            }
         }
     }
 
@@ -113,6 +127,49 @@ public class MinimapManager : MonoBehaviour
         }
     }
 
+    public void BuildMinimapFromBossScene()
+    {
+        Debug.Log("BuildMinimapFromBossScene called");
+
+        ClearRoomIcons();
+
+        //RoomInfo[] rooms = FindObjectsByType<RoomInfo>(FindObjectsSortMode.None);
+        RoomInfo[] rooms = new RoomInfo[0];
+        Debug.Log($"Found {rooms.Length} RoomInfo objects");
+
+        if (rooms.Length == 0)
+        {
+            Debug.LogWarning("No RoomInfo components found in Boss scene.");
+            return;
+        }
+
+        foreach (RoomInfo roomInfo in rooms)
+        {
+            MinimapRoomOverride overrideData = roomInfo.GetComponent<MinimapRoomOverride>();
+
+            if (overrideData != null && overrideData.minimapPrefab != null)
+            {
+                Debug.Log($"Instantiating OVERRIDE minimap for {roomInfo.name}");
+
+                GameObject icon = Instantiate(overrideData.minimapPrefab, roomsContainer);
+                RectTransform rect = icon.GetComponent<RectTransform>();
+
+                if (rect == null)
+                {
+                    Debug.LogError("Override prefab missing RectTransform!");
+                    continue;
+                }
+
+                rect.anchoredPosition = WorldToMap(roomInfo.transform.position);
+            }
+            else
+            {
+                Debug.Log($"Instantiating DEFAULT minimap for {roomInfo.name}");
+                CreateRoomFromWorld(roomInfo.transform.position, roomInfo);
+            }
+        }
+    }
+
     void ClearRoomIcons()
     {
         for (int i = roomsContainer.childCount - 1; i >= 0; i--)
@@ -125,26 +182,26 @@ public class MinimapManager : MonoBehaviour
     {
         GameObject room = Instantiate(roomPrefab, roomsContainer);
         RectTransform rect = room.GetComponent<RectTransform>();
+
+        if (rect == null)
+        {
+            Debug.LogError("roomPrefab missing RectTransform!");
+            return;
+        }
+
         rect.anchoredPosition = WorldToMap(worldPosition);
 
-        //added to size the minimap room icons to match actual room boundaries
         if (roomInfo != null)
         {
             Tilemap floor = roomInfo.GetFloor();
             if (floor != null)
             {
-                //actual centre of tiled area, not centre of room origin
                 Vector3 worldCentre = worldPosition + floor.localBounds.center;
-
-                //this shows the boundaries of the actual rooms being generated, and how they overlap in many cases, causing the icons to also overlap
-                //debugRoomBounds.Add(new Bounds(worldCentre, floor.localBounds.size));
 
                 rect.anchoredPosition = WorldToMap(worldCentre);
 
                 Vector2 worldSize = floor.localBounds.size;
                 rect.sizeDelta = (worldSize * worldToMapScale);
-                //this line allows for space between the room icons to attempt to balance out that the actual rooms overlap, replacing the above line 
-                //rect.sizeDelta = (worldSize * worldToMapScale) * 0.85f;
 
                 return;
             }
@@ -198,7 +255,12 @@ public class MinimapManager : MonoBehaviour
         return worldPos * worldToMapScale;
     }
 
-
+    IEnumerator BuildBossMinimapDelayed()
+    {
+        yield return null;
+        Debug.Log("Building Boss Minimap (delayed)");
+        BuildMinimapFromBossScene();
+    }
 
 
     /// <summary>
