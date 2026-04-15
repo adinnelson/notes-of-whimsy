@@ -19,7 +19,7 @@ public class BossBeamAttack : MonoBehaviour
 
     private Transform origin;
     private Vector2 fireDirection;
-    private float damagePerSecond;
+    private float dmg;
     private float lifeTimer;
     private bool active = false;
 
@@ -48,7 +48,7 @@ public class BossBeamAttack : MonoBehaviour
     {
         origin        = originTransform;
         fireDirection = direction.normalized;
-        damagePerSecond = dps;
+        dmg = dps;
         lifeTimer     = duration;
     }
 
@@ -82,7 +82,7 @@ public class BossBeamAttack : MonoBehaviour
         active = true;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (!active || origin == null)
         {
@@ -159,8 +159,6 @@ public class BossBeamAttack : MonoBehaviour
             return;
         }
         dir /= dist;
-
-        float dmg = damagePerSecond * Time.deltaTime;
 
         foreach (var hit in Physics2D.CircleCastAll(start, hitRadius, dir, dist, playerMask))
         {

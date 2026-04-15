@@ -106,7 +106,15 @@ public class SpellEditBar : MonoBehaviour
             beatHandler = FindObjectOfType<BeatHandler>();
         }
 
-        beatHandler.gameObject.SetActive(false);
+        if(playerActiveSpellsHandler == null)
+        {
+            playerActiveSpellsHandler = FindObjectOfType<PlayerActiveSpellsHandler>();
+        }
+
+        if(playerInventory == null)
+        {
+            playerInventory = FindObjectOfType<PlayerInventory>();
+        }
 
         if(!isCinematic)
         {
@@ -139,7 +147,6 @@ public class SpellEditBar : MonoBehaviour
     {
         gameObject.SetActive(false);
         backgroundColourDamper.SetActive(false);
-        beatHandler.gameObject.SetActive(true);
         spellToBePlaced = null;
         associatedSpellPickup = null;
         initialSlotId = null;

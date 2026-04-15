@@ -85,7 +85,7 @@ public class DeerBoss : EnemyBase
     [Tooltip("Optional charge-up glow/particle object at horn position.")]
     [SerializeField] private GameObject beamChargeVisual;
     // Beam damage per second.
-    [SerializeField] private float beamDamagePerSecond = 20.0f;
+    [SerializeField] private float beamDamagePerHit = 5.0f;
     // Fallback charge color.
     [Tooltip("Fallback charge orb color used when Beam Charge Visual is left empty.")]
     [SerializeField] private Color fallbackBeamChargeColor = new Color(1.0f, 0.25f, 0.1f, 0.9f);
@@ -644,7 +644,7 @@ public class DeerBoss : EnemyBase
         }
 
         Debug.Log($"[DeerBoss] Firing beam toward {target.position}, duration {secondsPerSequenceBeat:F2}s");
-        bossBeam.Initialize(beamOrigin, dir, beamDamagePerSecond, secondsPerSequenceBeat);
+        bossBeam.Initialize(beamOrigin, dir, beamDamagePerHit, secondsPerSequenceBeat);
     }
 
     // ═══════════════════════════════════════════════════════════════
