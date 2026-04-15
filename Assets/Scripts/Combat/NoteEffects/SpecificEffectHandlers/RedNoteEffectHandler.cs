@@ -62,9 +62,9 @@ public class RedNoteEffectHandler : NoteEffectHandler
                     }
                 }
             }
-            DoDamage(enemiesInRange);
-            Knockback(enemiesInRange, impactPosition, playerPosition);
-            DoAnimation(enemyComponent.transform.position);
+            //DoDamage(enemiesInRange);
+            //Knockback(enemiesInRange, impactPosition, playerPosition);
+            //DoAnimation(enemyComponent.transform.position);
         }
     }
 

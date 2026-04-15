@@ -65,9 +65,9 @@ public class BlueNoteEffectHandler : NoteEffectHandler
                     }
                 }
             }
-            DoDamage(enemiesInRange);
-            Pull(enemiesInRange, pullOrigin, playerPosition);
-            DoAnimation(enemyComponent.transform.position);
+            //DoDamage(enemiesInRange);
+            //Pull(enemiesInRange, pullOrigin, playerPosition);
+            //DoAnimation(enemyComponent.transform.position);
         }
     }
 
