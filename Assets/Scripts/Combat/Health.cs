@@ -151,6 +151,7 @@ public class Health : MonoBehaviour, IDamageable
     public void TakeDamage(float damageAmount)
     {
         if (invincible) return;
+        Debug.Log($"{gameObject.name} took {damageAmount} damage.");
         currentHealth -= damageAmount;
 
         //Play taking damage sound effect
