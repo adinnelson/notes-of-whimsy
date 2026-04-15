@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using FMODUnity;
+using Unity.VisualScripting;
 
 
 public class BeatHandler : MonoBehaviour
@@ -13,6 +14,8 @@ public class BeatHandler : MonoBehaviour
     [Header("FMOD Settings")]
     [SerializeField] private EventReference beatEndEvent;
     private MusicManager musicManager;
+
+    private BossMusicManager bossMusicManager;
     private float lastCheckedBPM = 0.0f;
 
     //FMOD music is now 8 beats divided
@@ -76,7 +79,9 @@ public class BeatHandler : MonoBehaviour
     {
 
         spriteRenderer = transform.Find("beatBarCenter").GetComponent<SpriteRenderer>();
-        musicManager = MusicManager.instance;
+
+        //Either MusicManager or BossMusicManager
+        FindMusicManagerInstance();
 
         gm = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
         playerActiveSpellsHandler = GameObject.FindWithTag("Player")?.GetComponent<PlayerActiveSpellsHandler>();
@@ -84,6 +89,21 @@ public class BeatHandler : MonoBehaviour
         playerAttack = GameObject.FindWithTag("Player")?.GetComponent<PlayerAttack>();
 
         PopulateBeatBar();
+    }
+
+
+    //Find Manager for the beathandler to work with 
+    void FindMusicManagerInstance()
+    {
+
+        if (MusicManager.instance != null)
+        {
+            musicManager = MusicManager.instance;
+        }
+        if (BossMusicManager.instance != null)
+        {
+            bossMusicManager = BossMusicManager.instance;
+        }
     }
 
     void Start()
@@ -95,7 +115,7 @@ public class BeatHandler : MonoBehaviour
     void Update()
     {
         //getting information about the current beat from music
-        musicBeatIndex = musicManager.timelineInfo.currentBeat;
+        FindMusicBeatIndex();
 
         //Fire percussion sound on tempo if beat is unlocked
         HandleFMODBeatChange();
@@ -120,6 +140,35 @@ public class BeatHandler : MonoBehaviour
         ValidAttackInterval = CheckValidAttackInterval(percentToNextBeat);
         ValidDashInterval = CheckValidDashInterval(percentToNextBeat);
 
+        void FindMusicBeatIndex()
+        {
+            //assign Instance either for the MusicManager or BossMusicManager
+            if (musicManager == null && MusicManager.instance != null)
+            {
+                musicManager = MusicManager.instance;
+            }
+
+            if (bossMusicManager == null && BossMusicManager.instance != null)
+            {
+                bossMusicManager = BossMusicManager.instance;
+                Debug.Log("[BeatHandler] Connected to BossMusicManager after boss spawned");
+            }
+
+            //Get the index From either one of the situation
+            if (bossMusicManager != null)
+            {
+                musicBeatIndex = bossMusicManager.timelineInfo.currentBeat;
+                if (musicBeatIndex != prevMusicIndex) 
+                {
+                    // Debug.Log("[BeatHandler] Getting beat from BossMusicManager: " + musicBeatIndex);
+                }
+            }
+            else if (musicManager != null)
+            {
+                musicBeatIndex = musicManager.timelineInfo.currentBeat;
+            }
+        }
+
         // Fires when FMOD reports a new beat. Syncs timing and triggers beat events.
         void HandleFMODBeatChange()
         {
@@ -143,18 +192,43 @@ public class BeatHandler : MonoBehaviour
             }
         }
 
+
         // Syncs BPM when music changes (e.g. room transitions)
         void SyncBPMFromMusic()
         {
-            if (musicManager == null) return;
+            // if (musicManager == null) return;
 
-            float currentMusicBPM = musicManager.GetCurrentBPM();
+            //Get Current BPM either for regular music or for the bosss
+            float currentMusicBPM = GetCurrentBPM();
             if (currentMusicBPM > 0.0f && Mathf.Abs(lastCheckedBPM - currentMusicBPM) > 0.01f)
             {
                 lastCheckedBPM = currentMusicBPM;
                 ChangeBPM(currentMusicBPM);
             }
         }
+
+        // helper method: current BPM music manager or Boss music manager
+        float GetCurrentBPM()
+        {
+            // Priority: Boss music > Regular music
+            if (bossMusicManager != null)
+            {
+                float bossBPM = bossMusicManager.GetCurrentBPM();
+                if (bossBPM > 0.0f)
+                    return bossBPM;
+            }
+
+            if (musicManager != null)
+            {
+                float musicBPM = musicManager.GetCurrentBPM();
+                if (musicBPM > 0.0f)
+                    return musicBPM;
+            }
+
+            // Fallback to current BPM if neither manager provides a valid BPM
+            return bpm;
+        }
+
 
         // Updates beatIndex at 50% through beat (for attack lock removal)
         void UpdateBeatIndexAtHalfBeat()
@@ -259,10 +333,10 @@ public class BeatHandler : MonoBehaviour
     private void InitializeRandomSpells()
     {
         // BEAT_NUM is limit of spell slots
-        if(unlockedBeats.Count == 0)
+        if (unlockedBeats.Count == 0)
         {
             int spellToUnlock = Random.Range(1, BEAT_NUM + 1);
-            for(int i = 1; i <= startingSpellCount; i++)
+            for (int i = 1; i <= startingSpellCount; i++)
             {
                 spellToUnlock = Random.Range(1, BEAT_NUM + 1);
                 while (unlockedBeats.Contains(spellToUnlock))

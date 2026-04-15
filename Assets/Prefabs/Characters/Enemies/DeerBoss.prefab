@@ -90,6 +90,13 @@ MonoBehaviour:
   whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
   defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   flashTime: 0.1
+  damageSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!61 &1184992770284889686
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -210,6 +217,13 @@ MonoBehaviour:
   config: {fileID: 0}
   disableOnDeath: 1
   deathFadeDuration: 1
+  attackSound:
+    Guid:
+      Data1: -82638414
+      Data2: 1332019532
+      Data3: -1713619523
+      Data4: -1199881936
+    Path: event:/DeerAttacks
   phase1BPM: 90
   phase2BPM: 100
   phase3BPM: 120

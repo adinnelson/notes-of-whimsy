@@ -304,11 +304,11 @@ MonoBehaviour:
   flashTime: 0.1
   damageSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 1508575996
+      Data2: 1090854337
+      Data3: -1662265670
+      Data4: -608174673
+    Path: event:/TakingDamage
 --- !u!114 &3173876067419357927
 MonoBehaviour:
   m_ObjectHideFlags: 0
