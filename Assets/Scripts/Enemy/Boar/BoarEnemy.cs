@@ -50,6 +50,9 @@ public class BoarEnemy : EnemyBase
     protected override void Awake()
     {
         base.Awake();
+
+        health.OnDeath += telegraphVisual.ReleaseIndicator;
+
         animator = GetComponent<Animator>();
         enemyFlip = GetComponent<EnemyFlip>();
         bodyCollider = GetComponent<Collider2D>();
