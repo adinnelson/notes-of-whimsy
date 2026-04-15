@@ -228,7 +228,7 @@ MonoBehaviour:
   phase2BPM: 100
   phase3BPM: 120
   chargeSpeed: 25
-  chargeDuration: 0.12
+  chargeDuration: 0.3
   chargeJitterDegrees: 15
   chargeDamage: 10
   telegraphVisual: {fileID: 7717947819948058708}
@@ -240,7 +240,7 @@ MonoBehaviour:
   beamPrefab: {fileID: 378179467823393837, guid: f9bca2f4a563ae046beb4c8af7d49dce, type: 3}
   beamOrigin: {fileID: 2770354159090951643}
   beamChargeVisual: {fileID: 8242822691426673261}
-  beamDamagePerHit: 5
+  beamDamagePerHit: 10
   fallbackBeamChargeColor: {r: 1, g: 0.10196078, b: 0.9155168, a: 0.9}
   fallbackBeamChargeFireCueColor: {r: 1, g: 0.029075306, b: 0, a: 1}
   fallbackBeamChargeMinScale: 2

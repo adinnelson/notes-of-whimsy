@@ -859,7 +859,7 @@ public class DeerBoss : EnemyBase
 
         //float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         //telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
-        telegraphVisual.Init(position - 0.25f * Vector2.up, position + 2.0f * direction);
+        telegraphVisual.Init(position - 0.25f * Vector2.up, position + chargeSpeed*chargeDuration * direction);
 
         telegraphVisual.gameObject.SetActive(true);
     }
