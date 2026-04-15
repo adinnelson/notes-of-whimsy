@@ -75,9 +75,12 @@ public class ShopItem : MonoBehaviour
 
     private float GetDistanceToPlayer()
     {
+        Vector2 playerPosition = player.transform.position;
+        Vector2 shopItemPosition = transform.position;
+
         if (player != null)
         {
-            return (player.transform.position - transform.position).magnitude;
+            return (playerPosition - shopItemPosition).magnitude;
         }
 
         return float.MaxValue;
