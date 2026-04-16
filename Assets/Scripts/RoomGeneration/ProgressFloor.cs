@@ -107,6 +107,12 @@ public class ProgressFloor : MonoBehaviour
             GameObject player = GameObject.FindWithTag("Player");
 
             player.transform.position = Vector3.zero;
+            GameObject music = GameObject.Find("AudioManager");
+            if (music != null)
+            {
+                Destroy(music);
+
+            }
 
             //make sure the scene is in the build settings for this to work
             SceneManager.LoadScene("Boss");
@@ -117,6 +123,12 @@ public class ProgressFloor : MonoBehaviour
             print("End Scene Reached");
             floorsCompleted = 0;
             OnEndSceneReached?.Invoke();
+            GameObject music = GameObject.Find("BossMusicManager");
+            if (music != null)
+            {
+                Destroy(music);
+
+            }
             SceneManager.LoadScene("EndScene");
             
         }
