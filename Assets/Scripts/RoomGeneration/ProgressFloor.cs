@@ -126,6 +126,7 @@ public class ProgressFloor : MonoBehaviour
                 Destroy(music);
 
             }
+            HardReset();
             SceneManager.LoadScene("EndScene");
             
         }
