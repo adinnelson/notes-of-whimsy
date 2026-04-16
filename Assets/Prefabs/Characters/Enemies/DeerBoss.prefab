@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4519917403022096249}
   - component: {fileID: 1819872311159718260}
   - component: {fileID: 5479530115689356444}
-  - component: {fileID: 3452066826487208510}
+  - component: {fileID: -6583810390979705392}
   m_Layer: 3
   m_Name: DeerBoss
   m_TagString: Untagged
@@ -220,11 +220,11 @@ MonoBehaviour:
   deathFadeDuration: 1
   attackSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -82638414
+      Data2: 1332019532
+      Data3: -1713619523
+      Data4: -1199881936
+    Path: event:/DeerAttacks
   phase1BPM: 90
   phase2BPM: 100
   phase3BPM: 120
@@ -237,7 +237,7 @@ MonoBehaviour:
   slamHitbox: {fileID: 5601943594632979886}
   slamSize: {x: 2, y: 4}
   slamDamage: 15
-  slamOffset: 0
+  slamOffset: 2
   beamPrefab: {fileID: 378179467823393837, guid: f9bca2f4a563ae046beb4c8af7d49dce, type: 3}
   beamOrigin: {fileID: 2770354159090951643}
   beamChargeVisual: {fileID: 8242822691426673261}
@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163cc5be27063014b888f23df76eae09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyFlip
---- !u!114 &3452066826487208510
+--- !u!114 &-6583810390979705392
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
