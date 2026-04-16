@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4519917403022096249}
   - component: {fileID: 1819872311159718260}
   - component: {fileID: 5479530115689356444}
+  - component: {fileID: 3452066826487208510}
   m_Layer: 3
   m_Name: DeerBoss
   m_TagString: Untagged
@@ -90,6 +91,13 @@ MonoBehaviour:
   whiteMaterial: {fileID: -876546973899608171, guid: 886cf86a8540c6d47852b76eee1c9cd1, type: 3}
   defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   flashTime: 0.1
+  damageSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!61 &1184992770284889686
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -210,6 +218,13 @@ MonoBehaviour:
   config: {fileID: 0}
   disableOnDeath: 1
   deathFadeDuration: 1
+  attackSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   phase1BPM: 90
   phase2BPM: 100
   phase3BPM: 120
@@ -226,7 +241,7 @@ MonoBehaviour:
   beamPrefab: {fileID: 378179467823393837, guid: f9bca2f4a563ae046beb4c8af7d49dce, type: 3}
   beamOrigin: {fileID: 2770354159090951643}
   beamChargeVisual: {fileID: 8242822691426673261}
-  beamDamagePerSecond: 20
+  beamDamagePerHit: 5
   fallbackBeamChargeColor: {r: 1, g: 0.10196078, b: 0.9155168, a: 0.9}
   fallbackBeamChargeFireCueColor: {r: 1, g: 0.029075306, b: 0, a: 1}
   fallbackBeamChargeMinScale: 2
@@ -273,6 +288,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163cc5be27063014b888f23df76eae09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyFlip
+--- !u!114 &3452066826487208510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163472863192674373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4a8eb6f9e251104d8647c34999aa33d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapEnemy
 --- !u!1 &1601358773786652688
 GameObject:
   m_ObjectHideFlags: 0
