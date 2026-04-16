@@ -1,14 +1,26 @@
 using UnityEngine;
 using System.Collections;
-
+using FMODUnity;
 /// Deer boss controller. Subscribes to OnOddBeatTriggered and runs a beat sequencer
 /// that steps through 8-beat attack sequences. All timing is beat-driven — increasing
 /// BPM between phases automatically speeds up every attack.
 
+//Need to be public so BossMusicManager can use it and used for onPhaseChanged
+public enum BossPhase
+{
+    First,
+    Second,
+    Third
+}
+
 public class DeerBoss : EnemyBase
 {
+    
     private enum BossAttack { Charge, Beam, Shockwave }
-    private enum BossPhase { First, Second, Third }
+
+    //used in in the BossMusicManager to update the phase change
+    internal delegate void PhaseChangedDelegate(BossPhase newPhase);
+    internal event PhaseChangedDelegate OnPhaseChanged;
 
     private const string ANIM_IDLE = "BossIdle";
     private const string ANIM_SLAM_TELEGRAPH = "SlamTelegraph";
@@ -537,6 +549,8 @@ public class DeerBoss : EnemyBase
         }
         HideTelegraph();
 
+        DeerSoundEffect("DeerCharge");
+
         if (slamHitbox != null)
         {
             slamHitbox.Activate(target);
@@ -600,6 +614,8 @@ public class DeerBoss : EnemyBase
         SetBeamChargeVisualActive(false);
         SetBeamChargeFireCue(false);
         TriggerAnimation(TRIGGER_IDLE);
+
+        DeerSoundEffect("DeerBeam");
 
         if (beamPrefab == null)
         {
@@ -731,6 +747,8 @@ public class DeerBoss : EnemyBase
         HideTelegraph();
         PlayAnimation(ANIM_SLAM);
 
+        DeerSoundEffect("DeerWave");
+
         if (shockwavePrefab == null)
         {
             return;
@@ -783,6 +801,9 @@ public class DeerBoss : EnemyBase
     {
         inPhaseTransition = true;
         currentPhase = newPhase;
+
+        //invoke if there is a change to the next phase of the boss fight
+        OnPhaseChanged?.Invoke(currentPhase);
 
         // Stop boss mid-action
         rb.linearVelocity = Vector2.zero;
@@ -838,7 +859,7 @@ public class DeerBoss : EnemyBase
 
         //float degrees = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         //telegraphVisual.transform.rotation = Quaternion.Euler(0.0f, 0.0f, degrees);
-        telegraphVisual.Init(position - 0.25f * Vector2.up, position + 2.0f * direction);
+        telegraphVisual.Init(position - 0.25f * Vector2.up, position + chargeSpeed*chargeDuration * direction);
 
         telegraphVisual.gameObject.SetActive(true);
     }
@@ -1099,5 +1120,19 @@ public class DeerBoss : EnemyBase
 
         texture.Apply();
         return texture;
+    }
+
+    //Sound effect depending on which being performed 
+    private void DeerSoundEffect(string attackName)
+    {
+        if (!attackSound.IsNull)
+        {
+            //Apply attack sound for the Deer 
+            var attackingInstance = RuntimeManager.CreateInstance(attackSound);
+            attackingInstance.setParameterByNameWithLabel("DeerAttacks", attackName);
+            // attackingInstance.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            attackingInstance.start();
+            attackingInstance.release();
+        }
     }
 }

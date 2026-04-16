@@ -51,6 +51,8 @@ public class TreantEnemy : EnemyBase
     protected override void Awake()
     {
         base.Awake();
+        health.OnDeath += telegraphVisual.ReleaseIndicator;
+        
         animator = GetComponent<Animator>();
         enemyFlip = GetComponent<EnemyFlip>();
         

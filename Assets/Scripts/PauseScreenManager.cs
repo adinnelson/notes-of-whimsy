@@ -51,7 +51,7 @@ public class PauseScreenManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        GoldManager.Instance.ResetGold();
+        GoldManager.Instance?.ResetGold();
         Close();
         ProgressFloor.InvokeEndSceneReached();
         SceneManager.LoadScene(0);

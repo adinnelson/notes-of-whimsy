@@ -8,7 +8,7 @@ public class BlueNoteEffectHandler : NoteEffectHandler
     [Header("Pull AOE specs")]
     [SerializeField] private float pullRadius = 1.0f;
     [SerializeField] private float pullForce = 45.0f;
-    [SerializeField] private float damage = 40.0f;
+    [SerializeField] private float damage = 30.0f;
 
     private GameObject whirlPool;
 
@@ -65,9 +65,9 @@ public class BlueNoteEffectHandler : NoteEffectHandler
                     }
                 }
             }
-            DoDamage(enemiesInRange);
-            Pull(enemiesInRange, pullOrigin, playerPosition);
-            DoAnimation(enemyComponent.transform.position);
+            //DoDamage(enemiesInRange);
+            //Pull(enemiesInRange, pullOrigin, playerPosition);
+            //DoAnimation(enemyComponent.transform.position);
         }
     }
 

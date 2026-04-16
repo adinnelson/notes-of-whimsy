@@ -8,7 +8,7 @@ public class RedNoteEffectHandler : NoteEffectHandler
     [Header("Fireball AOE specs")]
     [SerializeField] private float knockbackRadius = 1.0f;
     [SerializeField] private float knockbackForce = 15.0f;
-    [SerializeField] private float damage = 60.0f;
+    [SerializeField] private float damage = 45.0f;
     
     private GameObject explosion;
 
@@ -62,9 +62,9 @@ public class RedNoteEffectHandler : NoteEffectHandler
                     }
                 }
             }
-            DoDamage(enemiesInRange);
-            Knockback(enemiesInRange, impactPosition, playerPosition);
-            DoAnimation(enemyComponent.transform.position);
+            //DoDamage(enemiesInRange);
+            //Knockback(enemiesInRange, impactPosition, playerPosition);
+            //DoAnimation(enemyComponent.transform.position);
         }
     }
 
