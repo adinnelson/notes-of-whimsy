@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 4519917403022096249}
   - component: {fileID: 1819872311159718260}
   - component: {fileID: 5479530115689356444}
-  - component: {fileID: -6583810390979705392}
   m_Layer: 3
   m_Name: DeerBoss
   m_TagString: Untagged
@@ -83,8 +82,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df253cfd76d7c444bb2c365f00ac69b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  enemyMaxHealth: 300
-  healthPrefab: {fileID: 8085078092535345474, guid: 59df34ffd7f21d448abc2c2c6469964d, type: 3}
+  enemyMaxHealth: 2000
+  healthPrefab: {fileID: 0}
   healthBarUpdater: {fileID: 0}
   healthText: {fileID: 0}
   healthBarVerticalOffset: 0.1
@@ -229,19 +228,19 @@ MonoBehaviour:
   phase2BPM: 100
   phase3BPM: 120
   chargeSpeed: 25
-  chargeDuration: 0.12
+  chargeDuration: 0.25
   chargeJitterDegrees: 15
   chargeDamage: 10
   telegraphVisual: {fileID: 7717947819948058708}
   chargeHitbox: {fileID: 7591734518463191036}
   slamHitbox: {fileID: 5601943594632979886}
-  slamSize: {x: 2, y: 4}
+  slamSize: {x: 6, y: 3}
   slamDamage: 15
   slamOffset: 2
   beamPrefab: {fileID: 378179467823393837, guid: f9bca2f4a563ae046beb4c8af7d49dce, type: 3}
   beamOrigin: {fileID: 2770354159090951643}
   beamChargeVisual: {fileID: 8242822691426673261}
-  beamDamagePerHit: 5
+  beamDamagePerHit: 10
   fallbackBeamChargeColor: {r: 1, g: 0.10196078, b: 0.9155168, a: 0.9}
   fallbackBeamChargeFireCueColor: {r: 1, g: 0.029075306, b: 0, a: 1}
   fallbackBeamChargeMinScale: 2
@@ -288,18 +287,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163cc5be27063014b888f23df76eae09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyFlip
---- !u!114 &-6583810390979705392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 163472863192674373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4a8eb6f9e251104d8647c34999aa33d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MinimapEnemy
 --- !u!1 &1601358773786652688
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,7 +509,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0.5}
+    pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
