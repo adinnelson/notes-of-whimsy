@@ -82,7 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df253cfd76d7c444bb2c365f00ac69b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  enemyMaxHealth: 1000
+  enemyMaxHealth: 2000
   healthPrefab: {fileID: 0}
   healthBarUpdater: {fileID: 0}
   healthText: {fileID: 0}
@@ -228,13 +228,13 @@ MonoBehaviour:
   phase2BPM: 100
   phase3BPM: 120
   chargeSpeed: 25
-  chargeDuration: 0.3
+  chargeDuration: 0.25
   chargeJitterDegrees: 15
   chargeDamage: 10
   telegraphVisual: {fileID: 7717947819948058708}
   chargeHitbox: {fileID: 7591734518463191036}
   slamHitbox: {fileID: 5601943594632979886}
-  slamSize: {x: 4, y: 4}
+  slamSize: {x: 6, y: 3}
   slamDamage: 15
   slamOffset: 2
   beamPrefab: {fileID: 378179467823393837, guid: f9bca2f4a563ae046beb4c8af7d49dce, type: 3}
