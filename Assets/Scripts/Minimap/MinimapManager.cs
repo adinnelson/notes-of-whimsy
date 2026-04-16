@@ -9,6 +9,7 @@ public class MinimapManager : MonoBehaviour
     [Header("Room Layout")]
     public Transform roomsContainer;
     public GameObject roomPrefab;
+    [SerializeField] private GameObject bossMinimapPrefab;
 
     [Header("Icon Layout")]
     public Transform iconContainer;
@@ -28,7 +29,7 @@ public class MinimapManager : MonoBehaviour
         Gizmos.color = Color.cyan;
         foreach (Bounds b in debugRoomBounds)
         {
-            Gizmos.DrawWireCube(b.center, b.size); 
+            Gizmos.DrawWireCube(b.center, b.size);
         }
     }
 
@@ -97,6 +98,16 @@ public class MinimapManager : MonoBehaviour
         debugRoomBounds.Clear();
         ClearRoomIcons();
 
+        //attempt to find the BossRoom
+        GameObject bossRoom = GameObject.Find("BossRoom");
+
+        if (bossRoom != null)
+        {
+            Debug.Log("MinimapManager: Boss level detected, using special boss level prefab for minimap");
+            BuildMinimapFromBoss();
+            return;
+        }
+
         if (roomGenerator == null)
         {
             Debug.LogWarning("MinimapManager could not find RoomGenerator.");
@@ -149,6 +160,16 @@ public class MinimapManager : MonoBehaviour
                 return;
             }
         }
+    }
+
+    void BuildMinimapFromBoss()
+    {
+        if (bossMinimapPrefab == null)
+        {
+            Debug.LogWarning("MinimapManager: Boss Level minimap prefab not assigned in inspector.");
+            return;
+        }
+        Instantiate(bossMinimapPrefab, roomsContainer);
     }
 
     public RectTransform RegisterEnemyIcon()
@@ -211,7 +232,7 @@ public class MinimapManager : MonoBehaviour
     // Generate minimap layout of test rooms
     void GenerateTestRooms()
     {
-        Vector2Int[] testRooms = {new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(2, 0), new Vector2Int(1, 1), new Vector2Int(1, -1)};
+        Vector2Int[] testRooms = { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(2, 0), new Vector2Int(1, 1), new Vector2Int(1, -1) };
         foreach (Vector2Int gridPos in testRooms)
         {
             CreateRoom(gridPos);
