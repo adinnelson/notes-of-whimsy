@@ -6,6 +6,11 @@ using UnityEngine.InputSystem;
 
 public class RoomGenerator : MonoBehaviour
 {
+    [SerializeField]
+    private bool useSetSeed = false;
+    [SerializeField]
+    private int seed = 0;
+    private int currentSeed;
     // SERIALIZED FIELDS
     [Header("Enemy Pool")]
     [SerializeField]
@@ -76,6 +81,10 @@ public class RoomGenerator : MonoBehaviour
 
     private void Awake()
     {
+        if(useSetSeed)
+        {        
+            Random.InitState(seed);
+        }
         RoomInfo.OnFloorOverlap += HandleFloorOverlap;
         ProgressFloor.OnFloorProgressed += ResetGeneration;
     }
