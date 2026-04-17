@@ -501,7 +501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2791336798263055279, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Name
-      value: PLACEHOLDER COMBAT ROOM Variant
+      value: BigCombatRoom
       objectReference: {fileID: 0}
     - target: {fileID: 3546953481296007931, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Size.x
@@ -509,19 +509,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Size.x
-      value: 23.318233
+      value: 23.533278
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Size.y
-      value: 12.9555645
+      value: 13.636536
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Offset.x
-      value: -0.014680862
+      value: 0.09284115
       objectReference: {fileID: 0}
     - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Offset.y
-      value: -0.04224205
+      value: -0.060162544
       objectReference: {fileID: 0}
     - target: {fileID: 4020015746208584030, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.y

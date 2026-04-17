@@ -1672,9 +1672,29 @@ PrefabInstance:
       propertyPath: 'nodeList.Array.data[3]'
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1167656958354785006, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: customMaxSqrHorizontalCameraDistance
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 2791336798263055279, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Name
       value: Top3WayConnector
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: m_Size.x
+      value: 23.312721
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: m_Size.y
+      value: 11.950752
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.061828613
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843382522913789850, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.7356901
       objectReference: {fileID: 0}
     - target: {fileID: 4640511169473666890, guid: 26e56fb6d724ab04c8f8294ef556e623, type: 3}
       propertyPath: m_Tiles.Array.size

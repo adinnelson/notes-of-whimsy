@@ -200,6 +200,10 @@ public class Health : MonoBehaviour, IDamageable
             GoldManager.Instance.ResetGold();
             PlayerStats.Instance.ResetStats();
             GetComponent<PlayerActiveSpellsHandler>()?.RemoveAllSpells();
+            GameObject musicHandler = FindFirstObjectByType<BossMusicManager>()?.gameObject;
+            Destroy(musicHandler);
+            GameObject musicHandler2 = FindFirstObjectByType<MusicManager>()?.gameObject;
+            Destroy(musicHandler2);
 
             // TODO: load death scene
             SceneManager.LoadScene("DeathScreen", LoadSceneMode.Single);
