@@ -1,26 +1,29 @@
-# notes-of-whimsy
+# Notes of Whimsy
 
-A 2D top-down music-based rogue-like game built in Unity.
+<img width="963" height="686" alt="image" src="https://github.com/user-attachments/assets/92129671-22b6-48ba-97ef-0fc8571ca149" />
 
-## Requirements
+Our unique spin on a pixel 2D dungeon crawler roguelike. 
 
-**Unity Version:** 6000.3.4f1 LTS
+## Features
+- Stunning pixel art assets
+- Skill-expressive combat and input mechanics inspired by rhythm games
+- Procedurally generated rooms, loot, and enemy spawns
+- A fantastic and dynamic OST that compliments combat and exploring
 
-**Git LFS:** This project uses Git Large File Storage for certain asset types. Make sure Git LFS is installed before cloning:
-```
-git lfs install
-```
+## Download
+See releases for information.
 
-## Setup
+### Credits
+- Music and Music Integration: [Amir Alrishan](https://github.com/DarknessTookMe)
+- Procedural Generation Systems: [Alex Babaeff](https://github.com/Destroyer1232)
+- Gameplay Design and Balance: [Theodore Clarke-Abatis](https://github.com/Theodore-CA)
+- Rhythm Systems and System Quality: [Tyson Chan](https://github.com/LegendTova)
+- UI Integration and Interactables: [Taylor Dew-Jones](https://github.com/Taylor753)
+- Spell Effects and Enemy Behavior: [Suren Hajizadeh](https://github.com/Surenium)
+- Lead Artist: [Liam Jorgensen-Mitchell](https://github.com/BigggLim)
+- Build Manager and Enemy Spawn System: [Adin Nelson](https://github.com/adinnelson)
+- Lead Designer and Prototyper: [Avery Simmons](https://github.com/AverySimmons)
 
-1. Clone the repository
-2. Open the project in Unity 6000.3.4f1 LTS
-3. Load your chosen scene
-4. Press Play
-
-## Third-Party Assets
-
-This project uses FMOD to manage dynamic music and sound effects. FMOD is not required except for sound design.
 
 ## Copyright
 
