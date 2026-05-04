@@ -9,6 +9,8 @@ using UnityEngine.InputSystem;
 
 public class MusicManager : MonoBehaviour
 {
+    private const string VOLUME_KEY = "Settings.Volume";
+
     //name of parameter condition in FMOD (used for transition condition)
     private string parameterName = "roomChanging";
 
@@ -129,6 +131,8 @@ public class MusicManager : MonoBehaviour
     //Getting bus info and setting volume
     private void Start()
     {
+        volumeControl = PlayerPrefs.GetFloat(VOLUME_KEY, volumeControl);
+
         //get the bus info from FMOD bank
         bus = RuntimeManager.GetBus("bus:/");
         if (bus.isValid())
@@ -216,6 +220,16 @@ public class MusicManager : MonoBehaviour
         if (timelineHandle.IsAllocated)
         {
             timelineHandle.Free();
+        }
+    }
+
+    public void SetVolume(float volume)
+    {
+        volumeControl = Mathf.Clamp01(volume);
+
+        if (bus.isValid())
+        {
+            bus.setVolume(volumeControl);
         }
     }
 
@@ -372,5 +386,4 @@ public class MusicManager : MonoBehaviour
 //             return RoomType.smallCombat;
 //     }
 // }
-
 

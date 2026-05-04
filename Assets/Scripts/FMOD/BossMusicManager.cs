@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 //similar to MusicManager but needed for the boss
 public class BossMusicManager : MonoBehaviour
 {
+    private const string VOLUME_KEY = "Settings.Volume";
 
     //Captured music event in FMOD
     [Header("FMOD Settings")]
@@ -104,6 +105,8 @@ private void Awake()
     
     private void Start()
     {
+        volumeControl = PlayerPrefs.GetFloat(VOLUME_KEY, volumeControl);
+
         // Get master bus for volume control
         bus = RuntimeManager.GetBus("bus:/");
         if (bus.isValid())
